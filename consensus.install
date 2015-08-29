@@ -1,0 +1,14 @@
+lib: [
+  "META"
+  "src/consensus.mli" {"consensus.mli"}
+  "_build/src/consensus.cma" {"consensus.cma"}
+  "_build/src/consensus.cmxa" {"consensus.cmxa"}
+]
+doc: [
+  "AUTHORS"
+  "CHANGES"
+  "CREDITS"
+  "README"
+  "UNLICENSE"
+  "VERSION"
+]

@@ -1,0 +1,6 @@
+name = "@PACKAGE_TARNAME@"
+version = "@PACKAGE_VERSION@"
+description = "@PACKAGE_NAME@ library"
+requires = ""
+archive(byte) = "@PACKAGE_TARNAME@.cma"
+archive(native) = "@PACKAGE_TARNAME@.cmxa"

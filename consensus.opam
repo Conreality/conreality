@@ -1,0 +1,16 @@
+opam-version: "1.2"
+name: "consensus"
+version: "0.0.0"
+maintainer: "Arto Bendiken <arto@bendiken.net>"
+authors: "Arto Bendiken <arto@bendiken.net>"
+homepage: "https://bitbucket.org/bendiken/consensus"
+bug-reports: "https://bitbucket.org/bendiken/consensus/issues"
+license: "Public Domain"
+tags: "org:bendiken"
+dev-repo: "https://bitbucket.org/bendiken/consensus.git"
+build: [make]
+remove: ["ocamlfind" "remove" "consensus"]
+depends: [
+  "ocamlfind" {build}
+]
+available: [ocaml-version >= "4.01.0"]

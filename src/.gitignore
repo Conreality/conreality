@@ -1,0 +1,9 @@
+*.a
+*.cma
+*.cmi
+*.cmo
+*.cmx
+*.cmxa
+*.ml.depends
+*.mli.depends
+*.o
