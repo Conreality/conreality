@@ -5,7 +5,7 @@ PACKAGE_VERSION = $(shell cat VERSION)
 OCAMLBUILD      = ocamlbuild
 OPAM_INSTALLER  = opam-installer
 
-BINARIES = _build/src/$(PACKAGE_TARNAME).cma _build/src/$(PACKAGE_TARNAME).cmxa
+BINARIES = _build/src/consensus.cma _build/src/consensus.cmxa
 
 all: build
 
@@ -15,22 +15,22 @@ META: META.in Makefile VERSION
 	    -e 's:@PACKAGE_VERSION@:$(PACKAGE_VERSION):' \
 	    META.in > META
 
-_build/src/$(PACKAGE_TARNAME).cma: src/$(PACKAGE_TARNAME).mli src/$(PACKAGE_TARNAME).ml
-	$(OCAMLBUILD) -Is src src/$(PACKAGE_TARNAME).cma
+_build/src/consensus.cma: src/consensus.mli src/consensus.ml
+	$(OCAMLBUILD) -Is src src/consensus.cma
 
-_build/src/$(PACKAGE_TARNAME).cmxa: src/$(PACKAGE_TARNAME).mli src/$(PACKAGE_TARNAME).ml
-	$(OCAMLBUILD) -Is src src/$(PACKAGE_TARNAME).cmxa
+_build/src/consensus.cmxa: src/consensus.mli src/consensus.ml
+	$(OCAMLBUILD) -Is src src/consensus.cmxa
 
 build: META $(BINARIES)
 
 check:
 	# TODO
 
-install: $(PACKAGE_TARNAME).install build
-	$(OPAM_INSTALLER) $(PACKAGE_TARNAME).install
+install: consensus.install build
+	$(OPAM_INSTALLER) consensus.install
 
-uninstall: $(PACKAGE_TARNAME).install
-	$(OPAM_INSTALLER) -u $(PACKAGE_TARNAME).install
+uninstall: consensus.install
+	$(OPAM_INSTALLER) -u consensus.install
 
 clean:
 	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmx,cmxa,ml.depends,mli.depends,o}
