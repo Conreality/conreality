@@ -1,7 +1,12 @@
 # This is free and unencumbered software released into the public domain.
 
-@base <http://bendiken.github.com/consensus/> .
+################################################################################
 
+@base <http://bendiken.github.io/consensus/> .
+
+################################################################################
+
+@prefix :         <http://bendiken.github.io/consensus/> .
 @prefix cc:       <http://creativecommons.org/ns#> .
 @prefix cert:     <http://www.w3.org/ns/auth/cert#> .
 @prefix dbp:      <http://dbpedia.org/property/> .
@@ -30,3 +35,38 @@
 @prefix wot:      <http://xmlns.com/wot/0.1/> .
 @prefix xhtml:    <http://www.w3.org/1999/xhtml#> .
 @prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+################################################################################
+
+<> a owl:Ontology ;
+  dc:title "Consensus Reality ontology."@en .
+
+:Agent a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Agent"@en ;
+  rdfs:comment ""@en .
+
+:Channel a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Channel"@en ;
+  rdfs:comment ""@en .
+
+:Node a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Node"@en ;
+  rdfs:comment ""@en .
+
+:Object a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Object"@en ;
+  rdfs:comment ""@en .
+
+:Theater a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Theater"@en ;
+  rdfs:comment ""@en .
+
+:World a rdfs:Class ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "World"@en ;
+  rdfs:comment ""@en .
