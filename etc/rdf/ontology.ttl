@@ -2,11 +2,11 @@
 
 ################################################################################
 
-@base <http://bendiken.github.io/consensus/> .
+@base <http://conreality.github.io/consensus/> .
 
 ################################################################################
 
-@prefix :         <http://bendiken.github.io/consensus/> .
+@prefix :         <http://conreality.github.io/consensus/> .
 @prefix cc:       <http://creativecommons.org/ns#> .
 @prefix cert:     <http://www.w3.org/ns/auth/cert#> .
 @prefix dbp:      <http://dbpedia.org/property/> .
