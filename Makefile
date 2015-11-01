@@ -3,9 +3,13 @@ PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
 OCAMLBUILD      = ocamlbuild
+OCAMLC          = ocamlfind ocamlc
+OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
 
-BINARIES = _build/src/consensus.cma _build/src/consensus.cmxa
+BINARIES =                           \
+  _build/src/consensus.cma           \
+  _build/src/consensus.cmxa
 
 all: build
 
