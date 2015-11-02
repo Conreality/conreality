@@ -1,13 +1,20 @@
 name = "@PACKAGE_TARNAME@"
 version = "@PACKAGE_VERSION@"
-description = "Consensus Reality"
+description = "Consensus Reality wargame"
 requires = ""
 archive(byte) = "@PACKAGE_TARNAME@.cmo"
 archive(native) = "@PACKAGE_TARNAME@.cmx"
 
 package "geometry" (
   version = "@PACKAGE_VERSION@"
-  description = "Conreality geometry library"
+  description = "Consensus geometry library"
   archive(byte) = "consensus.geometry.cmo"
   archive(native) = "consensus.geometry.cmx"
+)
+
+package "physics" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus physics engine"
+  archive(byte) = "consensus.physics.cmo"
+  archive(native) = "consensus.physics.cmx"
 )

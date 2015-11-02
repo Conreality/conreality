@@ -7,6 +7,10 @@ lib: [
   "_build/src/consensus/geometry.cmi" {"consensus.geometry.cmi"}
   "_build/src/consensus/geometry.cmo" {"consensus.geometry.cmo"}
   "_build/src/consensus/geometry.cmx" {"consensus.geometry.cmx"}
+  "src/consensus/physics.mli" {"consensus.physics.mli"}
+  "_build/src/consensus/physics.cmi" {"consensus.physics.cmi"}
+  "_build/src/consensus/physics.cmo" {"consensus.physics.cmo"}
+  "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
 ]
 doc: [
   "AUTHORS"
