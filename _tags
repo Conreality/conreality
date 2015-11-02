@@ -1,1 +1,2 @@
 <src/consensus/*.cmx>: for-pack(Consensus)
+<src/consensus/vision.{cmo,cmx}>: use_opencv_core
