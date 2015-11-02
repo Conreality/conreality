@@ -25,3 +25,10 @@ package "physics" (
   archive(byte) = "consensus.physics.cmo"
   archive(native) = "consensus.physics.cmx"
 )
+
+package "vision" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus vision algorithms"
+  archive(byte) = "consensus.vision.cmo"
+  archive(native) = "consensus.vision.cmx"
+)
