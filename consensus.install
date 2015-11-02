@@ -1,8 +1,12 @@
 lib: [
   "META"
-  "src/consensus.mli" {"consensus.mli"}
-  "_build/src/consensus.cma" {"consensus.cma"}
-  "_build/src/consensus.cmxa" {"consensus.cmxa"}
+  "_build/src/consensus.cmi" {"consensus.cmi"}
+  "_build/src/consensus.cmo" {"consensus.cmo"}
+  "_build/src/consensus.cmx" {"consensus.cmx"}
+  "src/consensus/geometry.mli" {"consensus.geometry.mli"}
+  "_build/src/consensus/geometry.cmi" {"consensus.geometry.cmi"}
+  "_build/src/consensus/geometry.cmo" {"consensus.geometry.cmo"}
+  "_build/src/consensus/geometry.cmx" {"consensus.geometry.cmx"}
 ]
 doc: [
   "AUTHORS"

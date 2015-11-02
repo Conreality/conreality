@@ -7,9 +7,9 @@ OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
 
-BINARIES =                           \
-  _build/src/consensus.cma           \
-  _build/src/consensus.cmxa
+BINARIES =                 \
+  _build/src/consensus.cmo \
+  _build/src/consensus.cmx
 
 all: build
 
@@ -19,11 +19,11 @@ META: META.in Makefile VERSION
 	    -e 's:@PACKAGE_VERSION@:$(PACKAGE_VERSION):' \
 	    META.in > META
 
-_build/src/consensus.cma: src/consensus.mli src/consensus.ml
-	$(OCAMLBUILD) -Is src src/consensus.cma
+_build/src/consensus.cmo: src/consensus.mlpack _tags
+	$(OCAMLBUILD) -Is src src/consensus.cmo
 
-_build/src/consensus.cmxa: src/consensus.mli src/consensus.ml
-	$(OCAMLBUILD) -Is src src/consensus.cmxa
+_build/src/consensus.cmx: src/consensus.mlpack _tags
+	$(OCAMLBUILD) -Is src src/consensus.cmx
 
 build: META $(BINARIES)
 
