@@ -2,14 +2,13 @@ PACKAGE_NAME    = consensus
 PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
-OCAMLBUILD      = ocamlbuild
+OCAMLBUILD      = ocamlbuild -verbose 1
 OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
 
-BINARIES =                 \
-  _build/src/consensus.cmo \
-  _build/src/consensus.cmx
+BINARIES = \
+  _build/src/consensus.otarget
 
 all: build
 
@@ -19,11 +18,8 @@ META: META.in Makefile VERSION
 	    -e 's:@PACKAGE_VERSION@:$(PACKAGE_VERSION):' \
 	    META.in > META
 
-_build/src/consensus.cmo: src/consensus.mlpack _tags
-	$(OCAMLBUILD) -Is src src/consensus.cmo
-
-_build/src/consensus.cmx: src/consensus.mlpack _tags
-	$(OCAMLBUILD) -Is src src/consensus.cmx
+_build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
+	$(OCAMLBUILD) -Is src src/consensus.otarget
 
 build: META $(BINARIES)
 
@@ -37,6 +33,7 @@ uninstall: consensus.install
 	$(OPAM_INSTALLER) -u consensus.install
 
 clean:
+	$(OCAMLBUILD) -clean
 	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmx,cmxa,ml.depends,mli.depends,o}
 
 .PHONY: all build check install uninstall clean
