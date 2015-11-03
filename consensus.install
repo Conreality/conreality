@@ -17,8 +17,8 @@ lib: [
   "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
   "src/consensus/vision.mli" {"consensus.vision.mli"}
   "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
-  "_build/src/consensus/vision.cmo" {"consensus.vision.cmo"}
-  "_build/src/consensus/vision.cmx" {"consensus.vision.cmx"}
+  "_build/src/consensus/vision.cma" {"consensus.vision.cma"}
+  "_build/src/consensus/vision.cmxa" {"consensus.vision.cmxa"}
 ]
 doc: [
   "AUTHORS"

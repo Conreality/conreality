@@ -29,6 +29,6 @@ package "physics" (
 package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"
-  archive(byte) = "consensus.vision.cmo"
-  archive(native) = "consensus.vision.cmx"
+  archive(byte) = "consensus.vision.cma"
+  archive(native) = "consensus.vision.cmxa"
 )
