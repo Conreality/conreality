@@ -1,11 +1,11 @@
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
 
-#include <stdio.h>
+#include <cstdio>
 
-CAMLprim value
+extern "C" CAMLprim value
 caml_hello(value v_unit) {
   CAMLparam1(v_unit);
-  fprintf(stderr, "Hello, world!\n");
+  std::fprintf(stderr, "Greetings from C++!\n");
   CAMLreturn(Val_unit);
 }
