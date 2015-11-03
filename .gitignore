@@ -3,3 +3,9 @@ META
 README.html
 _build
 *~
+*.a
+*.cma
+*.cmo
+*.cmx
+*.cmxa
+*.o
