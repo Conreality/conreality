@@ -30,6 +30,8 @@ Setting up the OCaml environment on Ubuntu 14.04 LTS (Trusty Tahr):
    $ opam switch 4.02.3
    $ eval `opam config env`
 
+General installation:
+
 ::
 
    $ git clone https://github.com/conreality/consensus.git
