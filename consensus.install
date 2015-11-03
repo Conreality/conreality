@@ -19,6 +19,8 @@ lib: [
   "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
   "_build/src/consensus/vision.cma" {"consensus.vision.cma"}
   "_build/src/consensus/vision.cmxa" {"consensus.vision.cmxa"}
+  "_build/src/consensus/dllconsensus-vision.so" {"dllconsensus-vision.so"}
+  "_build/src/consensus/libconsensus-vision.a" {"libconsensus-vision.a"}
 ]
 doc: [
   "AUTHORS"

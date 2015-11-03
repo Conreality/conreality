@@ -1,3 +1,4 @@
+consensus/libconsensus-vision.a
 consensus/vision.cma
 consensus/vision.cmxa
 consensus.cmo
