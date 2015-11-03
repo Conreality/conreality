@@ -24,7 +24,7 @@ let () =
          let cc = env "%.cc" in
          let o = env "%.o" in
          let tags = tags_of_pathname cc ++ "c++" ++ "compile" in
-         Cmd(S[A cxx; T tags; A"-c"; A"-I"; A !*stdlib_dir; A"-o"; P o; Px cc])
+         Cmd(S[A cxx; T tags; A"-c"; A"-I"; A !*stdlib_dir; A"-fPIC"; A"-o"; P o; Px cc])
        end;
   | _ -> ()
   end
