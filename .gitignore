@@ -2,6 +2,7 @@
 META
 README.html
 _build
+debian
 *~
 *.a
 *.cma
