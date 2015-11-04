@@ -2,7 +2,7 @@ Source: conreality
 Priority: extra
 Maintainer: Arto Bendiken <arto@bendiken.net>
 Uploaders: Mike Gogulski <mike@gogulski.com>
-Build-Depends: debhelper (>= 8.0.0),
+Build-Depends: debhelper (>= 9),
   ocaml-nox (>= 4.01.0),
   g++ | c++-compiler
 Standards-Version: 3.9.5
