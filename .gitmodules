@@ -1,3 +1,6 @@
+[submodule "lib/cmdliner"]
+	path = lib/cmdliner
+	url = https://github.com/dbuenzli/cmdliner.git
 [submodule "lib/ctypes"]
 	path = lib/ctypes
 	url = https://github.com/ocamllabs/ocaml-ctypes.git
