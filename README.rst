@@ -12,6 +12,7 @@ To build the development version from a Git checkout, you will need a POSIX
 system and the following tooling:
 
 * OCaml compiler (>= 4.02.1)
+  with `Findlib <http://projects.camlcity.org/projects/findlib.html>`__
 * C/C++ compiler (GCC >= 4.8 or Clang >= 3.4)
 * GNU Make
 
