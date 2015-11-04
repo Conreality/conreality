@@ -18,20 +18,27 @@ depends: [
   "ctypes-foreign" {build & >= "0.4.0"}
 ]
 depexts: [
-  [["homebrew"]    ["libffi"]]
-  [["macports"]    ["libffi" "opencv"]]
-  [["debian"]      ["libffi-dev" "libopencv-core-dev"]]
-  [["ubuntu"]      ["libffi-dev" "libopencv-core-dev"]]
-  [["centos"]      ["libffi-devel"]]
-  [["fedora"]      [""]]
-  [["archlinux"]   [""]]
-  [["gentoo"]      [""]]
-  [["openbsd"]     [""]]
-  [["freebsd"]     [""]]
+  [["debian"]      ["libffi-dev"   (*3.1.0 *) "libopencv-dev" (*2.4.9 *)]] # Debian Jessie
+  [["ubuntu"]      ["libffi-dev"   (*3.0.13*) "libopencv-dev" (*2.4.8 *)]] # Ubuntu 14.04 LTS
+  [["centos"]      ["libffi-devel" (*3.0.13*) "opencv-devel"  (*2.4.5 *)]] # CentOS 7
+  [["fedora"]      ["libffi-devel" (*3.1.0 *) "opencv-devel"  (*2.4.11*)]] # Fedora 23
+  [["archlinux"]   ["libffi"       (*3.2.1 *) "opencv"        (*2.4.12*)]] # Arch Linux x86_64
+  [["gentoo"]      ["libffi"       (*3.0.13*) "opencv"        (*2.4.9 *)]] # Gentoo amd64
+  [["openbsd"]     ["libffi"       (*3.2.1 *) "opencv"        (*2.4.10*)]] # OpenBSD 5.8
+  [["freebsd"]     ["libffi"       (*3.2.1 *) "opencv"        (*2.4.9 *)]] # FreeBSD 10.2
+  [["macports"]    ["libffi"       (*3.2.1 *) "opencv"        (*3.0.0 *)]] # OS X MacPorts
+  [["homebrew"]    ["libffi"       (*3.0.13*) "opencv"        (*2.4.12*)]] # OS X Homebrew
 ]
 available: [ocaml-version >= "4.02.1"]
 post-messages: [
-  "This software requires libffi (>= 3.0.13) and opencv (>= 2.4)."                 {failure & os = "macports"}
-  "This software requires libffi-dev (>= 3.0.13) and libopencv-core-dev (>= 2.4)." {failure & os = "debian"}
-  "This software requires libffi-dev (>= 3.0.13) and libopencv-core-dev (>= 2.4)." {failure & os = "ubuntu"}
+  "This software requires libffi-dev (>= 3.0.13) and libopencv-dev (>= 2.4)."
+    {failure & (os = "debian" | os = "ubuntu")}
+  "This software requires libffi-devel (>= 3.0.13) and opencv-devel (>= 2.4)."
+    {failure & (os = "centos" | os = "fedora")}
+  "This software requires libffi (>= 3.0.13) and opencv (>= 2.4)."
+    {failure & (os = "archlinux" | os = "gentoo")}
+  "This software requires libffi (>= 3.0.13) and opencv (>= 2.4)."
+    {failure & (os = "openbsd" | os = "freebsd")}
+  "This software requires libffi (>= 3.0.13) and opencv (>= 2.4)."
+    {failure & (os = "macports" | os = "homebrew")}
 ]
