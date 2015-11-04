@@ -4,9 +4,11 @@ Upstream-Contact: Arto Bendiken <arto@bendiken.net>
 Source: http://conreality.org
 
 Files: *
+Copyright: Public Domain
 License: public-domain
 
 Files: debian/*
+Copyright: Public Domain
 License: public-domain
 
 License: public-domain
