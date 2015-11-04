@@ -15,4 +15,18 @@ depends: [
   "ocamlfind" {build}
   "ctypes.foreign"
 ]
+depexts: [
+  [["homebrew"]  ["libffi"]]
+  [["macports"]  ["libffi" "opencv"]]
+  [["debian"]    ["libffi-dev" "libopencv-core-dev"]]
+  [["ubuntu"]    ["libffi-dev" "libopencv-core-dev"]]
+  [["centos"]    ["libffi-devel"]]
+  [["fedora"]    [""]]
+  [["archlinux"] [""]]
+  [["gentoo"]    [""]]
+  [["openbsd"]   [""]]
+]
 available: [ocaml-version >= "4.02.1"]
+post-messages: [
+  "This software requires libffi (>= 3.0.13) and OpenCV (>= 2.4)." {failure}
+]
