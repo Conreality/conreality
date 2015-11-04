@@ -4,7 +4,7 @@ Maintainer: Arto Bendiken <arto@bendiken.net>
 Uploaders: Mike Gogulski <mike@gogulski.com>
 Build-Depends: debhelper (>= 8.0.0),
   ocaml-nox (>= 4.01.0),
-  c++-compiler
+  g++ | c++-compiler
 Standards-Version: 3.9.5
 Section: games
 Homepage: http://conreality.org
