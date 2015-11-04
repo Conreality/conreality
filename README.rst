@@ -14,7 +14,8 @@ Prerequisites
 Dependencies
 ------------
 
-* `OpenCV <http://opencv.org/>`__
+* `libffi <https://sourceware.org/libffi/>`__ (>= 3.0.13)
+* `OpenCV <http://opencv.org/>`__ (>= 2.4)
 
 Installation
 ------------
