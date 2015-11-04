@@ -1,1 +1,4 @@
-_build/src/consensus.itarget usr/lib/ocaml/
+_build/src/consensus/geometry.mli       usr/lib/ocaml/consensus/
+_build/src/consensus/ontology.mli       usr/lib/ocaml/consensus/
+_build/src/consensus/physics.mli        usr/lib/ocaml/consensus/
+_build/src/consensus/vision.mli         usr/lib/ocaml/consensus/
