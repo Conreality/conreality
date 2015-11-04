@@ -9,7 +9,7 @@ Prerequisites
 -------------
 
 * C/C++ compiler (e.g., GCC or Clang)
-* OCaml compiler (>= 4.02)
+* OCaml compiler (>= 4.02.1)
 
 Dependencies
 ------------
