@@ -4,6 +4,7 @@ Maintainer: Arto Bendiken <arto@bendiken.net>
 Uploaders: Mike Gogulski <mike@gogulski.com>
 Build-Depends: debhelper (>= 9),
   ocaml-nox (>= 4.01.0),
+  ocaml-findlib,
   g++ (>= 4.9) | c++-compiler
 Standards-Version: 3.9.5
 Section: games
