@@ -12,21 +12,26 @@ dev-repo: "https://github.com/conreality/consensus.git"
 build: [make]
 remove: ["ocamlfind" "remove" "consensus"]
 depends: [
-  "ocamlfind" {build}
-  "ctypes.foreign"
+  "ocamlfind"      {build}
+  "cmdliner"       {build & >= "0.9.8"}
+  "ctypes"         {build & >= "0.4.0"}
+  "ctypes-foreign" {build & >= "0.4.0"}
 ]
 depexts: [
-  [["homebrew"]  ["libffi"]]
-  [["macports"]  ["libffi" "opencv"]]
-  [["debian"]    ["libffi-dev" "libopencv-core-dev"]]
-  [["ubuntu"]    ["libffi-dev" "libopencv-core-dev"]]
-  [["centos"]    ["libffi-devel"]]
-  [["fedora"]    [""]]
-  [["archlinux"] [""]]
-  [["gentoo"]    [""]]
-  [["openbsd"]   [""]]
+  [["homebrew"]    ["libffi"]]
+  [["macports"]    ["libffi" "opencv"]]
+  [["debian"]      ["libffi-dev" "libopencv-core-dev"]]
+  [["ubuntu"]      ["libffi-dev" "libopencv-core-dev"]]
+  [["centos"]      ["libffi-devel"]]
+  [["fedora"]      [""]]
+  [["archlinux"]   [""]]
+  [["gentoo"]      [""]]
+  [["openbsd"]     [""]]
+  [["freebsd"]     [""]]
 ]
 available: [ocaml-version >= "4.02.1"]
 post-messages: [
-  "This software requires libffi (>= 3.0.13) and OpenCV (>= 2.4)." {failure}
+  "This software requires libffi (>= 3.0.13) and opencv (>= 2.4)."                 {failure & os = "macports"}
+  "This software requires libffi-dev (>= 3.0.13) and libopencv-core-dev (>= 2.4)." {failure & os = "debian"}
+  "This software requires libffi-dev (>= 3.0.13) and libopencv-core-dev (>= 2.4)." {failure & os = "ubuntu"}
 ]
