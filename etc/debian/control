@@ -14,14 +14,16 @@ Vcs-Browser: https://github.com/conreality/consensus
 Package: conreality
 Section: games
 Architecture: any
-Depends: libconreality0 (= ${binary:Version})
+Depends: ${misc:Depends},
+ libconreality0 (= ${binary:Version})
 Description: TODO: up to 60 chars description
  long description, indented with spaces
 
 Package: libconreality-dev
 Section: libdevel
 Architecture: any
-Depends: libconreality0 (= ${binary:Version}),
+Depends: ${misc:Depends},
+ libconreality0 (= ${binary:Version}),
  libffi-dev,
  libopencv-core-dev
 Description: TODO: up to 60 chars description
