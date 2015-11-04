@@ -1,7 +1,7 @@
 name = "@PACKAGE_TARNAME@"
 version = "@PACKAGE_VERSION@"
 description = "Consensus Reality wargame"
-requires = ""
+requires = "consensus.vision"
 archive(byte) = "@PACKAGE_TARNAME@.cmo"
 archive(native) = "@PACKAGE_TARNAME@.cmx"
 
@@ -22,6 +22,7 @@ package "ontology" (
 package "physics" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus physics engine"
+  requires = "consensus.geometry"
   archive(byte) = "consensus.physics.cmo"
   archive(native) = "consensus.physics.cmx"
 )
@@ -29,6 +30,7 @@ package "physics" (
 package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"
+  requires = "ctypes.foreign"
   archive(byte) = "consensus.vision.cma"
   archive(native) = "consensus.vision.cmxa"
 )

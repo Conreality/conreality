@@ -13,5 +13,6 @@ build: [make]
 remove: ["ocamlfind" "remove" "consensus"]
 depends: [
   "ocamlfind" {build}
+  "ctypes.foreign"
 ]
 available: [ocaml-version >= "4.01.0"]
