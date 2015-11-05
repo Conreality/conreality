@@ -25,10 +25,10 @@ module Vector = struct
     create (-. v.x) (-. v.y) (-. v.z)
 
   let magnitude v =
-    sqrt (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
+    sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
 
   let normalize v =
-    v (* TODO *)
+    create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 end
 
 module Point = Vector
