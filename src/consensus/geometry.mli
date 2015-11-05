@@ -12,6 +12,11 @@ module Vector : sig
   val zero : unit -> t
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
+  val ( = ) : t -> t -> bool
+  val ( * ) : t -> float -> t
+  val opposite : vector -> vector -> bool
+  val dotproduct : vector -> vector -> float
+  val crossproduct : vector -> vector -> vector
   val invert : vector -> vector
   val magnitude : vector -> float
   val normalize : vector -> vector
