@@ -33,11 +33,26 @@ files as follows::
 Installation
 ------------
 
-Setting up an OCaml environment on Ubuntu 14.04 LTS (Trusty Tahr)::
+Prerequisites for Ubuntu 14.04 LTS (Trusty Tahr)::
 
    $ sudo apt-add-repository ppa:avsm/ppa
    $ sudo apt-get update
    $ sudo apt-get install ocaml-nox opam
+
+Prerequisites for Raspberry Pi running Raspbian/Jessie::
+
+   $ sudo apt-get install ocaml-nox m4
+   $ git clone https://github.com/ocaml/opam.git
+   $ cd opam
+   $ git checkout 1.2
+   $ ./configure
+   $ make lib-ext
+   $ make
+   $ sudo make install
+   $ cd ..
+
+General initialization of local OCaml environment::
+
    $ opam init
    $ eval `opam config env`
    $ opam switch 4.02.3
@@ -53,3 +68,4 @@ package manager::
    $ opam uninstall consensus           # not needed the first time around
    $ opam install consensus --verbose
    $ ocamlfind query consensus          # should print a path
+
