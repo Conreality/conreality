@@ -15,6 +15,9 @@ module Vector = struct
   let zero () =
     create 0. 0. 0.
 
+  let invert v =
+    create (-. v.x) (-. v.y) (-. v.z)
+
   let ( + ) a b =
     create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
 
@@ -31,13 +34,10 @@ module Vector = struct
     if a = invert b then true else false
 
   let dotproduct a b =
-    a.x *. b.x + a.y *. b.y + a.z * b.z
+    a.x *. b.x +. a.y *. b.y +. a.z *. b.z
 
   let crossproduct a b =
-    create (a.y *. b.z - a.z *. b.y) (a.z *. b.x - a.x *. b.z) (a.x *. b.y - a.y *. b.x)
-
-  let invert v =
-    create (-. v.x) (-. v.y) (-. v.z)
+    create (a.y *. b.z -. a.z *. b.y) (a.z *. b.x -. a.x *. b.z) (a.x *. b.y -. a.y *. b.x)
 
   let magnitude v =
     sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))

@@ -10,6 +10,7 @@ module Vector : sig
   val y : vector -> float
   val z : vector -> float
   val zero : unit -> t
+  val invert : vector -> vector
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( = ) : t -> t -> bool
@@ -17,7 +18,6 @@ module Vector : sig
   val opposite : vector -> vector -> bool
   val dotproduct : vector -> vector -> float
   val crossproduct : vector -> vector -> vector
-  val invert : vector -> vector
   val magnitude : vector -> float
   val normalize : vector -> vector
 end
