@@ -28,7 +28,7 @@ module Vector = struct
     create (a.x *. f) (a.y *. f) (a.z *. f)
 
   let opposite a b =
-    if a.x = -.b.x && a.y = -.b.y && a.z = -.b.z the true else false
+    if a.x = -.b.x && a.y = -.b.y && a.z = -.b.z then true else false
 
   let dotproduct a b =
     a.x *. b.x + a.y *. b.y + a.z * b.z
