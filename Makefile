@@ -24,7 +24,7 @@ _build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
 build: META $(BINARIES)
 
 check:
-	# TODO
+	$(OCAMLBUILD) -Is test,src test/check.otarget
 
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install

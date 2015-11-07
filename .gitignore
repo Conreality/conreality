@@ -2,6 +2,7 @@
 META
 README.html
 _build
+check_*.byte
 debian
 *~
 *.a
