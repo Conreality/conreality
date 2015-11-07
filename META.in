@@ -12,6 +12,13 @@ package "geometry" (
   archive(native) = "consensus.geometry.cmx"
 )
 
+package "knowledge" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus knowledge base"
+  archive(byte) = "consensus.knowledge.cmo"
+  archive(native) = "consensus.knowledge.cmx"
+)
+
 package "ontology" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus ontology database"
