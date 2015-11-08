@@ -2,11 +2,14 @@ PACKAGE_NAME    = consensus
 PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
-#OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
 OCAMLBUILD      = ocamlbuild
 OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
+
+ifeq ($(V),1)
+OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
+endif
 
 BINARIES = \
   _build/src/consensus.otarget
