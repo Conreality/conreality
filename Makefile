@@ -24,7 +24,8 @@ _build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
 build: META $(BINARIES)
 
 check:
-	$(OCAMLBUILD) -Is test,src test/check.otarget
+	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+	  $(OCAMLBUILD) -Is test,src test/check.otarget
 
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install

@@ -11,14 +11,31 @@ end
 
 let () =
   dispatch begin function
+
   | Before_options ->
     Options.use_ocamlfind := true
+
   | After_rules ->
     ocaml_lib ~extern:true "opencv_core";
     ocaml_lib ~extern:true "opencv_objdetect";
+
     dep  ["link"; "ocaml"; "use_vision"] ["src/consensus/libconsensus-vision.a"];
-    flag ["link"; "library"; "ocaml"; "byte"; "use_vision"] (S[A"-dllib"; A"-lconsensus-vision"; A"-cclib"; A"-lconsensus-vision"]);
-    flag ["link"; "library"; "ocaml"; "native"; "use_vision"] (S[A"-cclib"; A"-lconsensus-vision"]);
+
+    flag ["link"; "ocaml"; "library"; "byte"; "use_vision"]
+      (S[A"-dllib"; A"-lconsensus-vision";
+         A"-cclib"; A"-lconsensus-vision"]);
+
+    flag ["link"; "ocaml"; "library"; "native"; "use_vision"]
+      (S[A"-cclib"; A"-lconsensus-vision"]);
+
+    flag ["link"; "ocaml"; "program"; "byte"; "use_vision"]
+      (S[A"-dllpath"; A"_build/src/consensus";
+         A"-dllib"; A"-lconsensus-vision";
+         A"-cclib"; A"-lconsensus-vision"]);
+
+    flag ["link"; "ocaml"; "program"; "native"; "use_vision"]
+      (S[A"-cclib"; A"-lconsensus-vision"]);
+
     rule "ocaml C++ stubs: cc -> o"
       ~prod:"%.o"
       ~dep:"%.cc"
@@ -28,5 +45,6 @@ let () =
         let tags = tags_of_pathname cc ++ "c++" ++ "compile" in
         Cmd(S[A cxx; T tags; A"-c"; A"-I"; A !*stdlib_dir; A"-fPIC"; A"-o"; P o; Px cc])
       end
+
   | _ -> ()
   end
