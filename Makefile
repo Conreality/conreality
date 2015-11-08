@@ -2,7 +2,8 @@ PACKAGE_NAME    = consensus
 PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
-OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
+#OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
+OCAMLBUILD      = ocamlbuild
 OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
