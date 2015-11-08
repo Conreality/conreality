@@ -26,7 +26,9 @@ build: META $(BINARIES)
 
 check:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
-	  $(OCAMLBUILD) -Is test,src test/check.otarget
+	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
+	  cp -p test/check_all.sh _build/test/ && \
+	  _build/test/check_all.sh
 
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install
