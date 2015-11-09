@@ -7,8 +7,10 @@ check_*.byte
 debian
 *~
 *.a
+*.byte
 *.cma
 *.cmo
 *.cmx
 *.cmxa
+*.native
 *.o

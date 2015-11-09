@@ -8,7 +8,9 @@ doc: [
   "VERSION"
 ]
 man: []
-bin: []
+bin: [
+  "_build/src/conctl.native" {"conctl"}
+]
 sbin: []
 lib: [
   "META"

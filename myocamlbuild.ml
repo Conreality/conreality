@@ -1,3 +1,5 @@
+(* This is free and unencumbered software released into the public domain. *)
+
 open Ocamlbuild_plugin
 open Command
 
@@ -26,15 +28,15 @@ let () =
          A"-cclib"; A"-lconsensus-vision"]);
 
     flag ["link"; "ocaml"; "library"; "native"; "use_vision"]
-      (S[A"-cclib"; A"-lconsensus-vision"]);
+      (S[A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
 
     flag ["link"; "ocaml"; "program"; "byte"; "use_vision"]
       (S[A"-dllpath"; A"_build/src/consensus";
          A"-dllib"; A"-lconsensus-vision";
-         A"-cclib"; A"-lconsensus-vision"]);
+         A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
 
     flag ["link"; "ocaml"; "program"; "native"; "use_vision"]
-      (S[A"-cclib"; A"-lconsensus-vision"]);
+      (S[A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
 
     rule "ocaml C++ stubs: cc -> o"
       ~prod:"%.o"

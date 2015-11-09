@@ -1,4 +1,5 @@
 "lib": -traverse, not_hygienic
+<src/conctl.{byte,native}>: package(ctypes.foreign), use_vision
 <src/consensus/*.cmx>: for-pack(Consensus)
 <src/consensus/vision.*>: package(ctypes.foreign)
 <src/consensus/vision.{cmo,cmx}>: use_opencv_core
