@@ -25,7 +25,7 @@ let () =
 
     flag ["link"; "ocaml"; "library"; "byte"; "use_vision"]
       (S[A"-dllib"; A"-lconsensus-vision";
-         A"-cclib"; A"-lconsensus-vision"]);
+         A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
 
     flag ["link"; "ocaml"; "library"; "native"; "use_vision"]
       (S[A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
@@ -36,7 +36,10 @@ let () =
          A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
 
     flag ["link"; "ocaml"; "program"; "native"; "use_vision"]
-      (S[A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
+      (S[A"-cclib"; A"-rdynamic";
+         A"-cclib"; A"-Wl,--whole-archive";
+         A"-cclib"; A"src/consensus/libconsensus-vision.a";
+         A"-cclib"; A"-Wl,--no-whole-archive"]);
 
     rule "ocaml C++ stubs: cc -> o"
       ~prod:"%.o"
