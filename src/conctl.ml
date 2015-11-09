@@ -1,9 +1,125 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+open Cmdliner
 open Consensus
-open Consensus.Vision
 
-let main () =
-  hello ()
+(* Configuration *)
 
-let () = main ()
+let version = "0.0.0"
+
+(* Option types *)
+
+type verbosity = Normal | Quiet | Verbose
+
+type common_options = { debug: bool; verbosity: verbosity }
+
+let str = Printf.sprintf
+
+let verbosity_str = function
+  | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
+
+(* Command implementations *)
+
+let help options man_format commands topic = match topic with
+  | None -> `Help (`Pager, None)
+  | Some topic ->
+      let topics = "topics" :: "environment" :: commands in
+      let conv, _ = Cmdliner.Arg.enum (List.rev_map (fun s -> (s, s)) topics) in
+      match conv topic with
+      | `Error e -> `Error (false, e)
+      | `Ok t when t = "topics" -> List.iter print_endline topics; `Ok ()
+      | `Ok t when List.mem t commands -> `Help (man_format, Some t)
+      | `Ok t ->
+          let page = (topic, 7, "", "", ""), [`S topic; `P "Say something";] in
+          `Ok (Cmdliner.Manpage.print man_format Format.std_formatter page)
+
+let report options = (* TODO *)
+  Consensus.Vision.hello ()
+
+let toggle options device = Printf.printf
+  "Toggled the %s device.\n" device (* TODO *)
+
+(* Help sections common to all commands *)
+
+let common_options_section = "COMMON OPTIONS"
+
+let help_sections = [
+  `S common_options_section;
+  `P "These options are common to all commands:";
+  `S "MORE HELP";
+  `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command."; `Noblank;
+  `P "Use `$(mname) help environment' for help on environment variables.";
+  `S "BUGS";
+  `P "Check open bug reports at <https://github.com/conreality/consensus/issues>.";
+]
+
+(* Options common to all commands *)
+
+let common_options debug verbosity = { debug; verbosity }
+
+let common_options_term =
+  let docs = common_options_section in
+  let debug =
+    let doc = "Give only debug output." in
+    Arg.(value & flag & info ["debug"] ~docs ~doc)
+  in
+  let verbosity =
+    let doc = "Suppress informational output." in
+    let quiet = Quiet, Arg.info ["q"; "quiet"] ~docs ~doc in
+    let doc = "Give verbose output." in
+    let verbose = Verbose, Arg.info ["v"; "verbose"] ~docs ~doc in
+    Arg.(last & vflag_all [Normal] [quiet; verbose])
+  in
+  Term.(const common_options $ debug $ verbosity)
+
+(* Command definitions *)
+
+let help_command =
+  let topic =
+    let doc = "The topic to get help on. `topics' lists the topics." in
+    Arg.(value & pos 0 (some string) None & info [] ~docv:"TOPIC" ~doc)
+  in
+  let doc = "Display help on a topic." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Displays help on a subcommand or topic."
+  ] @ help_sections
+  in
+  Term.(ret (const help $ common_options_term $ Term.man_format $ Term.choice_names $ topic)),
+  Term.info "help" ~doc ~man
+
+let report_command =
+  let doc = "Display a self-diagnosis report." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Runs a self-diagnosis test."
+  ] @ help_sections
+  in
+  Term.(const report $ common_options_term),
+  Term.info "report" ~doc ~man ~sdocs:common_options_section
+
+let toggle_command =
+  let device =
+    let doc = "The name of the device to toggle." in
+    Arg.(value & pos 0 string "" & info [] ~docv:"DEVICE" ~doc)
+  in
+  let doc = "Toggle power to a device." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Toggles direct current to a given device."
+  ] @ help_sections
+  in
+  Term.(const toggle $ common_options_term $ device),
+  Term.info "toggle" ~doc ~man ~sdocs:common_options_section
+
+let default_command =
+  let doc = "Control devices on the local node." in
+  let man = help_sections in
+  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ common_options_term)),
+  Term.info "conctl" ~version ~doc ~man ~sdocs:common_options_section
+
+let commands = [help_command; report_command; toggle_command]
+
+let () =
+  match Term.eval_choice default_command commands with
+  | `Error _ -> exit 1 | _  -> exit 0
