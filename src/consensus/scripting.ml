@@ -2,12 +2,27 @@
 
 open Lua_api
 
+module Option = struct
+ let value_exn = function
+ | Some value -> value
+ | None -> raise Not_found
+end
+
 module Context = struct
   type t = Lua_api_lib.state
 
   let create () =
-    LuaL.newstate ()
+    let context = LuaL.newstate () in
+    LuaL.openlibs context;
+    context
 
   let load_file context filepath =
-    ()
+    LuaL.loadfile context filepath |> ignore;
+    match Lua.pcall context 0 0 0 with
+    | Lua.LUA_OK -> ()
+    | error -> begin
+        let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
+        Lua.pop context 1;
+        failwith error_message
+      end
 end
