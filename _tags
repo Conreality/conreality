@@ -8,5 +8,5 @@
 <src/consensus/vision.*>: package(ctypes.foreign)
 <src/consensus/vision.{cmo,cmx}>: use_opencv_core
 <src/consensus/vision.{cma,cmxa}>: use_vision
-<test/check_*.*>: package(alcotest), package(ctypes.foreign)
+<test/check_*.*>: package(alcotest), package(ctypes.foreign), package(lua), thread
 <test/check_*.{byte,native}>: use_vision
