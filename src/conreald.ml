@@ -31,7 +31,7 @@ let verbosity_str = function
 
 let execute_script script =
   let context = Scripting.Context.create () in
-  Scripting.Context.load_file context script
+  Scripting.Context.eval_file context script
 
 let conreald options mission =
   if mission = ""

@@ -17,7 +17,10 @@ module Context = struct
     context
 
   let load_file context filepath =
-    LuaL.loadfile context filepath |> ignore;
+    LuaL.loadfile context filepath |> ignore (* TODO: use thread_status *)
+
+  let eval_file context filepath =
+    load_file context filepath;
     match Lua.pcall context 0 0 0 with
     | Lua.LUA_OK -> ()
     | error -> begin
@@ -25,4 +28,5 @@ module Context = struct
         Lua.pop context 1;
         failwith error_message
       end
+
 end
