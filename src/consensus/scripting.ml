@@ -42,4 +42,18 @@ module Context = struct
         failwith error_message
       end
 
+  let get_string context code =
+    match LuaL.loadstring context ("_=" ^ code) with
+    | Lua.LUA_OK -> begin
+        match Lua.pcall context 0 0 0 with
+        | Lua.LUA_OK -> begin
+            Lua.getglobal context "_";
+            let result = (Lua.tostring context (-1) |> Option.value_exn) in
+            Lua.pop context 1;
+            result
+          end
+        | _ -> failwith ("error executing: " ^ code)
+      end
+    | _ -> failwith ("error parsing: " ^ code)
+
 end

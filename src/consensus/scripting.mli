@@ -7,4 +7,5 @@ module Context : sig
   val eval_file : t -> string -> unit
   val load_code : t -> string -> unit
   val eval_code : t -> string -> unit
+  val get_string : t -> string -> string
 end
