@@ -35,6 +35,10 @@ lib: [
   "_build/src/consensus/physics.cmi" {"consensus.physics.cmi"}
   "_build/src/consensus/physics.cmo" {"consensus.physics.cmo"}
   "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
+  "src/consensus/scripting.mli" {"consensus.scripting.mli"}
+  "_build/src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
+  "_build/src/consensus/scripting.cmo" {"consensus.scripting.cmo"}
+  "_build/src/consensus/scripting.cmx" {"consensus.scripting.cmx"}
   "src/consensus/vision.mli" {"consensus.vision.mli"}
   "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
   "_build/src/consensus/vision.cma" {"consensus.vision.cma"}

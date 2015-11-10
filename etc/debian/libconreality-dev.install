@@ -2,4 +2,5 @@ _build/src/consensus/geometry.mli       usr/lib/ocaml/consensus/
 _build/src/consensus/knowledge.mli      usr/lib/ocaml/consensus/
 _build/src/consensus/ontology.mli       usr/lib/ocaml/consensus/
 _build/src/consensus/physics.mli        usr/lib/ocaml/consensus/
+_build/src/consensus/scripting.mli      usr/lib/ocaml/consensus/
 _build/src/consensus/vision.mli         usr/lib/ocaml/consensus/

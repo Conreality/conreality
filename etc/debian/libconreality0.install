@@ -3,4 +3,5 @@ _build/src/consensus/geometry.cmi       usr/lib/ocaml/consensus/
 _build/src/consensus/knowledge.cmi      usr/lib/ocaml/consensus/
 _build/src/consensus/ontology.cmi       usr/lib/ocaml/consensus/
 _build/src/consensus/physics.cmi        usr/lib/ocaml/consensus/
+_build/src/consensus/scripting.cmi      usr/lib/ocaml/consensus/
 _build/src/consensus/vision.cmi         usr/lib/ocaml/consensus/

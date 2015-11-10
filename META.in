@@ -34,6 +34,14 @@ package "physics" (
   archive(native) = "consensus.physics.cmx"
 )
 
+package "scripting" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus scripting engine"
+  requires = "lua threads"
+  archive(byte) = "consensus.scripting.cmo"
+  archive(native) = "consensus.scripting.cmx"
+)
+
 package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"
