@@ -8,6 +8,10 @@ module Option = struct
  | None -> raise Not_found
 end
 
+exception Input_error of string
+exception Parse_error of string
+exception Runtime_error of string
+
 module Context = struct
   type t = Lua_api_lib.state
 
@@ -16,44 +20,46 @@ module Context = struct
     LuaL.openlibs context;
     context
 
+  let call_tos context = (* not public *)
+    match Lua.pcall context 0 0 0 with
+    | Lua.LUA_OK -> ()
+    | Lua.LUA_ERRRUN -> begin
+        let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
+        Lua.pop context 1;
+        raise (Runtime_error error_message)
+      end
+    | Lua.LUA_ERRMEM -> raise Out_of_memory
+    | _ -> assert false
+
+  let load_code context code =
+    match LuaL.loadstring context code with
+    | Lua.LUA_OK -> ()
+    | Lua.LUA_ERRSYNTAX -> raise (Parse_error code)
+    | Lua.LUA_ERRMEM -> raise Out_of_memory
+    | _ -> assert false
+
   let load_file context filepath =
-    LuaL.loadfile context filepath |> ignore (* TODO: use thread_status *)
+    match LuaL.loadfile context filepath with
+    | Lua.LUA_OK -> ()
+    | Lua.LUA_ERRSYNTAX -> raise (Parse_error filepath)
+    | Lua.LUA_ERRMEM -> raise Out_of_memory
+    (*| Lua.LUA_ERRFILE -> raise (Input_error filepath)*)
+    | _ -> assert false
+
+  let eval_code context code =
+    load_code context code;
+    call_tos context
 
   let eval_file context filepath =
     load_file context filepath;
-    match Lua.pcall context 0 0 0 with
-    | Lua.LUA_OK -> ()
-    | error -> begin
-        let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
-        Lua.pop context 1;
-        failwith error_message
-      end
-
-  let load_code context code =
-    LuaL.loadstring context code |> ignore (* TODO: use thread_status *)
-
-  let eval_code context filepath =
-    load_code context filepath;
-    match Lua.pcall context 0 0 0 with
-    | Lua.LUA_OK -> ()
-    | error -> begin
-        let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
-        Lua.pop context 1;
-        failwith error_message
-      end
+    call_tos context
 
   let get_string context code =
-    match LuaL.loadstring context ("_=" ^ code) with
-    | Lua.LUA_OK -> begin
-        match Lua.pcall context 0 0 0 with
-        | Lua.LUA_OK -> begin
-            Lua.getglobal context "_";
-            let result = (Lua.tostring context (-1) |> Option.value_exn) in
-            Lua.pop context 1;
-            result
-          end
-        | _ -> failwith ("error executing: " ^ code)
-      end
-    | _ -> failwith ("error parsing: " ^ code)
+    load_code context ("_=(" ^ code ^ ")");
+    call_tos context;
+    Lua.getglobal context "_";
+    let result = (Lua.tostring context (-1) |> Option.value_exn) in
+    Lua.pop context 1;
+    result
 
 end
