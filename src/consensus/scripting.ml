@@ -29,4 +29,17 @@ module Context = struct
         failwith error_message
       end
 
+  let load_code context code =
+    LuaL.loadstring context code |> ignore (* TODO: use thread_status *)
+
+  let eval_code context filepath =
+    load_code context filepath;
+    match Lua.pcall context 0 0 0 with
+    | Lua.LUA_OK -> ()
+    | error -> begin
+        let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
+        Lua.pop context 1;
+        failwith error_message
+      end
+
 end

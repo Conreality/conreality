@@ -5,4 +5,6 @@ module Context : sig
   val create : unit -> t
   val load_file : t -> string -> unit
   val eval_file : t -> string -> unit
+  val load_code : t -> string -> unit
+  val eval_code : t -> string -> unit
 end
