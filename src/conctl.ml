@@ -33,6 +33,15 @@ let help options man_format commands topic = match topic with
           let page = (topic, 7, "", "", ""), [`S topic; `P "Say something";] in
           `Ok (Cmdliner.Manpage.print man_format Format.std_formatter page)
 
+let execute options script =
+  let execute_script script =
+    let context = Scripting.Context.create () in
+    Scripting.Context.load_file context script
+  in
+  if script = ""
+  then `Error (true, "no script specified")
+  else `Ok (execute_script script)
+
 let report options = (* TODO *)
   Consensus.Vision.hello ()
 
@@ -88,6 +97,20 @@ let help_command =
   Term.(ret (const help $ common_options_term $ Term.man_format $ Term.choice_names $ topic)),
   Term.info "help" ~doc ~man
 
+let execute_command =
+  let script =
+    let doc = "The file path to the script to execute." in
+    Arg.(value & pos 0 string "" & info [] ~docv:"SCRIPT" ~doc)
+  in
+  let doc = "Execute a script." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Executes a Lua script."
+  ] @ help_sections
+  in
+  Term.(ret (const execute $ common_options_term $ script)),
+  Term.info "execute" ~doc ~man ~sdocs:common_options_section
+
 let report_command =
   let doc = "Display a self-diagnosis report." in
   let man = [
@@ -118,7 +141,7 @@ let default_command =
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ common_options_term)),
   Term.info "conctl" ~version ~doc ~man ~sdocs:common_options_section
 
-let commands = [help_command; report_command; toggle_command]
+let commands = [help_command; execute_command; report_command; toggle_command]
 
 let () =
   match Term.eval_choice default_command commands with
