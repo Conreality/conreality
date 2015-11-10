@@ -18,7 +18,8 @@ depends: [
   "cmdliner"       {build & >= "0.9.8"} # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
   "ctypes"         {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/
   "ctypes-foreign" {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/
-  "ocaml-lua"      {>= "1.2"}           # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
+  "ocaml-lua"      {build & >= "1.2"}   # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
+  "syslog"         {build & >= "1.4"}   # https://opam.ocaml.org/packages/syslog/syslog.1.4/
 ]
 depexts: [
   [["debian"]      ["libffi-dev"   (*3.1.0 *) "libopencv-dev" (*2.4.9 *)]] # Debian Jessie

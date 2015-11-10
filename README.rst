@@ -44,6 +44,8 @@ libraries and header files as follows::
 
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
+* `Syslog <http://opam.ocaml.org/packages/syslog/syslog.1.4/>`__ (>= 1.4)
+
 Installation
 ------------
 
