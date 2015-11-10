@@ -1,5 +1,5 @@
 "lib": -traverse, not_hygienic
-<src/conctl.*>: package(cmdliner), package(ctypes.foreign)
+<src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua), thread
 <src/conctl.{byte,native}>: use_vision
 <src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua), thread
 <src/conreald.{byte,native}>: use_vision
