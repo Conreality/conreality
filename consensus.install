@@ -11,7 +11,9 @@ man: []
 bin: [
   "_build/src/conctl.native" {"conctl"}
 ]
-sbin: []
+sbin: [
+  "_build/src/conreald.native" {"conreald"}
+]
 lib: [
   "META"
   "_build/src/consensus.cmi" {"consensus.cmi"}

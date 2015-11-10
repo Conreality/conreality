@@ -1,4 +1,5 @@
 conctl.native
+conreald.native
 consensus/libconsensus-vision.a
 consensus/vision.cma
 consensus/vision.cmxa

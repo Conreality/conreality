@@ -1,6 +1,8 @@
 "lib": -traverse, not_hygienic
 <src/conctl.*>: package(cmdliner), package(ctypes.foreign)
 <src/conctl.{byte,native}>: use_vision
+<src/conreald.*>: package(cmdliner), package(ctypes.foreign)
+<src/conreald.{byte,native}>: use_vision
 <src/consensus/*.cmx>: for-pack(Consensus)
 <src/consensus/vision.*>: package(ctypes.foreign)
 <src/consensus/vision.{cmo,cmx}>: use_opencv_core
