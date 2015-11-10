@@ -1,3 +1,6 @@
+[submodule "lib/alcotest"]
+	path = lib/alcotest
+	url = https://github.com/mirage/alcotest.git
 [submodule "lib/cmdliner"]
 	path = lib/cmdliner
 	url = https://github.com/dbuenzli/cmdliner.git
