@@ -29,8 +29,14 @@ let verbosity_str = function
 
 (* Command implementations *)
 
+let execute_script script =
+  let context = Scripting.Context.create () in
+  Scripting.Context.load_file context script
+
 let conreald options mission =
-  Printf.printf "Hello, world!\n" (* TODO *)
+  if mission = ""
+  then `Error (true, "no mission scenario script specified")
+  else `Ok (execute_script mission)
 
 (* Options common to all commands *)
 
@@ -59,7 +65,7 @@ let command =
   in
   let doc = "Conreality daemon." in
   let man = man_sections in
-  Term.(const conreald $ common_options_term $ mission),
+  Term.(ret (const conreald $ common_options_term $ mission)),
   Term.info "conreald" ~version ~doc ~man
 
 let () =
