@@ -19,16 +19,30 @@ system and the following tooling:
 Dependencies
 ------------
 
+### C/C++ Dependencies
+
 * `libffi <https://sourceware.org/libffi/>`__ (>= 3.0.13)
+
+* `liblua <http://www.lua.org/download.html>`__ (= 5.1.x)
 
 * `OpenCV <http://opencv.org/>`__ (>= 2.4)
 
-* `Ctypes <https://github.com/ocamllabs/ocaml-ctypes>`__
+On a Debian or Ubuntu Linux system, install the needed native runtime
+libraries and header files as follows::
 
-On Debian or Ubuntu, install the needed native runtime libraries and header
-files as follows::
+   $ sudo apt-get install libffi-dev liblua5.1-0-dev libopencv-dev
 
-   $ sudo apt-get install libffi-dev libopencv-dev
+### OCaml Dependencies
+
+* `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
+
+* `Cmdliner <https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/>`__ (>= 0.9.8)
+
+* `Ctypes <https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/>`__ (>= 0.4.0)
+
+* `Ctypes.Foreign <https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/>`__ (>= 0.4.0)
+
+* `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
 Installation
 ------------
@@ -68,4 +82,3 @@ package manager::
    $ opam uninstall consensus           # not needed the first time around
    $ opam install consensus --verbose
    $ ocamlfind query consensus          # should print a path
-
