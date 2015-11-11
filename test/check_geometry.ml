@@ -3,6 +3,7 @@
 open Consensus.Geometry
 
 let tvec1 = Vector3.create 3. 1. 2.
+let tvec1opposite = Vector3.create ( -3. ) ( -1. ) ( -2. )
 let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
@@ -23,6 +24,12 @@ let z () =
 let el () =
   Alcotest.(check int) "same int" 3 (int_of_float (Vector3.x tvec1))
 
+let opposite () =
+  Alcotest.(check bool) "same bool" true (Vector3.opposite tvec1 tvec1opposite)
+
+let opposite_failure () =
+  Alcotest.(check bool) "same bool" false (Vector3.opposite tvec1 tvec2)
+
 (*
 let zero () =
   let z = Vector3.zero() in
@@ -42,6 +49,8 @@ let () =
       "Y", `Quick, y;
       "Z", `Quick, z;
       "Element", `Quick, el;
+      "Opposite", `Quick, opposite;
+      "Opposite failure", `Quick, opposite_failure;
 (*      "Zero", `Slow, zero;*)
       "Equality", `Quick, equals;
     ];
