@@ -2,96 +2,72 @@
 
 (* Vectors and points *)
 
-type vector2 = { x: float; y: float; }
-type point2 = vector2
+module V2t = struct
+  type t = { x: float; y: float }
+  let i = [| (fun v -> v.x); (fun v -> v.y); |]
+end
+
+module P2t = V2t
 
 module Vector2 = struct
-  type t = vector2
+  open V2t
+  type t = V2t.t
 
-  let create x y = { x; y }
-
+  let create x y = { x = x; y = y }
   let x v = v.x
   let y v = v.y
+  let el n = V2t.i.(n)
 
   let zero = create 0. 0.
-
-  let invert v =
-    create (-. v.x) (-. v.y)
-
+  let invert v = create (-. v.x) (-. v.y)
   let neg v = invert v
-
-  let ( + ) a b =
-    create (a.x +. b.x) (a.y +. b.y)
-
-  let ( - ) a b =
-    create (a.x -. b.x) (a.y -. b.y)
-
-  let ( = ) a b =
-    a.x = b.x && a.y = b.y
-
-  let ( * ) a f =
-    create (a.x *. f) (a.y *. f)
-
-  let opposite a b =
-    if a = invert b then true else false
-
-  let dotproduct a b =
-    a.x *. b.x +. a.y *. b.y
-
-  let magnitude v =
-    sqrt ((v.x *. v.x) +. (v.y *. v.y))
-
-  let normalize v =
-    create (v.x /. magnitude v) (v.y /. magnitude v)
-
-  let distance a b =
-    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
+  let ( + ) a b = create (a.x +. b.x) (a.y +. b.y)
+  let ( - ) a b = create (a.x -. b.x) (a.y -. b.y)
+  let ( = ) a b = a.x = b.x && a.y = b.y
+  let ( * ) a f = create (a.x *. f) (a.y *. f)
+  let opposite a b = if a = invert b then true else false
+  let dotproduct a b = a.x *. b.x +. a.y *. b.y
+  let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y))
+  let normalize v = create (v.x /. magnitude v) (v.y /. magnitude v)
+  let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
 
 module Point2 = Vector2
 
-type vector3 = { x: float; y: float; z: float }
-type point3 = vector3
+type vector2 = Vector2.t
+type point2 = Vector2.t
+
+module V3t = struct
+  type t = { x: float; y: float; z: float }
+  let i = [| (fun v -> v.x); (fun v -> v.y); (fun v -> v.z); |]
+end
+
+module P3t = V3t
 
 module Vector3 = struct
-  type t = vector3
+  open V3t
+  type t = V3t.t
 
   let create x y z = { x; y; z }
-
   let x v = v.x
   let y v = v.y
   let z v = v.z
+  let el n = i.(n)
 
   let zero = create 0. 0. 0.
-
-  let invert v =
-    create (-. v.x) (-. v.y) (-. v.z)
-
+  let invert v = create (-. v.x) (-. v.y) (-. v.z)
   let neg v = invert v
-
-  let ( + ) a b =
-    create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
-
-  let ( - ) a b =
-    create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
-
-  let ( = ) a b =
-    a.x = b.x && a.y = b.y && a.z = b.z
-
-  let ( * ) a f =
-    create (a.x *. f) (a.y *. f) (a.z *. f)
-
-  let opposite a b =
-    a = invert b
-
-  let dotproduct a b =
-    a.x *. b.x +. a.y *. b.y +. a.z *. b.z
+  let ( + ) a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
+  let ( - ) a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
+  let ( = ) a b = a.x = b.x && a.y = b.y && a.z = b.z
+  let ( * ) a f = create (a.x *. f) (a.y *. f) (a.z *. f)
+  let opposite a b = a = invert b
+  let dotproduct a b = a.x *. b.x +. a.y *. b.y +. a.z *. b.z
 
   let crossproduct a b =
     create (a.y *. b.z -. a.z *. b.y) (a.z *. b.x -. a.x *. b.z) (a.x *. b.y -. a.y *. b.x)
 
-  let magnitude v =
-    sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
+  let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
 
   let normalize v =
     create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
@@ -104,18 +80,25 @@ module Point3 = Vector3
 module Vector = Vector3
 module Point = Vector3
 
+type vector3 = Vector3.t
+type point3 = Vector3.t
+
 (* Matrices *)
 
-type matrix2 = { e00: float; e01: float;
-                 e10: float; e11: float }
-type m2 = matrix2
+module M2t = struct
+  type t = { e00: float; e01: float;
+             e10: float; e11: float }
+  let i = [| (fun m -> m.e00); (fun m -> m.e01);
+             (fun m -> m.e10); (fun m -> m.e11); |]
+end
 
 module Matrix2 = struct
-  type t = matrix2
+  open M2t
+  type t = M2t.t
 
   (* Vector elements in row-major order: https://en.wikipedia.org/wiki/Row-major_order *)
-  let create e00 e01 e10 e11 = { e00; e01;
-                                 e10; e11 }
+  let create e00 e01 e10 e11 = { e00 = e00; e01 = e01;
+                                 e10 = e10; e11 = e11 }
 
   let e00 m = m.e00
   let e01 m = m.e01
@@ -123,6 +106,8 @@ module Matrix2 = struct
   let e11 m = m.e11
   let zero = create 0. 0. 0. 0.
   let id = create 1. 0. 0. 1.
+
+  let el row col = i.(2 * row + col)
 
   let neg m =
     create (-. m.e00) (-. m.e01)
@@ -172,5 +157,8 @@ module Matrix2 = struct
            (-. a.e10 /. d) (   a.e00 /. d)
 
 end
+
+type matrix2 = Matrix2.t
+type m2 = Matrix2.t
 
 module M2 = Matrix2

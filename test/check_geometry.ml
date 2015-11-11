@@ -20,6 +20,9 @@ let y () =
 let z () =
   Alcotest.(check int) "same int" 2 (int_of_float (Vector3.z tvec1))
 
+let el () =
+  Alcotest.(check int) "same int" 3 (int_of_float (Vector3.x tvec1))
+
 (*
 let zero () =
   let z = Vector3.zero() in
@@ -38,6 +41,7 @@ let () =
       "X", `Quick, x;
       "Y", `Quick, y;
       "Z", `Quick, z;
+      "Element", `Quick, el;
 (*      "Zero", `Slow, zero;*)
       "Equality", `Quick, equals;
     ];

@@ -10,6 +10,7 @@ module Vector2 : sig
   val create : float -> float -> t
   val x : t -> float
   val y : t -> float
+  val el : int -> t -> float
   val zero : t
   val invert : t -> t
   val neg : t -> t
@@ -37,6 +38,7 @@ module Vector3 : sig
   val x : t -> float
   val y : t -> float
   val z : t -> float
+  val el : int -> t -> float
   val zero : t
   val invert : t -> t
   val neg : t -> t
@@ -76,6 +78,7 @@ module Matrix2: sig
   val e01 : t -> float
   val e10 : t -> float
   val e11 : t -> float
+  val el : int -> int -> t -> float
   val zero : t
   val id : t
   val neg : t -> t
