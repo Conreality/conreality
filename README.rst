@@ -34,7 +34,7 @@ libraries and header files as follows::
 
 ### OCaml Dependencies
 
-* `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
+* `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5) (not automatically installed. `opam install alcotest` to run the tests with `make check`)
 
 * `Cmdliner <https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/>`__ (>= 0.9.8)
 
