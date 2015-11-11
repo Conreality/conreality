@@ -12,20 +12,20 @@ let float =
 
 let todo () = Alcotest.(check bool) "PASS" true true
 
-let tvec1 = Vector3.create 3. 1. 2.
-let tvec1opposite = Vector3.create ( -3. ) ( -1. ) ( -2. )
+let tvec1 = V3.create 3. 1. 2.
+let tvec1opposite = V3.create ( -3. ) ( -1. ) ( -2. )
 let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
-let tvec2 = Vector3.create e pi phi
-let zerovec = Vector3.zero
+let tvec2 = V3.create e pi phi
+let zerovec = V3.zero
 
-let create () = Alcotest.(check int) "same int" 0 (int_of_float (Vector3.x (Vector3.zero)))
-let x () = Alcotest.(check int) "same int" 3 (int_of_float (Vector3.x tvec1))
-let y () = Alcotest.(check int) "same int" 1 (int_of_float (Vector3.y tvec1))
-let z () = Alcotest.(check int) "same int" 2 (int_of_float (Vector3.z tvec1))
-let el () = Alcotest.(check int) "same int" 3 (int_of_float (Vector3.x tvec1))
-let zero () = Alcotest.(check (list int)) "int lists" [0; 0; 0;] ([int_of_float (Vector3.x zerovec); int_of_float (Vector3.y zerovec); int_of_float (Vector3.z zerovec)])
+let create () = Alcotest.(check int) "same int" 0 (int_of_float (V3.x (V3.zero)))
+let x () = Alcotest.(check int) "same int" 3 (int_of_float (V3.x tvec1))
+let y () = Alcotest.(check int) "same int" 1 (int_of_float (V3.y tvec1))
+let z () = Alcotest.(check int) "same int" 2 (int_of_float (V3.z tvec1))
+let el () = Alcotest.(check int) "same int" 3 (int_of_float (V3.x tvec1))
+let zero () = Alcotest.(check (list float)) "float list" [0.; 0.; 0.;] ([V3.x zerovec; V3.y zerovec; V3.z zerovec])
 let unitx () = todo ()
 let unity () = todo ()
 let unitz () = todo ()
@@ -33,12 +33,12 @@ let invert () = todo ()
 let op_neg () = todo ()
 let op_add () = todo ()
 let op_sub () = todo ()
-let op_eq () = Alcotest.(check bool) "same bool" true ((Vector3.zero) = (Vector3.zero))
-let float_equals () = Alcotest.(check float) "same float" e (Vector3.x tvec2)
+let op_eq () = Alcotest.(check bool) "same bool" true ((V3.zero) = (V3.zero))
+let float_equals () = Alcotest.(check float) "same float" e (V3.x tvec2)
 let smul () = todo ()
 let op_smul () = todo ()
-let opposite () = Alcotest.(check bool) "same bool" true (Vector3.opposite tvec1 tvec1opposite)
-let opposite_failure () = Alcotest.(check bool) "same bool" false (Vector3.opposite tvec1 tvec2)
+let opposite () = Alcotest.(check bool) "same bool" true (V3.opposite tvec1 tvec1opposite)
+let opposite_failure () = Alcotest.(check bool) "same bool" false (V3.opposite tvec1 tvec2)
 let dotproduct () = todo ()
 let crossproduct () = todo ()
 let magnitude () = todo ()
@@ -47,9 +47,9 @@ let normalize () = todo ()
 let distance () = todo ()
 
 let laborious_floats () =
-  Alcotest.(check float) "same float" e (Vector3.x tvec2);
-  Alcotest.(check float) "same float" pi (Vector3.y tvec2);
-  Alcotest.(check float) "same float" phi (Vector3.z tvec2)
+  Alcotest.(check float) "same float" e (V3.x tvec2);
+  Alcotest.(check float) "same float" pi (V3.y tvec2);
+  Alcotest.(check float) "same float" phi (V3.z tvec2)
 
 let () =
   Alcotest.run "My first test" [

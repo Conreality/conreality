@@ -1,12 +1,12 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-(* Vectors and points *)
+(* Vs and ps *)
 
-type vector2     (** 2D vector *)
-type point2      (** 2D point *)
+type v2     (** 2D vector *)
+type p2     (** 2D point *)
 
-module Vector2 : sig
-  type t = vector2
+module V2 : sig
+  type t = v2
   val create : float -> float -> t
   val x : t -> float
   val y : t -> float
@@ -29,15 +29,15 @@ module Vector2 : sig
   val distance : t -> t -> float
 end
 
-module Point2 : sig
-  type t = vector2
-end
+module P2 : sig type t = v2 end
 
-type vector3     (** 3D vector. *)
-type point3      (** 3D point. *)
+type v3     (** 3D vector *)
+type v      (** type alias *)
+type p3     (** 3D point *)
+type p      (** type alias *)
 
-module Vector3 : sig
-  type t = vector3
+module V3 : sig
+  type t = v3
   val create : float -> float -> float -> t
   val x : t -> float
   val y : t -> float
@@ -63,25 +63,16 @@ module Vector3 : sig
   val distance : t -> t -> float
 end
 
-module Vector : sig
-  type t = vector3
-end
-
-module Point3 : sig
-  type t = point3
-end
-
-module Point : sig
-  type t = point3
-end
+module V : sig type t = v3 end 
+module P3 : sig type t = p3 end 
+module P : sig type t = p3 end
 
 (* Matrices *)
 
-type matrix2	(* 2x2 matrix *)
-type m2		(* type alias *)
+type m2         (* 2x2 matrix *)
 
-module Matrix2: sig
-  type t = matrix2
+module M2: sig
+  type t = m2
   val create : float -> float -> float -> float -> t
   val e00 : t -> float
   val e01 : t -> float
@@ -102,9 +93,5 @@ module Matrix2: sig
   val det : t -> float
   val trace : t -> float
   val inverse : t -> t
-end
-
-module M2: sig
-  type t = m2
 end
 

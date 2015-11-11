@@ -9,7 +9,7 @@ end
 
 module P2t = V2t
 
-module Vector2 = struct
+module V2 = struct
   open V2t
   type t = V2t.t
 
@@ -38,10 +38,10 @@ module Vector2 = struct
   let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
 
-module Point2 = Vector2
+module P2 = V2
 
-type vector2 = Vector2.t
-type point2 = Vector2.t
+type v2 = V2.t
+type p2 = V2.t
 
 module V3t = struct
   type t = { x: float; y: float; z: float }
@@ -50,7 +50,7 @@ end
 
 module P3t = V3t
 
-module Vector3 = struct
+module V3 = struct
   open V3t
   type t = V3t.t
 
@@ -88,12 +88,14 @@ module Vector3 = struct
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
 end
 
-module Point3 = Vector3
-module Vector = Vector3
-module Point = Vector3
+type v3 = V3.t
+type v = V3.t
+type p3 = V3.t
+type p = V3.t
 
-type vector3 = Vector3.t
-type point3 = Vector3.t
+module P3 = V3
+module P = V3
+module V = V3
 
 (* Matrices *)
 
@@ -104,11 +106,11 @@ module M2t = struct
              (fun m -> m.e10); (fun m -> m.e11); |]
 end
 
-module Matrix2 = struct
+module M2 = struct
   open M2t
   type t = M2t.t
 
-  (* Vector elements in row-major order: https://en.wikipedia.org/wiki/Row-major_order *)
+  (* V elements in row-major order: https://en.wikipedia.org/wiki/Row-major_order *)
   let create e00 e01 e10 e11 = { e00 = e00; e01 = e01;
                                  e10 = e10; e11 = e11 }
 
@@ -170,7 +172,5 @@ module Matrix2 = struct
 
 end
 
-type matrix2 = Matrix2.t
-type m2 = Matrix2.t
+type m2 = M2.t
 
-module M2 = Matrix2
