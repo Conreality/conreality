@@ -1,5 +1,55 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(* Vectors and points *)
+
+type vector2 = { x: float; y: float; }
+type point2 = vector2
+
+module Vector2 = struct
+  type t = vector2
+
+  let create x y = { x; y }
+
+  let x v = v.x
+  let y v = v.y
+
+  let zero = create 0. 0.
+
+  let invert v =
+    create (-. v.x) (-. v.y)
+
+  let neg v = invert v
+
+  let ( + ) a b =
+    create (a.x +. b.x) (a.y +. b.y)
+
+  let ( - ) a b =
+    create (a.x -. b.x) (a.y -. b.y)
+
+  let ( = ) a b =
+    a.x = b.x && a.y = b.y
+
+  let ( * ) a f =
+    create (a.x *. f) (a.y *. f)
+
+  let opposite a b =
+    if a = invert b then true else false
+
+  let dotproduct a b =
+    a.x *. b.x +. a.y *. b.y
+
+  let magnitude v =
+    sqrt ((v.x *. v.x) +. (v.y *. v.y))
+
+  let normalize v =
+    create (v.x /. magnitude v) (v.y /. magnitude v)
+
+  let distance a b =
+    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
+end
+
+module Point2 = Vector2
+
 type vector3 = { x: float; y: float; z: float }
 type point3 = vector3
 
@@ -16,6 +66,8 @@ module Vector3 = struct
 
   let invert v =
     create (-. v.x) (-. v.y) (-. v.z)
+
+  let neg v = invert v
 
   let ( + ) a b =
     create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
@@ -43,11 +95,16 @@ module Vector3 = struct
 
   let normalize v =
     create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
+
+  let distance a b =
+    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
 end
 
 module Point3 = Vector3
 module Vector = Vector3
 module Point = Vector3
+
+(* Matrices *)
 
 type matrix2 = { e00: float; e01: float;
                  e10: float; e11: float }
@@ -66,7 +123,8 @@ module Matrix2 = struct
   let e11 m = m.e11
   let zero = create 0. 0. 0. 0.
   let id = create 1. 0. 0. 1.
-  let invert m =
+
+  let neg m =
     create (-. m.e00) (-. m.e01)
            (-. m.e10) (-. m.e11)
 

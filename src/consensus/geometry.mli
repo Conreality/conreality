@@ -2,8 +2,34 @@
 
 (* Vectors and points *)
 
+type vector2     (** 2D vector *)
+type point2      (** 2D point *)
+
+module Vector2 : sig
+  type t = vector2
+  val create : float -> float -> t
+  val x : t -> float
+  val y : t -> float
+  val zero : t
+  val invert : t -> t
+  val neg : t -> t
+  val ( + ) : t -> t -> t
+  val ( - ) : t -> t -> t
+  val ( = ) : t -> t -> bool
+  val ( * ) : t -> float -> t
+  val opposite : t -> t -> bool
+  val dotproduct : t -> t -> float
+  val magnitude : t -> float
+  val normalize : t -> t
+  val distance : t -> t -> float
+end
+
+module Point2 : sig
+  type t = vector2
+end
+
 type vector3     (** 3D vector. *)
-type point3     (** 3D point. *)
+type point3      (** 3D point. *)
 
 module Vector3 : sig
   type t = vector3
@@ -13,6 +39,7 @@ module Vector3 : sig
   val z : t -> float
   val zero : t
   val invert : t -> t
+  val neg : t -> t
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( = ) : t -> t -> bool
@@ -22,6 +49,7 @@ module Vector3 : sig
   val crossproduct : t -> t -> t
   val magnitude : t -> float
   val normalize : t -> t
+  val distance : t -> t -> float
 end
 
 module Vector : sig
@@ -50,7 +78,7 @@ module Matrix2: sig
   val e11 : t -> float
   val zero : t
   val id : t
-  val invert : t -> t
+  val neg : t -> t
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( = ) : t -> t -> bool
