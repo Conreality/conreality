@@ -16,8 +16,11 @@ module V2 : sig
   val unity : t
   val invert : t -> t
   val neg : t -> t
+  val add : t -> t -> t
   val ( + ) : t -> t -> t
+  val sub : t -> t -> t
   val ( - ) : t -> t -> t
+  val eq : t -> t -> bool
   val ( = ) : t -> t -> bool
   val smul : t -> float -> t
   val ( * ) : t -> float -> t
@@ -49,8 +52,11 @@ module V3 : sig
   val unitz : t
   val invert : t -> t
   val neg : t -> t
+  val add : t -> t -> t
   val ( + ) : t -> t -> t
+  val sub : t -> t -> t
   val ( - ) : t -> t -> t
+  val eq : t -> t -> bool
   val ( = ) : t -> t -> bool
   val smul : t -> float -> t
   val ( * ) : t -> float -> t
@@ -82,11 +88,15 @@ module M2: sig
   val zero : t
   val id : t
   val neg : t -> t
+  val add : t -> t-> t
   val ( + ) : t -> t -> t
+  val sub : t -> t-> t
   val ( - ) : t -> t -> t
+  val eq : t -> t-> bool
   val ( = ) : t -> t -> bool
   val smul : t -> float -> t
   val transpose : t -> t
+  val mul : t -> t-> t
   val ( * ) : t -> t -> t
   val emul : t -> t -> t
   val ediv : t -> t -> t
