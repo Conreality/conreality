@@ -7,6 +7,7 @@ module V2t = struct
   let i = [| (fun v -> v.x); (fun v -> v.y); |]
 end
 
+(* TODO: Make points and vectors separate modules *)
 module P2t = V2t
 
 module V2 = struct
@@ -23,9 +24,12 @@ module V2 = struct
   let unity = create 0. 1.
   let invert v = create (-. v.x) (-. v.y)
   let neg v = invert v
-  let ( + ) a b = create (a.x +. b.x) (a.y +. b.y)
-  let ( - ) a b = create (a.x -. b.x) (a.y -. b.y)
-  let ( = ) a b = a.x = b.x && a.y = b.y
+  let add a b = create (a.x +. b.x) (a.y +. b.y)
+  let ( + ) a b = add a b
+  let sub a b = create (a.x -. b.x) (a.y -. b.y)
+  let ( - ) a b = sub a b
+  let eq a b = a.x = b.x && a.y = b.y
+  let ( = ) a b = eq a b
   let smul a f = create (a.x *. f) (a.y *. f)
   let ( * ) a f = smul a f
   let opposite a b = if a = invert b then true else false
@@ -33,7 +37,7 @@ module V2 = struct
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y))
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y)
   let normalize v =
-    if v = zero then v else
+    if v = zero then v else (* TODO: True? *)
     create (v.x /. magnitude v) (v.y /. magnitude v)
   let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
@@ -66,9 +70,12 @@ module V3 = struct
   let unitz = create 0. 0. 1.
   let invert v = create (-. v.x) (-. v.y) (-. v.z)
   let neg v = invert v
-  let ( + ) a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
-  let ( - ) a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
-  let ( = ) a b = a.x = b.x && a.y = b.y && a.z = b.z
+  let add a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
+  let ( + ) a b = add a b
+  let sub a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
+  let ( - ) a b = sub a b
+  let eq a b = a.x = b.x && a.y = b.y && a.z = b.z
+  let ( = ) a b = eq a b
   let smul a f = create (a.x *. f) (a.y *. f) (a.z *. f)
   let ( * ) a f = smul a f
   let opposite a b = a = invert b
@@ -127,17 +134,20 @@ module M2 = struct
     create (-. m.e00) (-. m.e01)
            (-. m.e10) (-. m.e11)
 
-  let ( + ) a b =
+  let add a b =
     create (a.e00 +. b.e00) (a.e01 +. b.e01)
            (a.e10 +. b.e10) (a.e11 +. b.e11)
+  let ( + ) a b = add a b
 
-  let ( - ) a b =
+  let sub a b =
     create (a.e00 -. b.e00) (a.e01 -. b.e01)
            (a.e10 -. b.e10) (a.e11 -. b.e11)
+  let ( - ) a b = sub a b
 
-  let ( = ) a b =
+  let eq a b =
     a.e00 = b.e00 && a.e01 = b.e01 &&
     a.e10 = b.e10 && a.e11 = b.e11
+  let ( = ) a b = eq a b
 
   let smul m f =
     create (m.e00 *. f) (m.e01 *. f)
@@ -147,11 +157,12 @@ module M2 = struct
     create m.e00 m.e10
            m.e01 m.e11
 
-  let ( * ) a b =
+  let mul a b =
     if a = id then b else
     if b = id then a else
     create (a.e00 *. b.e00 +. a.e01 *. b.e10) (a.e00 *. b.e01 +. a.e01 *. b.e11)
            (a.e10 *. b.e00 +. a.e11 *. b.e10) (a.e10 *. b.e01 +. a.e11 *. b.e11)
+  let ( * ) a b = mul a b
 
   let emul a b =
     create (a.e00 *. b.e00) (a.e01 *. b.e01)

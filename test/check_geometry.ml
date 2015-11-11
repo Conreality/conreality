@@ -18,14 +18,14 @@ let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
 let tvec2 = V3.create e pi phi
-let zerovec = V3.zero
+let vec0 = V3.zero
 
 let create () = Alcotest.(check int) "same int" 0 (int_of_float (V3.x (V3.zero)))
 let x () = Alcotest.(check int) "same int" 3 (int_of_float (V3.x tvec1))
 let y () = Alcotest.(check int) "same int" 1 (int_of_float (V3.y tvec1))
 let z () = Alcotest.(check int) "same int" 2 (int_of_float (V3.z tvec1))
 let el () = Alcotest.(check int) "same int" 3 (int_of_float (V3.x tvec1))
-let zero () = Alcotest.(check (list float)) "float list" [0.; 0.; 0.;] ([V3.x zerovec; V3.y zerovec; V3.z zerovec])
+let zero () = Alcotest.(check (list float)) "float list" [0.; 0.; 0.;] ([V3.x vec0; V3.y vec0; V3.z vec0])
 let unitx () = todo ()
 let unity () = todo ()
 let unitz () = todo ()
