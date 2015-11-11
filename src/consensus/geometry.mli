@@ -19,6 +19,7 @@ module Vector2 : sig
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( = ) : t -> t -> bool
+  val smul : t -> float -> t
   val ( * ) : t -> float -> t
   val opposite : t -> t -> bool
   val dotproduct : t -> t -> float
@@ -51,6 +52,7 @@ module Vector3 : sig
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( = ) : t -> t -> bool
+  val smul : t -> float -> t
   val ( * ) : t -> float -> t
   val opposite : t -> t -> bool
   val dotproduct : t -> t -> float

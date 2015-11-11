@@ -26,7 +26,8 @@ module Vector2 = struct
   let ( + ) a b = create (a.x +. b.x) (a.y +. b.y)
   let ( - ) a b = create (a.x -. b.x) (a.y -. b.y)
   let ( = ) a b = a.x = b.x && a.y = b.y
-  let ( * ) a f = create (a.x *. f) (a.y *. f)
+  let smul a f = create (a.x *. f) (a.y *. f)
+  let ( * ) a f = smul a f
   let opposite a b = if a = invert b then true else false
   let dotproduct a b = a.x *. b.x +. a.y *. b.y
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y))
@@ -68,7 +69,8 @@ module Vector3 = struct
   let ( + ) a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
   let ( - ) a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
   let ( = ) a b = a.x = b.x && a.y = b.y && a.z = b.z
-  let ( * ) a f = create (a.x *. f) (a.y *. f) (a.z *. f)
+  let smul a f = create (a.x *. f) (a.y *. f) (a.z *. f)
+  let ( * ) a f = smul a f
   let opposite a b = a = invert b
   let dotproduct a b = a.x *. b.x +. a.y *. b.y +. a.z *. b.z
 
