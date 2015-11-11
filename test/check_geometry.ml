@@ -16,10 +16,7 @@ let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
 let tvec2 = Vector3.create e pi phi
-(*let zerovec = Vector3.create 0. 0. 0.*)
 let zerovec = Vector3.zero
-
-let scale_float f = int_of_float (f *. 1000000.)
 
 let create () = Alcotest.(check int) "same int" 0 (int_of_float (Vector3.x (Vector3.zero)))
 let x () = Alcotest.(check int) "same int" 3 (int_of_float (Vector3.x tvec1))
@@ -35,6 +32,11 @@ let zero () =
 let equals () = Alcotest.(check bool) "same bool" true ((Vector3.zero) = (Vector3.zero))
 let float_equals () = Alcotest.(check float) "same float" e (Vector3.x tvec2)
 
+let laborious_floats () =
+  Alcotest.(check float) "same float" e (Vector3.x tvec2);
+  Alcotest.(check float) "same float" pi (Vector3.y tvec2);
+  Alcotest.(check float) "same float" phi (Vector3.z tvec2)
+
 let () =
   Alcotest.run "My first test" [
     "test_set", [
@@ -48,5 +50,6 @@ let () =
       "Zero", `Quick, zero;
       "Equality", `Quick, equals;
       "Float equality", `Quick, float_equals;
+      "Laborious floats", `Quick, laborious_floats;
     ];
   ]
