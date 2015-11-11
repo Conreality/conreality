@@ -19,6 +19,8 @@ module Vector2 = struct
   let el n = V2t.i.(n)
 
   let zero = create 0. 0.
+  let unitx = create 1. 0.
+  let unity = create 0. 1.
   let invert v = create (-. v.x) (-. v.y)
   let neg v = invert v
   let ( + ) a b = create (a.x +. b.x) (a.y +. b.y)
@@ -29,7 +31,9 @@ module Vector2 = struct
   let dotproduct a b = a.x *. b.x +. a.y *. b.y
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y))
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y)
-  let normalize v = create (v.x /. magnitude v) (v.y /. magnitude v)
+  let normalize v =
+    if v = zero then v else
+    create (v.x /. magnitude v) (v.y /. magnitude v)
   let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
 
@@ -56,6 +60,9 @@ module Vector3 = struct
   let el n = i.(n)
 
   let zero = create 0. 0. 0.
+  let unitx = create 1. 0. 0.
+  let unity = create 0. 1. 0.
+  let unitz = create 0. 0. 1.
   let invert v = create (-. v.x) (-. v.y) (-. v.z)
   let neg v = invert v
   let ( + ) a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z)
@@ -72,6 +79,7 @@ module Vector3 = struct
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
 
   let normalize v =
+    if v = zero then v else
     create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
   let distance a b =

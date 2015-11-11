@@ -12,6 +12,8 @@ module Vector2 : sig
   val y : t -> float
   val el : int -> t -> float
   val zero : t
+  val unitx : t
+  val unity : t
   val invert : t -> t
   val neg : t -> t
   val ( + ) : t -> t -> t
@@ -41,6 +43,9 @@ module Vector3 : sig
   val z : t -> float
   val el : int -> t -> float
   val zero : t
+  val unitx : t
+  val unity : t
+  val unitz : t
   val invert : t -> t
   val neg : t -> t
   val ( + ) : t -> t -> t
