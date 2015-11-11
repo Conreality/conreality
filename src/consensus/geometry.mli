@@ -21,6 +21,7 @@ module Vector2 : sig
   val opposite : t -> t -> bool
   val dotproduct : t -> t -> float
   val magnitude : t -> float
+  val magnitude2 : t -> float
   val normalize : t -> t
   val distance : t -> t -> float
 end
@@ -50,6 +51,7 @@ module Vector3 : sig
   val dotproduct : t -> t -> float
   val crossproduct : t -> t -> t
   val magnitude : t -> float
+  val magnitude2 : t -> float
   val normalize : t -> t
   val distance : t -> t -> float
 end

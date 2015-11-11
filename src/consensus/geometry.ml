@@ -28,6 +28,7 @@ module Vector2 = struct
   let opposite a b = if a = invert b then true else false
   let dotproduct a b = a.x *. b.x +. a.y *. b.y
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y))
+  let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y)
   let normalize v = create (v.x /. magnitude v) (v.y /. magnitude v)
   let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
@@ -68,6 +69,7 @@ module Vector3 = struct
     create (a.y *. b.z -. a.z *. b.y) (a.z *. b.x -. a.x *. b.z) (a.x *. b.y -. a.y *. b.x)
 
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
+  let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
 
   let normalize v =
     create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
