@@ -88,7 +88,7 @@ module V3 = struct
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
 
   let normalize v =
-    if v = zero then v else
+    if v = zero then v else (* TODO: True? *)
     create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
   let distance a b =
