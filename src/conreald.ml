@@ -2,7 +2,7 @@
 
 open Cmdliner
 open Consensus
-open Lwt
+open Lwt.Infix
 
 (* Configuration *)
 
@@ -34,10 +34,24 @@ let execute_script script =
   let context = Scripting.Context.create () in
   Scripting.Context.eval_file context script
 
-let conreald options mission =
+let rec loop () =
+  fst (Lwt.wait ())
+
+let run () =
+  Lwt_log.default := Lwt_log.syslog
+    ~facility:`Daemon
+    ~template:"$(name)[$(pid)]: $(message)" ();
+  Lwt_engine.on_timer 60. true (fun _ ->
+    Lwt_log.ign_info "Processed no requests in the last minute.") |> ignore;
+  Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
+  Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
+  Lwt_log.notice "Starting up..."
+  >>= fun () -> loop ()
+
+let main options mission =
   if mission = ""
   then `Error (true, "no mission scenario script specified")
-  else `Ok (execute_script mission)
+  else `Ok (Lwt_main.run (run ()))
 
 (* Options common to all commands *)
 
@@ -66,7 +80,7 @@ let command =
   in
   let doc = "Conreality daemon." in
   let man = man_sections in
-  Term.(ret (const conreald $ common_options_term $ mission)),
+  Term.(ret (const main $ common_options_term $ mission)),
   Term.info "conreald" ~version ~doc ~man
 
 let () =
