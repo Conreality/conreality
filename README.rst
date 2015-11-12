@@ -42,6 +42,8 @@ libraries and header files as follows::
 
 * `Ctypes.Foreign <https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/>`__ (>= 0.4.0)
 
+* `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
+
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
 Installation

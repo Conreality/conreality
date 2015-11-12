@@ -18,6 +18,7 @@ depends: [
   "cmdliner"       {build & >= "0.9.8"} # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
   "ctypes"         {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/
   "ctypes-foreign" {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/
+  "lwt"            {build & >= "2.5.0"} # https://opam.ocaml.org/packages/lwt/lwt.2.5.0/
   "ocaml-lua"      {build & >= "1.2"}   # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
 ]
 depexts: [
