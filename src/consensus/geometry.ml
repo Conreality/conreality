@@ -1,5 +1,17 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+let epsilon_float = 1e-9
+
+let ( =. ) ?(eps = epsilon_float) x y =
+  let c = compare x y in
+  if c = 0 then true else
+  let ax = abs_float x in
+  let ay = abs_float y in
+  let amax = if ax > ay then ax else ay in
+  let max = if 1. > amax then 1. else amax in
+  if max = infinity then false else
+  abs_float (x -. y) <= eps *. max
+
 (* Vectors and points *)
 
 module V2t = struct
@@ -28,7 +40,7 @@ module V2 = struct
   let ( + ) a b = add a b
   let sub a b = create (a.x -. b.x) (a.y -. b.y)
   let ( - ) a b = sub a b
-  let eq a b = a.x = b.x && a.y = b.y
+  let eq a b = a.x =. b.x && a.y =. b.y
   let ( = ) a b = eq a b
   let smul a f = create (a.x *. f) (a.y *. f)
   let ( * ) a f = smul a f
@@ -74,7 +86,7 @@ module V3 = struct
   let ( + ) a b = add a b
   let sub a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z)
   let ( - ) a b = sub a b
-  let eq a b = a.x = b.x && a.y = b.y && a.z = b.z
+  let eq a b = a.x =. b.x && a.y =. b.y && a.z =. b.z
   let ( = ) a b = eq a b
   let smul a f = create (a.x *. f) (a.y *. f) (a.z *. f)
   let ( * ) a f = smul a f
@@ -145,8 +157,8 @@ module M2 = struct
   let ( - ) a b = sub a b
 
   let eq a b =
-    a.e00 = b.e00 && a.e01 = b.e01 &&
-    a.e10 = b.e10 && a.e11 = b.e11
+    a.e00 =. b.e00 && a.e01 =. b.e01 &&
+    a.e10 =. b.e10 && a.e11 =. b.e11
   let ( = ) a b = eq a b
 
   let smul m f =

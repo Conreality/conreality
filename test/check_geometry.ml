@@ -6,23 +6,6 @@ let appx_equal ?(eps = 1e-5) f1 f2 = abs_float (f1 -. f2) < eps
 
 external format_float : string -> float -> string = "caml_format_float"
 
-(* Adds a "." at the end if needed. It makes the assumption on the string
-   passed in argument that it was returned by [format_float] *)
-let valid_float_lexem s =
-  let l = String.length s in
-  let rec loop i =
-    if i >= l then s ^ "." else
-    match s.[i] with
-    | '0' .. '9' | '-' -> loop (i + 1)
-    | _ -> s
-  in
-  loop 0
-;;
-
-(* Standard 12 significant digits, exponential notation used as necessary, guaranteed to
-   be a valid OCaml float lexem, not to look like an int.  *)
-let to_string x = valid_float_lexem (format_float "%.12g" x);;
-
 let float =
   let module M = struct
     type t = float
