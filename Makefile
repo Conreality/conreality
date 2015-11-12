@@ -6,9 +6,11 @@ OCAMLBUILD      = ocamlbuild
 OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
+CHECKSEDSCRIPT  = ''
 
 ifeq ($(V),1)
 OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
+CHECKSEDSCRIPT  = 's/$$/ --verbose/'
 endif
 
 BINARIES = \
@@ -31,6 +33,7 @@ check:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
+	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
 	  _build/test/check_all.sh
 
 install: consensus.install build
