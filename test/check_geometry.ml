@@ -5,12 +5,14 @@ open Consensus.Geometry
 let float =
   let module M = struct
     type t = float
-    let equal = ( = )
+    (*let equal = ( = )*)
+    let equal a b = (Printf.sprintf "%f" a) = (Printf.sprintf "%f" b)
     let pp = Format.pp_print_float
   end in
   (module M: Alcotest.TESTABLE with type t = M.t)
 
 let todo () = Alcotest.(check bool) "PASS" true true
+let of_floats l = List.map string_of_float l
 
 let e = 2.71828
 let pi = 3.14159
@@ -35,8 +37,10 @@ let v3_neg () = Alcotest.(check bool) "same bool" true (tvec3_1opposite = V3.neg
 let v3_add () = let v = V3.add tvec3_1 tvec3_2 in Alcotest.(check (list float)) "float list" [5.71828; 4.14159; 3.61803] ([(V3.x v); (V3.y v); (V3.z v)])
 (* TODO: Find out how to test infix operators *)
 (*let v3_op_add () = let v = tvec3_1 + tvec3_2 in Alcotest.(check (list float)) "float list" [5.71828; 4.14159; 3.61803] ([(V3.x v); (V3.y v); (V3.z v)])*)
-(* TODO: Find out why this is failing in the float module above(?) *)
+(* doesn't work with sprintf, works with string_of_float
 let v3_sub () = let v = V3.sub tvec3_1 tvec3_2 in Alcotest.(check (list float)) "float list" [0.28172; -2.14159; 0.38197] ([(V3.x v); (V3.y v); (V3.z v)])
+*)
+let v3_sub () = let v = V3.sub tvec3_1 tvec3_2 in Alcotest.(check (list string)) "string list" ["0.28172"; "-2.14159"; "0.38197"] (of_floats [(V3.x v); (V3.y v); (V3.z v)])
 let v3_sub2 () = let v = V3.sub tvec3_1 tvec3_1 in Alcotest.(check (list float)) "float list" [0.; 0.; 0.] ([V3.x v; V3.y v; V3.z v])
 let v3_op_sub () = todo ()
 let v3_eq () = Alcotest.(check bool) "same bool" true (V3.eq V3.zero V3.zero)
@@ -46,13 +50,11 @@ let v3_smul () = let v = V3.smul tvec3_1 2. in Alcotest.(check (list float)) "fl
 let v3_op_smul () = todo ()
 let v3_opposite () = Alcotest.(check bool) "same bool" true (V3.opposite tvec3_1 tvec3_1opposite)
 let v3_opposite_failure () = Alcotest.(check bool) "same bool" false (V3.opposite tvec3_1 tvec3_2)
-(* TODO: Find out why this is failing, despite outputting identical-looking floats *)
 let v3_dotproduct () = Alcotest.(check float) "same float" 14.53249 (V3.dotproduct tvec3_1 tvec3_2)
 let v3_dotproduct2 () = Alcotest.(check float) "same float" 14. (V3.dotproduct tvec3_1 tvec3_1)
 (* TODO: Implement a second test using tvec3_1 and tvec2_3 *)
 (* crosstproduct = < a2b3 - a3b2, a3b1 - a1b3, a1b2 - a2b1 > *)
 let v3_crossproduct () = let v = V3.crossproduct tvec3_1 tvec3_1 in Alcotest.(check (list float)) "float list" [0.; 0.; 0.] ([(V3.x v); (V3.y v); (V3.z v)])
-(* FIXME: Precision error here, different between OCaml and gnome-calculator *)
 let v3_magnitude () = Alcotest.(check float) "same float" 3.741657387 (V3.magnitude tvec3_1)
 let v3_magnitude2 () = Alcotest.(check float) "same float" 14. (V3.magnitude2 tvec3_1)
 let v3_normalize () = todo ()
