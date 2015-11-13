@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+open Prelude
+
 (* This is as good as we get with 32-bit floats (e.g. on ARMv6) *)
 let eps = 1e-9
 
