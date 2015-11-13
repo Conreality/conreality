@@ -8,6 +8,7 @@ archive(native) = "@PACKAGE_TARNAME@.cmx"
 package "geometry" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus geometry library"
+  requires = "consensus.prelude"
   archive(byte) = "consensus.geometry.cmo"
   archive(native) = "consensus.geometry.cmx"
 )
@@ -15,6 +16,7 @@ package "geometry" (
 package "knowledge" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus knowledge base"
+  requires = "consensus.prelude"
   archive(byte) = "consensus.knowledge.cmo"
   archive(native) = "consensus.knowledge.cmx"
 )
@@ -22,6 +24,7 @@ package "knowledge" (
 package "ontology" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus ontology database"
+  requires = "consensus.prelude"
   archive(byte) = "consensus.ontology.cmo"
   archive(native) = "consensus.ontology.cmx"
 )
@@ -29,15 +32,23 @@ package "ontology" (
 package "physics" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus physics engine"
-  requires = "consensus.geometry"
+  requires = "consensus.prelude consensus.geometry"
   archive(byte) = "consensus.physics.cmo"
   archive(native) = "consensus.physics.cmx"
+)
+
+package "prelude" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus standard prelude"
+  requires = ""
+  archive(byte) = "consensus.prelude.cmo"
+  archive(native) = "consensus.prelude.cmx"
 )
 
 package "scripting" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus scripting engine"
-  requires = "lua threads"
+  requires = "consensus.prelude lua threads"
   archive(byte) = "consensus.scripting.cmo"
   archive(native) = "consensus.scripting.cmx"
 )
@@ -45,7 +56,7 @@ package "scripting" (
 package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"
-  requires = "ctypes.foreign"
+  requires = "consensus.prelude ctypes.foreign"
   archive(byte) = "consensus.vision.cma"
   archive(native) = "consensus.vision.cmxa"
 )

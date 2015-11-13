@@ -35,6 +35,10 @@ lib: [
   "_build/src/consensus/physics.cmi" {"consensus.physics.cmi"}
   "_build/src/consensus/physics.cmo" {"consensus.physics.cmo"}
   "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
+  "src/consensus/prelude.mli" {"consensus.prelude.mli"}
+  "_build/src/consensus/prelude.cmi" {"consensus.prelude.cmi"}
+  "_build/src/consensus/prelude.cmo" {"consensus.prelude.cmo"}
+  "_build/src/consensus/prelude.cmx" {"consensus.prelude.cmx"}
   "src/consensus/scripting.mli" {"consensus.scripting.mli"}
   "_build/src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
   "_build/src/consensus/scripting.cmo" {"consensus.scripting.cmo"}

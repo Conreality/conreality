@@ -2,5 +2,6 @@ consensus/Geometry
 consensus/Knowledge
 consensus/Ontology
 consensus/Physics
+consensus/Prelude
 consensus/Scripting
 consensus/Vision
