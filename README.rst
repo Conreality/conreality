@@ -49,11 +49,11 @@ libraries and header files as follows::
 Installation
 ------------
 
-Prerequisites for Ubuntu 14.04 LTS (Trusty Tahr)::
+Prerequisites for Ubuntu 14.04 LTS (Trusty Tahr) and 15.10 (Wily Werewolf)::
 
    $ sudo apt-add-repository ppa:avsm/ppa
    $ sudo apt-get update
-   $ sudo apt-get install ocaml-nox opam
+   $ sudo apt-get install ocaml-nox opam m4
 
 Prerequisites for Raspberry Pi running Raspbian/Jessie::
 
@@ -84,3 +84,11 @@ package manager::
    $ opam uninstall consensus           # not needed the first time around
    $ opam install consensus --verbose
    $ ocamlfind query consensus          # should print a path
+
+If you want to run the test suite, you need to install Alcotest::
+
+   $ opam install alcotest
+
+To actually run the tests::
+
+   $ make clean && make check  # adding `V=1` here will produce lots of output
