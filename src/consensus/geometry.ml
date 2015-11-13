@@ -1,8 +1,11 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-let epsilon_float = 1e-9
+(* This is as good as we get with 32-bit floats (e.g. on ARMv6) *)
+let eps = 1e-9
 
-let ( =. ) ?(eps = epsilon_float) x y =
+(* I read something about doing let f (float: x) (float:y) = *)
+(* being more efficient, but it doesn't seem to work *)
+let ( =. ) x y =
   let c = compare x y in
   if c = 0 then true else
   let ax = abs_float x in
@@ -29,7 +32,7 @@ module V2 = struct
   let create x y = { x = x; y = y }
   let x v = v.x
   let y v = v.y
-  let el n = V2t.i.(n)
+  let el v n = i.(n) v
 
   let zero = create 0. 0.
   let unitx = create 1. 0.
@@ -74,7 +77,7 @@ module V3 = struct
   let x v = v.x
   let y v = v.y
   let z v = v.z
-  let el n = i.(n)
+  let el v n = i.(n) v
 
   let zero = create 0. 0. 0.
   let unitx = create 1. 0. 0.
@@ -94,7 +97,9 @@ module V3 = struct
   let dotproduct a b = a.x *. b.x +. a.y *. b.y +. a.z *. b.z
 
   let crossproduct a b =
-    create (a.y *. b.z -. a.z *. b.y) (a.z *. b.x -. a.x *. b.z) (a.x *. b.y -. a.y *. b.x)
+    create (a.y *. b.z -. a.z *. b.y)
+           (a.z *. b.x -. a.x *. b.z)
+           (a.x *. b.y -. a.y *. b.x)
 
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
@@ -105,6 +110,8 @@ module V3 = struct
 
   let distance a b =
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
+
+  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z
 end
 
 type v3 = V3.t

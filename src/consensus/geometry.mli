@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+val ( =. ) : float -> float -> bool
+
 (* Vs and ps *)
 
 type v2     (** 2D vector *)
@@ -10,7 +12,7 @@ module V2 : sig
   val create : float -> float -> t
   val x : t -> float
   val y : t -> float
-  val el : int -> t -> float
+  val el : t -> int -> float
   val zero : t
   val unitx : t
   val unity : t
@@ -45,7 +47,7 @@ module V3 : sig
   val x : t -> float
   val y : t -> float
   val z : t -> float
-  val el : int -> t -> float
+  val el : t -> int -> float
   val zero : t
   val unitx : t
   val unity : t
@@ -67,6 +69,7 @@ module V3 : sig
   val magnitude2 : t -> float
   val normalize : t -> t
   val distance : t -> t -> float
+  val print : Format.formatter -> t -> unit
 end
 
 module V : sig type t = v3 end 
