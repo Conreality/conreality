@@ -18,6 +18,13 @@ let float =
   (module M: Alcotest.TESTABLE with type t = M.t)
 
 let todo () = Alcotest.(check bool) "PASS" true true
+
+let same_float a b = Alcotest.(check float) "same float" a b
+let same_bool a b = Alcotest.(check bool) "same bool" a b
+let same_int a b = Alcotest.(check int) "same int" a b
+let same_string a b = Alcotest.(check string) "same string" a b
+(*let same_list t a b = Alcotest.(check (t list)) *)
+
 let v3_to_list v = [(V3.x v); (V3.y v); (V3.z v)]
 
 let e = 2.71828
@@ -45,69 +52,69 @@ let tvec3_p13 = make_v3 (12345678901.)
 
 (* Keep this one operating on floats to avoid depending on V3.eq *)
 let v3_create () = Alcotest.(check (list float)) "float list" [e; pi; phi] (v3_to_list tvec3_2)
-let v3_x () = Alcotest.(check float) "same float" 3. (V3.x tvec3_1)
-let v3_y () = Alcotest.(check float) "same float" pi (V3.y tvec3_2)
-let v3_z () = Alcotest.(check float) "same float" 2. (V3.z tvec3_1)
-let v3_el () = Alcotest.(check float) "same float" 3. (V3.el tvec3_1 0)
+let v3_x () = same_float 3. (V3.x tvec3_1)
+let v3_y () = same_float pi (V3.y tvec3_2)
+let v3_z () = same_float 2. (V3.z tvec3_1)
+let v3_el () = same_float 3. (V3.el tvec3_1 0)
 (* Keep this one operating on floats to avoid depending on V3.eq *)
 let v3_zero () = Alcotest.(check (list float)) "float list" [0.; 0.; 0.] (v3_to_list tvec3_0)
-let v3_unitx () = Alcotest.(check bool) "same bool" true (V3.eq V3.unitx (V3.create 1. 0. 0.))
-let v3_unity () = Alcotest.(check bool) "same bool" true (V3.eq V3.unity (V3.create 0. 1. 0.))
-let v3_unitz () = Alcotest.(check bool) "same bool" true (V3.eq V3.unitz (V3.create 0. 0. 1.))
-let v3_invert () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_1opposite (V3.invert tvec3_1))
-let v3_neg () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_1opposite (V3.neg tvec3_1))
+let v3_unitx () = same_bool true (V3.eq V3.unitx (V3.create 1. 0. 0.))
+let v3_unity () = same_bool true (V3.eq V3.unity (V3.create 0. 1. 0.))
+let v3_unitz () = same_bool true (V3.eq V3.unitz (V3.create 0. 0. 1.))
+let v3_invert () = same_bool true (V3.eq tvec3_1opposite (V3.invert tvec3_1))
+let v3_neg () = same_bool true (V3.eq tvec3_1opposite (V3.neg tvec3_1))
 
 let v3_add_expected = V3.create (5.71828) (4.14159) (3.61803)
 let v3_add () =
   let v = V3.add tvec3_1 tvec3_2 in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_add_expected)
+  same_bool true (V3.eq v v3_add_expected)
 let v3_op_add () =
   let v = V3.( + ) tvec3_1 tvec3_2 in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_add_expected)
+  same_bool true (V3.eq v v3_add_expected)
 
 let v3_sub_expected = V3.create (0.28172) (-2.14159) (0.38197)
 let v3_sub () =
   let v = V3.sub tvec3_1 tvec3_2 in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_sub_expected)
+  same_bool true (V3.eq v v3_sub_expected)
 let v3_op_sub () =
   let v = V3.( - ) tvec3_1 tvec3_2 in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_sub_expected)
+  same_bool true (V3.eq v v3_sub_expected)
 
-let v3_eq () = Alcotest.(check bool) "same bool" true (V3.eq V3.zero V3.zero)
+let v3_eq () = same_bool true (V3.eq V3.zero V3.zero)
 (* TODO: Rewrite these so values created by make_v3 are actually related to Geometry.eps *)
-let v3_eq_p1 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p1 (V3.add tvec3_p1 (make_v3 (0.001))))
-let v3_eq_p2 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p2 (V3.add tvec3_p2 (make_v3 (0.00000001))))
-let v3_eq_p3 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p3 (V3.add tvec3_p3 (make_v3 (0.000000001))))
-let v3_eq_p4 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p4 (V3.add tvec3_p4 (make_v3 (0.0000000001))))
-let v3_eq_p5 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p5 (V3.add tvec3_p5 (make_v3 (0.00000000001))))
-let v3_eq_p6 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p6 (V3.add tvec3_p6 (make_v3 (0.0000001))))
-let v3_eq_p7 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p7 (V3.add tvec3_p7 (make_v3 (0.00000001))))
-let v3_eq_p8 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p8 (V3.add tvec3_p8 (make_v3 (0.0000000001))))
-let v3_eq_p9 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p9 (V3.add tvec3_p9 (make_v3 (0.00000000001))))
-let v3_eq_p10 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p10 (V3.add tvec3_p10 (make_v3 (1.))))
-let v3_eq_p11 () = Alcotest.(check bool) "same bool" false (V3.eq tvec3_p11 (V3.add tvec3_p11 (make_v3 (1.))))
-let v3_eq_p12 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p12 (V3.add tvec3_p12 (make_v3 (1.))))
-let v3_eq_p13 () = Alcotest.(check bool) "same bool" true (V3.eq tvec3_p13 (V3.add tvec3_p13 (make_v3 (1.))))
-let v3_op_eq () = Alcotest.(check bool) "same bool" true (V3.eq V3.zero V3.zero)
+let v3_eq_p1 () = same_bool false (V3.eq tvec3_p1 (V3.add tvec3_p1 (make_v3 (0.001))))
+let v3_eq_p2 () = same_bool false (V3.eq tvec3_p2 (V3.add tvec3_p2 (make_v3 (0.00000001))))
+let v3_eq_p3 () = same_bool false (V3.eq tvec3_p3 (V3.add tvec3_p3 (make_v3 (0.000000001))))
+let v3_eq_p4 () = same_bool true (V3.eq tvec3_p4 (V3.add tvec3_p4 (make_v3 (0.0000000001))))
+let v3_eq_p5 () = same_bool true (V3.eq tvec3_p5 (V3.add tvec3_p5 (make_v3 (0.00000000001))))
+let v3_eq_p6 () = same_bool false (V3.eq tvec3_p6 (V3.add tvec3_p6 (make_v3 (0.0000001))))
+let v3_eq_p7 () = same_bool false (V3.eq tvec3_p7 (V3.add tvec3_p7 (make_v3 (0.00000001))))
+let v3_eq_p8 () = same_bool true (V3.eq tvec3_p8 (V3.add tvec3_p8 (make_v3 (0.0000000001))))
+let v3_eq_p9 () = same_bool true (V3.eq tvec3_p9 (V3.add tvec3_p9 (make_v3 (0.00000000001))))
+let v3_eq_p10 () = same_bool false (V3.eq tvec3_p10 (V3.add tvec3_p10 (make_v3 (1.))))
+let v3_eq_p11 () = same_bool false (V3.eq tvec3_p11 (V3.add tvec3_p11 (make_v3 (1.))))
+let v3_eq_p12 () = same_bool true (V3.eq tvec3_p12 (V3.add tvec3_p12 (make_v3 (1.))))
+let v3_eq_p13 () = same_bool true (V3.eq tvec3_p13 (V3.add tvec3_p13 (make_v3 (1.))))
+let v3_op_eq () = same_bool true (V3.eq V3.zero V3.zero)
 
 let v3_smul_expected = V3.create (6.) (2.) (4.)
 let v3_smul () =
   let v = V3.smul tvec3_1 2. in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_smul_expected)
+  same_bool true (V3.eq v v3_smul_expected)
 let v3_op_smul () =
   let v = V3.( * ) tvec3_1 2. in
-  Alcotest.(check bool) "same bool" true (V3.eq v v3_smul_expected)
+  same_bool true (V3.eq v v3_smul_expected)
 
-let v3_opposite () = Alcotest.(check bool) "same bool" true (V3.opposite tvec3_1 tvec3_1opposite)
-let v3_opposite_failure () = Alcotest.(check bool) "same bool" false (V3.opposite tvec3_1 tvec3_2)
+let v3_opposite () = same_bool true (V3.opposite tvec3_1 tvec3_1opposite)
+let v3_opposite_failure () = same_bool false (V3.opposite tvec3_1 tvec3_2)
 
-let v3_dotproduct () = Alcotest.(check float) "same float" 14.53249 (V3.dotproduct tvec3_1 tvec3_2)
-let v3_dotproduct2 () = Alcotest.(check float) "same float" 14. (V3.dotproduct tvec3_1 tvec3_1)
+let v3_dotproduct () = same_float 14.53249 (V3.dotproduct tvec3_1 tvec3_2)
+let v3_dotproduct2 () = same_float 14. (V3.dotproduct tvec3_1 tvec3_1)
 
 let v3_crossproduct () =
   let v = V3.crossproduct tvec3_1 tvec3_1 in
   let w = V3.create (0.) (0.) (0.) in
-  Alcotest.(check bool) "same bool" true (V3.eq v w)
+  same_bool true (V3.eq v w)
 
 (* a = 2.71828, 3.14159, 1.61803 *)
 (* b = 3, 1, 2 *)
@@ -119,14 +126,14 @@ let wx = (V3.create (a2 *. b3 -. a3 *. b2)
                     (a1 *. b2 -. a2 *. b1))
 let vx = (V3.crossproduct tvec3_2 tvec3_1)
 let v3_crossproduct2 () =
-  Alcotest.(check bool) "same bool" true (V3.eq vx wx)
+  same_bool true (V3.eq vx wx)
 
-let v3_magnitude () = Alcotest.(check float) "same float" 3.741657387 (V3.magnitude tvec3_1)
-let v3_magnitude2 () = Alcotest.(check float) "same float" 14. (V3.magnitude2 tvec3_1)
-let v3_magnitude2_2 () = Alcotest.(check float) "same float" 19.876654967 (V3.magnitude2 tvec3_2)
-let v3_magnitude3 () = Alcotest.(check float) "same float" 4.458324233 (V3.magnitude tvec3_2)
-let v3_magnitude2_0 () = Alcotest.(check float) "same float" 0. (V3.magnitude2 tvec3_0)
-let v3_magnitude0 () = Alcotest.(check float) "same float" 0. (V3.magnitude tvec3_0)
+let v3_magnitude () = same_float 3.741657387 (V3.magnitude tvec3_1)
+let v3_magnitude2 () = same_float 14. (V3.magnitude2 tvec3_1)
+let v3_magnitude2_2 () = same_float 19.876654967 (V3.magnitude2 tvec3_2)
+let v3_magnitude3 () = same_float 4.458324233 (V3.magnitude tvec3_2)
+let v3_magnitude2_0 () = same_float 0. (V3.magnitude2 tvec3_0)
+let v3_magnitude0 () = same_float 0. (V3.magnitude tvec3_0)
 
 let v3_normalize () =
 (* normalize v = v.x / magnitude v, v.y / magnitude v, v.z / magnitude z  *)
@@ -134,24 +141,24 @@ let v3_normalize () =
 (* normalize 3 1 2 = 0.801783726 0.267261242 0.534522484 *)
   let v = V3.normalize tvec3_1 in
   let vn = V3.create (0.801783726) (0.267261242) (0.534522484) in
-  Alcotest.(check bool) "same bool" true (V3.eq v vn)
+  same_bool true (V3.eq v vn)
 
 let v3_normalize2 () =
 (* magnitude 2.71828 3.14159 1.61803 = 4.458324233 *)
 (* normalize 2.71828 3.14159 1.61803 = 0.609708908 0.704657139 0.362923358 *)
   let v = V3.normalize tvec3_2 in
   let vn = V3.create (0.609708908) (0.704657139) (0.362923358) in
-  Alcotest.(check bool) "same bool" true (V3.eq v vn)
+  same_bool true (V3.eq v vn)
 
 let v3_normalize0 () =
-  Alcotest.(check bool) "same bool" true (V3.eq tvec3_0 (V3.normalize tvec3_0))
+  same_bool true (V3.eq tvec3_0 (V3.normalize tvec3_0))
 
 let v3_distance () =
 (* distance(3 1 2, e pi phi) = 2.193553046 *)
-  Alcotest.(check float) "same float" 2.193553046 (V3.distance tvec3_1 tvec3_2)
+  same_float 2.193553046 (V3.distance tvec3_1 tvec3_2)
 
 let v3_distance0 () =
-  Alcotest.(check float) "same float" 0. (V3.distance tvec3_0 tvec3_0)
+  same_float 0. (V3.distance tvec3_0 tvec3_0)
 
 let () =
   Alcotest.run "My first test" [
