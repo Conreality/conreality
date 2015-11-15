@@ -2,6 +2,7 @@
 
 open Cmdliner
 open Consensus
+open Consensus.Prelude
 
 (* Configuration *)
 

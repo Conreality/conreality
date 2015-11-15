@@ -1,6 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Lua_api
+open Prelude
 
 module Option = struct
  let value_exn = function

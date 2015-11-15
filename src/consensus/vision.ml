@@ -2,6 +2,7 @@
 
 open Ctypes
 open Foreign
+open Prelude
 
 let hello =
   foreign "hello" (void @-> returning void)
