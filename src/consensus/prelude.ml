@@ -188,8 +188,6 @@ module Float = struct
   let read_float () = Pervasives.read_float ()
 end
 
-type float = Float
-
 module String = struct
   include String
 

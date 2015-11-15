@@ -97,7 +97,6 @@ module Float :
     val prerr_float : float -> unit
     val read_float : unit -> float
   end
-type float = Float
 module String :
   sig
     external length : string -> int = "%string_length"
