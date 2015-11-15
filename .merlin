@@ -1,0 +1,7 @@
+# Merlin setup for conreality
+
+S src/**
+
+B _build/**
+
+PKG lwt consensus alcotest cmdliner ctypes
