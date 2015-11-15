@@ -27,6 +27,10 @@ lib: [
   "_build/src/consensus/knowledge.cmi" {"consensus.knowledge.cmi"}
   "_build/src/consensus/knowledge.cmo" {"consensus.knowledge.cmo"}
   "_build/src/consensus/knowledge.cmx" {"consensus.knowledge.cmx"}
+  "src/consensus/messaging.mli" {"consensus.messaging.mli"}
+  "_build/src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
+  "_build/src/consensus/messaging.cmo" {"consensus.messaging.cmo"}
+  "_build/src/consensus/messaging.cmx" {"consensus.messaging.cmx"}
   "src/consensus/ontology.mli" {"consensus.ontology.mli"}
   "_build/src/consensus/ontology.cmi" {"consensus.ontology.cmi"}
   "_build/src/consensus/ontology.cmo" {"consensus.ontology.cmo"}

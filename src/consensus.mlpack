@@ -1,5 +1,6 @@
 consensus/Geometry
 consensus/Knowledge
+consensus/Messaging
 consensus/Ontology
 consensus/Physics
 consensus/Prelude

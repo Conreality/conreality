@@ -21,6 +21,14 @@ package "knowledge" (
   archive(native) = "consensus.knowledge.cmx"
 )
 
+package "messaging" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus messaging protocols"
+  requires = "consensus.prelude"
+  archive(byte) = "consensus.scripting.cmo"
+  archive(native) = "consensus.scripting.cmx"
+)
+
 package "ontology" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus ontology database"
