@@ -1,6 +1,8 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(*
 val ( =. ) : float -> float -> bool
+*)
 
 (* Vs and ps *)
 

@@ -2,17 +2,11 @@
 
 open Consensus.Geometry
 
-let appx_equal ?(eps = 1e-9) f1 f2 = abs_float (f1 -. f2) < eps
-
 let float =
   let module M = struct
+    open Consensus.Prelude.Float
     type t = float
-    (*let equal = ( = )*)
-    let equal a b =
-      (a = b) ||
-      (appx_equal a b) ||
-      (Printf.sprintf "%f" a) = (Printf.sprintf "%f" b) ||
-      (string_of_float a) = (string_of_float b)
+    let equal a b = a =. b
     let pp = Format.pp_print_float
   end in
   (module M: Alcotest.TESTABLE with type t = M.t)

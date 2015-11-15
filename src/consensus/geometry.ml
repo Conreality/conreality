@@ -1,21 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Prelude
-
-(* This is as good as we get with 32-bit floats (e.g. on ARMv6) *)
-let eps = 1e-9
-
-(* I read something about doing let f (float: x) (float:y) = *)
-(* being more efficient, but it doesn't seem to work *)
-let ( =. ) x y =
-  let c = compare x y in
-  if c = 0 then true else
-  let ax = abs_float x in
-  let ay = abs_float y in
-  let amax = if ax > ay then ax else ay in
-  let max = if 1. > amax then 1. else amax in
-  if max = infinity then false else
-  abs_float (x -. y) <= eps *. max
+open Prelude.Float
 
 (* Vectors and points *)
 
@@ -55,7 +41,7 @@ module V2 = struct
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y)
   let normalize v =
     if v = zero then v else (* TODO: True? *)
-    create (v.x /. magnitude v) (v.y /. magnitude v)
+      create (v.x /. magnitude v) (v.y /. magnitude v)
   let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
 
@@ -100,15 +86,15 @@ module V3 = struct
 
   let crossproduct a b =
     create (a.y *. b.z -. a.z *. b.y)
-           (a.z *. b.x -. a.x *. b.z)
-           (a.x *. b.y -. a.y *. b.x)
+      (a.z *. b.x -. a.x *. b.z)
+      (a.x *. b.y -. a.y *. b.x)
 
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z))
   let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
 
   let normalize v =
     if v = zero then v else (* TODO: True? *)
-    create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
+      create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
   let distance a b =
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
@@ -153,16 +139,16 @@ module M2 = struct
 
   let neg m =
     create (-. m.e00) (-. m.e01)
-           (-. m.e10) (-. m.e11)
+      (-. m.e10) (-. m.e11)
 
   let add a b =
     create (a.e00 +. b.e00) (a.e01 +. b.e01)
-           (a.e10 +. b.e10) (a.e11 +. b.e11)
+      (a.e10 +. b.e10) (a.e11 +. b.e11)
   let ( + ) a b = add a b
 
   let sub a b =
     create (a.e00 -. b.e00) (a.e01 -. b.e01)
-           (a.e10 -. b.e10) (a.e11 -. b.e11)
+      (a.e10 -. b.e10) (a.e11 -. b.e11)
   let ( - ) a b = sub a b
 
   let eq a b =
@@ -172,26 +158,26 @@ module M2 = struct
 
   let smul m f =
     create (m.e00 *. f) (m.e01 *. f)
-           (m.e10 *. f) (m.e11 *. f)
+      (m.e10 *. f) (m.e11 *. f)
 
   let transpose m =
     create m.e00 m.e10
-           m.e01 m.e11
+      m.e01 m.e11
 
   let mul a b =
     if a = id then b else
     if b = id then a else
-    create (a.e00 *. b.e00 +. a.e01 *. b.e10) (a.e00 *. b.e01 +. a.e01 *. b.e11)
-           (a.e10 *. b.e00 +. a.e11 *. b.e10) (a.e10 *. b.e01 +. a.e11 *. b.e11)
+      create (a.e00 *. b.e00 +. a.e01 *. b.e10) (a.e00 *. b.e01 +. a.e01 *. b.e11)
+        (a.e10 *. b.e00 +. a.e11 *. b.e10) (a.e10 *. b.e01 +. a.e11 *. b.e11)
   let ( * ) a b = mul a b
 
   let emul a b =
     create (a.e00 *. b.e00) (a.e01 *. b.e01)
-           (a.e10 *. b.e10) (a.e11 *. b.e11)
+      (a.e10 *. b.e10) (a.e11 *. b.e11)
 
   let ediv a b =
     create (a.e00 /. b.e00) (a.e01 /. b.e01)
-           (a.e10 /. b.e10) (a.e11 /. b.e11)
+      (a.e10 /. b.e10) (a.e11 /. b.e11)
 
   let det a = a.e00 *. a.e11 -. a.e01 *. a.e10
 
@@ -200,7 +186,7 @@ module M2 = struct
   let inverse a =
     let d = det a in
     create (   a.e11 /. d) (-. a.e01 /. d)
-           (-. a.e10 /. d) (   a.e00 /. d)
+      (-. a.e10 /. d) (   a.e00 /. d)
 
 end
 
