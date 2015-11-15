@@ -5,13 +5,17 @@ open Prelude
 module Topic = struct
   type t = { path: string list; message_type: string; qos_policy: int }
 
-  let separator = "/"
+  let separator_string = "/"
+  let separator_char = (String.get separator_string 0) (* TODO: (Char.of_string separator) *)
 
   let create path =
+    if (List.exists (fun part -> String.contains part separator_char) path) then begin
+      raise (Invalid_argument "topic path component must not contain the separator character")
+    end;
     {path = path; message_type = ""; qos_policy = 0}
 
-  let of_string path = create [path] (* TODO: String.split path (Char.of_string separator) *)
-  let to_string topic = String.concat separator topic.path
+  let of_string path = create [path] (* TODO: String.split path separator_char *)
+  let to_string topic = String.concat separator_string topic.path
 
   let path topic = topic.path
   let message_type topic = topic.message_type

@@ -2,7 +2,8 @@
 
 module Topic : sig
   type t
-  val separator : string
+  val separator_char : char
+  val separator_string : string
   val create : string list -> t
   val of_string : string -> t
   val path : t -> string list
