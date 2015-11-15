@@ -8,9 +8,10 @@ module Topic = struct
   let create path =
     {path = path; message_type = ""; qos_policy = 0}
 
+  let of_string path = create [path] (* TODO: String.split path '/' *)
+  let to_string topic = String.concat "/" topic.path
+
   let path topic = topic.path
   let message_type topic = topic.message_type
   let qos_policy topic = topic.qos_policy
-
-  let to_string topic = String.concat "/" topic.path
 end
