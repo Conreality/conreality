@@ -39,7 +39,7 @@ let execute options script =
     let context = Scripting.Context.create () in
     Scripting.Context.eval_file context script
   in
-  if script = ""
+  if String.is_empty script
   then `Error (true, "no script specified")
   else `Ok (execute_script script)
 

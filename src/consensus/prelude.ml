@@ -42,3 +42,10 @@ module Float = struct
     | FP_nan -> true
     | _      -> false
 end
+
+module String = struct
+  include String
+
+  let is_empty s =
+    (length s) = 0
+end

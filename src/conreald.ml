@@ -50,7 +50,7 @@ let run () =
   >>= fun () -> loop ()
 
 let main options mission =
-  if mission = ""
+  if String.is_empty mission
   then `Error (true, "no mission scenario script specified")
   else `Ok (Lwt_main.run (run ()))
 
