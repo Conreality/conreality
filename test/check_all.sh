@@ -4,5 +4,9 @@
 ./check_ontology.byte
 ./check_physics.byte
 ./check_prelude.byte
+./check_prelude_char.byte
+./check_prelude_float.byte
+./check_prelude_math.byte
+./check_prelude_string.byte
 ./check_scripting.byte
 ./check_vision.byte
