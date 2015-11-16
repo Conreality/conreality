@@ -4,5 +4,7 @@ consensus/Messaging
 consensus/Ontology
 consensus/Physics
 consensus/Prelude
+consensus/Prelude_float
+consensus/Prelude_string
 consensus/Scripting
 consensus/Vision

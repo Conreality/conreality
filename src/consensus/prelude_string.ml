@@ -1,4 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-module Float  = Prelude_float
-module String = Prelude_string
+include String
+
+let is_empty s =
+  (length s) = 0

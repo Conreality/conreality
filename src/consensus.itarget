@@ -1,6 +1,8 @@
 conctl.native
 conreald.native
 consensus/libconsensus-vision.a
+consensus/prelude.cma
+consensus/prelude.cmxa
 consensus/vision.cma
 consensus/vision.cmxa
 consensus.cmo

@@ -4,6 +4,7 @@
 <src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua), package(lwt), package(lwt.unix), thread
 <src/conreald.{byte,native}>: use_vision
 <src/consensus/*.cmx>: for-pack(Consensus)
+<src/consensus/prelude*.*>: no_alias_deps
 <src/consensus/scripting.*>: package(lua), thread
 <src/consensus/vision.*>: package(ctypes.foreign)
 <src/consensus/vision.{cmo,cmx}>: use_opencv_core
