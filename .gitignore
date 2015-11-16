@@ -12,6 +12,7 @@ debian
 *.cmo
 *.cmx
 *.cmxa
+*.inferred.mli
 *.native
 *.o
 .*.s[a-w][a-z]

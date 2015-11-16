@@ -1,7 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 val consensus_epsilon : float
-
 type t = float
 val infinity : float
 val neg_infinity : float
