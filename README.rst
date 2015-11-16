@@ -103,4 +103,4 @@ To run the benchmarks, you need to install the Jane Street Core_bench package::
 
 To run the benchmarks::
 
-   $ make bench
+   $ make clean && make bench
