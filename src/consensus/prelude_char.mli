@@ -8,3 +8,4 @@ val uppercase : char -> char
 type t = char
 val compare : t -> t -> int
 external unsafe_chr : int -> char = "%identity"
+val of_string : string -> char

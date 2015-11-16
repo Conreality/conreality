@@ -6,7 +6,7 @@ module Topic = struct
   type t = { path: string list; message_type: string; qos_policy: int }
 
   let separator_string = "/"
-  let separator_char = (String.get separator_string 0) (* TODO: (Char.of_string separator) *)
+  let separator_char = (Char.of_string separator_string)
 
   let create path =
     if (List.exists (fun part -> String.contains part separator_char) path) then begin
