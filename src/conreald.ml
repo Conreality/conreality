@@ -3,7 +3,9 @@
 open Cmdliner
 open Consensus
 open Consensus.Prelude
+open Consensus.Messaging
 open Lwt.Infix
+open Lwt_unix
 
 (* Configuration *)
 
@@ -17,6 +19,9 @@ let man_sections = [
   `S "SEE ALSO";
   `P "$(b,concfg)(8), $(b,conctl)(8)";
 ]
+
+let server_name = "localhost"
+let server_port = 1234
 
 (* Option types *)
 
@@ -35,6 +40,15 @@ let execute_script script =
   let context = Scripting.Context.create () in
   Scripting.Context.eval_file context script
 
+let connect addr port =
+  let sockfd = Lwt_unix.socket Lwt_unix.PF_INET Lwt_unix.SOCK_STREAM 0 in
+  let sockaddr = Lwt_unix.ADDR_INET (addr, port) in
+  Lwt_unix.connect sockfd sockaddr
+  >>= fun () -> Lwt.return (sockfd)
+
+let hello sockfd =
+  Lwt.return ()
+
 let rec loop () =
   fst (Lwt.wait ())
 
@@ -43,10 +57,16 @@ let run () =
     ~facility:`Daemon
     ~template:"$(name)[$(pid)]: $(message)" ();
   Lwt_engine.on_timer 60. true (fun _ ->
-    Lwt_log.ign_info "Processed no requests in the last minute.") |> ignore;
+    Lwt_log.ign_info "Processed no requests in the last minute.") |> ignore; (* TODO *)
   Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
   Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
-  Lwt_log.notice "Starting up..."
+  Lwt_log.ign_notice "Starting up...";
+  Lwt_unix.gethostbyname server_name
+  >>= fun host -> begin
+    Lwt_log.ign_notice_f "Connecting to message broker at %s..." host.h_name;
+    connect (Array.get host.h_addr_list 0) server_port
+  end
+  >>= fun (sockfd) -> hello sockfd
   >>= fun () -> loop ()
 
 let main options mission =
