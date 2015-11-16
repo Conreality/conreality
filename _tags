@@ -11,3 +11,5 @@
 <src/consensus/vision.{cma,cmxa}>: use_vision
 <test/check_*.*>: package(alcotest), package(ctypes.foreign), package(lua), thread
 <test/check_*.{byte,native}>: use_vision
+<bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua), thread
+<bench/bench_*.{byte,native}>: use_vision

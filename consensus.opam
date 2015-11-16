@@ -11,15 +11,17 @@ tags: "org:conreality"
 dev-repo: "https://github.com/conreality/consensus.git"
 build: [make]
 build-test: [make check]
+build-bench: [make bench]
 remove: ["ocamlfind" "remove" "consensus"]
 depends: [
   "ocamlfind"      {build}
-  "alcotest"       {test  & >= "0.4.5"} # https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/
-  "cmdliner"       {build & >= "0.9.8"} # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
-  "ctypes"         {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/
-  "ctypes-foreign" {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/
-  "lwt"            {build & >= "2.5.0"} # https://opam.ocaml.org/packages/lwt/lwt.2.5.0/
-  "ocaml-lua"      {build & >= "1.2"}   # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
+  "core_bench"     {bench & >= "112.35.00"} # https://opam.ocaml.org/packages/core_bench/core_bench.112.35.00/
+  "alcotest"       {test  & >= "0.4.5"}     # https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/
+  "cmdliner"       {build & >= "0.9.8"}     # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
+  "ctypes"         {build & >= "0.4.0"}     # https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/
+  "ctypes-foreign" {build & >= "0.4.0"}     # https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/
+  "lwt"            {build & >= "2.5.0"}     # https://opam.ocaml.org/packages/lwt/lwt.2.5.0/
+  "ocaml-lua"      {build & >= "1.2"}       # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
 ]
 depexts: [
   [["debian"]      ["libffi-dev"   (*3.1.0 *) "libopencv-dev" (*2.4.9 *)]] # Debian Jessie

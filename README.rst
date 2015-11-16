@@ -34,9 +34,13 @@ libraries and header files as follows::
 
 ### OCaml Dependencies
 
-* `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5) (not automatically installed. ``opam install alcotest`` to run the tests with ``make check``)
+* `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
+  (not automatically installed. ``opam install alcotest`` to run the tests with ``make check``)
 
 * `Cmdliner <https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/>`__ (>= 0.9.8)
+
+* `Core_bench <https://github.com/janestreet/core_bench>`__ (>= 112.35.00)
+  (not automatically installed. ``opam install core_bench`` to run the benchmarks with ``make bench``)
 
 * `Ctypes <https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/>`__ (>= 0.4.0)
 
@@ -89,6 +93,14 @@ If you want to run the test suite, you need to install Alcotest::
 
    $ opam install alcotest
 
-To actually run the tests::
+To run the tests::
 
-   $ make clean && make check  # adding `V=1` here will produce lots of output
+   $ make clean && make check  # adding ``V=1`` here will produce lots of output
+
+To run the benchmarks, you need to install the Jane Street Core_bench package::
+
+   $ opam install core_bench
+
+To run the benchmarks::
+
+   $ make bench

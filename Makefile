@@ -8,6 +8,8 @@ OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
 CHECKSEDSCRIPT  = ''
 
+COREBUILD	= corebuild
+
 ifeq ($(V),1)
 OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
 CHECKSEDSCRIPT  = 's/$$/ --verbose/'
@@ -36,6 +38,12 @@ check:
 	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
 	  _build/test/check_all.sh
 
+bench:
+	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+	  $(COREBUILD) -Is bench,src bench/bench.otarget && \
+	  cp -p bench/bench_all.sh _build/bench/ && \
+	  _build/bench/bench_all.sh
+
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install
 
@@ -46,4 +54,4 @@ clean:
 	$(OCAMLBUILD) -clean
 	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmx,cmxa,ml.depends,mli.depends,o}
 
-.PHONY: all build check install uninstall clean
+.PHONY: all build check bench install uninstall clean

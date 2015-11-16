@@ -4,4 +4,4 @@ S src/**
 
 B _build/**
 
-PKG lwt alcotest cmdliner ctypes consensus consensus.prelude
+PKG lwt alcotest cmdliner ctypes consensus consensus.prelude core_bench
