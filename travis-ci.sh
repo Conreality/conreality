@@ -7,12 +7,13 @@ export OPAM_PACKAGES='alcotest'
 
 # install ocaml from apt
 sudo apt-get update -qq
-sudo apt-get install -qq ocaml
+sudo apt-get install -qq ocaml-nox m4
 
 # install opam
 curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
 pushd /tmp/opam-${OPAM_VERSION}
 ./configure
+make lib-ext
 make
 sudo make install
 opam init
