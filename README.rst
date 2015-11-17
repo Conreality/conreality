@@ -5,6 +5,10 @@ Consensus Reality
 
 http://conreality.org
 
+.. image:: https://api.travis-ci.org/conreality/consensus.svg?branch=master
+   :target: https://travis-ci.org/conreality/consensus
+      :alt: Travis CI build status
+
 Prerequisites
 -------------
 
