@@ -53,8 +53,7 @@ bench:
 else
 bench:
 	echo -n "Benchmarking is currently supported only on these \
-	  architectures: "
-	echo $(BENCHABLE_ARCHITECTURES) | sed 's/|/ /g'
+	  architectures: $(BENCHABLE_ARCHITECTURES)"
 endif
 
 install: consensus.install build
