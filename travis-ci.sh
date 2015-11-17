@@ -23,7 +23,7 @@ eval `opam config env`
 popd
 
 # install packages from opam
-opam install -q -y ${OPAM_PACKAGES}
+opam install -q -y ${OPAM_PACKAGES} --verbose
 
 # compile & run tests
 make clean && make check
