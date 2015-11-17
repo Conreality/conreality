@@ -13,6 +13,7 @@ module P2 : sig
   val zero : t
   val mid : t -> t -> t
   val distance : t -> t -> float
+  val print : Format.formatter -> t -> unit
 end
 
 type p3     (** 3D point *)
@@ -27,6 +28,7 @@ module P3 : sig
   val zero : t
   val mid : t -> t -> t
   val distance : t -> t -> float
+  val print : Format.formatter -> t -> unit
 end
 
 module P = P3
@@ -59,6 +61,7 @@ module V2 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
+  val print : Format.formatter -> t -> unit
 end
 
 type v3     (** 3D vector *)
