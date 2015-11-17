@@ -6,9 +6,15 @@ OCAMLBUILD      = ocamlbuild
 OCAMLC          = ocamlfind ocamlc
 OCAMLOPT        = ocamlfind ocamlopt
 OPAM_INSTALLER  = opam-installer
+COREBUILD	= corebuild
+
 CHECKSEDSCRIPT  = ''
 
-COREBUILD	= corebuild
+BENCHABLE_ARCHITECTURES := x86_|i686
+IS_BENCHABLE_ARCHITECTURE := $(shell \
+  uname -m | \
+  egrep "($(BENCHABLE_ARCHITECTURES))" 2>&1 >/dev/null && \
+  echo true || echo false)
 
 ifeq ($(V),1)
 OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
@@ -38,11 +44,18 @@ check:
 	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
 	  _build/test/check_all.sh
 
+ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
 bench:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
 	  $(COREBUILD) -Is bench,src bench/bench.otarget && \
 	  cp -p bench/bench_all.sh _build/bench/ && \
 	  _build/bench/bench_all.sh
+else
+bench:
+	echo -n "Benchmarking is currently supported only on these \
+	  architectures: "
+	echo $(BENCHABLE_ARCHITECTURES) | sed 's/|/ /g'
+endif
 
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install
