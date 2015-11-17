@@ -17,9 +17,9 @@ make lib-ext
 make
 sudo make install
 opam init -y
-eval `opam config -env`
+eval `opam config env`
 opam switch ${OPAM_SWITCH}
-eval `opam config -env`
+eval `opam config env`
 popd
 
 # install packages from opam
