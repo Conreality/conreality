@@ -1,12 +1,10 @@
-./check_geometry.byte
-./check_knowledge.byte
-./check_messaging.byte
-./check_ontology.byte
-./check_physics.byte
-./check_prelude.byte
-./check_prelude_char.byte
-./check_prelude_float.byte
-./check_prelude_math.byte
-./check_prelude_string.byte
-./check_scripting.byte
-./check_vision.byte
+#!/bin/bash
+
+EXIT_STATUS=0
+
+for check in $(cat test/check.itarget)
+do
+  "./${check}" || EXIT_STATUS=1
+done
+
+exit ${EXIT_STATUS}
