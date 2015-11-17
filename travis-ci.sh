@@ -7,7 +7,7 @@ export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocam
 
 # install ocaml from apt
 sudo apt-get update -qq
-sudo apt-get install -qq ocaml-nox m4
+sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
 
 # install opam
 curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
