@@ -26,6 +26,7 @@ popd
 opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests
+opam pin add consensus . --no-action --yes
 opam install -y consensus --verbose
 make clean && make check
 
