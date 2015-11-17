@@ -23,9 +23,10 @@ eval `opam config env`
 popd
 
 # install packages from opam
-opam install -q -y ${OPAM_PACKAGES} --verbose
+opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests
+opam install -y consensus --verbose
 make clean && make check
 
 # TODO: Run the benchmarks, too?

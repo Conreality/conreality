@@ -52,6 +52,6 @@ uninstall: consensus.install
 
 clean:
 	$(OCAMLBUILD) -clean
-	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmx,cmxa,ml.depends,mli.depends,o}
+	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o}
 
 .PHONY: all build check bench install uninstall clean
