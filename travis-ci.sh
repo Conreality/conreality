@@ -6,29 +6,29 @@ export OPAM_VERSION=1.2.2
 export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua'
 
 # install ocaml from apt
-sudo apt-get update -qq
-sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
+time sudo apt-get update -qq
+time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
 
 # install opam
-curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
+time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
 pushd /tmp/opam-${OPAM_VERSION}
-./configure
-make lib-ext
-make
-sudo make install
-opam init -y
+time ./configure
+time make lib-ext
+time make
+time sudo make install
+time opam init -y
 eval `opam config env`
-opam switch ${OPAM_SWITCH}
+time opam switch ${OPAM_SWITCH}
 eval `opam config env`
 popd
 
 # install packages from opam
-opam install -q -y ${OPAM_PACKAGES}
+time opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests
 #opam pin add consensus . --no-action --yes
 #opam install -y consensus
-make clean && make check
+time make clean && make check
 
-# TODO: Run the benchmarks, too?
+# TODO: Run the benchmarks, too? Probaby not, since building Core is slow.
 
