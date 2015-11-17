@@ -16,7 +16,7 @@ pushd /tmp/opam-${OPAM_VERSION}
 make lib-ext
 make
 sudo make install
-opam init
+opam init -y
 eval `opam config -env`
 opam switch ${OPAM_SWITCH}
 eval `opam config -env`
