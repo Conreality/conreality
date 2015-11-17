@@ -1,13 +1,39 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-(*
-val ( =. ) : float -> float -> bool
-*)
+(* Points *)
 
-(* Vs and ps *)
+type p2     (** 2D point *)
+
+module P2 : sig
+  type t = p2
+  val create : float -> float -> t
+  val x : t -> float
+  val y : t -> float
+  val el : t -> int -> float
+  val zero : t
+  val mid : t -> t -> t
+  val distance : t -> t -> float
+end
+
+type p3     (** 3D point *)
+type p      (** type alias *)
+module P3 : sig
+  type t = p3
+  val create : float -> float -> float -> t
+  val x : t -> float
+  val y : t -> float
+  val z : t -> float
+  val el : t -> int -> float
+  val zero : t
+  val mid : t -> t -> t
+  val distance : t -> t -> float
+end
+
+module P = P3
+
+(* Vectors *)
 
 type v2     (** 2D vector *)
-type p2     (** 2D point *)
 
 module V2 : sig
   type t = v2
@@ -33,15 +59,10 @@ module V2 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
-  val distance : t -> t -> float
 end
-
-module P2 : sig type t = v2 end
 
 type v3     (** 3D vector *)
 type v      (** type alias *)
-type p3     (** 3D point *)
-type p      (** type alias *)
 
 module V3 : sig
   type t = v3
@@ -70,13 +91,10 @@ module V3 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
-  val distance : t -> t -> float
   val print : Format.formatter -> t -> unit
 end
 
 module V : sig type t = v3 end
-module P3 : sig type t = p3 end
-module P : sig type t = p3 end
 
 (* Matrices *)
 

@@ -3,15 +3,56 @@
 open Prelude
 open Prelude.Float
 
-(* Vectors and points *)
+(* Points *)
+
+module P2t = struct
+  type t = { x: float; y: float }
+  let i = [| (fun p -> p.x); (fun p -> p.y); |]
+end
+
+module P2 = struct
+  open P2t
+  type t = P2t.t
+  let create x y = { x = x; y = y }
+  let x p = p.x
+  let y p = p.y
+  let el p n = i.(n) p
+  let zero = create 0. 0.
+  let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5)
+  let distance p q = sqrt ((p.x -. q.x) ** 2. +. (p.y -. q.y) ** 2.)
+end
+
+type p2 = P2.t
+
+module P3t = struct
+  type t = { x: float; y: float; z: float }
+  let i = [| (fun p -> p.x); (fun p -> p.y); (fun p -> p.z); |]
+end
+
+module P3 = struct
+  open P3t
+  type t = P3t.t
+  let create x y z = { x = x; y = y; z = z }
+  let x p = p.x
+  let y p = p.y
+  let z p = p.z
+  let el p n = i.(n) p
+  let zero = create 0. 0. 0.
+  let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5) ((p.z +. q.z) *. 0.5)
+  let distance a b =
+    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
+end
+
+type p3 = P3.t
+type p = P3.t
+module P = P3
+
+(* Vectors *)
 
 module V2t = struct
   type t = { x: float; y: float }
   let i = [| (fun v -> v.x); (fun v -> v.y); |]
 end
-
-(* TODO: Make points and vectors separate modules *)
-module P2t = V2t
 
 module V2 = struct
   open V2t
@@ -42,20 +83,14 @@ module V2 = struct
   let normalize v =
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v)
-  let distance a b = sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2.)
 end
 
-module P2 = V2
-
 type v2 = V2.t
-type p2 = V2.t
 
 module V3t = struct
   type t = { x: float; y: float; z: float }
   let i = [| (fun v -> v.x); (fun v -> v.y); (fun v -> v.z); |]
 end
-
-module P3t = V3t
 
 module V3 = struct
   open V3t
@@ -96,19 +131,11 @@ module V3 = struct
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
-  let distance a b =
-    sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
-
   let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z
 end
 
 type v3 = V3.t
 type v = V3.t
-type p3 = V3.t
-type p = V3.t
-
-module P3 = V3
-module P = V3
 module V = V3
 
 (* Matrices *)

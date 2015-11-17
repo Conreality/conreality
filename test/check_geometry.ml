@@ -148,12 +148,14 @@ let v3_normalize2 () =
 let v3_normalize0 () =
   same_bool true (V3.eq tvec3_0 (V3.normalize tvec3_0))
 
+(*
 let v3_distance () =
 (* distance(3 1 2, e pi phi) = 2.193553046 *)
   same_float 2.193553046 (V3.distance tvec3_1 tvec3_2)
 
 let v3_distance0 () =
   same_float 0. (V3.distance tvec3_0 tvec3_0)
+*)
 
 let () =
   Alcotest.run "My first test" [
@@ -205,8 +207,6 @@ let () =
       "v3 normalize",            `Quick, v3_normalize;
       "v3 normalize2",           `Quick, v3_normalize2;
       "v3 normalize0",           `Quick, v3_normalize0;
-      "v3 distance",             `Quick, v3_distance;
-      "v3 distance0",            `Quick, v3_distance0;
     ];
   ]
 
