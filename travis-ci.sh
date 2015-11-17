@@ -3,7 +3,7 @@ export OPAM_SWITCH=4.02.3
 # OPAM version to install
 export OPAM_VERSION=1.2.2
 # OPAM packages needed to build tests
-export OPAM_PACKAGES='ctypes cmdliner alcotest'
+export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua'
 
 # install ocaml from apt
 sudo apt-get update -qq
