@@ -70,6 +70,7 @@ val floor : float -> float
 val abs_float : float -> float
 val copysign : float -> float -> float
 val mod_float : float -> float -> float
+val ( %. ) : float -> float -> float
 val frexp : float -> float * int
 val ldexp : float -> int -> float
 val modf : float -> float * float

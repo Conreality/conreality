@@ -113,6 +113,7 @@ let floor x           = Pervasives.floor x
 let abs_float x       = Pervasives.abs_float x
 let copysign x y      = Pervasives.copysign x y
 let mod_float x y     = Pervasives.mod_float x y
+let ( %. ) x y        = Pervasives.mod_float x y
 let frexp x           = Pervasives.frexp x
 let ldexp x i         = Pervasives.ldexp x i
 let modf x            = Pervasives.modf x
