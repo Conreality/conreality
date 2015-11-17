@@ -73,6 +73,7 @@ val mod_float : float -> float -> float
 val frexp : float -> float * int
 val ldexp : float -> int -> float
 val modf : float -> float * float
+val float : int -> float
 val float_of_int : int -> float
 val truncate : float -> int
 val ( == ) : 'a -> 'a -> bool

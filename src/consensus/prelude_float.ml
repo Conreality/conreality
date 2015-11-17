@@ -90,7 +90,7 @@ let cot x             = (cos x) /. (sin x)
 let asin x            = Pervasives.asin x
 let acos x            = Pervasives.acos x
 let atan x            = Pervasives.atan x
-let atan2 x           = Pervasives.atan2 x
+let atan2 x y         = Pervasives.atan2 x y
 let acsc x            = asin (1. /. x)
 let asec x            = acos (1. /. x)
 let acot x            = pi_over_2 -. (atan x)
@@ -106,7 +106,7 @@ let atanh x           = (log ((1. +. x) /. (1. -. x))) /. 2.
 let acsch x           = asinh (1. /. x)
 let asech x           = acosh (1. /. x)
 let acoth x           = (log ((1. -. x) /. (1. +. x))) /. 2.
-let hypot x           = Pervasives.hypot x
+let hypot x y         = Pervasives.hypot x y
 
 let ceil x            = Pervasives.ceil x
 let floor x           = Pervasives.floor x
@@ -116,6 +116,7 @@ let mod_float x y     = Pervasives.mod_float x y
 let frexp x           = Pervasives.frexp x
 let ldexp x i         = Pervasives.ldexp x i
 let modf x            = Pervasives.modf x
+let float i           = Pervasives.float i
 let float_of_int i    = Pervasives.float_of_int i
 let truncate x        = Pervasives.truncate x
 

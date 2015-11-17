@@ -11,7 +11,7 @@ let () =
   Command.run (Bench.make_command [
       Bench.Test.create ~name:"Float.(=.)"
         (fun () -> ignore (f0 = f0));
-      Bench.Test.create ~name:"Float.(==.)" 
+      Bench.Test.create ~name:"Float.(==.)"
         (fun () -> ignore (f0 ==. f0));
       Bench.Test.create ~name:"Float.(<)"
         (fun () -> ignore (f0 < f1));

@@ -74,8 +74,8 @@ module V3 : sig
   val print : Format.formatter -> t -> unit
 end
 
-module V : sig type t = v3 end 
-module P3 : sig type t = p3 end 
+module V : sig type t = v3 end
+module P3 : sig type t = p3 end
 module P : sig type t = p3 end
 
 (* Matrices *)
