@@ -15,7 +15,6 @@ build-bench: [make bench]
 remove: ["ocamlfind" "remove" "consensus"]
 depends: [
   "ocamlfind"      {build}
-  "core_bench"     {bench & >= "112.35.00"} # https://opam.ocaml.org/packages/core_bench/core_bench.112.35.00/
   "alcotest"       {test  & >= "0.4.5"}     # https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/
   "cmdliner"       {build & >= "0.9.8"}     # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
   "ctypes"         {build & >= "0.4.0"}     # https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/
