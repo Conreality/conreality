@@ -18,11 +18,13 @@ time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-
 ##time sudo make install
 
 # testing bypassing the opam build by installing up-version
-sudo echo 'APT::Default-Release "wily";' >> /etc/apt/apt.conf.d/01ubuntu
-sudo echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list
-sudo echo 'Package: opam\
-  Pin: release n=wily\
-  Pin-Priority: 900' >> /etc/apt/preferences
+sudo bash -c "echo 'APT::Default-Release \"trusty\";' > /etc/apt/apt.conf.d/01ubuntu"
+sudo bash -c "echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list"
+sudo bash -c "cat << EOF > /etc/apt/preferences
+Package: opam
+Pin: release n=wily
+Pin-Priority: 900
+EOF"
 time sudo apt-get update -qq
 time sudo apt-get install -qq -y opam ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
 
