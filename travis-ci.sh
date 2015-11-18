@@ -18,7 +18,7 @@ export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocam
 ##time sudo make install
 
 # testing bypassing the opam build by installing up-version
-sudo bash -c "echo 'APT::Default-Release \"trusty\";' > /etc/apt/apt.conf.d/01ubuntu"
+sudo bash -c "echo 'APT::Default-Release \"wily\";' > /etc/apt/apt.conf.d/01ubuntu"
 sudo bash -c "echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list"
 sudo bash -c "cat << EOF > /etc/apt/preferences
 Package: opam
