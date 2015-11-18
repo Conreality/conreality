@@ -2,6 +2,7 @@
 META
 README.html
 _build
+_reports
 _tests
 check_*.byte
 debian
@@ -16,4 +17,5 @@ debian
 *.inferred.mli
 *.native
 *.o
+bisect[0-9]*.out
 .*.s[a-w][a-z]

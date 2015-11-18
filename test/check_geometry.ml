@@ -31,19 +31,6 @@ let tvec3_1opposite = V3.create (-3.) (-1.) (-2.)
 let tvec3_2 = V3.create e pi phi
 let tvec3_0 = V3.zero
 let make_v3 x = V3.create (x) (x) (x)
-let tvec3_p1 = make_v3 (3.01)
-let tvec3_p2 = make_v3 (0.30000001)
-let tvec3_p3 = make_v3 (0.300000001)
-let tvec3_p4 = make_v3 (0.3000000001)
-let tvec3_p5 = make_v3 (0.30000000001)
-let tvec3_p6 = make_v3 (-0.000001)
-let tvec3_p7 = make_v3 (-0.0000001)
-let tvec3_p8 = make_v3 (-0.000000001)
-let tvec3_p9 = make_v3 (-0.0000000001)
-let tvec3_p10 = make_v3 (12345678.)
-let tvec3_p11 = make_v3 (123456789.)
-let tvec3_p12 = make_v3 (1234567890.)
-let tvec3_p13 = make_v3 (12345678901.)
 
 (* Keep this one operating on floats to avoid depending on V3.eq *)
 let v3_create () = Alcotest.(check (list float)) "float list" [e; pi; phi] (v3_to_list tvec3_2)
@@ -76,20 +63,6 @@ let v3_op_sub () =
   same_bool true (V3.eq v v3_sub_expected)
 
 let v3_eq () = same_bool true (V3.eq V3.zero V3.zero)
-(* TODO: Rewrite these so values created by make_v3 are actually related to Geometry.eps *)
-let v3_eq_p1 () = same_bool false (V3.eq tvec3_p1 (V3.add tvec3_p1 (make_v3 (0.001))))
-let v3_eq_p2 () = same_bool false (V3.eq tvec3_p2 (V3.add tvec3_p2 (make_v3 (0.00000001))))
-let v3_eq_p3 () = same_bool false (V3.eq tvec3_p3 (V3.add tvec3_p3 (make_v3 (0.000000001))))
-let v3_eq_p4 () = same_bool true (V3.eq tvec3_p4 (V3.add tvec3_p4 (make_v3 (0.0000000001))))
-let v3_eq_p5 () = same_bool true (V3.eq tvec3_p5 (V3.add tvec3_p5 (make_v3 (0.00000000001))))
-let v3_eq_p6 () = same_bool false (V3.eq tvec3_p6 (V3.add tvec3_p6 (make_v3 (0.0000001))))
-let v3_eq_p7 () = same_bool false (V3.eq tvec3_p7 (V3.add tvec3_p7 (make_v3 (0.00000001))))
-let v3_eq_p8 () = same_bool true (V3.eq tvec3_p8 (V3.add tvec3_p8 (make_v3 (0.0000000001))))
-let v3_eq_p9 () = same_bool true (V3.eq tvec3_p9 (V3.add tvec3_p9 (make_v3 (0.00000000001))))
-let v3_eq_p10 () = same_bool false (V3.eq tvec3_p10 (V3.add tvec3_p10 (make_v3 (1.))))
-let v3_eq_p11 () = same_bool false (V3.eq tvec3_p11 (V3.add tvec3_p11 (make_v3 (1.))))
-let v3_eq_p12 () = same_bool true (V3.eq tvec3_p12 (V3.add tvec3_p12 (make_v3 (1.))))
-let v3_eq_p13 () = same_bool true (V3.eq tvec3_p13 (V3.add tvec3_p13 (make_v3 (1.))))
 let v3_op_eq () = same_bool true (V3.eq V3.zero V3.zero)
 
 let v3_smul_expected = V3.create (6.) (2.) (4.)
@@ -176,19 +149,6 @@ let () =
       "v3 sub",                  `Quick, v3_sub;
       "v3 op_sub",               `Quick, v3_op_sub;
       "v3 eq",                   `Quick, v3_eq;
-      "v3 eq precision p1",      `Quick, v3_eq_p1;
-      "v3 eq precision p2",      `Quick, v3_eq_p2;
-      "v3 eq precision p3",      `Quick, v3_eq_p3;
-      "v3 eq precision p4",      `Quick, v3_eq_p4;
-      "v3 eq precision p5",      `Quick, v3_eq_p5;
-      "v3 eq precision p6",      `Quick, v3_eq_p6;
-      "v3 eq precision p7",      `Quick, v3_eq_p7;
-      "v3 eq precision p8",      `Quick, v3_eq_p8;
-      "v3 eq precision p9",      `Quick, v3_eq_p9;
-      "v3 eq precision p10",     `Quick, v3_eq_p10;
-      "v3 eq precision p11",     `Quick, v3_eq_p11;
-      "v3 eq precision p12",     `Quick, v3_eq_p12;
-      "v3 eq precision p13",     `Quick, v3_eq_p13;
       "v3 op_eq",                `Quick, v3_op_eq;
       "v3 smul",                 `Quick, v3_smul;
       "v3 op_smul",              `Quick, v3_op_smul;
