@@ -7,7 +7,7 @@ export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocam
 
 # install ocaml from apt
 time sudo apt-get update -qq
-time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
+time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev libncurses5-dev
 
 # install opam
 ##time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
@@ -22,6 +22,10 @@ sudo bash -c "echo 'APT::Default-Release \"trusty\";' > /etc/apt/apt.conf.d/01ub
 sudo bash -c "echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list"
 sudo bash -c "cat << EOF > /etc/apt/preferences
 Package: opam
+Pin: release n=wily
+Pin-Priority: 900
+
+Package: ocaml-nox
 Pin: release n=wily
 Pin-Priority: 900
 EOF"
