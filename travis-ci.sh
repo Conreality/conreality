@@ -6,8 +6,8 @@ export OPAM_VERSION=1.2.2
 export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua ocveralls'
 
 # install ocaml from apt
-time sudo apt-get update -qq
-time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev libncurses5-dev
+##time sudo apt-get update -qq
+##time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev libncurses5-dev
 
 # install opam
 ##time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
