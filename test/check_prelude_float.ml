@@ -170,6 +170,7 @@ let () =
       "f_asinh",        `Quick, f_asinh;
       "f_acosh",        `Quick, f_acosh;
       "f_atanh",        `Quick, f_atanh;
+      "f_acoth",        `Quick, f_acoth;
       "f_op_ident",     `Quick, f_op_ident;
       "f_op_ident_dot", `Quick, f_op_ident_dot;
       "f_compare",      `Quick, f_compare;

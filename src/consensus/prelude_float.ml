@@ -115,7 +115,7 @@ let acosh x           = log (x +. sqrt (x ** 2. -. 1.))
 let atanh x           = (log ((1. +. x) /. (1. -. x))) /. 2.
 let acsch x           = asinh (1. /. x)
 let asech x           = acosh (1. /. x)
-let acoth x           = (log ((1. -. x) /. (1. +. x))) /. 2.
+let acoth x           = (log (1. +. (1. /. x)) -. log (1. -. (1. /. x))) /. 2.
 let hypot x y         = Pervasives.hypot x y (*BISECT-IGNORE*)
 
 (*BISECT-IGNORE-BEGIN*)
