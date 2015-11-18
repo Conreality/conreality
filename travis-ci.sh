@@ -5,19 +5,7 @@ export OPAM_VERSION=1.2.2
 # OPAM packages needed to build tests
 export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua ocveralls bisect_ppx'
 
-# install ocaml from apt
-##time sudo apt-get update -qq
-##time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev libncurses5-dev
-
-# install opam
-##time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
-##pushd /tmp/opam-${OPAM_VERSION}
-##time ./configure
-##time make lib-ext
-##time make
-##time sudo make install
-
-# testing bypassing the opam build by installing up-version
+# install OPAM and OCaml
 sudo bash -c "echo 'APT::Default-Release \"wily\";' > /etc/apt/apt.conf.d/01ubuntu"
 sudo bash -c "echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list"
 sudo bash -c "cat << EOF > /etc/apt/preferences
@@ -32,15 +20,11 @@ EOF"
 time sudo apt-get update -qq
 time sudo apt-get install -qq -y opam ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
 
-##sudo apt-add-repository -y ppa:avsm/ppa
-##sudo sed -i -e 's/trusty/wily/g' /etc/apt/sources.list.d/
-
 # set up the OPAM/OCaml environment with our desired OCaml version
 time opam init -y
 eval `opam config env`
 time opam switch ${OPAM_SWITCH}
 eval `opam config env`
-##popd
 
 # install packages from opam
 time opam install -q -y ${OPAM_PACKAGES}
@@ -53,6 +37,4 @@ time make report
 
 # send code coverage report to Coveralls.io
 time ocveralls --prefix _build bisect00*.out --send
-
-# TODO: Run the benchmarks, too? Probaby not, since building Core is slow.
 
