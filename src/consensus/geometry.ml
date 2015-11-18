@@ -18,6 +18,8 @@ module P2 = struct
   let y p = p.y
   let el p n = i.(n) p
   let zero = create 0. 0.
+  let eq p q = (p.x =. q.x) && (p.y =. q.y)
+  let ( = ) p q = eq p q
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5)
   let distance p q = sqrt ((p.x -. q.x) ** 2. +. (p.y -. q.y) ** 2.)
   let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g)@]" p.x p.y
@@ -39,6 +41,8 @@ module P3 = struct
   let z p = p.z
   let el p n = i.(n) p
   let zero = create 0. 0. 0.
+  let eq p q = (p.x =. q.x) && (p.y =. q.y) && (p.z =. q.z)
+  let ( = ) p q = eq p q
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5) ((p.z +. q.z) *. 0.5)
   let distance a b =
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)

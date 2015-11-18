@@ -11,6 +11,8 @@ module P2 : sig
   val y : t -> float
   val el : t -> int -> float
   val zero : t
+  val eq : t -> t -> bool
+  val ( = ) : t -> t -> bool
   val mid : t -> t -> t
   val distance : t -> t -> float
   val print : Format.formatter -> t -> unit
@@ -26,6 +28,8 @@ module P3 : sig
   val z : t -> float
   val el : t -> int -> float
   val zero : t
+  val eq : t -> t -> bool
+  val ( = ) : t -> t -> bool
   val mid : t -> t -> t
   val distance : t -> t -> float
   val print : Format.formatter -> t -> unit
