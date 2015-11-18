@@ -17,5 +17,5 @@ let same_float a b = Alcotest.(check float) "same float" a b
 let same_bool a b = Alcotest.(check bool) "same bool" a b
 let same_int a b = Alcotest.(check int) "same int" a b
 let same_string a b = Alcotest.(check string) "same string" a b
-(* TODO: Convert this *)
-(*let same_list t a b = Alcotest.(check (t list)) *)
+(* TODO: Genericize this, if possible *)
+let same_float_list a b = Alcotest.(check (list float)) "same float list" a b
