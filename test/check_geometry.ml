@@ -9,6 +9,82 @@ let phi = 1.61803
 
 (* 3D Vectors *)
 
+let tvec2_1 = V2.create (3.) (1.)
+let tvec2_1opposite = V2.create (-3.) (-1.)
+let tvec2_2 = V2.create e pi
+let tvec2_0 = V2.zero
+let make_v2 x = V2.create (x) (x)
+
+let v2_to_list v = [(V2.x v); (V2.y v)]
+(* Keep this one operating on floats to avoid depending on V2.eq *)
+let v2_create () = Alcotest.(check (list float)) "float list" [e; pi] (v2_to_list tvec2_2)
+let v2_x () = same_float 3. (V2.x tvec2_1)
+let v2_y () = same_float pi (V2.y tvec2_2)
+let v2_el () = same_float 3. (V2.el tvec2_1 0)
+(* Keep this one operating on floats to avoid depending on V2.eq *)
+let v2_zero () = Alcotest.(check (list float)) "float list" [0.; 0.] (v2_to_list tvec2_0)
+let v2_unitx () = same_bool true (V2.eq V2.unitx (V2.create 1. 0.))
+let v2_unity () = same_bool true (V2.eq V2.unity (V2.create 0. 1.))
+let v2_invert () = same_bool true (V2.eq tvec2_1opposite (V2.invert tvec2_1))
+let v2_neg () = same_bool true (V2.eq tvec2_1opposite (V2.neg tvec2_1))
+
+let v2_add_expected = V2.create (5.71828) (4.14159)
+let v2_add () =
+  let v = V2.add tvec2_1 tvec2_2 in
+  same_bool true (V2.eq v v2_add_expected)
+let v2_op_add () =
+  let v = V2.( + ) tvec2_1 tvec2_2 in
+  same_bool true (V2.eq v v2_add_expected)
+
+let v2_sub_expected = V2.create (0.28172) (-2.14159)
+let v2_sub () =
+  let v = V2.sub tvec2_1 tvec2_2 in
+  same_bool true (V2.eq v v2_sub_expected)
+let v2_op_sub () =
+  let v = V2.( - ) tvec2_1 tvec2_2 in
+  same_bool true (V2.eq v v2_sub_expected)
+
+let v2_eq () = same_bool true (V2.eq V2.zero V2.zero)
+let v2_op_eq () = same_bool true (V2.zero = V2.zero)
+
+let v2_smul_expected = V2.create (6.) (2.)
+let v2_smul () =
+  let v = V2.smul tvec2_1 2. in
+  same_bool true (V2.eq v v2_smul_expected)
+let v2_op_smul () =
+  let v = V2.( * ) tvec2_1 2. in
+  same_bool true (V2.eq v v2_smul_expected)
+
+let v2_opposite () = same_bool true (V2.opposite tvec2_1 tvec2_1opposite)
+let v2_opposite_failure () = same_bool false (V2.opposite tvec2_1 tvec2_2)
+let v2_dotproduct () = same_float 11.29643 (V2.dotproduct tvec2_1 tvec2_2)
+let v2_magnitude () = same_float 3.16227766 (V2.magnitude tvec2_1)
+let v2_magnitude2 () = same_float 10. (V2.magnitude2 tvec2_1)
+let v2_magnitude2_2 () = same_float 17.258633887 (V2.magnitude2 tvec2_2)
+let v2_magnitude3 () = same_float 4.154351199 (V2.magnitude tvec2_2)
+let v2_magnitude2_0 () = same_float 0. (V2.magnitude2 tvec2_0)
+let v2_magnitude0 () = same_float 0. (V2.magnitude tvec2_0)
+
+let v2_normalize () =
+(* normalize v = v.x / magnitude v, v.y / magnitude v *)
+(* magnitude 3 1 = 3.16227766 *)
+(* normalize 3 1 = 0.948683298 0.316227766 *)
+  let v = V2.normalize tvec2_1 in
+  let vn = V2.create (0.948683298) (0.316227766) in
+  same_bool true (V2.eq v vn)
+
+let v2_normalize2 () =
+(* magnitude 2.71828 3.14159 = 4.154351199 *)
+(* normalize 2.71828 3.14159 = 0.654321185 0.704657139 *)
+  let v = V2.normalize tvec2_2 in
+  let vn = V2.create (0.654321185) (0.756216759) in
+  same_bool true (V2.eq v vn)
+
+let v2_normalize0 () =
+  same_bool true (V2.eq tvec2_0 (V2.normalize tvec2_0))
+
+(* 3D Vectors *)
+
 let tvec3_1 = V3.create (3.) (1.) (2.)
 let tvec3_1opposite = V3.create (-3.) (-1.) (-2.)
 let tvec3_2 = V3.create e pi phi
@@ -61,7 +137,6 @@ let v3_opposite () = same_bool true (V3.opposite tvec3_1 tvec3_1opposite)
 let v3_opposite_failure () = same_bool false (V3.opposite tvec3_1 tvec3_2)
 
 let v3_dotproduct () = same_float 14.53249 (V3.dotproduct tvec3_1 tvec3_2)
-let v3_dotproduct2 () = same_float 14. (V3.dotproduct tvec3_1 tvec3_1)
 
 let v3_crossproduct () =
   let v = V3.crossproduct tvec3_1 tvec3_1 in
@@ -147,6 +222,36 @@ let p3_distance () = same_float 3.741657387 (P3.distance tp3_1 tp3_zero)
 let () =
   Alcotest.run "My first test" [
     "test_set", [
+      (* 2D Vectors *)
+      "v2 create",               `Quick, v2_create;
+      "v2 x",                    `Quick, v2_x;
+      "v2 y",                    `Quick, v2_y;
+      "v2 element",              `Quick, v2_el;
+      "v2 zero",                 `Quick, v2_zero;
+      "v2 unitx",                `Quick, v2_unitx;
+      "v2 unity",                `Quick, v2_unity;
+      "v2 invert",               `Quick, v2_invert;
+      "v2 neg",                  `Quick, v2_neg;
+      "v2 add",                  `Quick, v2_add;
+      "v2 op_add",               `Quick, v2_op_add;
+      "v2 sub",                  `Quick, v2_sub;
+      "v2 op_sub",               `Quick, v2_op_sub;
+      "v2 eq",                   `Quick, v2_eq;
+      "v2 op_eq",                `Quick, v2_op_eq;
+      "v2 smul",                 `Quick, v2_smul;
+      "v2 op_smul",              `Quick, v2_op_smul;
+      "v2 opposite",             `Quick, v2_opposite;
+      "v2 opposite failure",     `Quick, v2_opposite_failure;
+      "v2 dot product",          `Quick, v2_dotproduct;
+      "v2 magnitude",            `Quick, v2_magnitude;
+      "v2 magnitude3",           `Quick, v2_magnitude3;
+      "v2 magnitude0",           `Quick, v2_magnitude0;
+      "v2 magnitude2",           `Quick, v2_magnitude2;
+      "v2 magnitude2_2",         `Quick, v2_magnitude2_2;
+      "v2 magnitude2_0",         `Quick, v2_magnitude2_0;
+      "v2 normalize",            `Quick, v2_normalize;
+      "v2 normalize2",           `Quick, v2_normalize2;
+      "v2 normalize0",           `Quick, v2_normalize0;
       (* 3D Vectors *)
       "v3 create",               `Quick, v3_create;
       "v3 x",                    `Quick, v3_x;
@@ -170,7 +275,6 @@ let () =
       "v3 opposite",             `Quick, v3_opposite;
       "v3 opposite failure",     `Quick, v3_opposite_failure;
       "v3 dot product",          `Quick, v3_dotproduct;
-      "v3 dot product2",         `Quick, v3_dotproduct2;
       "v3 cross product",        `Quick, v3_crossproduct;
       "v3 cross product2",       `Quick, v3_crossproduct2;
       "v3 magnitude",            `Quick, v3_magnitude;
