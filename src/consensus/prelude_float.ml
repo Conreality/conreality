@@ -188,9 +188,11 @@ let max x y =
   if (x <. y) then y else x
 
 (* Conversions *)
-let int_of_float x = Pervasives.int_of_float x (*BISECT-IGNORE*)
+(*BISECT-IGNORE-BEGIN*)
+let int_of_float x = Pervasives.int_of_float x
 external format_float : string -> float -> string = "caml_format_float"
-let valid_float_lexem s = Pervasives.valid_float_lexem s (*BISECT-IGNORE*)
+let valid_float_lexem s = Pervasives.valid_float_lexem s
+(*BISECT-IGNORE-END*)
 (* TODO: Do we need to switch 12 to 9 here? *)
 let string_of_float x = valid_float_lexem (format_float "%.12g" x)
 let float_of_string s = Pervasives.float_of_string s (*BISECT-IGNORE*)
