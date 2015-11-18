@@ -20,6 +20,7 @@ end
 
 type p3     (** 3D point *)
 type p      (** type alias *)
+
 module P3 : sig
   type t = p3
   val create : float -> float -> float -> t
@@ -118,7 +119,7 @@ module M2: sig
   val zero : t
   val id : t
   val neg : t -> t
-  val add : t -> t-> t
+  val add : t -> t -> t
   val ( + ) : t -> t -> t
   val sub : t -> t-> t
   val ( - ) : t -> t -> t
