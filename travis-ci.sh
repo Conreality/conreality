@@ -3,7 +3,7 @@ export OPAM_SWITCH=4.02.3
 # OPAM version to install
 export OPAM_VERSION=1.2.2
 # OPAM packages needed to build tests
-export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua'
+export OPAM_PACKAGES='ctypes cmdliner alcotest ocamlfind ctypes-foreign lwt ocaml-lua ocveralls'
 
 # install ocaml from apt
 time sudo apt-get update -qq
@@ -28,7 +28,13 @@ time opam install -q -y ${OPAM_PACKAGES}
 # compile & run tests
 #opam pin add consensus . --no-action --yes
 #opam install -y consensus
-time make clean && make check
+time make clean && make covered_check
+
+# generate Bisect coverage reports
+time make report
+
+# send code coverage report to Coveralls.io
+time ocveralls --prefix _build bisect00*.out --send
 
 # TODO: Run the benchmarks, too? Probaby not, since building Core is slow.
 

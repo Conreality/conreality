@@ -10,6 +10,7 @@ debian
 *.byte
 *.cma
 *.cmo
+*.cmp
 *.cmx
 *.cmxa
 *.inferred.mli

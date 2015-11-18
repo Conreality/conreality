@@ -52,9 +52,25 @@ bench:
 	  _build/bench/bench_all.sh
 else
 bench:
-	echo -n "Benchmarking is currently supported only on these \
+	echo "Benchmarking is currently supported only on these \
 	  architectures: $(BENCHABLE_ARCHITECTURES)"
 endif
+
+covered_check:
+	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+          $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
+	  cp -p test/check_all.sh _build/test/ && \
+	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
+	  _build/test/check_all.sh
+
+clean_reports:
+	rm -rf _reports && \
+	mkdir -p _reports
+
+report: clean_reports
+	cd _build && \
+	bisect-ppx-report -verbose -html ../_reports ../bisect*.out && \
+	cd -
 
 install: consensus.install build
 	$(OPAM_INSTALLER) consensus.install
@@ -64,6 +80,6 @@ uninstall: consensus.install
 
 clean:
 	$(OCAMLBUILD) -clean
-	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o}
+	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
 
 .PHONY: all build check bench install uninstall clean
