@@ -219,6 +219,44 @@ let p3_op_eq () = same_bool true (P3.zero = P3.zero)
 let p3_mid () = same_bool true ((P3.mid tp3_1 tp3_zero) = (P3.create (1.5) (0.5) (1.0)))
 let p3_distance () = same_float 3.741657387 (P3.distance tp3_1 tp3_zero)
 
+(* 2D Matrices *)
+
+let tm2_1 = M2.create
+    (3.) (1.)
+    (2.) (7.)
+let tm2_2 = M2.create
+    (e) (pi)
+    (phi) (0.)
+let tm2_zero = M2.zero
+
+let m2_to_list m = [ (M2.e00 m); (M2.e01 m); (M2.e10 m); (M2.e11 m) ]
+(* Keep this one operating on floats to avoid depending on P3.eq *)
+let m2_create () = Alcotest.(check (list float)) "float list" [e; pi; phi; 0.] (m2_to_list tm2_2)
+let m2_e00 () = same_float e (M2.e00 tm2_2)
+let m2_e01 () = same_float pi (M2.e01 tm2_2)
+let m2_e10 () = same_float phi (M2.e10 tm2_2)
+let m2_e11 () = same_float 0. (M2.e11 tm2_2)
+(* Keep this one operating on floats to avoid depending on P3.eq *)
+let m2_zero () = Alcotest.(check (list float)) "float list" [0.; 0.; 0.; 0.] (m2_to_list tm2_zero)
+let m2_id () = Alcotest.(check (list float)) "float list" [1.; 0.; 0.; 1.] (m2_to_list M2.id)
+let m2_el () = same_float 3.14159 (M2.e01 tm2_2)
+let m2_neg () = todo ()
+let m2_add () = todo ()
+let m2_op_add () = todo ()
+let m2_sub () = todo ()
+let m2_op_sub () = todo ()
+let m2_eq () = same_bool true (M2.eq M2.zero M2.zero)
+let m2_op_eq () = same_bool true (M2.zero = M2.zero)
+let m3_smul () = todo ()
+let m3_transpose () = todo ()
+let m3_mul () = todo ()
+let m3_op_mul () = todo ()
+let m3_emul () = todo ()
+let m3_ediv () = todo ()
+let m3_det () = todo ()
+let m3_trace () = todo ()
+let m3_inverse () = todo ()
+
 let () =
   Alcotest.run "My first test" [
     "test_set", [
@@ -307,6 +345,31 @@ let () =
       "p3 op_eq",                `Quick, p3_op_eq;
       "p3 mid",                  `Quick, p3_mid;
       "p3 distance",             `Quick, p3_distance;
+      (* 2D Matrices *)
+      "m2_create",               `Quick, m2_create;
+      "m2_e00",                  `Quick, m2_e00;
+      "m2_e01",                  `Quick, m2_e01;
+      "m2_e10",                  `Quick, m2_e10;
+      "m2_e11",                  `Quick, m2_e11;
+      "m2_zero",                 `Quick, m2_zero;
+      "m2_id",                   `Quick, m2_id;
+      "m2_el",                   `Quick, m2_el;
+      "m2_neg",                  `Quick, m2_neg;
+      "m2_add",                  `Quick, m2_add;
+      "m2_op_add",               `Quick, m2_op_add;
+      "m2_sub",                  `Quick, m2_sub;
+      "m2_op_sub",               `Quick, m2_op_sub;
+      "m2_eq",                   `Quick, m2_eq;
+      "m2_op_eq",                `Quick, m2_op_eq;
+      "m3_smul",                 `Quick, m3_smul;
+      "m3_transpose",            `Quick, m3_transpose;
+      "m3_mul",                  `Quick, m3_mul;
+      "m3_op_mul",               `Quick, m3_op_mul;
+      "m3_emul",                 `Quick, m3_emul;
+      "m3_ediv",                 `Quick, m3_ediv;
+      "m3_det",                  `Quick, m3_det;
+      "m3_trace",                `Quick, m3_trace;
+      "m3_inverse",              `Quick, m3_inverse;
     ];
   ]
 

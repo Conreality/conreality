@@ -171,17 +171,17 @@ module M2 = struct
 
   let el row col = i.(2 * row + col)
 
-  let neg m =
-    create (-. m.e00) (-. m.e01)
+  let neg m = create
+      (-. m.e00) (-. m.e01)
       (-. m.e10) (-. m.e11)
 
-  let add a b =
-    create (a.e00 +. b.e00) (a.e01 +. b.e01)
+  let add a b = create
+      (a.e00 +. b.e00) (a.e01 +. b.e01)
       (a.e10 +. b.e10) (a.e11 +. b.e11)
   let ( + ) a b = add a b
 
-  let sub a b =
-    create (a.e00 -. b.e00) (a.e01 -. b.e01)
+  let sub a b = create
+      (a.e00 -. b.e00) (a.e01 -. b.e01)
       (a.e10 -. b.e10) (a.e11 -. b.e11)
   let ( - ) a b = sub a b
 
@@ -190,27 +190,28 @@ module M2 = struct
     a.e10 =. b.e10 && a.e11 =. b.e11
   let ( = ) a b = eq a b
 
-  let smul m f =
-    create (m.e00 *. f) (m.e01 *. f)
+  let smul m f = create
+      (m.e00 *. f) (m.e01 *. f)
       (m.e10 *. f) (m.e11 *. f)
 
-  let transpose m =
-    create m.e00 m.e10
+  let transpose m = create
+      m.e00 m.e10
       m.e01 m.e11
 
   let mul a b =
     if a = id then b else
     if b = id then a else
-      create (a.e00 *. b.e00 +. a.e01 *. b.e10) (a.e00 *. b.e01 +. a.e01 *. b.e11)
+      create
+        (a.e00 *. b.e00 +. a.e01 *. b.e10) (a.e00 *. b.e01 +. a.e01 *. b.e11)
         (a.e10 *. b.e00 +. a.e11 *. b.e10) (a.e10 *. b.e01 +. a.e11 *. b.e11)
   let ( * ) a b = mul a b
 
-  let emul a b =
-    create (a.e00 *. b.e00) (a.e01 *. b.e01)
+  let emul a b = create
+      (a.e00 *. b.e00) (a.e01 *. b.e01)
       (a.e10 *. b.e10) (a.e11 *. b.e11)
 
-  let ediv a b =
-    create (a.e00 /. b.e00) (a.e01 /. b.e01)
+  let ediv a b = create
+      (a.e00 /. b.e00) (a.e01 /. b.e01)
       (a.e10 /. b.e10) (a.e11 /. b.e11)
 
   let det a = a.e00 *. a.e11 -. a.e01 *. a.e10
@@ -219,7 +220,8 @@ module M2 = struct
 
   let inverse a =
     let d = det a in
-    create (   a.e11 /. d) (-. a.e01 /. d)
+    create
+      (   a.e11 /. d) (-. a.e01 /. d)
       (-. a.e10 /. d) (   a.e00 /. d)
 
 end
