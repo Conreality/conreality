@@ -36,19 +36,19 @@ let f_eq_p13 () = same_bool true (fp13 =. (fp13 +. (1.)))
 let () =
   Alcotest.run "My first test" [
     "test_set", [
-      "f_eq_p1",               `Quick, f_eq_p1;
-      "f_eq_p2",               `Quick, f_eq_p2;
-      "f_eq_p3",               `Quick, f_eq_p3;
-      "f_eq_p4",               `Quick, f_eq_p4;
-      "f_eq_p5",               `Quick, f_eq_p5;
-      "f_eq_p6",               `Quick, f_eq_p6;
-      "f_eq_p7",               `Quick, f_eq_p7;
-      "f_eq_p8",               `Quick, f_eq_p9;
-      "f_eq_p9",               `Quick, f_eq_p9;
-      "f_eq_p10",               `Quick, f_eq_p10;
-      "f_eq_p11",               `Quick, f_eq_p11;
-      "f_eq_p12",               `Quick, f_eq_p12;
-      "f_eq_p13",               `Quick, f_eq_p13;
+      "f_eq_p1",        `Quick, f_eq_p1;
+      "f_eq_p2",        `Quick, f_eq_p2;
+      "f_eq_p3",        `Quick, f_eq_p3;
+      "f_eq_p4",        `Quick, f_eq_p4;
+      "f_eq_p5",        `Quick, f_eq_p5;
+      "f_eq_p6",        `Quick, f_eq_p6;
+      "f_eq_p7",        `Quick, f_eq_p7;
+      "f_eq_p8",        `Quick, f_eq_p9;
+      "f_eq_p9",        `Quick, f_eq_p9;
+      "f_eq_p10",       `Quick, f_eq_p10;
+      "f_eq_p11",       `Quick, f_eq_p11;
+      "f_eq_p12",       `Quick, f_eq_p12;
+      "f_eq_p13",       `Quick, f_eq_p13;
     ];
   ]
 
