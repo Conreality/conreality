@@ -10,24 +10,36 @@ time sudo apt-get update -qq
 time sudo apt-get install -qq ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
 
 # install opam
-time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
-pushd /tmp/opam-${OPAM_VERSION}
-time ./configure
-time make lib-ext
-time make
-time sudo make install
+##time curl -L https://github.com/OCamlPro/opam/archive/${OPAM_VERSION}.tar.gz | tar xz -C /tmp
+##pushd /tmp/opam-${OPAM_VERSION}
+##time ./configure
+##time make lib-ext
+##time make
+##time sudo make install
+
+# testing bypassing the opam build by installing up-version
+sudo echo 'APT::Default-Release "wily";' >> /etc/apt/apt.conf.d/01ubuntu
+sudo echo 'deb http://archive.ubuntu.com/ubuntu wily main restricted universe multiverse' >> /etc/apt/sources.list
+sudo echo 'Package: opam\
+  Pin: release n=wily\
+  Pin-Priority: 900' >> /etc/apt/preferences
+time sudo apt-get update -qq
+time sudo apt-get install -qq -y opam ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
+
+##sudo apt-add-repository -y ppa:avsm/ppa
+##sudo sed -i -e 's/trusty/wily/g' /etc/apt/sources.list.d/
+
+# set up the OPAM/OCaml environment with our desired OCaml version
 time opam init -y
 eval `opam config env`
 time opam switch ${OPAM_SWITCH}
 eval `opam config env`
-popd
+##popd
 
 # install packages from opam
 time opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests
-#opam pin add consensus . --no-action --yes
-#opam install -y consensus
 time make clean && make covered_check
 
 # generate Bisect coverage reports
