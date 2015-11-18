@@ -3,11 +3,11 @@
 open Consensus.Geometry
 open Check_common
 
-let v3_to_list v = [(V3.x v); (V3.y v); (V3.z v)]
-
 let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
+
+(* 3D Vectors *)
 
 let tvec3_1 = V3.create (3.) (1.) (2.)
 let tvec3_1opposite = V3.create (-3.) (-1.) (-2.)
@@ -15,6 +15,7 @@ let tvec3_2 = V3.create e pi phi
 let tvec3_0 = V3.zero
 let make_v3 x = V3.create (x) (x) (x)
 
+let v3_to_list v = [(V3.x v); (V3.y v); (V3.z v)]
 (* Keep this one operating on floats to avoid depending on V3.eq *)
 let v3_create () = Alcotest.(check (list float)) "float list" [e; pi; phi] (v3_to_list tvec3_2)
 let v3_x () = same_float 3. (V3.x tvec3_1)
@@ -104,6 +105,23 @@ let v3_normalize2 () =
 let v3_normalize0 () =
   same_bool true (V3.eq tvec3_0 (V3.normalize tvec3_0))
 
+(* 2D Points *)
+
+let tp2_1 = P2.create (3.) (1.)
+let tp2_2 = P2.create (e) (pi)
+let tp2_zero = P2.zero
+
+let p2_to_list p = [ (P2.x p); (P2.y p); ]
+(* Keep this one operating on floats to avoid depending on P2.eq *)
+let p2_create () = Alcotest.(check (list float)) "float list" [e; pi] (p2_to_list tp2_2)
+let p2_x () = same_float 3. (P2.x tp2_1)
+let p2_y () = same_float pi (P2.y tp2_2)
+let p2_el () = same_float 3. (P2.el tp2_1 0)
+(* Keep this one operating on floats to avoid depending on P2.eq *)
+let p2_zero () = Alcotest.(check (list float)) "float list" [0.; 0.] (p2_to_list tp2_zero)
+let p2_mid () = todo ()
+let p2_distance () = todo ()
+
 (*
 let v3_distance () =
 (* distance(3 1 2, e pi phi) = 2.193553046 *)
@@ -116,6 +134,7 @@ let v3_distance0 () =
 let () =
   Alcotest.run "My first test" [
     "test_set", [
+      (* 3D Vectors *)
       "v3 create",               `Quick, v3_create;
       "v3 x",                    `Quick, v3_x;
       "v3 y",                    `Quick, v3_y;
@@ -150,6 +169,14 @@ let () =
       "v3 normalize",            `Quick, v3_normalize;
       "v3 normalize2",           `Quick, v3_normalize2;
       "v3 normalize0",           `Quick, v3_normalize0;
+      (* 2D Points *)
+      "p2 create",               `Quick, p2_create;
+      "p2 x",                    `Quick, p2_x;
+      "p2 y",                    `Quick, p2_y;
+      "p2 element",              `Quick, p2_el;
+      "p2 zero",                 `Quick, p2_zero;
+      "p2 mid",                  `Quick, p2_mid;
+      "p2 distance",             `Quick, p2_distance;
     ];
   ]
 
