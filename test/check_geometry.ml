@@ -247,15 +247,15 @@ let m2_sub () = todo ()
 let m2_op_sub () = todo ()
 let m2_eq () = same_bool true (M2.eq M2.zero M2.zero)
 let m2_op_eq () = same_bool true (M2.zero = M2.zero)
-let m3_smul () = todo ()
-let m3_transpose () = todo ()
-let m3_mul () = todo ()
-let m3_op_mul () = todo ()
-let m3_emul () = todo ()
-let m3_ediv () = todo ()
-let m3_det () = todo ()
-let m3_trace () = todo ()
-let m3_inverse () = todo ()
+let m2_smul () = todo ()
+let m2_transpose () = todo ()
+let m2_mul () = todo ()
+let m2_op_mul () = todo ()
+let m2_emul () = todo ()
+let m2_ediv () = todo ()
+let m2_det () = todo ()
+let m2_trace () = todo ()
+let m2_inverse () = todo ()
 
 let () =
   Alcotest.run "My first test" [
@@ -361,15 +361,15 @@ let () =
       "m2_op_sub",               `Quick, m2_op_sub;
       "m2_eq",                   `Quick, m2_eq;
       "m2_op_eq",                `Quick, m2_op_eq;
-      "m3_smul",                 `Quick, m3_smul;
-      "m3_transpose",            `Quick, m3_transpose;
-      "m3_mul",                  `Quick, m3_mul;
-      "m3_op_mul",               `Quick, m3_op_mul;
-      "m3_emul",                 `Quick, m3_emul;
-      "m3_ediv",                 `Quick, m3_ediv;
-      "m3_det",                  `Quick, m3_det;
-      "m3_trace",                `Quick, m3_trace;
-      "m3_inverse",              `Quick, m3_inverse;
+      "m2_smul",                 `Quick, m2_smul;
+      "m2_transpose",            `Quick, m2_transpose;
+      "m2_mul",                  `Quick, m2_mul;
+      "m2_op_mul",               `Quick, m2_op_mul;
+      "m2_emul",                 `Quick, m2_emul;
+      "m2_ediv",                 `Quick, m2_ediv;
+      "m2_det",                  `Quick, m2_det;
+      "m2_trace",                `Quick, m2_trace;
+      "m2_inverse",              `Quick, m2_inverse;
     ];
   ]
 
