@@ -172,7 +172,7 @@ let f_max () = same_float 2. (max 2. 1.);
 let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
 
 let () =
-  Alcotest.run "My first test" [
+  Alcotest.run "prelude_float" [
     "test_set", [
       "f_eq_p1",        `Quick, f_eq_p1;
       "f_eq_p2",        `Quick, f_eq_p2;
