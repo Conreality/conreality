@@ -138,7 +138,7 @@ let f_compare () =
   same_int 1 (compare 1. 0.1);
   same_int 0 (compare 1. (1. +. 1e-10))
 
-let f_eq_fot () =
+let f_eq_dot () =
   (* Everything else in prelude_float.(=) gets checked via the precision tests *)
   same_bool false (1. =. infinity);
   same_bool false (infinity =. 1.)
@@ -210,6 +210,7 @@ let () =
       "f_op_ident",     `Quick, f_op_ident;
       "f_op_ident_dot", `Quick, f_op_ident_dot;
       "f_compare",      `Quick, f_compare;
+      "f_eq_dot",       `Quick, f_eq_dot;
       "f_neq_dot",      `Quick, f_neq_dot;
       "f_gt_dot",       `Quick, f_gt_dot;
       "f_ge_dot",       `Quick, f_ge_dot;
