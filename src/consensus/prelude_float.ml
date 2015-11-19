@@ -143,7 +143,11 @@ let compare x y =
     let ax = abs_float x in
     let ay = abs_float y in
     let amax = if ax > ay then ax else ay in
-    let max = if 1. > amax then 1. else amax in
+    let max =
+      if 1. > amax then
+        1.
+      else
+        amax in
     if max = infinity then c else
     if abs_float (x -. y) <= consensus_epsilon *. max then 0 else c
 

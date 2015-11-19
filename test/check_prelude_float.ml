@@ -137,16 +137,37 @@ let f_compare () =
   same_int (-1) (compare 0.1 1.);
   same_int 1 (compare 1. 0.1);
   same_int 0 (compare 1. (1. +. 1e-10))
+
 let f_eq_fot () =
   (* Everything else in prelude_float.(=) gets checked via the precision tests *)
-  same_bool false (1. =. infinity)
+  same_bool false (1. =. infinity);
+  same_bool false (infinity =. 1.)
+
 let f_neq_dot () = same_bool true (1. <>. 2.)
-let f_gt_dot () = same_bool true (2. >. 1.); same_bool false (1. >. 2.)
-let f_ge_dot () = same_bool true (2. >=. 1.); same_bool true (2. >=. 2.); same_bool false (1. >=. 2.)
-let f_lt_dot () = same_bool true (1. <. 2.); same_bool false (2. <. 1.)
-let f_le_dot () = same_bool true (1. <=. 2.); same_bool true (2. <=. 2.); same_bool false (2. <=. 1.)
-let f_min () = same_float 1. (min 1. 2.); same_float 1. (min 2. 1.); same_float nan (min nan 1.)
-let f_max () = same_float 2. (max 2. 1.); same_float 2. (max 1. 2.); same_float 1. (max nan 1.)
+
+let f_gt_dot () = same_bool true (2. >. 1.);
+  same_bool false (1. >. 2.)
+
+let f_ge_dot () = same_bool true (2. >=. 1.);
+  same_bool true (2. >=. 2.);
+  same_bool false (1. >=. 2.)
+
+let f_lt_dot () = same_bool true (1. <. 2.);
+  same_bool false (2. <. 1.)
+
+let f_le_dot () = same_bool true (1. <=. 2.);
+  same_bool true (2. <=. 2.);
+  same_bool false (2. <=. 1.)
+
+let f_min () = same_float 1. (min 1. 2.);
+  same_float 1. (min 2. 1.);
+  same_float nan (min nan 1.);
+  same_float nan (min 1. nan)
+
+let f_max () = same_float 2. (max 2. 1.);
+  same_float 2. (max 1. 2.);
+  same_float 1. (max nan 1.);
+  same_float nan (min 1. nan)
 
 let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
 
