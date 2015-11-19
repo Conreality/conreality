@@ -136,6 +136,7 @@ let f_compare () =
   same_int 1 (compare infinity 1.);
   same_int (-1) (compare 0.1 1.);
   same_int 1 (compare 1. 0.1);
+  same_int 1 (compare 0.2 0.1);
   same_int 0 (compare 1. (1. +. 1e-10))
 
 let f_eq_dot () =
@@ -160,14 +161,10 @@ let f_le_dot () = same_bool true (1. <=. 2.);
   same_bool false (2. <=. 1.)
 
 let f_min () = same_float 1. (min 1. 2.);
-  same_float 1. (min 2. 1.);
-  same_float nan (min nan 1.);
-  same_float nan (min 1. nan)
+  same_float 1. (min 2. 1.)
 
 let f_max () = same_float 2. (max 2. 1.);
-  same_float 2. (max 1. 2.);
-  same_float 1. (max nan 1.);
-  same_float nan (min 1. nan)
+  same_float 2. (max 1. 2.)
 
 let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
 
@@ -181,7 +178,7 @@ let () =
       "f_eq_p5",        `Quick, f_eq_p5;
       "f_eq_p6",        `Quick, f_eq_p6;
       "f_eq_p7",        `Quick, f_eq_p7;
-      "f_eq_p8",        `Quick, f_eq_p9;
+      "f_eq_p8",        `Quick, f_eq_p8;
       "f_eq_p9",        `Quick, f_eq_p9;
       "f_eq_p10",       `Quick, f_eq_p10;
       "f_eq_p11",       `Quick, f_eq_p11;

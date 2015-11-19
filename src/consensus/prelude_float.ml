@@ -184,11 +184,9 @@ let ( <=. ) x y =
 
 (* min/max *)
 let min x y =
-  if (x <>. x) then y else
   if (y <. x) then y else x
 
 let max x y =
-  if (x <>. x) then y else
   if (x <. y) then y else x
 
 (* Conversions *)
