@@ -13,7 +13,6 @@ let tvec2_1 = V2.create (3.) (1.)
 let tvec2_1opposite = V2.create (-3.) (-1.)
 let tvec2_2 = V2.create e pi
 let tvec2_0 = V2.zero
-let make_v2 x = V2.create (x) (x)
 
 let v2_to_list v = [(V2.x v); (V2.y v)]
 (* Keep this one operating on floats to avoid depending on V2.eq *)
@@ -89,7 +88,6 @@ let tvec3_1 = V3.create (3.) (1.) (2.)
 let tvec3_1opposite = V3.create (-3.) (-1.) (-2.)
 let tvec3_2 = V3.create e pi phi
 let tvec3_0 = V3.zero
-let make_v3 x = V3.create (x) (x) (x)
 
 let v3_to_list v = [(V3.x v); (V3.y v); (V3.z v)]
 (* Keep this one operating on floats to avoid depending on V3.eq *)

@@ -22,7 +22,7 @@ module P2 = struct
   let ( = ) p q = eq p q
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5)
   let distance p q = sqrt ((p.x -. q.x) ** 2. +. (p.y -. q.y) ** 2.)
-  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g)@]" p.x p.y
+  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g)@]" p.x p.y (*BISECT-IGNORE*)
 end
 
 type p2 = P2.t
@@ -46,7 +46,7 @@ module P3 = struct
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5) ((p.z +. q.z) *. 0.5)
   let distance a b =
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
-  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" p.x p.y p.z
+  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" p.x p.y p.z (*BISECT-IGNORE*)
 end
 
 type p3 = P3.t
@@ -89,7 +89,7 @@ module V2 = struct
   let normalize v =
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v)
-  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g)@]" v.x v.y
+  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g)@]" v.x v.y (*BISECT-IGNORE*)
 end
 
 type v2 = V2.t
@@ -138,7 +138,7 @@ module V3 = struct
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
-  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z
+  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z (*BISECT-IGNORE*)
 end
 
 type v3 = V3.t
