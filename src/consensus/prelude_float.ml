@@ -158,8 +158,8 @@ let ( =. ) x y =
     let ay = abs_float y in
     let amax = if ax > ay then ax else ay in
     let max = if 1. > amax then 1. else amax in
-    if max = infinity then false else
-      abs_float (x -. y) <= consensus_epsilon *. max
+    if max = infinity then false
+    else abs_float (x -. y) <= consensus_epsilon *. max
 
 let ( <>. ) x y = not (x =. y)
 
