@@ -18,7 +18,8 @@ IS_BENCHABLE_ARCHITECTURE := $(shell \
 
 ifeq ($(V),1)
 OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
-CHECKSEDSCRIPT  = 's/$$/ --verbose/'
+#CHECKSEDSCRIPT  = 's/$$/ --verbose/'
+CHECKVERBOSE	= '--verbose'
 endif
 
 BINARIES = \
@@ -41,8 +42,8 @@ check:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
-	  _build/test/check_all.sh
+	  #sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
+	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
 bench:
@@ -60,8 +61,8 @@ covered_check:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	  sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
-	  _build/test/check_all.sh
+	  #sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
+	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 clean_reports:
 	rm -rf _reports && \
