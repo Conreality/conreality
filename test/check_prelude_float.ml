@@ -123,14 +123,17 @@ let f_atanh () =
   same_float 1.003353477310755804e-01 (atanh 0.1);
   same_float 0. (atanh 0.)
 
-let f_op_ident () = todo ()
-let f_op_ident_dot () = todo ()
+let fi0 = 1.
+let fi1 = fi0
+let f_op_ident () = same_bool true (fi0 == fi1)
+let f_op_ident_dot () = same_bool true (fi0 =. fi1)
+
 let f_compare () = todo ()
-let f_neq_dot () = todo ()
-let f_gt_dot () = todo ()
-let f_ge_dot () = todo ()
-let f_lt_dot () = todo ()
-let f_le_dot () = todo ()
+let f_neq_dot () = same_bool true (1. <>. 2.)
+let f_gt_dot () = same_bool true (2. >. 1.)
+let f_ge_dot () = same_bool true (2. >=. 1.); same_bool true (2. >= 2.)
+let f_lt_dot () = same_bool true (1. <. 2.)
+let f_le_dot () = same_bool true (1. <=. 2.); same_bool true (2. <= 2.)
 let f_min () = todo ()
 let f_max () = todo ()
 let f_string_of_float () = todo ()
