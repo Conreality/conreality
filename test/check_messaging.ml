@@ -35,6 +35,68 @@ module Topic_test = struct
       "a/b/c" (Topic.to_string abc_topic)
 end
 
+(* Messaging.Stomp_command *)
+
+module Stomp_command_test = struct
+  open Stomp_command
+
+  let connected () =
+    Alcotest.(check string) "string"
+      "CONNECTED" (Stomp_command.to_string CONNECTED)
+
+  let message () =
+    Alcotest.(check string) "string"
+      "MESSAGE" (Stomp_command.to_string MESSAGE)
+
+  let receipt () =
+    Alcotest.(check string) "string"
+      "RECEIPT" (Stomp_command.to_string RECEIPT)
+
+  let error () =
+    Alcotest.(check string) "string"
+      "ERROR" (Stomp_command.to_string ERROR)
+
+  let connect () =
+    Alcotest.(check string) "string"
+      "CONNECT" (Stomp_command.to_string CONNECT)
+
+  let send () =
+    Alcotest.(check string) "string"
+      "SEND" (Stomp_command.to_string SEND)
+
+  let subscribe () =
+    Alcotest.(check string) "string"
+      "SUBSCRIBE" (Stomp_command.to_string SUBSCRIBE)
+
+  let unsubscribe () =
+    Alcotest.(check string) "string"
+      "UNSUBSCRIBE" (Stomp_command.to_string UNSUBSCRIBE)
+
+  let ack () =
+    Alcotest.(check string) "string"
+      "ACK" (Stomp_command.to_string ACK)
+
+  let nack () =
+    Alcotest.(check string) "string"
+      "NACK" (Stomp_command.to_string NACK)
+
+  let begin_ () =
+    Alcotest.(check string) "string"
+      "BEGIN" (Stomp_command.to_string BEGIN)
+
+  let commit () =
+    Alcotest.(check string) "string"
+      "COMMIT" (Stomp_command.to_string COMMIT)
+
+  let abort () =
+    Alcotest.(check string) "string"
+      "ABORT" (Stomp_command.to_string ABORT)
+
+  let disconnect () =
+    Alcotest.(check string) "string"
+      "DISCONNECT" (Stomp_command.to_string DISCONNECT)
+end
+
 (* Messaging.Stomp_frame *)
 
 module Stomp_frame_test = struct
@@ -81,6 +143,22 @@ let () =
       (* XXX: Temporarily disabled *)
       (*"Topic.of_string",       `Quick, Topic_test.of_string;*)
       "Topic.to_string",       `Quick, Topic_test.to_string;
+    ];
+    "Stomp_command", [
+      "CONNECTED",             `Quick, Stomp_command_test.connected;
+      "MESSAGE",               `Quick, Stomp_command_test.message;
+      "RECEIPT",               `Quick, Stomp_command_test.receipt;
+      "ERROR",                 `Quick, Stomp_command_test.error;
+      "CONNECT",               `Quick, Stomp_command_test.connect;
+      "SEND",                  `Quick, Stomp_command_test.send;
+      "SUBSCRIBE",             `Quick, Stomp_command_test.subscribe;
+      "UNSUBSCRIBE",           `Quick, Stomp_command_test.unsubscribe;
+      "ACK",                   `Quick, Stomp_command_test.ack;
+      "NACK",                  `Quick, Stomp_command_test.nack;
+      "BEGIN",                 `Quick, Stomp_command_test.begin_;
+      "COMMIT",                `Quick, Stomp_command_test.commit;
+      "ABORT",                 `Quick, Stomp_command_test.abort;
+      "DISCONNECT",            `Quick, Stomp_command_test.disconnect;
     ];
     "Stomp_frame", [
       "Stomp_frame.create",    `Quick, Stomp_frame_test.create;

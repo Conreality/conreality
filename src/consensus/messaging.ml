@@ -22,6 +22,65 @@ module Topic = struct
   let to_string topic = String.concat separator_string topic.path
 end
 
+(* See: https://stomp.github.io/stomp-specification-1.2.html#Server_Frames *)
+(* See: https://stomp.github.io/stomp-specification-1.2.html#Client_Frames *)
+module Stomp_command = struct
+  type t =
+    (* Server commands *)
+    | CONNECTED
+    | MESSAGE
+    | RECEIPT
+    | ERROR
+    (* Client commands *)
+    | CONNECT
+    | SEND
+    | SUBSCRIBE
+    | UNSUBSCRIBE
+    | ACK
+    | NACK
+    | BEGIN
+    | COMMIT
+    | ABORT
+    | DISCONNECT
+
+  let of_string = function
+    (* Server commands *)
+    | "CONNECTED" -> CONNECTED
+    | "MESSAGE" -> MESSAGE
+    | "RECEIPT" -> RECEIPT
+    | "ERROR" -> ERROR
+    (* Client commands *)
+    | "CONNECT" -> CONNECT
+    | "SEND" -> SEND
+    | "SUBSCRIBE" -> SUBSCRIBE
+    | "UNSUBSCRIBE" -> UNSUBSCRIBE
+    | "ACK" -> ACK
+    | "NACK" -> NACK
+    | "BEGIN" -> BEGIN
+    | "COMMIT" -> COMMIT
+    | "ABORT" -> ABORT
+    | "DISCONNECT" -> DISCONNECT
+    | input -> raise (Invalid_argument input)
+
+  let to_string = function
+    (* Server commands *)
+    | CONNECTED -> "CONNECTED"
+    | MESSAGE -> "MESSAGE"
+    | RECEIPT -> "RECEIPT"
+    | ERROR -> "ERROR"
+    (* Client commands *)
+    | CONNECT -> "CONNECT"
+    | SEND -> "SEND"
+    | SUBSCRIBE -> "SUBSCRIBE"
+    | UNSUBSCRIBE -> "UNSUBSCRIBE"
+    | ACK -> "ACK"
+    | NACK -> "NACK"
+    | BEGIN -> "BEGIN"
+    | COMMIT -> "COMMIT"
+    | ABORT -> "ABORT"
+    | DISCONNECT -> "DISCONNECT"
+end
+
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
 module Stomp_frame = struct
   type t = { command: string; headers: string list; body: string }
