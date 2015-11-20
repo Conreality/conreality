@@ -224,6 +224,8 @@ module M2 = struct
       (   a.e11 /. d) (-. a.e01 /. d)
       (-. a.e10 /. d) (   a.e00 /. d)
 
+  let print fmt m = Format.fprintf fmt "@[<1>(%g@ %g@\n%g@ %g)@]" m.e00 m.e01 m.e10 m.e11 (*BISECT-IGNORE*)
+
 end
 
 type m2 = M2.t

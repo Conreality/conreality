@@ -134,5 +134,6 @@ module M2: sig
   val det : t -> float
   val trace : t -> float
   val inverse : t -> t
+  val print : Format.formatter -> t -> unit
 end
 

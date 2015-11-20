@@ -3,7 +3,6 @@
 open Check_common
 open Consensus.Geometry
 
-(* TODO: Use prelude_math *)
 let e = 2.71828
 let pi = 3.14159
 let phi = 1.61803
@@ -238,6 +237,9 @@ module M2_test = struct
   let tm2_2 = M2.create
       (e) (pi)
       (phi) (0.)
+  let tm2_3 = M2.create
+      (6.) (2.)
+      (4.) (14.)
   let tm2_zero = M2.zero
 
   let m2_to_list m = [ (M2.e00 m); (M2.e01 m); (M2.e10 m); (M2.e11 m) ]
@@ -258,15 +260,59 @@ module M2_test = struct
   let op_sub () = same_bool true (M2.eq (M2.( - ) tm2_1 tm2_1) tm2_zero)
   let eq () = same_bool true (M2.eq M2.zero M2.zero)
   let op_eq () = same_bool true (M2.( = ) M2.zero M2.zero)
-  let smul () = todo ()
-  let transpose () = todo ()
-  let mul () = todo ()
-  let op_mul () = todo ()
-  let emul () = todo ()
-  let ediv () = todo ()
-  let det () = todo ()
-  let trace () = todo ()
-  let inverse () = todo ()
+  let smul () = same_bool true (M2.eq (M2.smul tm2_1 (2.)) tm2_3)
+
+  let transpose () =
+    let expected = M2.create
+        (3.) (2.)
+        (1.) (7.) in
+    same_bool true (M2.eq (M2.transpose tm2_1) expected)
+
+  (*let m2print m = M2.print Format.std_formatter m*)
+
+  let expected_mul = M2.create
+      (9.77287) (9.42477)
+      (16.76277) (6.28318)
+
+  let mul () =
+    same_bool true (M2.eq (M2.mul tm2_1 M2.id) tm2_1);
+    same_bool true (M2.eq (M2.mul M2.id tm2_1) tm2_1);
+    same_bool true (M2.eq (M2.mul tm2_1 tm2_2) expected_mul)
+
+  let op_mul () =
+    same_bool true (M2.eq (M2.( * ) tm2_1 M2.id) tm2_1);
+    same_bool true (M2.eq (M2.( * ) M2.id tm2_1) tm2_1);
+    same_bool true (M2.eq (M2.( * ) tm2_1 tm2_2) expected_mul)
+
+  let emul () =
+    let expected = M2.create
+        (8.15484) (3.14159)
+        (3.23606) (0.) in
+    same_bool true (M2.eq (M2.emul tm2_1 tm2_2) expected)
+
+  let ediv () =
+    let expected = M2.create
+        (1.103639065879894687) (3.183101550488765530e-01)
+        (1.236071024641075766) (infinity) in
+    same_bool true (M2.eq (M2.ediv tm2_1 tm2_2) expected)
+
+  let det () =
+    same_float (19.) (M2.det tm2_1);
+    same_float (-5.0831868677) (M2.det tm2_2)
+
+  let trace () =
+    same_float (10.) (M2.trace tm2_1);
+    same_float (2.71828) (M2.trace tm2_2)
+
+  let inverse () =
+    let expected_1 = M2.create
+        (3.684210526315789269e-01) (-5.263157894736842507e-02)
+        (-1.052631578947368501e-01) (1.578947368421052821e-01) in
+    let expected_2 = M2.create 
+        (1.110223024625156540e-16) (6.180355123205377721e-01)
+        (3.183101550488764975e-01) ( -5.347590145215230795e-01) in
+    same_bool true (M2.eq (M2.inverse tm2_1) expected_1);
+    same_bool true (M2.eq (M2.inverse tm2_2) expected_2)
 
 end
 
