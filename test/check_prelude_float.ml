@@ -2,6 +2,7 @@
 
 open Consensus.Prelude
 open Consensus.Prelude.Float
+open Consensus.Prelude.Math
 open Check_common
 
 (* Equality with precision checking *)
