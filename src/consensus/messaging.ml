@@ -29,7 +29,19 @@ module Stomp_frame = struct
   let create command headers body =
     {command = command; headers = headers; body = body}
 
-  let to_string frame = "" (* TODO *)
+  let to_string frame =
+    let buffer = Buffer.create 256 in
+    Buffer.add_string buffer frame.command;
+    Buffer.add_char buffer '\n';
+    List.iter
+      (fun header ->
+        Buffer.add_string buffer header;
+        Buffer.add_char buffer '\n')
+      frame.headers;
+    Buffer.add_char buffer '\n';
+    Buffer.add_string buffer frame.body;
+    Buffer.add_char buffer '\x00';
+    Buffer.to_bytes buffer
 
   let command frame = frame.command
   let headers frame = frame.headers

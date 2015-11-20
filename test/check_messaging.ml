@@ -40,9 +40,15 @@ end
 module Stomp_frame_test = struct
   open Stomp_frame
 
+  let message_frame =
+    Stomp_frame.create "MESSAGE" ["key1:value1"; "key2:value2"] "body"
+
   let create () = todo ()
 
-  let to_string () = todo ()
+  let to_string () =
+    Alcotest.(check string) "string"
+      "MESSAGE\nkey1:value1\nkey2:value2\n\nbody\x00"
+      (Stomp_frame.to_string message_frame)
 
   let command () = todo ()
 
