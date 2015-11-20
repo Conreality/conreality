@@ -21,3 +21,17 @@ module Topic = struct
   let message_type topic = topic.message_type
   let qos_policy topic = topic.qos_policy
 end
+
+(* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
+module Stomp_frame = struct
+  type t = { command: string; headers: string list; body: string }
+
+  let create command headers body =
+    {command = command; headers = headers; body = body}
+
+  let to_string frame = "" (* TODO *)
+
+  let command frame = frame.command
+  let headers frame = frame.headers
+  let body frame = frame.body
+end
