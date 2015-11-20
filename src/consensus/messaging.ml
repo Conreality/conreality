@@ -136,3 +136,77 @@ module Stomp_frame = struct
     Buffer.add_char buffer '\x00';
     Buffer.to_bytes buffer
 end
+
+(* See: https://stomp.github.io/stomp-specification-1.2.html *)
+module Stomp_protocol = struct
+  open Stomp_command
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#CONNECT_or_STOMP_Frame *)
+  let make_connect_frame host login passcode =
+    Stomp_frame.create CONNECT
+      [Stomp_header.create "accept-version" "1.2";
+       Stomp_header.create "host" host;
+       Stomp_header.create "login" login;
+       Stomp_header.create "passcode" passcode]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#SEND *)
+  let make_send_frame destination content_type body =
+    Stomp_frame.create SEND
+      [Stomp_header.create "destination" destination;
+       Stomp_header.create "content-type" content_type;
+       Stomp_header.create "content-length" (String.of_int (String.length body))]
+      body
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#SUBSCRIBE *)
+  let make_subscribe_frame id destination =
+    Stomp_frame.create SUBSCRIBE
+      [Stomp_header.create "id" id;
+       Stomp_header.create "destination" destination;
+       Stomp_header.create "ack" "auto"]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#UNSUBSCRIBE *)
+  let make_unsubscribe_frame id =
+    Stomp_frame.create UNSUBSCRIBE
+      [Stomp_header.create "id" id]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#ACK *)
+  let make_ack_frame id transaction =
+    Stomp_frame.create ACK
+      [Stomp_header.create "id" id;
+       Stomp_header.create "transaction" transaction]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#NACK *)
+  let make_nack_frame id transaction =
+    Stomp_frame.create NACK
+      [Stomp_header.create "id" id;
+       Stomp_header.create "transaction" transaction]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#BEGIN *)
+  let make_begin_frame transaction =
+    Stomp_frame.create BEGIN
+      [Stomp_header.create "transaction" transaction]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#COMMIT *)
+  let make_commit_frame transaction =
+    Stomp_frame.create COMMIT
+      [Stomp_header.create "transaction" transaction]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#ABORT *)
+  let make_abort_frame transaction =
+    Stomp_frame.create ABORT
+      [Stomp_header.create "transaction" transaction]
+      ""
+
+  (* See: https://stomp.github.io/stomp-specification-1.2.html#DISCONNECT *)
+  let make_disconnect_frame receipt =
+    Stomp_frame.create DISCONNECT
+      [Stomp_header.create "receipt" receipt]
+      ""
+end

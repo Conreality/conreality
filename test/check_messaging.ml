@@ -162,6 +162,12 @@ module Stomp_frame_test = struct
       (Stomp_frame.to_string message_frame)
 end
 
+(* Messaging.Stomp_protocol *)
+
+module Stomp_protocol_test = struct
+  (* TODO *)
+end
+
 (* Test suite definition *)
 
 let () =
@@ -206,5 +212,8 @@ let () =
       "Stomp_frame.body",       `Quick, Stomp_frame_test.body;
       "Stomp_frame.size",       `Quick, Stomp_frame_test.size;
       "Stomp_frame.to_string",  `Quick, Stomp_frame_test.to_string;
+    ];
+    "Stomp_protocol", [
+      (* TODO *)
     ];
   ]

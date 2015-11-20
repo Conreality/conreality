@@ -52,3 +52,16 @@ module Stomp_frame : sig
   val to_string : t -> string
   val size : t -> int
 end
+
+module Stomp_protocol : sig
+  val make_connect_frame : string -> string -> string -> Stomp_frame.t
+  val make_send_frame : string -> string -> string -> Stomp_frame.t
+  val make_subscribe_frame : string -> string -> Stomp_frame.t
+  val make_unsubscribe_frame : string -> Stomp_frame.t
+  val make_ack_frame : string -> string -> Stomp_frame.t
+  val make_nack_frame : string -> string -> Stomp_frame.t
+  val make_begin_frame : string -> Stomp_frame.t
+  val make_commit_frame : string -> Stomp_frame.t
+  val make_abort_frame : string -> Stomp_frame.t
+  val make_disconnect_frame : string -> Stomp_frame.t
+end
