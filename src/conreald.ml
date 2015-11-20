@@ -20,8 +20,8 @@ let man_sections = [
   `P "$(b,concfg)(8), $(b,conctl)(8)";
 ]
 
-let server_name = "localhost"
-let server_port = 1234
+let broker_name = "localhost"
+let broker_port = 61613 (* Apache ActiveMQ Apollo *)
 
 (* Option types *)
 
@@ -46,8 +46,21 @@ let connect addr port =
   Lwt_unix.connect sockfd sockaddr
   >>= fun () -> Lwt.return (sockfd)
 
+let send sockfd message =
+  let channel = Lwt_io.of_fd sockfd ~mode:Lwt_io.output in
+  Lwt_io.write channel message
+  >>= fun () -> Lwt_io.flush channel
+
+let recv_line sockfd =
+  let channel = Lwt_io.of_fd sockfd ~mode:Lwt_io.input in
+  Lwt_io.read_line channel
+
 let hello sockfd =
-  Lwt.return ()
+  let frame = Stomp_protocol.make_connect_frame "localhost" "admin" "password" in
+  send sockfd (Stomp_frame.to_string frame)
+  >>= fun () -> recv_line sockfd
+  >>= fun (line) -> Printf.printf "%s\n" line; Lwt.return ()
+  >>= fun () -> Lwt.return ()
 
 let rec loop () =
   fst (Lwt.wait ())
@@ -61,10 +74,10 @@ let run () =
   Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
   Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
   Lwt_log.ign_notice "Starting up...";
-  Lwt_unix.gethostbyname server_name
+  Lwt_unix.gethostbyname broker_name
   >>= fun host -> begin
-    Lwt_log.ign_notice_f "Connecting to message broker at %s..." host.h_name;
-    connect (Array.get host.h_addr_list 0) server_port
+    Lwt_log.ign_notice_f "Connecting to message broker at %s:%d..." host.h_name broker_port;
+    connect (Array.get host.h_addr_list 0) broker_port
   end
   >>= fun (sockfd) -> hello sockfd
   >>= fun () -> loop ()
