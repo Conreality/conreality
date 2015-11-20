@@ -229,7 +229,7 @@ module P3_test = struct
 end
 
 module M2_test = struct
-  (* 2D Matrices *)
+  (* 2x2 Matrices *)
 
   let tm2_1 = M2.create
       (3.) (1.)
@@ -310,13 +310,13 @@ module M2_test = struct
         (-1.052631578947368501e-01) (1.578947368421052821e-01) in
     let expected_2 = M2.create
         (1.110223024625156540e-16) (6.180355123205377721e-01)
-        (3.183101550488764975e-01) ( -5.347590145215230795e-01) in
+        (3.183101550488764975e-01) (-5.347590145215230795e-01) in
     same_bool true (M2.eq (M2.inverse tm2_1) expected_1);
     same_bool true (M2.eq (M2.inverse tm2_2) expected_2)
 end
 
 module M3_test = struct
-  (* 2D Matrices *)
+  (* 3x3 Matrices *)
 
   let tm3_1 = M3.create
       (3.) (1.) (4.)
@@ -517,7 +517,7 @@ let () =
       "P3.distance",             `Quick, P3_test.distance;
     ];
     "Matrix2", [
-      (* 2D Matrices *)
+      (* 2x2 Matrices *)
       "M2.create",               `Quick, M2_test.create;
       "M2.e00",                  `Quick, M2_test.e00;
       "M2.e01",                  `Quick, M2_test.e01;
@@ -544,7 +544,7 @@ let () =
       "M2.inverse",              `Quick, M2_test.inverse;
     ];
     "Matrix3", [
-      (* 3D Matrices *)
+      (* 3x3 Matrices *)
       "M3.create",               `Quick, M3_test.create;
       "M3.e00",                  `Quick, M3_test.e00;
       "M3.e01",                  `Quick, M3_test.e01;

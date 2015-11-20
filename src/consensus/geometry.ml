@@ -1,4 +1,5 @@
 (* This is free and unencumbered software released into the public domain. *)
+(* TODO: consensus_epsilon is probably too small to use here *)
 
 open Prelude
 open Prelude.Float
@@ -361,3 +362,69 @@ end
 
 type m3 = M3.t
 
+(* Quaternions *)
+
+module Qt = struct
+  type t = { r: float; a: float; b: float; c: float; }
+end
+
+module Q = struct
+  open Qt
+  type t = Qt.t
+  let create r a b c = { r = r; a = a; b = b; c = c }
+  let r q = q.r
+  let a q = q.a
+  let b q = q.b
+  let c q = q.c
+  let zero = create 0. 0. 0. 0.
+  let real q = q.r
+  let imag q = ( q.a, q.b, q.c )
+  let of_scalar s = create s 0. 0. 0.
+  let to_list q = [q.r; q.a; q.b; q.c]
+  let of_list = function
+    | [r; a; b; c] -> (create r a b c)
+    | _ -> invalid_arg "Q.of_list"
+  let add p q = create (p.r +. q.r) (p.a +. q.a) (p.b +. q.b) (p.c +. q.c)
+  let sub p q = create (p.r -. q.r) (p.a -. q.a) (p.b -. q.b) (p.c -. q.c)
+  let mul p q = create
+      (p.r *. q.r -. p.a *. q.a -. p.b *. q.b -. p.c *. q.c)
+      (p.r *. q.a +. q.r *. p.a +. p.a *. p.b -. q.b *. p.c)
+      (p.r *. q.b +. q.r *. p.b +. p.c *. q.a -. q.c *. p.a)
+      (p.r *. q.c +. q.r *. p.c +. p.a *. q.b -. q.a *. p.b)
+  let ( + ) p q = add p q
+  let ( - ) p q = sub p q
+  let ( * ) p q = mul p q
+  let eq p q = p.r =. q.r && p.a =. q.a && p.b =. q.b && p.c =. q.c
+  let ( = ) p q = eq p q
+  let addr q r = create (q.r +. r) q.a q.b q.c
+  let subr q r = create (q.r -. r) q.a q.b q.c
+  let mulr q r = create (q.r *. r) q.a q.b q.c
+  let divr q r = create (q.r /. r) q.a q.b q.c
+  let smul q r = create (q.r *. r) (q.a *. r) (q.b *. r) (q.c *. r)
+  let sdiv q r = create (q.r /. r) (q.a /. r) (q.b /. r) (q.c /. r)
+  let norm2 q = q.r *. q.r +. q.a *. q.a +. q.b *. q.b +. q.c *. q.c
+  let norm q = sqrt (norm2 q)
+  let conj q = create q.r (-. q.a) (-. q.b) (-. q.c)
+  let neg q = create (-. q.r) (-. q.a) (-. q.b) (-. q.c)
+  let inv q = sdiv (conj q) (norm2 q)
+  let unit q = sdiv q (norm q)
+  let dot p q = p.r *. q.r +. p.a *. q.a +. p.b *. q.b +. p.c *. q.c
+  let cos_theta p q = (dot p q) /. ((norm p) *. (norm q))
+  let theta p q = acos (cos_theta p q)
+  let slerp p q t =
+    if p = q then p else
+      let th = abs_float (theta p q) in
+      (* TODO: consensus_epsilon is probably too small to use here *)
+      let sin_th = if th <=. consensus_epsilon then th else (sin th) in
+      sdiv (add (smul p ((sin (1.0 -. t)) *. th)) (smul q (sin (t *. th)))) sin_th
+  let distance p q = norm (p - q)
+    (*
+  let nlerp = t -> t
+  let squad = t -> t
+  let of_euler = M3.t -> t
+  let to_euler q =
+  let cross = t -> t -> t
+       *)
+end
+
+type q = Q.t
