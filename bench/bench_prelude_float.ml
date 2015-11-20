@@ -2,7 +2,9 @@
 
 open Core.Std
 open Core_bench.Std
+open Consensus.Prelude
 open Consensus.Prelude_float
+open Consensus.Prelude_math
 
 let () =
   let f0 = 0. in
@@ -56,70 +58,6 @@ let () =
         (fun () -> ignore (f0 /. f1));
       Bench.Test.create ~name:"Float.(**)"
         (fun () -> ignore (f0 ** f1));
-      Bench.Test.create ~name:"Float.exp"
-        (fun () -> ignore (exp f0));
-      Bench.Test.create ~name:"Float.expm1"
-        (fun () -> ignore (expm1 f0));
-      Bench.Test.create ~name:"Float.sqrt"
-        (fun () -> ignore (sqrt f0));
-      Bench.Test.create ~name:"Float.log"
-        (fun () -> ignore (log f0));
-      Bench.Test.create ~name:"Float.log10"
-        (fun () -> ignore (log10 f0));
-      Bench.Test.create ~name:"Float.log1p"
-        (fun () -> ignore (log1p f0));
-      Bench.Test.create ~name:"Float.sin"
-        (fun () -> ignore (sin f0));
-      Bench.Test.create ~name:"Float.cos"
-        (fun () -> ignore (cos f0));
-      Bench.Test.create ~name:"Float.tan"
-        (fun () -> ignore (tan f0));
-      Bench.Test.create ~name:"Float.csc"
-        (fun () -> ignore (csc f0));
-      Bench.Test.create ~name:"Float.sec"
-        (fun () -> ignore (sec f0));
-      Bench.Test.create ~name:"Float.cot"
-        (fun () -> ignore (cot f0));
-      Bench.Test.create ~name:"Float.asin"
-        (fun () -> ignore (asin f0));
-      Bench.Test.create ~name:"Float.acos"
-        (fun () -> ignore (acos f0));
-      Bench.Test.create ~name:"Float.atan"
-        (fun () -> ignore (atan f0));
-      Bench.Test.create ~name:"Float.atan2"
-        (fun () -> ignore (atan2 f0 f1));
-      Bench.Test.create ~name:"Float.acsc"
-        (fun () -> ignore (acsc f0));
-      Bench.Test.create ~name:"Float.asec"
-        (fun () -> ignore (asec f0));
-      Bench.Test.create ~name:"Float.acot"
-        (fun () -> ignore (acot f0));
-      Bench.Test.create ~name:"Float.sinh"
-        (fun () -> ignore (sinh f0));
-      Bench.Test.create ~name:"Float.cosh"
-        (fun () -> ignore (cosh f0));
-      Bench.Test.create ~name:"Float.tanh"
-        (fun () -> ignore (tanh f0));
-      Bench.Test.create ~name:"Float.csch"
-        (fun () -> ignore (csch f0));
-      Bench.Test.create ~name:"Float.sech"
-        (fun () -> ignore (sech f0));
-      Bench.Test.create ~name:"Float.coth"
-        (fun () -> ignore (coth f0));
-      Bench.Test.create ~name:"Float.asinh"
-        (fun () -> ignore (asinh f0));
-      Bench.Test.create ~name:"Float.acosh"
-        (fun () -> ignore (acosh f0));
-      Bench.Test.create ~name:"Float.atanh"
-        (fun () -> ignore (atanh f0));
-      Bench.Test.create ~name:"Float.acsch"
-        (fun () -> ignore (acsch f0));
-      Bench.Test.create ~name:"Float.asech"
-        (fun () -> ignore (asech f0));
-      Bench.Test.create ~name:"Float.acoth"
-        (fun () -> ignore (acoth f0));
-      Bench.Test.create ~name:"Float.hypot"
-        (fun () -> ignore (hypot f0 f1));
       Bench.Test.create ~name:"Float.ceil"
         (fun () -> ignore (ceil f0));
       Bench.Test.create ~name:"Float.floor"
