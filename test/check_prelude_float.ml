@@ -125,7 +125,9 @@ let f_atanh () =
 
 let fi0 = 1.
 let fi1 = fi0
+
 let f_op_ident () = same_bool true (fi0 == fi1)
+
 let f_op_ident_dot () = same_bool true (fi0 ==. fi1)
 
 let f_compare () =
@@ -146,24 +148,30 @@ let f_eq_dot () =
 
 let f_neq_dot () = same_bool true (1. <>. 2.)
 
-let f_gt_dot () = same_bool true (2. >. 1.);
+let f_gt_dot () =
+  same_bool true (2. >. 1.);
   same_bool false (1. >. 2.)
 
-let f_ge_dot () = same_bool true (2. >=. 1.);
+let f_ge_dot () =
+  same_bool true (2. >=. 1.);
   same_bool true (2. >=. 2.);
   same_bool false (1. >=. 2.)
 
-let f_lt_dot () = same_bool true (1. <. 2.);
+let f_lt_dot () =
+  same_bool true (1. <. 2.);
   same_bool false (2. <. 1.)
 
-let f_le_dot () = same_bool true (1. <=. 2.);
+let f_le_dot () =
+  same_bool true (1. <=. 2.);
   same_bool true (2. <=. 2.);
   same_bool false (2. <=. 1.)
 
-let f_min () = same_float 1. (min 1. 2.);
+let f_min () =
+  same_float 1. (min 1. 2.);
   same_float 1. (min 2. 1.)
 
-let f_max () = same_float 2. (max 2. 1.);
+let f_max () =
+  same_float 2. (max 2. 1.);
   same_float 2. (max 1. 2.)
 
 let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
@@ -171,51 +179,51 @@ let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
 let () =
   Alcotest.run "prelude_float" [
     "test_set", [
-      "f_eq_p1",        `Quick, f_eq_p1;
-      "f_eq_p2",        `Quick, f_eq_p2;
-      "f_eq_p3",        `Quick, f_eq_p3;
-      "f_eq_p4",        `Quick, f_eq_p4;
-      "f_eq_p5",        `Quick, f_eq_p5;
-      "f_eq_p6",        `Quick, f_eq_p6;
-      "f_eq_p7",        `Quick, f_eq_p7;
-      "f_eq_p8",        `Quick, f_eq_p8;
-      "f_eq_p9",        `Quick, f_eq_p9;
-      "f_eq_p10",       `Quick, f_eq_p10;
-      "f_eq_p11",       `Quick, f_eq_p11;
-      "f_eq_p12",       `Quick, f_eq_p12;
-      "f_eq_p13",       `Quick, f_eq_p13;
-      "f_is_normal",    `Quick, f_is_normal;
-      "f_is_subnormal", `Quick, f_is_subnormal;
-      "f_is_zero",      `Quick, f_is_zero;
-      "f_is_infinite",  `Quick, f_is_infinite;
-      "f_is_nan",       `Quick, f_is_nan;
-      "f_csc",          `Quick, f_csc;
-      "f_sec",          `Quick, f_sec;
-      "f_cot",          `Quick, f_cot;
-      "f_acsc",         `Quick, f_acsc;
-      "f_asec",         `Quick, f_asec;
-      "f_acot",         `Quick, f_acot;
-      "f_csch",         `Quick, f_csch;
-      "f_sech",         `Quick, f_sech;
-      "f_coth",         `Quick, f_coth;
-      "f_acsch",        `Quick, f_acsch;
-      "f_asech",        `Quick, f_asech;
-      "f_asinh",        `Quick, f_asinh;
-      "f_acosh",        `Quick, f_acosh;
-      "f_atanh",        `Quick, f_atanh;
-      "f_acoth",        `Quick, f_acoth;
-      "f_op_ident",     `Quick, f_op_ident;
-      "f_op_ident_dot", `Quick, f_op_ident_dot;
-      "f_compare",      `Quick, f_compare;
-      "f_eq_dot",       `Quick, f_eq_dot;
-      "f_neq_dot",      `Quick, f_neq_dot;
-      "f_gt_dot",       `Quick, f_gt_dot;
-      "f_ge_dot",       `Quick, f_ge_dot;
-      "f_lt_dot",       `Quick, f_lt_dot;
-      "f_le_dot",       `Quick, f_le_dot;
-      "f_min",          `Quick, f_min;
-      "f_max",          `Quick, f_max;
-      "f_string_of_float",`Quick, f_string_of_float;
+      "f_eq_p1",                `Quick, f_eq_p1;
+      "f_eq_p2",                `Quick, f_eq_p2;
+      "f_eq_p3",                `Quick, f_eq_p3;
+      "f_eq_p4",                `Quick, f_eq_p4;
+      "f_eq_p5",                `Quick, f_eq_p5;
+      "f_eq_p6",                `Quick, f_eq_p6;
+      "f_eq_p7",                `Quick, f_eq_p7;
+      "f_eq_p8",                `Quick, f_eq_p8;
+      "f_eq_p9",                `Quick, f_eq_p9;
+      "f_eq_p10",               `Quick, f_eq_p10;
+      "f_eq_p11",               `Quick, f_eq_p11;
+      "f_eq_p12",               `Quick, f_eq_p12;
+      "f_eq_p13",               `Quick, f_eq_p13;
+      "f_is_normal",            `Quick, f_is_normal;
+      "f_is_subnormal",         `Quick, f_is_subnormal;
+      "f_is_zero",              `Quick, f_is_zero;
+      "f_is_infinite",          `Quick, f_is_infinite;
+      "f_is_nan",               `Quick, f_is_nan;
+      "f_csc",                  `Quick, f_csc;
+      "f_sec",                  `Quick, f_sec;
+      "f_cot",                  `Quick, f_cot;
+      "f_acsc",                 `Quick, f_acsc;
+      "f_asec",                 `Quick, f_asec;
+      "f_acot",                 `Quick, f_acot;
+      "f_csch",                 `Quick, f_csch;
+      "f_sech",                 `Quick, f_sech;
+      "f_coth",                 `Quick, f_coth;
+      "f_acsch",                `Quick, f_acsch;
+      "f_asech",                `Quick, f_asech;
+      "f_asinh",                `Quick, f_asinh;
+      "f_acosh",                `Quick, f_acosh;
+      "f_atanh",                `Quick, f_atanh;
+      "f_acoth",                `Quick, f_acoth;
+      "f_op_ident",             `Quick, f_op_ident;
+      "f_op_ident_dot",         `Quick, f_op_ident_dot;
+      "f_compare",              `Quick, f_compare;
+      "f_eq_dot",               `Quick, f_eq_dot;
+      "f_neq_dot",              `Quick, f_neq_dot;
+      "f_gt_dot",               `Quick, f_gt_dot;
+      "f_ge_dot",               `Quick, f_ge_dot;
+      "f_lt_dot",               `Quick, f_lt_dot;
+      "f_le_dot",               `Quick, f_le_dot;
+      "f_min",                  `Quick, f_min;
+      "f_max",                  `Quick, f_max;
+      "f_string_of_float",      `Quick, f_string_of_float;
     ];
   ]
 
