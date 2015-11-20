@@ -40,61 +40,55 @@ end
 module Stomp_command_test = struct
   open Stomp_command
 
-  let connected () =
+  let check command string =
     Alcotest.(check string) "string"
-      "CONNECTED" (Stomp_command.to_string CONNECTED)
+      string (Stomp_command.to_string command);
+    Alcotest.(check string) "string"
+      string (Stomp_command.to_string (Stomp_command.of_string string));
+    Alcotest.(check int) "int"
+      (String.length string) (Stomp_command.length command)
+
+  let connected () =
+    check CONNECTED "CONNECTED"
 
   let message () =
-    Alcotest.(check string) "string"
-      "MESSAGE" (Stomp_command.to_string MESSAGE)
+    check MESSAGE "MESSAGE"
 
   let receipt () =
-    Alcotest.(check string) "string"
-      "RECEIPT" (Stomp_command.to_string RECEIPT)
+    check RECEIPT "RECEIPT"
 
   let error () =
-    Alcotest.(check string) "string"
-      "ERROR" (Stomp_command.to_string ERROR)
+    check ERROR "ERROR"
 
   let connect () =
-    Alcotest.(check string) "string"
-      "CONNECT" (Stomp_command.to_string CONNECT)
+    check CONNECT "CONNECT"
 
   let send () =
-    Alcotest.(check string) "string"
-      "SEND" (Stomp_command.to_string SEND)
+    check SEND "SEND"
 
   let subscribe () =
-    Alcotest.(check string) "string"
-      "SUBSCRIBE" (Stomp_command.to_string SUBSCRIBE)
+    check SUBSCRIBE "SUBSCRIBE"
 
   let unsubscribe () =
-    Alcotest.(check string) "string"
-      "UNSUBSCRIBE" (Stomp_command.to_string UNSUBSCRIBE)
+    check UNSUBSCRIBE "UNSUBSCRIBE"
 
   let ack () =
-    Alcotest.(check string) "string"
-      "ACK" (Stomp_command.to_string ACK)
+    check ACK "ACK"
 
   let nack () =
-    Alcotest.(check string) "string"
-      "NACK" (Stomp_command.to_string NACK)
+    check NACK "NACK"
 
   let begin_ () =
-    Alcotest.(check string) "string"
-      "BEGIN" (Stomp_command.to_string BEGIN)
+    check BEGIN "BEGIN"
 
   let commit () =
-    Alcotest.(check string) "string"
-      "COMMIT" (Stomp_command.to_string COMMIT)
+    check COMMIT "COMMIT"
 
   let abort () =
-    Alcotest.(check string) "string"
-      "ABORT" (Stomp_command.to_string ABORT)
+    check ABORT "ABORT"
 
   let disconnect () =
-    Alcotest.(check string) "string"
-      "DISCONNECT" (Stomp_command.to_string DISCONNECT)
+    check DISCONNECT "DISCONNECT"
 end
 
 (* Messaging.Stomp_frame *)
