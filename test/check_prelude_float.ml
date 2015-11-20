@@ -1,6 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Consensus.Prelude
+(* TODO: Don't open the module under test *)
 open Consensus.Prelude.Float
 open Consensus.Prelude.Math
 open Check_common
@@ -57,72 +58,6 @@ let f_is_infinite () =
 let f_is_nan () =
   same_bool true (is_nan (asin 7.));
   same_bool false (is_nan 1.)
-
-(* Trigonometric functions, inverses, hyperbolics and inverse hyperbolics *)
-
-let f_csc () =
-  same_float 1.188395105778121241 (csc 1.);
-  same_bool true (is_infinite (csc 0.))
-
-let f_sec () =
-  same_float 1.850815717680925454 (sec 1.);
-  same_bool true (is_nan (sec infinity))
-
-let f_cot () =
-  same_float 6.420926159343306461e-01 (cot 1.);
-  same_bool true (is_infinite (cot 0.))
-
-let f_acsc () =
-  same_float 1.570796326794896558 (acsc 1.);
-  same_float 0. (acsc 10000000000000000.)
-
-let f_asec () =
-  same_float 0. (asec 1.);
-  same_float 1.570796326794896558 (asec infinity);
-  same_bool true (is_nan (asec 0.))
-
-let f_acot () =
-  same_float 7.853981633974482790e-01 (acot 1.);
-  same_float 0. (acot infinity)
-
-let f_csch () =
-  same_float 8.509181282393215584e-01 (csch 1.);
-  same_bool true (is_infinite (csch 0.))
-
-let f_sech () =
-  same_float 6.480542736638854606e-01(sech 1.);
-  same_float 1. (sech 0.)
-
-let f_coth () =
-  same_float 1.313035285499331462 (coth 1.);
-  same_bool true (is_infinite (coth 0.))
-
-let f_acsch () =
-  same_float 8.813735870195430477e-01 (acsch 1.);
-  same_bool true (is_infinite (acsch 0.))
-
-let f_asech () =
-  same_float 0. (asech 1.);
-  same_bool true (is_infinite (asech 0.))
-
-let f_acoth () =
-  same_float 5.493061443340547800e-01 (acoth 2.);
-  same_bool true (is_infinite (acoth 1.));
-  same_bool true (is_nan (acoth 0.))
-
-let f_asinh () =
-  same_float 8.813735870195430477e-01 (asinh 1.);
-  same_float 0. (asinh 0.);
-  same_bool true (is_infinite (asinh infinity))
-
-let f_acosh () =
-  same_float 1.316957896924816573e+00 (acosh 2.);
-  same_bool true (is_infinite (acosh infinity))
-
-let f_atanh () =
-  same_float infinity (atanh 1.);
-  same_float 1.003353477310755804e-01 (atanh 0.1);
-  same_float 0. (atanh 0.)
 
 let fi0 = 1.
 let fi1 = fi0
@@ -198,21 +133,6 @@ let () =
       "f_is_zero",              `Quick, f_is_zero;
       "f_is_infinite",          `Quick, f_is_infinite;
       "f_is_nan",               `Quick, f_is_nan;
-      "f_csc",                  `Quick, f_csc;
-      "f_sec",                  `Quick, f_sec;
-      "f_cot",                  `Quick, f_cot;
-      "f_acsc",                 `Quick, f_acsc;
-      "f_asec",                 `Quick, f_asec;
-      "f_acot",                 `Quick, f_acot;
-      "f_csch",                 `Quick, f_csch;
-      "f_sech",                 `Quick, f_sech;
-      "f_coth",                 `Quick, f_coth;
-      "f_acsch",                `Quick, f_acsch;
-      "f_asech",                `Quick, f_asech;
-      "f_asinh",                `Quick, f_asinh;
-      "f_acosh",                `Quick, f_acosh;
-      "f_atanh",                `Quick, f_atanh;
-      "f_acoth",                `Quick, f_acoth;
       "f_op_ident",             `Quick, f_op_ident;
       "f_op_ident_dot",         `Quick, f_op_ident_dot;
       "f_compare",              `Quick, f_compare;
