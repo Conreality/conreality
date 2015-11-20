@@ -1,7 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-open Consensus.Geometry
 open Check_common
+open Consensus.Geometry
 
 let e = 2.71828
 let pi = 3.14159
