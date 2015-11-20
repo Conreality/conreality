@@ -308,12 +308,117 @@ module M2_test = struct
     let expected_1 = M2.create
         (3.684210526315789269e-01) (-5.263157894736842507e-02)
         (-1.052631578947368501e-01) (1.578947368421052821e-01) in
-    let expected_2 = M2.create 
+    let expected_2 = M2.create
         (1.110223024625156540e-16) (6.180355123205377721e-01)
         (3.183101550488764975e-01) ( -5.347590145215230795e-01) in
     same_bool true (M2.eq (M2.inverse tm2_1) expected_1);
     same_bool true (M2.eq (M2.inverse tm2_2) expected_2)
+end
 
+module M3_test = struct
+  (* 2D Matrices *)
+
+  let tm3_1 = M3.create
+      (3.) (1.) (4.)
+      (2.) (7.) (5.)
+      (6.) (-1.) (8.)
+  let tm3_2 = M3.create
+      (e) (pi) (1.)
+      (phi) (0.) (2.)
+      (3.) (4.) (-1.)
+  let tm3_3 = M3.create
+      (6.) (2.) (8.)
+      (4.) (14.) (10.)
+      (12.) (-2.) (16.)
+  let tm3_zero = M3.zero
+
+  let m3_to_list m = [
+    (M3.e00 m); (M3.e01 m); M3.e02 m;
+    (M3.e10 m); (M3.e11 m); M3.e12 m;
+    (M3.e20 m); (M3.e21 m); M3.e22 m;
+  ]
+
+  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  let create () = same_float_list [e; pi; (1.); phi; (0.); (2.); (3.); (4.); (-1.);] (m3_to_list tm3_2)
+  let e00 () = same_float e (M3.e00 tm3_2)
+  let e01 () = same_float pi (M3.e01 tm3_2)
+  let e02 () = same_float 1. (M3.e02 tm3_2)
+  let e10 () = same_float phi (M3.e10 tm3_2)
+  let e11 () = same_float 0. (M3.e11 tm3_2)
+  let e12 () = same_float 2. (M3.e12 tm3_2)
+  let e20 () = same_float 3. (M3.e20 tm3_2)
+  let e21 () = same_float 4. (M3.e21 tm3_2)
+  let e22 () = same_float (-1.) (M3.e22 tm3_2)
+  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  let zero () = same_float_list [0.; 0.; 0.; 0.; 0.; 0.; 0.; 0.; 0.] (m3_to_list tm3_zero)
+  let id () = same_float_list [1.; 0.; 0.; 0.; 1.; 0.; 0.; 0.; 1.;] (m3_to_list M3.id)
+  let el () = same_float 4. (M3.el 2 1 tm3_2)
+  let neg () = same_bool true (M3.eq (M3.neg tm3_1) (M3.create (-3.) (-1.) (-4.) (-2.) (-7.) (-5.) (-6.) (1.) (-8.)))
+  let add () = same_bool true (M3.eq ((M3.add tm3_1 tm3_1)) tm3_3)
+  let op_add () = same_bool true (M3.eq ((M3.(+) tm3_1 tm3_1)) tm3_3)
+  let sub () = same_bool true (M3.eq (M3.sub tm3_1 tm3_1) tm3_zero)
+  let op_sub () = same_bool true (M3.eq (M3.( - ) tm3_1 tm3_1) tm3_zero)
+  let eq () = same_bool true (M3.eq M3.zero M3.zero)
+  let op_eq () = same_bool true (M3.( = ) M3.zero M3.zero)
+  let smul () = same_bool true (M3.eq (M3.smul tm3_1 (2.)) tm3_3)
+
+  let transpose () =
+    let expected = M3.create
+        (3.) (2.) (6.)
+        (1.) (7.) (-1.)
+        (4.) (5.) (8.) in
+    same_bool true (M3.eq (M3.transpose tm3_1) expected)
+
+  (*let m3print m = M3.print Format.std_formatter m*)
+
+  let expected_mul = M3.create
+      (2.177287000000000106e+01) (2.542476999999999876e+01) (1.000000000000000000e+00)
+      (3.176276999999999973e+01) (2.628318000000000154e+01) (1.100000000000000000e+01)
+      (3.869164999999999566e+01) (5.084953999999999752e+01) (-4.000000000000000000e+00)
+
+  let mul () =
+    same_bool true (M3.eq (M3.mul tm3_1 M3.id) tm3_1);
+    same_bool true (M3.eq (M3.mul M3.id tm3_1) tm3_1);
+    same_bool true (M3.eq (M3.mul tm3_1 tm3_2) expected_mul)
+
+  let op_mul () =
+    same_bool true (M3.eq (M3.( * ) tm3_1 M3.id) tm3_1);
+    same_bool true (M3.eq (M3.( * ) M3.id tm3_1) tm3_1);
+    same_bool true (M3.eq (M3.( * ) tm3_1 tm3_2) expected_mul)
+
+  let emul () =
+    let expected = M3.create
+        (8.154840000000000089e+00) (3.141589999999999883e+00) (4.000000000000000000e+00)
+        (3.236060000000000159e+00) (0.000000000000000000e+00) (1.000000000000000000e+01)
+        (1.800000000000000000e+01) (-4.000000000000000000e+00) (-8.000000000000000000e+00) in
+    same_bool true (M3.eq (M3.emul tm3_1 tm3_2) expected)
+
+  let ediv () =
+    let expected = M3.create
+        (1.103639065879894687e+00) (3.183101550488765530e-01) (4.000000000000000000e+00)
+        (1.236071024641075766e+00) (infinity) (2.500000000000000000e+00)
+        (2.000000000000000000e+00) (-2.500000000000000000e-01) (-8.000000000000000000e+00) in
+    same_bool true (M3.eq (M3.ediv tm3_1 tm3_2) expected)
+
+  let det () =
+    same_float (21.) (M3.det tm3_1);
+    same_float (8.6586068677) (M3.det tm3_2)
+
+  let trace () =
+    same_float (18.) (M3.trace tm3_1);
+    same_float (1.71828) (M3.trace tm3_2)
+
+  let inverse () =
+    let expected_1 = M3.create
+        (2.904761904761903324e+00) (-5.714285714285712858e-01) (-1.095238095238094456e+00)
+        (6.666666666666665186e-01) (2.775557561562891351e-17) (-3.333333333333332593e-01)
+        (-2.095238095238094456e+00) (4.285714285714284921e-01) (9.047619047619044341e-01) in
+    let expected_2 = M3.create
+        (-9.239361622760742243e-01) (8.247966571436486927e-01) (7.256571520112230500e-01)
+        (8.798216752880003710e-01) (-6.604157097525038544e-01) (-4.410097442170073379e-01)
+        (7.474782143237783671e-01) (-1.672728675790690622e-01) (-5.870675208343596463e-01) in
+    same_bool true (M3.eq (M3.inverse tm3_1) expected_1);
+    same_bool true (M3.eq (M3.inverse tm3_2) expected_2)
 end
 
 let () =
@@ -437,6 +542,38 @@ let () =
       "M2.det",                  `Quick, M2_test.det;
       "M2.trace",                `Quick, M2_test.trace;
       "M2.inverse",              `Quick, M2_test.inverse;
+    ];
+    "Matrix3", [
+      (* 3D Matrices *)
+      "M3.create",               `Quick, M3_test.create;
+      "M3.e00",                  `Quick, M3_test.e00;
+      "M3.e01",                  `Quick, M3_test.e01;
+      "M3.e02",                  `Quick, M3_test.e02;
+      "M3.e10",                  `Quick, M3_test.e10;
+      "M3.e11",                  `Quick, M3_test.e11;
+      "M3.e12",                  `Quick, M3_test.e12;
+      "M3.e20",                  `Quick, M3_test.e20;
+      "M3.e21",                  `Quick, M3_test.e21;
+      "M3.e22",                  `Quick, M3_test.e22;
+      "M3.zero",                 `Quick, M3_test.zero;
+      "M3.id",                   `Quick, M3_test.id;
+      "M3.el",                   `Quick, M3_test.el;
+      "M3.neg",                  `Quick, M3_test.neg;
+      "M3.add",                  `Quick, M3_test.add;
+      "M3.op_add",               `Quick, M3_test.op_add;
+      "M3.sub",                  `Quick, M3_test.sub;
+      "M3.op_sub",               `Quick, M3_test.op_sub;
+      "M3.eq",                   `Quick, M3_test.eq;
+      "M3.op_eq",                `Quick, M3_test.op_eq;
+      "M3.smul",                 `Quick, M3_test.smul;
+      "M3.transpose",            `Quick, M3_test.transpose;
+      "M3.mul",                  `Quick, M3_test.mul;
+      "M3.op_mul",               `Quick, M3_test.op_mul;
+      "M3.emul",                 `Quick, M3_test.emul;
+      "M3.ediv",                 `Quick, M3_test.ediv;
+      "M3.det",                  `Quick, M3_test.det;
+      "M3.trace",                `Quick, M3_test.trace;
+      "M3.inverse",              `Quick, M3_test.inverse;
     ];
   ]
 

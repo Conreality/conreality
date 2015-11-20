@@ -137,3 +137,39 @@ module M2: sig
   val print : Format.formatter -> t -> unit
 end
 
+type m3         (* 3x3 matrix *)
+
+module M3: sig
+  type t = m3
+  val create : float -> float -> float -> float -> float -> float -> float -> float -> float -> t
+  val e00 : t -> float
+  val e01 : t -> float
+  val e02 : t -> float
+  val e10 : t -> float
+  val e11 : t -> float
+  val e12 : t -> float
+  val e20 : t -> float
+  val e21 : t -> float
+  val e22 : t -> float
+  val el : int -> int -> t -> float
+  val zero : t
+  val id : t
+  val neg : t -> t
+  val add : t -> t -> t
+  val ( + ) : t -> t -> t
+  val sub : t -> t-> t
+  val ( - ) : t -> t -> t
+  val eq : t -> t-> bool
+  val ( = ) : t -> t -> bool
+  val smul : t -> float -> t
+  val transpose : t -> t
+  val mul : t -> t-> t
+  val ( * ) : t -> t -> t
+  val emul : t -> t -> t
+  val ediv : t -> t -> t
+  val det : t -> float
+  val trace : t -> float
+  val inverse : t -> t
+  val print : Format.formatter -> t -> unit
+end
+
