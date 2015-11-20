@@ -14,12 +14,12 @@ module Topic = struct
     end;
     {path = path; message_type = ""; qos_policy = 0}
 
-  let of_string path = create [path] (* TODO: String.split path separator_char *)
-  let to_string topic = String.concat separator_string topic.path
-
   let path topic = topic.path
   let message_type topic = topic.message_type
   let qos_policy topic = topic.qos_policy
+
+  let of_string path = create [path] (* TODO: String.split path separator_char *)
+  let to_string topic = String.concat separator_string topic.path
 end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
@@ -29,8 +29,20 @@ module Stomp_frame = struct
   let create command headers body =
     {command = command; headers = headers; body = body}
 
+  let command frame = frame.command
+  let headers frame = frame.headers
+  let body frame = frame.body
+
+  let size frame =
+    (String.length frame.command) + 1 +
+    (List.fold_left (+) 0
+      (List.map
+        (fun header -> String.length header + 1)
+        frame.headers)) + 1 +
+    (String.length frame.body) + 1
+
   let to_string frame =
-    let buffer = Buffer.create 256 in
+    let buffer = Buffer.create (size frame) in
     Buffer.add_string buffer frame.command;
     Buffer.add_char buffer '\n';
     List.iter
@@ -42,8 +54,4 @@ module Stomp_frame = struct
     Buffer.add_string buffer frame.body;
     Buffer.add_char buffer '\x00';
     Buffer.to_bytes buffer
-
-  let command frame = frame.command
-  let headers frame = frame.headers
-  let body frame = frame.body
 end
