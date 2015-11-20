@@ -91,6 +91,40 @@ module Stomp_command_test = struct
     check DISCONNECT "DISCONNECT"
 end
 
+(* Messaging.Stomp_header *)
+
+module Stomp_header_test = struct
+  open Stomp_header
+
+  let kv1_header =
+    Stomp_header.create "key1" "val1"
+
+  let kv2_header =
+    Stomp_header.create "key2" "val2"
+
+  let create () = todo ()
+
+  let key () =
+    Alcotest.(check string) "string"
+      "key1" (Stomp_header.key kv1_header)
+
+  let value () =
+    Alcotest.(check string) "string"
+      "val1" (Stomp_header.value kv1_header)
+
+  let of_string () = todo ()
+
+  let to_string () =
+    Alcotest.(check string) "string"
+      "key1:val1"
+      (Stomp_header.to_string kv1_header)
+
+  let length () =
+    Alcotest.(check int) "int"
+      (String.length (Stomp_header.to_string kv1_header))
+      (Stomp_header.length kv1_header)
+end
+
 (* Messaging.Stomp_frame *)
 
 module Stomp_frame_test = struct
@@ -131,36 +165,44 @@ end
 let () =
   Alcotest.run "Consensus.Messaging test suite" [
     "Topic", [
-      "Topic.create",          `Quick, Topic_test.create;
-      "Topic.path",            `Quick, Topic_test.path;
-      "Topic.message_type",    `Quick, Topic_test.message_type;
-      "Topic.qos_policy",      `Quick, Topic_test.qos_policy;
+      "Topic.create",           `Quick, Topic_test.create;
+      "Topic.path",             `Quick, Topic_test.path;
+      "Topic.message_type",     `Quick, Topic_test.message_type;
+      "Topic.qos_policy",       `Quick, Topic_test.qos_policy;
       (* XXX: Temporarily disabled *)
-      (*"Topic.of_string",       `Quick, Topic_test.of_string;*)
-      "Topic.to_string",       `Quick, Topic_test.to_string;
+      (*"Topic.of_string",        `Quick, Topic_test.of_string;*)
+      "Topic.to_string",        `Quick, Topic_test.to_string;
     ];
     "Stomp_command", [
-      "CONNECTED",             `Quick, Stomp_command_test.connected;
-      "MESSAGE",               `Quick, Stomp_command_test.message;
-      "RECEIPT",               `Quick, Stomp_command_test.receipt;
-      "ERROR",                 `Quick, Stomp_command_test.error;
-      "CONNECT",               `Quick, Stomp_command_test.connect;
-      "SEND",                  `Quick, Stomp_command_test.send;
-      "SUBSCRIBE",             `Quick, Stomp_command_test.subscribe;
-      "UNSUBSCRIBE",           `Quick, Stomp_command_test.unsubscribe;
-      "ACK",                   `Quick, Stomp_command_test.ack;
-      "NACK",                  `Quick, Stomp_command_test.nack;
-      "BEGIN",                 `Quick, Stomp_command_test.begin_;
-      "COMMIT",                `Quick, Stomp_command_test.commit;
-      "ABORT",                 `Quick, Stomp_command_test.abort;
-      "DISCONNECT",            `Quick, Stomp_command_test.disconnect;
+      "CONNECTED",              `Quick, Stomp_command_test.connected;
+      "MESSAGE",                `Quick, Stomp_command_test.message;
+      "RECEIPT",                `Quick, Stomp_command_test.receipt;
+      "ERROR",                  `Quick, Stomp_command_test.error;
+      "CONNECT",                `Quick, Stomp_command_test.connect;
+      "SEND",                   `Quick, Stomp_command_test.send;
+      "SUBSCRIBE",              `Quick, Stomp_command_test.subscribe;
+      "UNSUBSCRIBE",            `Quick, Stomp_command_test.unsubscribe;
+      "ACK",                    `Quick, Stomp_command_test.ack;
+      "NACK",                   `Quick, Stomp_command_test.nack;
+      "BEGIN",                  `Quick, Stomp_command_test.begin_;
+      "COMMIT",                 `Quick, Stomp_command_test.commit;
+      "ABORT",                  `Quick, Stomp_command_test.abort;
+      "DISCONNECT",             `Quick, Stomp_command_test.disconnect;
+    ];
+    "Stomp_header", [
+      "Stomp_header.create",    `Quick, Stomp_header_test.create;
+      "Stomp_header.key",       `Quick, Stomp_header_test.key;
+      "Stomp_header.value",     `Quick, Stomp_header_test.value;
+      "Stomp_header.of_string", `Quick, Stomp_header_test.of_string;
+      "Stomp_header.to_string", `Quick, Stomp_header_test.to_string;
+      "Stomp_header.length",    `Quick, Stomp_header_test.length;
     ];
     "Stomp_frame", [
-      "Stomp_frame.create",    `Quick, Stomp_frame_test.create;
-      "Stomp_frame.command",   `Quick, Stomp_frame_test.command;
-      "Stomp_frame.headers",   `Quick, Stomp_frame_test.headers;
-      "Stomp_frame.body",      `Quick, Stomp_frame_test.body;
-      "Stomp_frame.size",      `Quick, Stomp_frame_test.size;
-      "Stomp_frame.to_string", `Quick, Stomp_frame_test.to_string;
+      "Stomp_frame.create",     `Quick, Stomp_frame_test.create;
+      "Stomp_frame.command",    `Quick, Stomp_frame_test.command;
+      "Stomp_frame.headers",    `Quick, Stomp_frame_test.headers;
+      "Stomp_frame.body",       `Quick, Stomp_frame_test.body;
+      "Stomp_frame.size",       `Quick, Stomp_frame_test.size;
+      "Stomp_frame.to_string",  `Quick, Stomp_frame_test.to_string;
     ];
   ]

@@ -85,6 +85,25 @@ module Stomp_command = struct
 end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
+module Stomp_header = struct
+  type t = { key: string; value: string }
+
+  let create key value =
+    {key = key; value = value}
+
+  let key header = header.key
+  let value header = header.value
+
+  let of_string input = assert false (* TODO *)
+
+  let to_string header =
+    Printf.sprintf "%s:%s" header.key header.value
+
+  let length command =
+    (String.length command.key) + 1 + (String.length command.value)
+end
+
+(* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
 module Stomp_frame = struct
   type t = { command: Stomp_command.t; headers: string list; body: string }
 

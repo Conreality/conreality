@@ -33,6 +33,16 @@ module Stomp_command : sig
   val length : t -> int
 end
 
+module Stomp_header : sig
+  type t
+  val create : string -> string -> t
+  val key : t -> string
+  val value : t -> string
+  val of_string : string -> t
+  val to_string : t -> string
+  val length : t -> int
+end
+
 module Stomp_frame : sig
   type t
   val create : Stomp_command.t -> string list -> string -> t
