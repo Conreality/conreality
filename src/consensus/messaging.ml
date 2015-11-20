@@ -79,11 +79,14 @@ module Stomp_command = struct
     | COMMIT -> "COMMIT"
     | ABORT -> "ABORT"
     | DISCONNECT -> "DISCONNECT"
+
+  let length command =
+    (String.length (to_string command))
 end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
 module Stomp_frame = struct
-  type t = { command: string; headers: string list; body: string }
+  type t = { command: Stomp_command.t; headers: string list; body: string }
 
   let create command headers body =
     {command = command; headers = headers; body = body}
@@ -93,7 +96,7 @@ module Stomp_frame = struct
   let body frame = frame.body
 
   let size frame =
-    (String.length frame.command) + 1 +
+    (Stomp_command.length frame.command) + 1 +
     (List.fold_left (+) 0
       (List.map
         (fun header -> String.length header + 1)
@@ -102,7 +105,7 @@ module Stomp_frame = struct
 
   let to_string frame =
     let buffer = Buffer.create (size frame) in
-    Buffer.add_string buffer frame.command;
+    Buffer.add_string buffer (Stomp_command.to_string frame.command);
     Buffer.add_char buffer '\n';
     List.iter
       (fun header ->

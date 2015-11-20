@@ -30,12 +30,13 @@ module Stomp_command : sig
     | DISCONNECT
   val of_string : string -> t
   val to_string : t -> string
+  val length : t -> int
 end
 
 module Stomp_frame : sig
   type t
-  val create : string -> string list -> string -> t
-  val command : t -> string
+  val create : Stomp_command.t -> string list -> string -> t
+  val command : t -> Stomp_command.t
   val headers : t -> string list
   val body : t -> string
   val to_string : t -> string

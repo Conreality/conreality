@@ -101,9 +101,10 @@ end
 
 module Stomp_frame_test = struct
   open Stomp_frame
+  open Stomp_command
 
   let message_frame =
-    Stomp_frame.create "MESSAGE" ["key1:value1"; "key2:value2"] "body"
+    Stomp_frame.create MESSAGE ["key1:value1"; "key2:value2"] "body"
 
   let message_frame_bytes =
     "MESSAGE\nkey1:value1\nkey2:value2\n\nbody\x00"
@@ -112,7 +113,7 @@ module Stomp_frame_test = struct
 
   let command () =
     Alcotest.(check string) "string"
-      "MESSAGE" (Stomp_frame.command message_frame)
+      "MESSAGE" (Stomp_command.to_string (Stomp_frame.command message_frame))
 
   let headers () = todo ()
 
