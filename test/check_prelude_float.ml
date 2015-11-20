@@ -1,150 +1,152 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-open Consensus.Prelude
-(* TODO: Don't open the module under test *)
-open Consensus.Prelude.Float
-open Consensus.Prelude.Math
 open Check_common
+open Consensus.Prelude
+open Consensus.Prelude.Math
 
-(* Equality with precision checking *)
+(* Prelude.Float *)
 
-let fp1 = (3.01)
-let fp2 = (0.30000001)
-let fp3 = (0.300000001)
-let fp4 = (0.3000000001)
-let fp5 = (0.30000000001)
-let fp6 = (-0.000001)
-let fp7 = (-0.0000001)
-let fp8 = (-0.000000001)
-let fp9 = (-0.0000000001)
-let fp10 = (12345678.)
-let fp11 = (123456789.)
-let fp12 = (1234567890.)
-let fp13 = (12345678901.)
+module Float_test = struct
+  (* Equality with precision checking *)
 
-(* TODO: Rewrite these so values created by are actually related to Float.eps *)
-let f_eq_p1 () = same_bool false (fp1 =. (fp1 +. (0.001)))
-let f_eq_p2 () = same_bool false (fp2 =. (fp2 +. (0.00000001)))
-let f_eq_p3 () = same_bool false (fp3 =. (fp3 +. (0.000000001)))
-let f_eq_p4 () = same_bool true (fp4 =. (fp4 +. (0.0000000001)))
-let f_eq_p5 () = same_bool true (fp5 =. (fp5 +. (0.00000000001)))
-let f_eq_p6 () = same_bool false (fp6 =. (fp6 +. (0.0000001)))
-let f_eq_p7 () = same_bool false (fp7 =. (fp7 +. (0.00000001)))
-let f_eq_p8 () = same_bool true (fp8 =. (fp8 +. (0.0000000001)))
-let f_eq_p9 () = same_bool true (fp9 =. (fp9 +. (0.00000000001)))
-let f_eq_p10 () = same_bool false (fp10 =. (fp10 +. (1.)))
-let f_eq_p11 () = same_bool false (fp11 =. (fp11 +. (1.)))
-let f_eq_p12 () = same_bool true (fp12 =. (fp12 +. (1.)))
-let f_eq_p13 () = same_bool true (fp13 =. (fp13 +. (1.)))
+  let fp1 = (3.01)
+  let fp2 = (0.30000001)
+  let fp3 = (0.300000001)
+  let fp4 = (0.3000000001)
+  let fp5 = (0.30000000001)
+  let fp6 = (-0.000001)
+  let fp7 = (-0.0000001)
+  let fp8 = (-0.000000001)
+  let fp9 = (-0.0000000001)
+  let fp10 = (12345678.)
+  let fp11 = (123456789.)
+  let fp12 = (1234567890.)
+  let fp13 = (12345678901.)
 
-(* classification *)
+  (* TODO: Rewrite these so values created by are actually related to Float.eps *)
+  let eq_p1 () = same_bool false (Float.( =. ) fp1 (fp1 +. (0.001)))
+  let eq_p2 () = same_bool false (Float.( =. ) fp2 (fp2 +. (0.00000001)))
+  let eq_p3 () = same_bool false (Float.( =. ) fp3 (fp3 +. (0.000000001)))
+  let eq_p4 () = same_bool true (Float.( =. ) fp4 (fp4 +. (0.0000000001)))
+  let eq_p5 () = same_bool true (Float.( =. ) fp5 (fp5 +. (0.00000000001)))
+  let eq_p6 () = same_bool false (Float.( =. ) fp6 (fp6 +. (0.0000001)))
+  let eq_p7 () = same_bool false (Float.( =. ) fp7 (fp7 +. (0.00000001)))
+  let eq_p8 () = same_bool true (Float.( =. ) fp8 (fp8 +. (0.0000000001)))
+  let eq_p9 () = same_bool true (Float.( =. ) fp9 (fp9 +. (0.00000000001)))
+  let eq_p10 () = same_bool false (Float.( =. ) fp10 (fp10 +. (1.)))
+  let eq_p11 () = same_bool false (Float.( =. ) fp11 (fp11 +. (1.)))
+  let eq_p12 () = same_bool true (Float.( =. ) fp12 (fp12 +. (1.)))
+  let eq_p13 () = same_bool true (Float.( =. ) fp13 (fp13 +. (1.)))
 
-let f_is_normal () =
-  same_bool true (is_normal 1.);
-  same_bool false (is_normal (2. ** (-1047.)))
+  (* classification *)
 
-let f_is_subnormal () =
-  same_bool true (is_subnormal (2. ** (-1047.)));
-  same_bool false (is_subnormal 1.)
+  let is_normal () =
+    same_bool true (Float.is_normal 1.);
+    same_bool false (Float.is_normal (2. ** (-1047.)))
 
-let f_is_zero () =
-  same_bool true (is_zero 0.);
-  same_bool false (is_zero 1.)
+  let is_subnormal () =
+    same_bool true (Float.is_subnormal (2. ** (-1047.)));
+    same_bool false (Float.is_subnormal 1.)
 
-let f_is_infinite () =
-  same_bool true (is_infinite (1. /. 0.));
-  same_bool false (is_infinite 1.)
+  let is_zero () =
+    same_bool true (Float.is_zero 0.);
+    same_bool false (Float.is_zero 1.)
 
-let f_is_nan () =
-  same_bool true (is_nan (asin 7.));
-  same_bool false (is_nan 1.)
+  let is_infinite () =
+    same_bool true (Float.is_infinite (1. /. 0.));
+    same_bool false (Float.is_infinite 1.)
 
-let fi0 = 1.
-let fi1 = fi0
+  let is_nan () =
+    same_bool true (Float.is_nan (asin 7.));
+    same_bool false (Float.is_nan 1.)
 
-let f_op_ident () = same_bool true (fi0 == fi1)
+  let fi0 = 1.
+  let fi1 = fi0
 
-let f_op_ident_dot () = same_bool true (fi0 ==. fi1)
+  let op_ident () = same_bool true (Float.( == ) fi0 fi1)
 
-let f_compare () =
-  same_int 0 (compare 1. 1.);
-  same_int (-1) (compare 1. 2.);
-  same_int 1 (compare 2. 1.);
-  same_int (-1) (compare 1. infinity);
-  same_int 1 (compare infinity 1.);
-  same_int (-1) (compare 0.1 1.);
-  same_int 1 (compare 1. 0.1);
-  same_int 1 (compare 0.2 0.1);
-  same_int 0 (compare 1. (1. +. 1e-10))
+  let op_ident_dot () = same_bool true (Float.( ==. ) fi0 fi1)
 
-let f_eq_dot () =
-  (* Everything else in prelude_float.(=) gets checked via the precision tests *)
-  same_bool false (1. =. infinity);
-  same_bool false (infinity =. 1.)
+  let compare () =
+    same_int 0 (Float.compare 1. 1.);
+    same_int (-1) (Float.compare 1. 2.);
+    same_int 1 (Float.compare 2. 1.);
+    same_int (-1) (Float.compare 1. infinity);
+    same_int 1 (Float.compare infinity 1.);
+    same_int (-1) (Float.compare 0.1 1.);
+    same_int 1 (Float.compare 1. 0.1);
+    same_int 1 (Float.compare 0.2 0.1);
+    same_int 0 (Float.compare 1. (1. +. 1e-10))
 
-let f_neq_dot () = same_bool true (1. <>. 2.)
+  let eq_dot () =
+    (* Everything else in prelude_float.(=) gets checked via the precision tests *)
+    same_bool false (Float.( =. ) 1. infinity);
+    same_bool false (Float.( =. ) infinity 1.)
 
-let f_gt_dot () =
-  same_bool true (2. >. 1.);
-  same_bool false (1. >. 2.)
+  let neq_dot () = same_bool true (Float.( <>. ) 1. 2.)
 
-let f_ge_dot () =
-  same_bool true (2. >=. 1.);
-  same_bool true (2. >=. 2.);
-  same_bool false (1. >=. 2.)
+  let gt_dot () =
+    same_bool true (Float.( >. ) 2. 1.);
+    same_bool false (Float.( >. ) 1. 2.)
 
-let f_lt_dot () =
-  same_bool true (1. <. 2.);
-  same_bool false (2. <. 1.)
+  let ge_dot () =
+    same_bool true (Float.( >=. ) 2. 1.);
+    same_bool true (Float.( >=. ) 2. 2.);
+    same_bool false (Float.( >=. ) 1. 2.)
 
-let f_le_dot () =
-  same_bool true (1. <=. 2.);
-  same_bool true (2. <=. 2.);
-  same_bool false (2. <=. 1.)
+  let lt_dot () =
+    same_bool true (Float.( <. ) 1. 2.);
+    same_bool false (Float.( <. ) 2. 1.)
 
-let f_min () =
-  same_float 1. (min 1. 2.);
-  same_float 1. (min 2. 1.)
+  let le_dot () =
+    same_bool true (Float.( <=. ) 1. 2.);
+    same_bool true (Float.( <=. ) 2. 2.);
+    same_bool false (Float.( <=. ) 2. 1.)
 
-let f_max () =
-  same_float 2. (max 2. 1.);
-  same_float 2. (max 1. 2.)
+  let min () =
+    same_float 1. (Float.min 1. 2.);
+    same_float 1. (Float.min 2. 1.)
 
-let f_string_of_float () = same_string "3.14159" (string_of_float 3.14159)
+  let max () =
+    same_float 2. (Float.max 2. 1.);
+    same_float 2. (Float.max 1. 2.)
+
+  let string_of_float () = same_string "3.14159" (Float.string_of_float 3.14159)
+end
 
 let () =
-  Alcotest.run "prelude_float" [
-    "test_set", [
-      "f_eq_p1",                `Quick, f_eq_p1;
-      "f_eq_p2",                `Quick, f_eq_p2;
-      "f_eq_p3",                `Quick, f_eq_p3;
-      "f_eq_p4",                `Quick, f_eq_p4;
-      "f_eq_p5",                `Quick, f_eq_p5;
-      "f_eq_p6",                `Quick, f_eq_p6;
-      "f_eq_p7",                `Quick, f_eq_p7;
-      "f_eq_p8",                `Quick, f_eq_p8;
-      "f_eq_p9",                `Quick, f_eq_p9;
-      "f_eq_p10",               `Quick, f_eq_p10;
-      "f_eq_p11",               `Quick, f_eq_p11;
-      "f_eq_p12",               `Quick, f_eq_p12;
-      "f_eq_p13",               `Quick, f_eq_p13;
-      "f_is_normal",            `Quick, f_is_normal;
-      "f_is_subnormal",         `Quick, f_is_subnormal;
-      "f_is_zero",              `Quick, f_is_zero;
-      "f_is_infinite",          `Quick, f_is_infinite;
-      "f_is_nan",               `Quick, f_is_nan;
-      "f_op_ident",             `Quick, f_op_ident;
-      "f_op_ident_dot",         `Quick, f_op_ident_dot;
-      "f_compare",              `Quick, f_compare;
-      "f_eq_dot",               `Quick, f_eq_dot;
-      "f_neq_dot",              `Quick, f_neq_dot;
-      "f_gt_dot",               `Quick, f_gt_dot;
-      "f_ge_dot",               `Quick, f_ge_dot;
-      "f_lt_dot",               `Quick, f_lt_dot;
-      "f_le_dot",               `Quick, f_le_dot;
-      "f_min",                  `Quick, f_min;
-      "f_max",                  `Quick, f_max;
-      "f_string_of_float",      `Quick, f_string_of_float;
+  Alcotest.run "Consensus.Prelude.Float test suite" [
+    "Float", [
+      "Float.eq_p1",                `Quick, Float_test.eq_p1;
+      "Float.eq_p2",                `Quick, Float_test.eq_p2;
+      "Float.eq_p3",                `Quick, Float_test.eq_p3;
+      "Float.eq_p4",                `Quick, Float_test.eq_p4;
+      "Float.eq_p5",                `Quick, Float_test.eq_p5;
+      "Float.eq_p6",                `Quick, Float_test.eq_p6;
+      "Float.eq_p7",                `Quick, Float_test.eq_p7;
+      "Float.eq_p8",                `Quick, Float_test.eq_p8;
+      "Float.eq_p9",                `Quick, Float_test.eq_p9;
+      "Float.eq_p10",               `Quick, Float_test.eq_p10;
+      "Float.eq_p11",               `Quick, Float_test.eq_p11;
+      "Float.eq_p12",               `Quick, Float_test.eq_p12;
+      "Float.eq_p13",               `Quick, Float_test.eq_p13;
+      "Float.is_normal",            `Quick, Float_test.is_normal;
+      "Float.is_subnormal",         `Quick, Float_test.is_subnormal;
+      "Float.is_zero",              `Quick, Float_test.is_zero;
+      "Float.is_infinite",          `Quick, Float_test.is_infinite;
+      "Float.is_nan",               `Quick, Float_test.is_nan;
+      "Float.op_ident",             `Quick, Float_test.op_ident;
+      "Float.op_ident_dot",         `Quick, Float_test.op_ident_dot;
+      "Float.compare",              `Quick, Float_test.compare;
+      "Float.eq_dot",               `Quick, Float_test.eq_dot;
+      "Float.neq_dot",              `Quick, Float_test.neq_dot;
+      "Float.gt_dot",               `Quick, Float_test.gt_dot;
+      "Float.ge_dot",               `Quick, Float_test.ge_dot;
+      "Float.lt_dot",               `Quick, Float_test.lt_dot;
+      "Float.le_dot",               `Quick, Float_test.le_dot;
+      "Float.min",                  `Quick, Float_test.min;
+      "Float.max",                  `Quick, Float_test.max;
+      "Float.string_of_float",      `Quick, Float_test.string_of_float;
     ];
   ]
 
