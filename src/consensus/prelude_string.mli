@@ -37,3 +37,6 @@ external unsafe_blit : string -> int -> bytes -> int -> int -> unit
 external unsafe_fill : bytes -> int -> int -> char -> unit
   = "caml_fill_string" "noalloc"
 val is_empty : string -> bool
+val of_bool : bool -> string
+val of_float : float -> string
+val of_int : int -> string
