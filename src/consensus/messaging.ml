@@ -105,7 +105,7 @@ end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
 module Stomp_frame = struct
-  type t = { command: Stomp_command.t; headers: string list; body: string }
+  type t = { command: Stomp_command.t; headers: Stomp_header.t list; body: string }
 
   let create command headers body =
     {command = command; headers = headers; body = body}
@@ -118,7 +118,7 @@ module Stomp_frame = struct
     (Stomp_command.length frame.command) + 1 +
     (List.fold_left (+) 0
       (List.map
-        (fun header -> String.length header + 1)
+        (fun header -> Stomp_header.length header + 1)
         frame.headers)) + 1 +
     (String.length frame.body) + 1
 
@@ -128,7 +128,7 @@ module Stomp_frame = struct
     Buffer.add_char buffer '\n';
     List.iter
       (fun header ->
-        Buffer.add_string buffer header;
+        Buffer.add_string buffer (Stomp_header.to_string header);
         Buffer.add_char buffer '\n')
       frame.headers;
     Buffer.add_char buffer '\n';

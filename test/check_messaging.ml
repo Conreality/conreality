@@ -132,10 +132,12 @@ module Stomp_frame_test = struct
   open Stomp_command
 
   let message_frame =
-    Stomp_frame.create MESSAGE ["key1:value1"; "key2:value2"] "body"
+    Stomp_frame.create MESSAGE
+      [Stomp_header_test.kv1_header; Stomp_header_test.kv2_header]
+      "body"
 
   let message_frame_bytes =
-    "MESSAGE\nkey1:value1\nkey2:value2\n\nbody\x00"
+    "MESSAGE\nkey1:val1\nkey2:val2\n\nbody\x00"
 
   let create () = todo ()
 

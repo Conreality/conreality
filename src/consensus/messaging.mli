@@ -45,9 +45,9 @@ end
 
 module Stomp_frame : sig
   type t
-  val create : Stomp_command.t -> string list -> string -> t
+  val create : Stomp_command.t -> Stomp_header.t list -> string -> t
   val command : t -> Stomp_command.t
-  val headers : t -> string list
+  val headers : t -> Stomp_header.t list
   val body : t -> string
   val to_string : t -> string
   val size : t -> int
