@@ -27,7 +27,8 @@ system and the following tooling:
 Dependencies
 ------------
 
-### C/C++ Dependencies
+C/C++ Dependencies
+~~~~~~~~~~~~~~~~~~
 
 * `libffi <https://sourceware.org/libffi/>`__ (>= 3.0.13)
 
@@ -40,7 +41,8 @@ libraries and header files as follows::
 
    $ sudo apt-get install libffi-dev liblua5.1-0-dev libopencv-dev
 
-### OCaml Dependencies
+OCaml Dependencies
+~~~~~~~~~~~~~~~~~~
 
 * `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
   (not automatically installed. ``opam install alcotest`` to run the tests with ``make check``)
@@ -103,7 +105,7 @@ If you want to run the test suite, you need to install Alcotest::
 
 To run the tests::
 
-   $ make clean && make check  # adding ``V=1`` here will produce lots of output
+   $ make clean && make check  # adding "V=1" here will produce lots of output
 
 To run the benchmarks, you need to install the Jane Street Core_bench package::
 
