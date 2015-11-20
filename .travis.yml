@@ -1,5 +1,5 @@
+# https://travis-ci.org/conreality/consensus
 language: c
-script: bash -ex travis-ci.sh
+script: bash -ex etc/travis-ci/script.sh
 sudo: required
 dist: trusty
-

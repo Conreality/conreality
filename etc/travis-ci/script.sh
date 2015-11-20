@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # OCaml version to use
 export OPAM_SWITCH=4.02.3
 # OPAM version to install
@@ -37,4 +39,3 @@ time make report
 
 # send code coverage report to Coveralls.io
 time ocveralls --prefix _build bisect00*.out --send
-
