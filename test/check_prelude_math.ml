@@ -3,8 +3,6 @@
 open Check_common
 open Consensus.Prelude
 open Consensus.Prelude.Float
-(* TODO: Don't open the module under test *)
-open Consensus.Prelude.Math
 
 (* Prelude.Math *)
 
@@ -12,70 +10,71 @@ module Math_test = struct
   let tan () = todo ()
 
   (* Trigonometric functions, inverses, hyperbolics and inverse hyperbolics *)
+  (* Values used here were calculated in GNU Octave *)
 
   let csc () =
-    same_float 1.188395105778121241 (csc 1.);
-    same_bool true (is_infinite (csc 0.))
+    same_float 1.188395105778121241 (Math.csc 1.);
+    same_bool true (is_infinite (Math.csc 0.))
 
   let sec () =
-    same_float 1.850815717680925454 (sec 1.);
-    same_bool true (is_nan (sec infinity))
+    same_float 1.850815717680925454 (Math.sec 1.);
+    same_bool true (is_nan (Math.sec infinity))
 
   let cot () =
-    same_float 6.420926159343306461e-01 (cot 1.);
-    same_bool true (is_infinite (cot 0.))
+    same_float 6.420926159343306461e-01 (Math.cot 1.);
+    same_bool true (is_infinite (Math.cot 0.))
 
   let acsc () =
-    same_float 1.570796326794896558 (acsc 1.);
-    same_float 0. (acsc 10000000000000000.)
+    same_float 1.570796326794896558 (Math.acsc 1.);
+    same_float 0. (Math.acsc 10000000000000000.)
 
   let asec () =
-    same_float 0. (asec 1.);
-    same_float 1.570796326794896558 (asec infinity);
-    same_bool true (is_nan (asec 0.))
+    same_float 0. (Math.asec 1.);
+    same_float 1.570796326794896558 (Math.asec infinity);
+    same_bool true (is_nan (Math.asec 0.))
 
   let acot () =
-    same_float 7.853981633974482790e-01 (acot 1.);
-    same_float 0. (acot infinity)
+    same_float 7.853981633974482790e-01 (Math.acot 1.);
+    same_float 0. (Math.acot infinity)
 
   let csch () =
-    same_float 8.509181282393215584e-01 (csch 1.);
-    same_bool true (is_infinite (csch 0.))
+    same_float 8.509181282393215584e-01 (Math.csch 1.);
+    same_bool true (is_infinite (Math.csch 0.))
 
   let sech () =
-    same_float 6.480542736638854606e-01(sech 1.);
-    same_float 1. (sech 0.)
+    same_float 6.480542736638854606e-01 (Math.sech 1.);
+    same_float 1. (Math.sech 0.)
 
   let coth () =
-    same_float 1.313035285499331462 (coth 1.);
-    same_bool true (is_infinite (coth 0.))
+    same_float 1.313035285499331462 (Math.coth 1.);
+    same_bool true (is_infinite (Math.coth 0.))
 
   let acsch () =
-    same_float 8.813735870195430477e-01 (acsch 1.);
-    same_bool true (is_infinite (acsch 0.))
+    same_float 8.813735870195430477e-01 (Math.acsch 1.);
+    same_bool true (is_infinite (Math.acsch 0.))
 
   let asech () =
-    same_float 0. (asech 1.);
-    same_bool true (is_infinite (asech 0.))
+    same_float 0. (Math.asech 1.);
+    same_bool true (is_infinite (Math.asech 0.))
 
   let acoth () =
-    same_float 5.493061443340547800e-01 (acoth 2.);
-    same_bool true (is_infinite (acoth 1.));
-    same_bool true (is_nan (acoth 0.))
+    same_float 5.493061443340547800e-01 (Math.acoth 2.);
+    same_bool true (is_infinite (Math.acoth 1.));
+    same_bool true (is_nan (Math.acoth 0.))
 
   let asinh () =
-    same_float 8.813735870195430477e-01 (asinh 1.);
-    same_float 0. (asinh 0.);
-    same_bool true (is_infinite (asinh infinity))
+    same_float 8.813735870195430477e-01 (Math.asinh 1.);
+    same_float 0. (Math.asinh 0.);
+    same_bool true (is_infinite (Math.asinh infinity))
 
   let acosh () =
-    same_float 1.316957896924816573e+00 (acosh 2.);
-    same_bool true (is_infinite (acosh infinity))
+    same_float 1.316957896924816573e+00 (Math.acosh 2.);
+    same_bool true (is_infinite (Math.acosh infinity))
 
   let atanh () =
-    same_float infinity (atanh 1.);
-    same_float 1.003353477310755804e-01 (atanh 0.1);
-    same_float 0. (atanh 0.)
+    same_float infinity (Math.atanh 1.);
+    same_float 1.003353477310755804e-01 (Math.atanh 0.1);
+    same_float 0. (Math.atanh 0.)
 
 end
 
