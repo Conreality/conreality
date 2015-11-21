@@ -404,12 +404,10 @@ module Q = struct
       (p.r *. q.c +. q.r *. p.c +. p.a *. q.b -. q.a *. p.b)
 
   let div p q = mul p (inv q)
-  (* TODO: let pow q a = q^a *)
   let ( + ) p q = add p q
   let ( - ) p q = sub p q
   let ( * ) p q = mul p q
   let ( / ) p q = div p q
-  (* TODO: let ( ** ) q a = pow q a *)
   let eq p q = p.r =. q.r && p.a =. q.a && p.b =. q.b && p.c =. q.c
   let ( = ) p q = eq p q
   let addr q r = create (q.r +. r) q.a q.b q.c
@@ -459,6 +457,12 @@ module Q = struct
     let vn = V3.magnitude v in
     let u = V3.smul v (q.r /. vn /. qn) in
     create (log qn) (V3.x u) (V3.y u) (V3.z u)
+
+  let pow q a =
+    (* http://www.cc.gatech.edu/~ndantam3/note/dantam-quaternion.pdf *)
+    (* probably very expensive *)
+    exp (smul (log q) a)
+  let ( ** ) q a = pow q a
 end
 
 type q = Q.t

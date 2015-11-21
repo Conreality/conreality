@@ -200,12 +200,10 @@ module Q: sig
   val sub : t -> t -> t
   val mul : t -> t -> t
   val div : t -> t -> t
-  (* TODO: val pow : t -> float -> t *)
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( * ) : t -> t -> t
   val ( / ) : t -> t -> t
-  (* TODO: val ( ** ) : t -> float -> t *)
   val eq : t -> t -> bool
   val ( = ) : t -> t -> bool
   val addr : t -> float -> t
@@ -223,5 +221,7 @@ module Q: sig
   val nlerp : t -> t -> float -> t
   val exp : t -> t
   val log : t -> t
+  val pow : t -> float -> t
+  val ( ** ) : t -> float -> t
 end
 

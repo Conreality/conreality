@@ -446,12 +446,10 @@ module Q_test = struct
   let sub () = todo ()
   let mul () = todo ()
   let div () = todo ()
-  (* TODO: let pow () = todo () *)
   let op_add () = todo ()
   let op_sub () = todo ()
   let op_mul () = todo ()
   let op_div () = todo ()
-  (* TODO: let op_exp () = todo () *)
   let eq () = todo ()
   let op_eq () = todo ()
   let addr () = todo ()
@@ -469,6 +467,8 @@ module Q_test = struct
   let nlerp () = todo ()
   let exp () = todo ()
   let log () = todo ()
+  let pow () = todo ()
+  let op_exp () = todo ()
 end
 
 let () =
@@ -650,12 +650,12 @@ let () =
       "Q.sub",                   `Quick, Q_test.sub;
       "Q.mul",                   `Quick, Q_test.mul;
       "Q.div",                   `Quick, Q_test.div;
-      (* "Q.pow",                   `Quick, Q_test.pow; *)
+      "Q.pow",                   `Quick, Q_test.pow;
       "Q.op_add",                `Quick, Q_test.op_add;
       "Q.op_sub",                `Quick, Q_test.op_sub;
       "Q.op_mul",                `Quick, Q_test.op_mul;
       "Q.op_div",                `Quick, Q_test.op_div;
-      (* "Q.op_exp",                `Quick, Q_test.op_exp; *)
+      "Q.op_exp",                `Quick, Q_test.op_exp;
       "Q.eq",                    `Quick, Q_test.eq;
       "Q.op_eq",                 `Quick, Q_test.op_eq;
       "Q.addr",                  `Quick, Q_test.addr;
