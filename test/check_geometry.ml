@@ -458,40 +458,65 @@ module Q_test = struct
   let magnitude () = norm ()
   let length () = norm ()
   let inv () =
-    let etq1 = (Q.create 0.111111111111111 0.0370370370370370 (-0.148148148148148) (-0.0370370370370370)) in
-    let etq2 = (Q.create 0.136757417405408 (-0.158054260395050) (-0.0814035360906428) 0.) in
+    let etq1 = Q.create 0.111111111111111 0.0370370370370370 (-0.148148148148148) (-0.0370370370370370) in
+    let etq2 = Q.create 0.136757417405408 (-0.158054260395050) (-0.0814035360906428) 0. in
     same_bool true (Q.eq (Q.inv tq1) etq1);
     same_bool true (Q.eq (Q.inv tq2) etq2)
   let add () =
     let ex = Q.create 5.71828 2.14159 5.61803 1. in
     same_bool true (Q.eq ex (Q.add tq1 tq2))
   let sub () =
-    let ex = Q.create 0.281720000000000 (-4.14159000000000) 2.38197000000000 1.00000000000000 in
+    let ex = Q.create 0.28172 (-4.14159) 2.38197 1. in
     same_bool true (Q.eq ex (Q.sub tq1 tq2))
   let mul () =
     let ex1 = Q.create 4.82431 5.08846 18.8688 (-11.46611) in
     let ex2 = Q.create 4.82431 8.32452 12.58562 16.90267 in
     same_bool true (Q.eq ex1 (Q.mul tq1 tq2));
     same_bool true (Q.eq ex2 (Q.mul tq2 tq1))
-  let div () = todo ()
+  let div () =
+    let ex1 = Q.create 0.577832136183746 (-0.529516662499915) 0.144764800954654 0.850377995076250 in
+    let ex2 = Q.create 0.425384074074074 0.389815555555556 (-0.106571851851852) (-0.626024814814815) in
+    same_bool true (Q.eq ex1 (Q.div tq1 tq2));
+    same_bool true (Q.eq ex2 (Q.div tq2 tq1))
   let op_add () =
     let ex = Q.create 5.71828 2.14159 5.61803 1. in
     same_bool true (Q.eq ex (Q.( + ) tq1 tq2))
-  let op_sub () = todo ()
-  let op_mul () = todo ()
-  let op_div () = todo ()
+  let op_sub () =
+    let ex = Q.create 0.28172 (-4.14159) 2.38197 1. in
+    same_bool true (Q.eq ex (Q.( - ) tq1 tq2))
+  let op_mul () =
+    let ex1 = Q.create 4.82431 5.08846 18.8688 (-11.46611) in
+    let ex2 = Q.create 4.82431 8.32452 12.58562 16.90267 in
+    same_bool true (Q.eq ex1 (Q.( * ) tq1 tq2));
+    same_bool true (Q.eq ex2 (Q.( * ) tq2 tq1))
+  let op_div () =
+    let ex1 = Q.create 0.577832136183746 (-0.529516662499915) 0.144764800954654 0.850377995076250 in
+    let ex2 = Q.create 0.425384074074074 0.389815555555556 (-0.106571851851852) (-0.626024814814815) in
+    same_bool true (Q.eq ex1 (Q.( / ) tq1 tq2));
+    same_bool true (Q.eq ex2 (Q.( / ) tq2 tq1))
   let eq () = same_bool true (Q.eq tq1 tq1)
   let op_eq () = same_bool true (Q.( = ) tq1 tq1)
-  let addr () = todo ()
-  let subr () = todo ()
-  let mulr () = todo ()
-  let divr () = todo ()
-  let neg () = todo ()
-  let unit () = todo ()
-  let dot () = todo ()
-  let cos_alpha () = todo ()
-  let alpha () = todo ()
-  let distance () = todo ()
+  let addr () = same_bool true (Q.eq (Q.addr tq1 1.) (Q.create (4.) (-1.) (4.) (1.)))
+  let subr () = same_bool true (Q.eq (Q.subr tq1 1.) (Q.create (2.) (-1.) (4.) (1.)))
+  let mulr () = same_bool true (Q.eq (Q.mulr tq1 2.) (Q.create (6.) (-1.) (4.) (1.)))
+  let divr () = same_bool true (Q.eq (Q.divr tq1 2.) (Q.create (1.5) (-1.) (4.) (1.)))
+  let neg () = same_bool true (Q.eq (Q.neg tq1) (Q.create (-3.) (1.) (-4.) (-1.)))
+  (*let tq1 = Q.create (3.) (-1.) (4.) (1.)*)
+  (*let tq2 = Q.create e pi phi 0.*)
+  let unit () =
+    let ex1 = Q.create 0.577350269189626 (-0.192450089729875) 0.769800358919501 0.192450089729875 in
+    let ex2 = Q.create 0.609708908073986 0.704657139263120 0.362923357612517 0. in
+    same_bool true (Q.eq ex1 (Q.unit tq1));
+    same_bool true (Q.eq ex2 (Q.unit tq2))
+  let dot () =
+    same_float 11.48537 (Q.dot tq1 tq2);
+    same_float 11.48537 (Q.dot tq2 tq1)
+  let cos_alpha () = same_float 0.49578280347423 (Q.cos_alpha tq1 tq2)
+  let alpha () = same_float 1.05206034324592 (Q.alpha tq1 tq2)
+  let distance () =
+    let ex = 4.88936754267871 in
+    same_float ex (Q.distance tq1 tq2);
+    same_float ex (Q.distance tq2 tq1)
   let slerp () = todo ()
   let squad () = todo ()
   let nlerp () = todo ()
