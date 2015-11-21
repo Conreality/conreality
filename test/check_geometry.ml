@@ -627,52 +627,52 @@ let () =
     ];
     "Quaternion", [
       (* Quaternions *)
-      "create",                  `Quick, Q_test.create;
-      "r",                       `Quick, Q_test.r;
-      "a",                       `Quick, Q_test.a;
-      "b",                       `Quick, Q_test.b;
-      "c",                       `Quick, Q_test.c;
-      "zero",                    `Quick, Q_test.zero;
-      "real",                    `Quick, Q_test.real;
-      "imag",                    `Quick, Q_test.imag;
-      "of_scalar",               `Quick, Q_test.of_scalar;
-      "to_list",                 `Quick, Q_test.to_list;
-      "of_list",                 `Quick, Q_test.of_list;
-      "conj",                    `Quick, Q_test.conj;
-      "smul",                    `Quick, Q_test.smul;
-      "sdiv",                    `Quick, Q_test.sdiv;
-      "norm2",                   `Quick, Q_test.norm2;
-      "magnitude",               `Quick, Q_test.magnitude;
-      "length",                  `Quick, Q_test.length;
-      "norm",                    `Quick, Q_test.norm;
-      "inv",                     `Quick, Q_test.inv;
-      "add",                     `Quick, Q_test.add;
-      "sub",                     `Quick, Q_test.sub;
-      "mul",                     `Quick, Q_test.mul;
-      "div",                     `Quick, Q_test.div;
-      (* "pow",                     `Quick, Q_test.pow; *)
-      "op_add",                  `Quick, Q_test.op_add;
-      "op_sub",                  `Quick, Q_test.op_sub;
-      "op_mul",                  `Quick, Q_test.op_mul;
-      "op_div",                  `Quick, Q_test.op_div;
-      (* "op_exp",                  `Quick, Q_test.op_exp; *)
-      "eq",                      `Quick, Q_test.eq;
-      "op_eq",                   `Quick, Q_test.op_eq;
-      "addr",                    `Quick, Q_test.addr;
-      "subr",                    `Quick, Q_test.subr;
-      "mulr",                    `Quick, Q_test.mulr;
-      "divr",                    `Quick, Q_test.divr;
-      "neg",                     `Quick, Q_test.neg;
-      "unit",                    `Quick, Q_test.unit;
-      "dot",                     `Quick, Q_test.dot;
-      "cos_alpha",               `Quick, Q_test.cos_alpha;
-      "alpha",                   `Quick, Q_test.alpha;
-      "distance",                `Quick, Q_test.distance;
-      "slerp",                   `Quick, Q_test.slerp;
-      "squad",                   `Quick, Q_test.squad;
-      "nlerp",                   `Quick, Q_test.nlerp;
-      "exp",                     `Quick, Q_test.exp;
-      "log",                     `Quick, Q_test.log;
+      "Q.create",                `Quick, Q_test.create;
+      "Q.r",                     `Quick, Q_test.r;
+      "Q.a",                     `Quick, Q_test.a;
+      "Q.b",                     `Quick, Q_test.b;
+      "Q.c",                     `Quick, Q_test.c;
+      "Q.zero",                  `Quick, Q_test.zero;
+      "Q.real",                  `Quick, Q_test.real;
+      "Q.imag",                  `Quick, Q_test.imag;
+      "Q.of_scalar",             `Quick, Q_test.of_scalar;
+      "Q.to_list",               `Quick, Q_test.to_list;
+      "Q.of_list",               `Quick, Q_test.of_list;
+      "Q.conj",                  `Quick, Q_test.conj;
+      "Q.smul",                  `Quick, Q_test.smul;
+      "Q.sdiv",                  `Quick, Q_test.sdiv;
+      "Q.norm2",                 `Quick, Q_test.norm2;
+      "Q.magnitude",             `Quick, Q_test.magnitude;
+      "Q.length",                `Quick, Q_test.length;
+      "Q.norm",                  `Quick, Q_test.norm;
+      "Q.inv",                   `Quick, Q_test.inv;
+      "Q.add",                   `Quick, Q_test.add;
+      "Q.sub",                   `Quick, Q_test.sub;
+      "Q.mul",                   `Quick, Q_test.mul;
+      "Q.div",                   `Quick, Q_test.div;
+      (* "Q.pow",                   `Quick, Q_test.pow; *)
+      "Q.op_add",                `Quick, Q_test.op_add;
+      "Q.op_sub",                `Quick, Q_test.op_sub;
+      "Q.op_mul",                `Quick, Q_test.op_mul;
+      "Q.op_div",                `Quick, Q_test.op_div;
+      (* "Q.op_exp",                `Quick, Q_test.op_exp; *)
+      "Q.eq",                    `Quick, Q_test.eq;
+      "Q.op_eq",                 `Quick, Q_test.op_eq;
+      "Q.addr",                  `Quick, Q_test.addr;
+      "Q.subr",                  `Quick, Q_test.subr;
+      "Q.mulr",                  `Quick, Q_test.mulr;
+      "Q.divr",                  `Quick, Q_test.divr;
+      "Q.neg",                   `Quick, Q_test.neg;
+      "Q.unit",                  `Quick, Q_test.unit;
+      "Q.dot",                   `Quick, Q_test.dot;
+      "Q.cos_alpha",             `Quick, Q_test.cos_alpha;
+      "Q.alpha",                 `Quick, Q_test.alpha;
+      "Q.distance",              `Quick, Q_test.distance;
+      "Q.slerp",                 `Quick, Q_test.slerp;
+      "Q.squad",                 `Quick, Q_test.squad;
+      "Q.nlerp",                 `Quick, Q_test.nlerp;
+      "Q.exp",                   `Quick, Q_test.exp;
+      "Q.log",                   `Quick, Q_test.log;
     ]   ;
   ]
 
