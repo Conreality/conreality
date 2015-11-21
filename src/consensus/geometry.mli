@@ -223,5 +223,6 @@ module Q: sig
   val log : t -> t
   val pow : t -> float -> t
   val ( ** ) : t -> float -> t
+  val print : Format.formatter -> t -> unit
 end
 

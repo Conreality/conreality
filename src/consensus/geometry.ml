@@ -463,6 +463,8 @@ module Q = struct
     (* probably very expensive *)
     exp (smul (log q) a)
   let ( ** ) q a = pow q a
+
+  let print fmt q = Format.fprintf fmt "@[<1>[%g@, (%g@ %g@ %g)@]" q.r q.a q.b q.c (*BISECT-IGNORE*)
 end
 
 type q = Q.t
