@@ -421,6 +421,56 @@ module M3_test = struct
     same_bool true (M3.eq (M3.inverse tm3_2) expected_2)
 end
 
+module Q_test = struct
+  (* Quaternions *)
+  let create () = todo ()
+  let r () = todo ()
+  let a () = todo ()
+  let b () = todo ()
+  let c () = todo ()
+  let zero () = todo ()
+  let real () = todo ()
+  let imag () = todo ()
+  let of_scalar () = todo ()
+  let to_list () = todo ()
+  let of_list () = todo ()
+  let conj () = todo ()
+  let smul () = todo ()
+  let sdiv () = todo ()
+  let norm2 () = todo ()
+  let magnitude () = todo ()
+  let length () = todo ()
+  let norm () = todo ()
+  let inv () = todo ()
+  let add () = todo ()
+  let sub () = todo ()
+  let mul () = todo ()
+  let div () = todo ()
+  (* TODO: let pow () = todo () *)
+  let op_add () = todo ()
+  let op_sub () = todo ()
+  let op_mul () = todo ()
+  let op_div () = todo ()
+  (* TODO: let op_exp () = todo () *)
+  let eq () = todo ()
+  let op_eq () = todo ()
+  let addr () = todo ()
+  let subr () = todo ()
+  let mulr () = todo ()
+  let divr () = todo ()
+  let neg () = todo ()
+  let unit () = todo ()
+  let dot () = todo ()
+  let cos_alpha () = todo ()
+  let alpha () = todo ()
+  let distance () = todo ()
+  let slerp () = todo ()
+  let squad () = todo ()
+  let nlerp () = todo ()
+  let exp () = todo ()
+  let log () = todo ()
+end
+
 let () =
   Alcotest.run "Consensus.Geometry test suite" [
     "Vector2", [
@@ -575,5 +625,54 @@ let () =
       "M3.trace",                `Quick, M3_test.trace;
       "M3.inverse",              `Quick, M3_test.inverse;
     ];
+    "Quaternion", [
+      (* Quaternions *)
+      "create",                  `Quick, Q_test.create;
+      "r",                       `Quick, Q_test.r;
+      "a",                       `Quick, Q_test.a;
+      "b",                       `Quick, Q_test.b;
+      "c",                       `Quick, Q_test.c;
+      "zero",                    `Quick, Q_test.zero;
+      "real",                    `Quick, Q_test.real;
+      "imag",                    `Quick, Q_test.imag;
+      "of_scalar",               `Quick, Q_test.of_scalar;
+      "to_list",                 `Quick, Q_test.to_list;
+      "of_list",                 `Quick, Q_test.of_list;
+      "conj",                    `Quick, Q_test.conj;
+      "smul",                    `Quick, Q_test.smul;
+      "sdiv",                    `Quick, Q_test.sdiv;
+      "norm2",                   `Quick, Q_test.norm2;
+      "magnitude",               `Quick, Q_test.magnitude;
+      "length",                  `Quick, Q_test.length;
+      "norm",                    `Quick, Q_test.norm;
+      "inv",                     `Quick, Q_test.inv;
+      "add",                     `Quick, Q_test.add;
+      "sub",                     `Quick, Q_test.sub;
+      "mul",                     `Quick, Q_test.mul;
+      "div",                     `Quick, Q_test.div;
+      (* "pow",                     `Quick, Q_test.pow; *)
+      "op_add",                  `Quick, Q_test.op_add;
+      "op_sub",                  `Quick, Q_test.op_sub;
+      "op_mul",                  `Quick, Q_test.op_mul;
+      "op_div",                  `Quick, Q_test.op_div;
+      (* "op_exp",                  `Quick, Q_test.op_exp; *)
+      "eq",                      `Quick, Q_test.eq;
+      "op_eq",                   `Quick, Q_test.op_eq;
+      "addr",                    `Quick, Q_test.addr;
+      "subr",                    `Quick, Q_test.subr;
+      "mulr",                    `Quick, Q_test.mulr;
+      "divr",                    `Quick, Q_test.divr;
+      "neg",                     `Quick, Q_test.neg;
+      "unit",                    `Quick, Q_test.unit;
+      "dot",                     `Quick, Q_test.dot;
+      "cos_alpha",               `Quick, Q_test.cos_alpha;
+      "alpha",                   `Quick, Q_test.alpha;
+      "distance",                `Quick, Q_test.distance;
+      "slerp",                   `Quick, Q_test.slerp;
+      "squad",                   `Quick, Q_test.squad;
+      "nlerp",                   `Quick, Q_test.nlerp;
+      "exp",                     `Quick, Q_test.exp;
+      "log",                     `Quick, Q_test.log;
+    ]   ;
   ]
 

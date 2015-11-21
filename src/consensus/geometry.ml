@@ -381,50 +381,84 @@ module Q = struct
   let imag q = ( q.a, q.b, q.c )
   let of_scalar s = create s 0. 0. 0.
   let to_list q = [q.r; q.a; q.b; q.c]
+
   let of_list = function
     | [r; a; b; c] -> (create r a b c)
     | _ -> invalid_arg "Q.of_list"
+
+  let conj q = create q.r (-. q.a) (-. q.b) (-. q.c)
+  let smul q r = create (q.r *. r) (q.a *. r) (q.b *. r) (q.c *. r)
+  let sdiv q r = create (q.r /. r) (q.a /. r) (q.b /. r) (q.c /. r)
+  let norm2 q = q.r *. q.r +. q.a *. q.a +. q.b *. q.b +. q.c *. q.c
+  let magnitude q = norm2 q
+  let length q = norm2 q
+  let norm q = sqrt (norm2 q)
+  let inv q = sdiv (conj q) (norm2 q)
   let add p q = create (p.r +. q.r) (p.a +. q.a) (p.b +. q.b) (p.c +. q.c)
   let sub p q = create (p.r -. q.r) (p.a -. q.a) (p.b -. q.b) (p.c -. q.c)
+
   let mul p q = create
       (p.r *. q.r -. p.a *. q.a -. p.b *. q.b -. p.c *. q.c)
-      (p.r *. q.a +. q.r *. p.a +. p.a *. p.b -. q.b *. p.c)
+      (p.r *. q.a +. q.r *. p.a +. q.c *. p.b -. q.b *. p.c)
       (p.r *. q.b +. q.r *. p.b +. p.c *. q.a -. q.c *. p.a)
       (p.r *. q.c +. q.r *. p.c +. p.a *. q.b -. q.a *. p.b)
+
+  let div p q = mul p (inv q)
+  (* TODO: let pow q a = q^a *)
   let ( + ) p q = add p q
   let ( - ) p q = sub p q
   let ( * ) p q = mul p q
+  let ( / ) p q = div p q
+  (* TODO: let ( ** ) q a = pow q a *)
   let eq p q = p.r =. q.r && p.a =. q.a && p.b =. q.b && p.c =. q.c
   let ( = ) p q = eq p q
   let addr q r = create (q.r +. r) q.a q.b q.c
   let subr q r = create (q.r -. r) q.a q.b q.c
   let mulr q r = create (q.r *. r) q.a q.b q.c
   let divr q r = create (q.r /. r) q.a q.b q.c
-  let smul q r = create (q.r *. r) (q.a *. r) (q.b *. r) (q.c *. r)
-  let sdiv q r = create (q.r /. r) (q.a /. r) (q.b /. r) (q.c /. r)
-  let norm2 q = q.r *. q.r +. q.a *. q.a +. q.b *. q.b +. q.c *. q.c
-  let norm q = sqrt (norm2 q)
-  let conj q = create q.r (-. q.a) (-. q.b) (-. q.c)
   let neg q = create (-. q.r) (-. q.a) (-. q.b) (-. q.c)
-  let inv q = sdiv (conj q) (norm2 q)
   let unit q = sdiv q (norm q)
   let dot p q = p.r *. q.r +. p.a *. q.a +. p.b *. q.b +. p.c *. q.c
-  let cos_theta p q = (dot p q) /. ((norm p) *. (norm q))
-  let theta p q = acos (cos_theta p q)
+  let cos_alpha p q = (dot p q) /. ((norm p) *. (norm q))
+  let alpha p q = acos (cos_alpha p q)
+  let distance p q = norm (p - q)
+
   let slerp p q t =
     if p = q then p else
-      let th = abs_float (theta p q) in
+      let th = abs_float (alpha p q) in
       (* TODO: consensus_epsilon is probably too small to use here *)
-      let sin_th = if th <=. consensus_epsilon then th else (sin th) in
+      let sin_th =
+        if th <=. consensus_epsilon
+        then th
+        else (sin th) in
       sdiv (add (smul p ((sin (1.0 -. t)) *. th)) (smul q (sin (t *. th)))) sin_th
-  let distance p q = norm (p - q)
-    (*
-  let nlerp = t -> t
-  let squad = t -> t
-  let of_euler = M3.t -> t
-  let to_euler q =
-  let cross = t -> t -> t
-       *)
+
+  let squad p q cp cq t =
+    (* http://www.3dgep.com/understanding-quaternions/#SQUAD *)
+    let a = slerp p cp t in
+    let b = slerp q cq t in
+    slerp a b (2.0 *. t *. (1.0 -. t))
+
+  let nlerp p q t =
+    (* Lerp(q0; q1; h) = q0(1 h) + q1h *)
+    (* http://web.mit.edu/2.998/www/QuaternionReport1.pdf *)
+    (smul q t) + (smul p (1.0 -. t))
+
+  let exp q =
+    (* https://en.wikipedia.org/wiki/Quaternion#Exponential.2C_logarithm.2C_and_power *)
+    let v = V3.create q.a q.b q.c in
+    let n = V3.magnitude v in
+    let exp_r = exp q.r in
+    let u = V3.smul v ((sin n) /. n) in
+    create (exp_r *. cos n) (exp_r *. V3.x u) (exp_r *. V3.y u) (exp_r *. V3.z u)
+
+  let log q =
+    (* https://en.wikipedia.org/wiki/Quaternion#Exponential.2C_logarithm.2C_and_power *)
+    let qn = norm q in
+    let v = V3.create q.a q.b q.c in
+    let vn = V3.magnitude v in
+    let u = V3.smul v (q.r /. vn /. qn) in
+    create (log qn) (V3.x u) (V3.y u) (V3.z u)
 end
 
 type q = Q.t
