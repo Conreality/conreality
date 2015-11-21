@@ -192,9 +192,9 @@ module Q: sig
   val smul : t -> float -> t
   val sdiv : t -> float -> t
   val norm2 : t -> float
+  val norm : t -> float
   val magnitude : t -> float
   val length : t -> float
-  val norm : t -> float
   val inv : t -> t
   val add : t -> t -> t
   val sub : t -> t -> t

@@ -423,35 +423,65 @@ end
 
 module Q_test = struct
   (* Quaternions *)
-  let create () = todo ()
-  let r () = todo ()
-  let a () = todo ()
-  let b () = todo ()
-  let c () = todo ()
-  let zero () = todo ()
-  let real () = todo ()
-  let imag () = todo ()
-  let of_scalar () = todo ()
-  let to_list () = todo ()
-  let of_list () = todo ()
-  let conj () = todo ()
-  let smul () = todo ()
-  let sdiv () = todo ()
-  let norm2 () = todo ()
-  let magnitude () = todo ()
-  let length () = todo ()
-  let norm () = todo ()
-  let inv () = todo ()
-  let add () = todo ()
-  let sub () = todo ()
-  let mul () = todo ()
+  let tq1 = Q.create (3.) (-1.) (4.) (1.)
+  let tq2 = Q.create e pi phi 0.
+  let tqz = Q.create 0. 0. 0. 0.
+
+  let q_to_list q = [Q.r q; Q.a q; Q.b q; Q.c q]
+
+  (* Keep this one operating on floats to avoid depending on Q.eq *)
+  let create () = same_float_list [e; pi; phi; 0.] (q_to_list (Q.create e pi phi 0.))
+  let r () = same_float e (Q.r tq2)
+  let a () = same_float (-1.) (Q.a tq1)
+  let b () = same_float phi (Q.b tq2)
+  let c () = same_float (1.) (Q.c tq1)
+  (* Keep this one operating on floats to avoid depending on Q.eq *)
+  let zero () = same_float_list [0.; 0.; 0.; 0.] (q_to_list Q.zero)
+  let real () = same_float e (Q.real tq2)
+  let imag () = todo () (* TODO: needs to use a tuple or V3 *)
+  let of_scalar () = same_bool true (Q.eq (Q.of_scalar 3.) (Q.create 3. 0. 0. 0.))
+  let to_list () = same_float_list [e; pi; phi; 0.] (Q.to_list tq2)
+  let of_list () = same_bool true (Q.eq tq2 (Q.of_list [e; pi; phi; 0.]))
+  let conj () =
+    same_bool true (Q.eq (Q.conj tq1) (Q.create (3.) (1.) (-4.) (-1.)));
+    same_bool true (Q.eq (Q.conj tq2) (Q.create (e) (-. pi) (-. phi) (0.)))
+  let smul () = same_bool true (Q.eq (Q.smul tq1 2.) (Q.create (6.) (-2.) (8.) (2.)))
+  let sdiv () = same_bool true (Q.eq (Q.sdiv tq1 2.) (Q.create (1.5) (-0.5) (2.) (0.5)))
+  let norm2 () =
+    same_float 27. (Q.norm2 tq1);
+    same_float 19.8766549674 (Q.norm2 tq2);
+    same_float 0. (Q.norm2 tqz)
+  let norm () =
+    same_float 5.19615242270663 (Q.norm tq1);
+    same_float 4.45832423309476 (Q.norm tq2);
+    same_float 0. (Q.magnitude tqz)
+  let magnitude () = norm ()
+  let length () = norm ()
+  let inv () =
+    let etq1 = (Q.create 0.111111111111111 0.0370370370370370 (-0.148148148148148) (-0.0370370370370370)) in
+    let etq2 = (Q.create 0.136757417405408 (-0.158054260395050) (-0.0814035360906428) 0.) in
+    same_bool true (Q.eq (Q.inv tq1) etq1);
+    same_bool true (Q.eq (Q.inv tq2) etq2)
+  let add () =
+    let ex = Q.create 5.71828 2.14159 5.61803 1. in
+    same_bool true (Q.eq ex (Q.add tq1 tq2))
+  let sub () =
+    let ex = Q.create 0.281720000000000 (-4.14159000000000) 2.38197000000000 1.00000000000000 in
+    same_bool true (Q.eq ex (Q.sub tq1 tq2))
+  let mul () =
+    let ex1 = Q.create 4.82431 5.08846 18.8688 (-11.46611) in
+    let ex2 = Q.create 4.82431 8.32452 12.58562 16.90267 in
+    same_bool true (Q.eq ex1 (Q.mul tq1 tq2));
+    same_bool true (Q.eq ex2 (Q.mul tq2 tq1))
   let div () = todo ()
-  let op_add () = todo ()
+  let op_add () =
+    let ex = Q.create 5.71828 2.14159 5.61803 1. in
+    same_bool true (Q.eq ex (Q.( + ) tq1 tq2))
   let op_sub () = todo ()
   let op_mul () = todo ()
   let op_div () = todo ()
-  let eq () = todo ()
-  let op_eq () = todo ()
+  let eq () = same_bool true (Q.eq tq1 tq1)
+  let op_eq () = same_bool true (Q.( = ) tq1 tq1)
   let addr () = todo ()
   let subr () = todo ()
   let mulr () = todo ()
