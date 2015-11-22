@@ -616,9 +616,9 @@ module Q_test = struct
     let ex1 = Q.create 1.647918433002165 0.225170286285347 (-0.900681145141387) (-0.225170286285347) in
     let ex2 = Q.create 1.494772962936871 0.813541778114865 0.419002798978605 0. in
     same_bool true (Q.eq ex1 (Q.log tq1));
-    Q.print Format.std_formatter (Q.log tq1);
+    Q.print Format.err_formatter (Q.log tq1);
     same_bool true (Q.eq ex2 (Q.log tq2));
-    Q.print Format.std_formatter (Q.log tq2)
+    Q.print Format.err_formatter (Q.log tq2)
 *)
   let pow () = todo ()
   let op_exp () = todo ()
@@ -700,11 +700,13 @@ let () =
       "V4.x",                    `Quick, V4_test.x;
       "V4.y",                    `Quick, V4_test.y;
       "V4.z",                    `Quick, V4_test.z;
+      "V4.w",                    `Quick, V4_test.w;
       "V4.element",              `Quick, V4_test.el;
       "V4.zero",                 `Quick, V4_test.zero;
       "V4.unitx",                `Quick, V4_test.unitx;
       "V4.unity",                `Quick, V4_test.unity;
       "V4.unitz",                `Quick, V4_test.unitz;
+      "V4.unitw",                `Quick, V4_test.unitw;
       "V4.invert",               `Quick, V4_test.invert;
       "V4.neg",                  `Quick, V4_test.neg;
       "V4.add",                  `Quick, V4_test.add;
@@ -721,6 +723,7 @@ let () =
       "V4.magnitude",            `Quick, V4_test.magnitude;
       "V4.magnitude0",           `Quick, V4_test.magnitude0;
       "V4.magnitude2",           `Quick, V4_test.magnitude2;
+      "V4.magnitude3",           `Quick, V4_test.magnitude3;
       "V4.magnitude2_2",         `Quick, V4_test.magnitude2_2;
       "V4.magnitude2_0",         `Quick, V4_test.magnitude2_0;
       "V4.normalize",            `Quick, V4_test.normalize;
