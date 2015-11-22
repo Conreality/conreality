@@ -32,7 +32,7 @@ package "messaging" (
 package "ontology" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus ontology database"
-  requires = "consensus.prelude"
+  requires = "consensus.prelude consensus.knowledge"
   archive(byte) = "consensus.ontology.cmo"
   archive(native) = "consensus.ontology.cmx"
 )
