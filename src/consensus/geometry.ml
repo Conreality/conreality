@@ -23,7 +23,7 @@ module P2 = struct
   let ( = ) p q = eq p q
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5)
   let distance p q = sqrt ((p.x -. q.x) ** 2. +. (p.y -. q.y) ** 2.)
-  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g)@]" p.x p.y (*BISECT-IGNORE*)
+  let to_string p = Format.sprintf "@[<1>(%g@ %g)@]" p.x p.y
 end
 
 type p2 = P2.t
@@ -47,7 +47,7 @@ module P3 = struct
   let mid p q = create ((p.x +. q.x) *. 0.5) ((p.y +. q.y) *. 0.5) ((p.z +. q.z) *. 0.5)
   let distance a b =
     sqrt ((a.x -. b.x) ** 2. +. (a.y -. b.y) ** 2. +. (a.z -. b.z) ** 2.)
-  let print fmt p = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" p.x p.y p.z (*BISECT-IGNORE*)
+  let to_string p = Format.sprintf "@[<1>(%g@ %g@ %g)@]" p.x p.y p.z
 end
 
 type p3 = P3.t
@@ -90,7 +90,7 @@ module V2 = struct
   let normalize v =
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v)
-  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g)@]" v.x v.y (*BISECT-IGNORE*)
+  let to_string v = Format.sprintf "@[<1>(%g@ %g)@]" v.x v.y
 end
 
 type v2 = V2.t
@@ -139,7 +139,7 @@ module V3 = struct
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v)
 
-  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z (*BISECT-IGNORE*)
+  let to_string v = Format.sprintf "@[<1>(%g@ %g@ %g)@]" v.x v.y v.z
 end
 
 type v3 = V3.t
@@ -186,7 +186,7 @@ module V4 = struct
     if v = zero then v else (* TODO: True? *)
       create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v) (v.w /. magnitude v)
 
-  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g@ %g)@]" v.x v.y v.z v.w (*BISECT-IGNORE*)
+  let to_string v = Format.sprintf "@[<1>(%g@ %g@ %g@ %g)@]" v.x v.y v.z v.w
 end
 
 type v4 = V4.t
@@ -272,7 +272,7 @@ module M2 = struct
       (   a.e11 /. d) (-. a.e01 /. d)
       (-. a.e10 /. d) (   a.e00 /. d)
 
-  let print fmt m = Format.fprintf fmt "@[<1>(%g@ %g@\n%g@ %g)@]" m.e00 m.e01 m.e10 m.e11 (*BISECT-IGNORE*)
+  let to_string m = Format.sprintf "@[<1>(%g@ %g@\n%g@ %g)@]" m.e00 m.e01 m.e10 m.e11
 end
 
 type m2 = M2.t
@@ -402,7 +402,7 @@ module M3 = struct
       (-. i01 /. d) (   i11 /. d) (-. i21 /. d)
       (   i02 /. d) (-. i12 /. d) (   i22 /. d)
 
-  let print fmt m = Format.fprintf fmt "@[<1>(%g@ %g@ %g@\n%g@ %g@ %g\n%g@ %g@ %g)@]" m.e00 m.e01 m.e02 m.e10 m.e11 m.e12 m.e20 m.e21 m.e22 (*BISECT-IGNORE*)
+  let to_string m = Format.sprintf "@[<1>(%g@ %g@ %g@\n%g@ %g@ %g\n%g@ %g@ %g)@]" m.e00 m.e01 m.e02 m.e10 m.e11 m.e12 m.e20 m.e21 m.e22
 end
 
 type m3 = M3.t
@@ -516,7 +516,7 @@ module Q = struct
     exp (smul (log q) a)
   let ( ** ) q a = pow q a
 
-  let print fmt q = Format.fprintf fmt "@[<1>[%g@, (%g@ %g@ %g)@]" q.r q.a q.b q.c (*BISECT-IGNORE*)
+  let to_string q = Format.sprintf "@[<1>[%g@, (%g@ %g@ %g)@]" q.r q.a q.b q.c
 end
 
 type q = Q.t

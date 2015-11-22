@@ -15,7 +15,7 @@ module P2 : sig
   val ( = ) : t -> t -> bool
   val mid : t -> t -> t
   val distance : t -> t -> float
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 type p3     (** 3D point *)
@@ -33,7 +33,7 @@ module P3 : sig
   val ( = ) : t -> t -> bool
   val mid : t -> t -> t
   val distance : t -> t -> float
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 module P = P3
@@ -66,7 +66,7 @@ module V2 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 type v3     (** 3D vector *)
@@ -99,7 +99,7 @@ module V3 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 module V : sig type t = v3 end
@@ -134,7 +134,7 @@ module V4 : sig
   val magnitude : t -> float
   val magnitude2 : t -> float
   val normalize : t -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 (* Matrices *)
@@ -167,7 +167,7 @@ module M2: sig
   val det : t -> float
   val trace : t -> float
   val inverse : t -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 type m3         (* 3x3 matrix *)
@@ -203,7 +203,7 @@ module M3: sig
   val det : t -> float
   val trace : t -> float
   val inverse : t -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
 type q          (* quaternion *)
@@ -256,6 +256,6 @@ module Q: sig
   val log : t -> t
   val pow : t -> float -> t
   val ( ** ) : t -> float -> t
-  val print : Format.formatter -> t -> unit
+  val to_string : t -> bytes
 end
 
