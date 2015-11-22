@@ -88,8 +88,7 @@ end
 module Stomp_header = struct
   type t = { key: string; value: string }
 
-  let create key value =
-    {key = key; value = value}
+  let create key value = { key; value }
 
   let key header = header.key
   let value header = header.value
@@ -107,8 +106,7 @@ end
 module Stomp_frame = struct
   type t = { command: Stomp_command.t; headers: Stomp_header.t list; body: string }
 
-  let create command headers body =
-    {command = command; headers = headers; body = body}
+  let create command headers body = { command; headers; body }
 
   let command frame = frame.command
   let headers frame = frame.headers
