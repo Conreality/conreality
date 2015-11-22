@@ -104,6 +104,38 @@ end
 
 module V : sig type t = v3 end
 
+type v4     (** 4D vector *)
+
+module V4 : sig
+  type t = v4
+  val create : float -> float -> float -> float -> t
+  val x : t -> float
+  val y : t -> float
+  val z : t -> float
+  val w : t -> float
+  val el : t -> int -> float
+  val zero : t
+  val unitx : t
+  val unity : t
+  val unitz : t
+  val invert : t -> t
+  val neg : t -> t
+  val add : t -> t -> t
+  val ( + ) : t -> t -> t
+  val sub : t -> t -> t
+  val ( - ) : t -> t -> t
+  val eq : t -> t -> bool
+  val ( = ) : t -> t -> bool
+  val smul : t -> float -> t
+  val ( * ) : t -> float -> t
+  val opposite : t -> t -> bool
+  val dotproduct : t -> t -> float
+  val magnitude : t -> float
+  val magnitude2 : t -> float
+  val normalize : t -> t
+  val print : Format.formatter -> t -> unit
+end
+
 (* Matrices *)
 
 type m2         (* 2x2 matrix *)
@@ -213,8 +245,8 @@ module Q: sig
   val neg : t -> t
   val unit : t -> t
   val dot : t -> t -> float
-  val cos_alpha : t -> t -> float
   val alpha : t -> t -> float
+  val cos_alpha : t -> t -> float
   val distance : t -> t -> float
   val slerp : t -> t -> float -> t
   val squad : t -> t -> t -> t -> float -> t

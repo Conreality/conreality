@@ -146,6 +146,51 @@ type v3 = V3.t
 type v = V3.t
 module V = V3
 
+module V4t = struct
+  type t = { x: float; y: float; z: float; w: float }
+  let i = [| (fun v -> v.x); (fun v -> v.y); (fun v -> v.z); (fun v -> v.w) |]
+end
+
+module V4 = struct
+  open V4t
+  type t = V4t.t
+
+  let create x y z w = { x; y; z; w }
+  let x v = v.x
+  let y v = v.y
+  let z v = v.z
+  let w v = v.w
+  let el v n = i.(n) v
+
+  let zero = create 0. 0. 0. 0.
+  let unitx = create 1. 0. 0. 0.
+  let unity = create 0. 1. 0. 0.
+  let unitz = create 0. 0. 1. 0.
+  let unitw = create 0. 0. 0. 1.
+  let invert v = create (-. v.x) (-. v.y) (-. v.z) (-. v.w)
+  let neg v = invert v
+  let add a b = create (a.x +. b.x) (a.y +. b.y) (a.z +. b.z) (a.w +. b.w)
+  let ( + ) a b = add a b
+  let sub a b = create (a.x -. b.x) (a.y -. b.y) (a.z -. b.z) (a.w -. b.w)
+  let ( - ) a b = sub a b
+  let eq a b = a.x =. b.x && a.y =. b.y && a.z =. b.z && a.w =. b.w
+  let ( = ) a b = eq a b
+  let smul a f = create (a.x *. f) (a.y *. f) (a.z *. f) (a.w *. f)
+  let ( * ) a f = smul a f
+  let opposite a b = a = invert b
+  let dotproduct a b = a.x *. b.x +. a.y *. b.y +. a.z *. b.z +. a.w *. b.w
+  let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z) +. (v.w *. v.w))
+  let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
+
+  let normalize v =
+    if v = zero then v else (* TODO: True? *)
+      create (v.x /. magnitude v) (v.y /. magnitude v) (v.z /. magnitude v) (v.w /. magnitude v)
+
+  let print fmt v = Format.fprintf fmt "@[<1>(%g@ %g@ %g@ %g)@]" v.x v.y v.z v.w (*BISECT-IGNORE*)
+end
+
+type v4 = V4.t
+
 (* Matrices *)
 
 module M2t = struct
@@ -417,11 +462,17 @@ module Q = struct
   let neg q = create (-. q.r) (-. q.a) (-. q.b) (-. q.c)
   let unit q = sdiv q (norm q)
   let dot p q = p.r *. q.r +. p.a *. q.a +. p.b *. q.b +. p.c *. q.c
+(*
   let cos_alpha p q = (dot p q) /. ((norm p) *. (norm q))
   let alpha p q = acos (cos_alpha p q)
+*)
+  (* http://www.cc.gatech.edu/~ndantam3/note/dantam-quaternion.pdf *)
+  let alpha p q = 2. *. (atan2 (norm (p - q)) (norm (p + q)))
+  let cos_alpha p q = cos (alpha p q)
   let distance p q = norm (p - q)
 
   let slerp p q t =
+    (* http://web.mit.edu/2.998/www/QuaternionReport1.pdf *)
     if p = q then p else
       let th = abs_float (alpha p q) in
       (* TODO: consensus_epsilon is probably too small to use here *)
@@ -432,6 +483,7 @@ module Q = struct
       sdiv (add (smul p ((sin (1.0 -. t)) *. th)) (smul q (sin (t *. th)))) sin_th
 
   let squad p q cp cq t =
+    (* http://web.mit.edu/2.998/www/QuaternionReport1.pdf *)
     (* http://www.3dgep.com/understanding-quaternions/#SQUAD *)
     let a = slerp p cp t in
     let b = slerp q cq t in

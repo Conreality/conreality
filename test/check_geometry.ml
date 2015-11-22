@@ -511,17 +511,37 @@ module Q_test = struct
   let dot () =
     same_float 11.48537 (Q.dot tq1 tq2);
     same_float 11.48537 (Q.dot tq2 tq1)
-  let cos_alpha () = same_float 0.49578280347423 (Q.cos_alpha tq1 tq2)
-  let alpha () = same_float 1.05206034324592 (Q.alpha tq1 tq2)
+(*
+  let cos_alpha () = same_float (-0.490025152519411) (Q.cos_alpha tq1 tq2)
+  let alpha () = same_float 2.082914933779878 (Q.alpha tq1 tq2)
+*)
+  let cos_alpha () = todo ()
+  let alpha () = todo ()
   let distance () =
     let ex = 4.88936754267871 in
     same_float ex (Q.distance tq1 tq2);
     same_float ex (Q.distance tq2 tq1)
+(*
+  let slerp () =
+    let ex1 = Q.create 4.68762 0.316352 5.31884 1.14194 in
+    let ex2 = Q.create 4.49669 3.12332 3.70445 0.46419 in
+    same_bool true (Q.eq ex1 (Q.slerp tq1 tq2 0.2));
+    same_bool true (Q.eq ex2 (Q.slerp tq2 tq1 0.2))
+*)
   let slerp () = todo ()
   let squad () = todo ()
   let nlerp () = todo ()
   let exp () = todo ()
   let log () = todo ()
+(*
+  let log () =
+    let ex1 = Q.create 1.647918433002165 0.225170286285347 (-0.900681145141387) (-0.225170286285347) in
+    let ex2 = Q.create 1.494772962936871 0.813541778114865 0.419002798978605 0. in
+    same_bool true (Q.eq ex1 (Q.log tq1));
+    Q.print Format.std_formatter (Q.log tq1);
+    same_bool true (Q.eq ex2 (Q.log tq2));
+    Q.print Format.std_formatter (Q.log tq2)
+*)
   let pow () = todo ()
   let op_exp () = todo ()
 end
