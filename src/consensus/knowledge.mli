@@ -9,3 +9,17 @@ module Term : sig
   val make_uuid : string -> t
   val make_node : string -> t
 end
+
+(* A fact is a propositional statement represented by a binary relation. *)
+module Fact : sig
+  type t
+  val create : Term.t -> Term.t -> Term.t -> t
+  val subject : t -> Term.t
+  val predicate : t -> Term.t
+  val object_ : t -> Term.t
+  val confidence : t -> float option
+end
+
+module Rule : sig
+  type t
+end
