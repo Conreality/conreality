@@ -45,6 +45,28 @@ module Rule_test = struct
   (* TODO *)
 end
 
+(* Knowledge.Store *)
+
+module Store_test = struct
+  open Store
+
+  let create = todo
+
+  let facts = todo
+
+  let rules = todo
+
+  let is_empty = todo
+
+  let has_fact = todo
+
+  let has_rule = todo
+
+  let insert = todo
+
+  let remove = todo
+end
+
 (* Test suite definition *)
 
 let () =
@@ -63,5 +85,15 @@ let () =
     ];
     "Rule", [
       (* TODO *)
+    ];
+    "Store", [
+      "Store.create",    `Quick, Store_test.create;
+      "Store.facts",     `Quick, Store_test.facts;
+      "Store.rules",     `Quick, Store_test.rules;
+      "Store.is_empty",  `Quick, Store_test.is_empty;
+      "Store.has_fact",  `Quick, Store_test.has_fact;
+      "Store.has_rule",  `Quick, Store_test.has_rule;
+      "Store.insert",    `Quick, Store_test.insert;
+      "Store.remove",    `Quick, Store_test.remove;
     ];
   ]

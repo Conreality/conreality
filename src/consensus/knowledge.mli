@@ -18,8 +18,30 @@ module Fact : sig
   val predicate : t -> Term.t
   val object_ : t -> Term.t
   val confidence : t -> float option
+  val compare : t -> t -> int
+end
+
+module Fact_set : sig
+  type t
 end
 
 module Rule : sig
   type t
+  val compare : t -> t -> int
+end
+
+module Rule_set : sig
+  type t
+end
+
+module Store : sig
+  type t
+  val create : unit -> t
+  val facts : t -> Fact_set.t
+  val rules : t -> Rule_set.t
+  val is_empty : t -> bool
+  val has_fact : t -> Fact.t -> bool
+  val has_rule : t -> Rule.t -> bool
+  val insert : t -> Fact.t -> unit
+  val remove : t -> Fact.t -> unit
 end
