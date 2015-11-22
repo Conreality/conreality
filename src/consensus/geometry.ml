@@ -180,7 +180,7 @@ module V4 = struct
   let opposite a b = a = invert b
   let dotproduct a b = a.x *. b.x +. a.y *. b.y +. a.z *. b.z +. a.w *. b.w
   let magnitude v = sqrt ((v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z) +. (v.w *. v.w))
-  let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z)
+  let magnitude2 v = (v.x *. v.x) +. (v.y *. v.y) +. (v.z *. v.z) +. (v.w *. v.w)
 
   let normalize v =
     if v = zero then v else (* TODO: True? *)

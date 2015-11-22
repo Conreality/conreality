@@ -118,6 +118,7 @@ module V4 : sig
   val unitx : t
   val unity : t
   val unitz : t
+  val unitw : t
   val invert : t -> t
   val neg : t -> t
   val add : t -> t -> t

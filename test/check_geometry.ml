@@ -181,7 +181,85 @@ module V3_test = struct
 
   let normalize0 () =
     same_bool true (V3.eq tvec3_0 (V3.normalize tvec3_0))
+end
 
+module V4_test = struct
+  (* 3D Vectors *)
+
+  let tvec4_1 = V4.create (3.) (1.) (2.) (4.)
+  let tvec4_1opposite = V4.create (-3.) (-1.) (-2.) (-4.)
+  let tvec4_2 = V4.create e pi phi 0.
+  let tvec4_0 = V4.zero
+
+  let v4_to_list v = [(V4.x v); (V4.y v); (V4.z v); (V4.w v)]
+  (* Keep this one operating on floats to avoid depending on V4.eq *)
+  let create () = same_float_list [e; pi; phi; 0.] (v4_to_list tvec4_2)
+  let x () = same_float 3. (V4.x tvec4_1)
+  let y () = same_float pi (V4.y tvec4_2)
+  let z () = same_float 2. (V4.z tvec4_1)
+  let w () = same_float 4. (V4.w tvec4_1)
+  let el () = same_float 3. (V4.el tvec4_1 0)
+  (* Keep this one operating on floats to avoid depending on V4.eq *)
+  let zero () = same_float_list [0.; 0.; 0.; 0.] (v4_to_list tvec4_0)
+  let unitx () = same_bool true (V4.eq V4.unitx (V4.create 1. 0. 0. 0.))
+  let unity () = same_bool true (V4.eq V4.unity (V4.create 0. 1. 0. 0.))
+  let unitz () = same_bool true (V4.eq V4.unitz (V4.create 0. 0. 1. 0.))
+  let unitw () = same_bool true (V4.eq V4.unitw (V4.create 0. 0. 0. 1.))
+  let invert () = same_bool true (V4.eq tvec4_1opposite (V4.invert tvec4_1))
+  let neg () = same_bool true (V4.eq tvec4_1opposite (V4.neg tvec4_1))
+
+  let add_expected = V4.create (5.71828) (4.14159) (3.61803) (4.)
+  let add () =
+    let v = V4.add tvec4_1 tvec4_2 in
+    same_bool true (V4.eq v add_expected)
+  let op_add () =
+    let v = V4.( + ) tvec4_1 tvec4_2 in
+    same_bool true (V4.eq v add_expected)
+
+  let sub_expected = V4.create (0.28172) (-2.14159) (0.38197) (4.)
+  let sub () =
+    let v = V4.sub tvec4_1 tvec4_2 in
+    same_bool true (V4.eq v sub_expected)
+  let op_sub () =
+    let v = V4.( - ) tvec4_1 tvec4_2 in
+    same_bool true (V4.eq v sub_expected)
+
+  let eq () = same_bool true (V4.eq V4.zero V4.zero)
+  let op_eq () = same_bool true (V4.zero = V4.zero)
+
+  let smul_expected = V4.create (6.) (2.) (4.) (8.)
+  let smul () =
+    let v = V4.smul tvec4_1 2. in
+    same_bool true (V4.eq v smul_expected)
+  let op_smul () =
+    let v = V4.( * ) tvec4_1 2. in
+    same_bool true (V4.eq v smul_expected)
+
+  let opposite () = same_bool true (V4.opposite tvec4_1 tvec4_1opposite)
+  let opposite_failure () = same_bool false (V4.opposite tvec4_1 tvec4_2)
+
+  let dotproduct () = same_float 14.53249 (V4.dotproduct tvec4_1 tvec4_2)
+
+  let magnitude () = same_float 5.477225575 (V4.magnitude tvec4_1)
+  let magnitude2 () = same_float 30. (V4.magnitude2 tvec4_1)
+  let magnitude2_2 () = same_float 19.876654967 (V4.magnitude2 tvec4_2)
+  let magnitude3 () = same_float 4.458324233 (V4.magnitude tvec4_2)
+  let magnitude2_0 () = same_float 0. (V4.magnitude2 tvec4_0)
+  let magnitude0 () = same_float 0. (V4.magnitude tvec4_0)
+
+  let normalize () =
+    let v = V4.normalize tvec4_1 in
+    let sqrt30 = sqrt 30. in
+    let vn = V4.create (sqrt30 /. 10.) (sqrt30 /. 30.) (sqrt30 /. 15.) (2. *. sqrt30 /. 15.) in
+    same_bool true (V4.eq v vn)
+
+  let normalize2 () =
+    let v = V4.normalize tvec4_2 in
+    let vn = V4.create (0.609708908) (0.704657139) (0.362923358) (0.) in
+    same_bool true (V4.eq v vn)
+
+  let normalize0 () =
+    same_bool true (V4.eq tvec4_0 (V4.normalize tvec4_0))
 end
 
 module P2_test = struct
@@ -615,6 +693,39 @@ let () =
       "V3.normalize",            `Quick, V3_test.normalize;
       "V3.normalize2",           `Quick, V3_test.normalize2;
       "V3.normalize0",           `Quick, V3_test.normalize0;
+    ];
+    "Vector4", [
+      (* 4D Vectors *)
+      "V4.create",               `Quick, V4_test.create;
+      "V4.x",                    `Quick, V4_test.x;
+      "V4.y",                    `Quick, V4_test.y;
+      "V4.z",                    `Quick, V4_test.z;
+      "V4.element",              `Quick, V4_test.el;
+      "V4.zero",                 `Quick, V4_test.zero;
+      "V4.unitx",                `Quick, V4_test.unitx;
+      "V4.unity",                `Quick, V4_test.unity;
+      "V4.unitz",                `Quick, V4_test.unitz;
+      "V4.invert",               `Quick, V4_test.invert;
+      "V4.neg",                  `Quick, V4_test.neg;
+      "V4.add",                  `Quick, V4_test.add;
+      "V4.op_add",               `Quick, V4_test.op_add;
+      "V4.sub",                  `Quick, V4_test.sub;
+      "V4.op_sub",               `Quick, V4_test.op_sub;
+      "V4.eq",                   `Quick, V4_test.eq;
+      "V4.op_eq",                `Quick, V4_test.op_eq;
+      "V4.smul",                 `Quick, V4_test.smul;
+      "V4.op_smul",              `Quick, V4_test.op_smul;
+      "V4.opposite",             `Quick, V4_test.opposite;
+      "V4.opposite failure",     `Quick, V4_test.opposite_failure;
+      "V4.dot product",          `Quick, V4_test.dotproduct;
+      "V4.magnitude",            `Quick, V4_test.magnitude;
+      "V4.magnitude0",           `Quick, V4_test.magnitude0;
+      "V4.magnitude2",           `Quick, V4_test.magnitude2;
+      "V4.magnitude2_2",         `Quick, V4_test.magnitude2_2;
+      "V4.magnitude2_0",         `Quick, V4_test.magnitude2_0;
+      "V4.normalize",            `Quick, V4_test.normalize;
+      "V4.normalize2",           `Quick, V4_test.normalize2;
+      "V4.normalize0",           `Quick, V4_test.normalize0;
     ];
     "Point2", [
       (* 2D Points *)
