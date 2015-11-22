@@ -143,7 +143,9 @@ type m2         (* 2x2 matrix *)
 
 module M2: sig
   type t = m2
-  val create : float -> float -> float -> float -> t
+  val create :
+    float -> float ->
+    float -> float -> t
   val e00 : t -> float
   val e01 : t -> float
   val e10 : t -> float
@@ -174,7 +176,10 @@ type m3         (* 3x3 matrix *)
 
 module M3: sig
   type t = m3
-  val create : float -> float -> float -> float -> float -> float -> float -> float -> float -> t
+  val create :
+    float -> float -> float ->
+    float -> float -> float ->
+    float -> float -> float -> t
   val e00 : t -> float
   val e01 : t -> float
   val e02 : t -> float
@@ -184,6 +189,53 @@ module M3: sig
   val e20 : t -> float
   val e21 : t -> float
   val e22 : t -> float
+  val el : int -> int -> t -> float
+  val zero : t
+  val id : t
+  val neg : t -> t
+  val add : t -> t -> t
+  val ( + ) : t -> t -> t
+  val sub : t -> t-> t
+  val ( - ) : t -> t -> t
+  val eq : t -> t-> bool
+  val ( = ) : t -> t -> bool
+  val smul : t -> float -> t
+  val transpose : t -> t
+  val mul : t -> t-> t
+  val ( * ) : t -> t -> t
+  val emul : t -> t -> t
+  val ediv : t -> t -> t
+  val det : t -> float
+  val trace : t -> float
+  val inverse : t -> t
+  val to_string : t -> bytes
+end
+
+type m4         (* 4x4 matrix *)
+
+module M4: sig
+  type t = m4
+  val create :
+    float -> float -> float -> float ->
+    float -> float -> float -> float ->
+    float -> float -> float -> float ->
+    float -> float -> float -> float -> t
+  val e00 : t -> float
+  val e01 : t -> float
+  val e02 : t -> float
+  val e03 : t -> float
+  val e10 : t -> float
+  val e11 : t -> float
+  val e12 : t -> float
+  val e13 : t -> float
+  val e20 : t -> float
+  val e21 : t -> float
+  val e22 : t -> float
+  val e23 : t -> float
+  val e30 : t -> float
+  val e31 : t -> float
+  val e32 : t -> float
+  val e33 : t -> float
   val el : int -> int -> t -> float
   val zero : t
   val id : t

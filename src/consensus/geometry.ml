@@ -272,7 +272,7 @@ module M2 = struct
       (   a.e11 /. d) (-. a.e01 /. d)
       (-. a.e10 /. d) (   a.e00 /. d)
 
-  let to_string m = Format.sprintf "@[<1>(%g@ %g@\n%g@ %g)@]" m.e00 m.e01 m.e10 m.e11
+  let to_string m = Format.sprintf "@[<1>|%g@ %g@|\n|%g@ %g|@]" m.e00 m.e01 m.e10 m.e11
 end
 
 type m2 = M2.t
@@ -402,10 +402,186 @@ module M3 = struct
       (-. i01 /. d) (   i11 /. d) (-. i21 /. d)
       (   i02 /. d) (-. i12 /. d) (   i22 /. d)
 
-  let to_string m = Format.sprintf "@[<1>(%g@ %g@ %g@\n%g@ %g@ %g\n%g@ %g@ %g)@]" m.e00 m.e01 m.e02 m.e10 m.e11 m.e12 m.e20 m.e21 m.e22
+  let to_string m = Format.sprintf "@[<1>|%g@ %g@ %g@|\n|%g@ %g@ %g|\n|%g@ %g@ %g|@]" m.e00 m.e01 m.e02 m.e10 m.e11 m.e12 m.e20 m.e21 m.e22
 end
 
 type m3 = M3.t
+
+module M4t = struct
+  type t = {
+    e00: float; e01: float; e02: float; e03: float;
+    e10: float; e11: float; e12: float; e13: float;
+    e20: float; e21: float; e22: float; e23: float;
+    e30: float; e31: float; e32: float; e33: float
+  }
+  let i = [|
+    (fun m -> m.e00); (fun m -> m.e01); (fun m -> m.e02); (fun m -> m.e03);
+    (fun m -> m.e10); (fun m -> m.e11); (fun m -> m.e12); (fun m -> m.e13);
+    (fun m -> m.e20); (fun m -> m.e21); (fun m -> m.e22); (fun m -> m.e23);
+    (fun m -> m.e30); (fun m -> m.e31); (fun m -> m.e32); (fun m -> m.e33);
+  |]
+end
+
+module M4 = struct
+  open M4t
+  type t = M4t.t
+
+  (* Elements in row-major order: https://en.wikipedia.org/wiki/Row-major_order *)
+  let create
+      e00 e01 e02 e03
+      e10 e11 e12 e13
+      e20 e21 e22 e23
+      e30 e31 e32 e33 =
+    {
+      e00 = e00; e01 = e01; e02 = e02; e03 = e03;
+      e10 = e10; e11 = e11; e12 = e12; e13 = e13;
+      e20 = e20; e21 = e21; e22 = e22; e23 = e23;
+      e30 = e30; e31 = e31; e32 = e32; e33 = e33;
+    }
+
+  let e00 m = m.e00
+  let e01 m = m.e01
+  let e02 m = m.e02
+  let e03 m = m.e03
+  let e10 m = m.e10
+  let e11 m = m.e11
+  let e12 m = m.e12
+  let e13 m = m.e13
+  let e20 m = m.e20
+  let e21 m = m.e21
+  let e22 m = m.e22
+  let e23 m = m.e23
+  let e30 m = m.e30
+  let e31 m = m.e31
+  let e32 m = m.e32
+  let e33 m = m.e33
+  let zero = create
+      0. 0. 0. 0.
+      0. 0. 0. 0.
+      0. 0. 0. 0.
+      0. 0. 0. 0.
+  let id = create
+      1. 0. 0. 0.
+      0. 1. 0. 0.
+      0. 0. 1. 0.
+      0. 0. 0. 1.
+
+  let el row col = i.(4 * row + col)
+
+  let neg m = create
+      (-. m.e00) (-. m.e01) (-. m.e02) (-. m.e03)
+      (-. m.e10) (-. m.e11) (-. m.e12) (-. m.e13)
+      (-. m.e20) (-. m.e21) (-. m.e22) (-. m.e23)
+      (-. m.e30) (-. m.e31) (-. m.e32) (-. m.e33)
+
+  let add a b = create
+      (a.e00 +. b.e00) (a.e01 +. b.e01) (a.e02 +. b.e02) (a.e03 +. b.e03)
+      (a.e10 +. b.e10) (a.e11 +. b.e11) (a.e12 +. b.e12) (a.e13 +. b.e13)
+      (a.e20 +. b.e20) (a.e21 +. b.e21) (a.e22 +. b.e22) (a.e23 +. b.e23)
+      (a.e30 +. b.e30) (a.e31 +. b.e31) (a.e32 +. b.e32) (a.e33 +. b.e33)
+  let ( + ) a b = add a b
+
+  let sub a b = create
+      (a.e00 -. b.e00) (a.e01 -. b.e01) (a.e02 -. b.e02) (a.e03 -. b.e03)
+      (a.e10 -. b.e10) (a.e11 -. b.e11) (a.e12 -. b.e12) (a.e13 -. b.e13)
+      (a.e20 -. b.e20) (a.e21 -. b.e21) (a.e22 -. b.e22) (a.e23 -. b.e23)
+      (a.e30 -. b.e30) (a.e31 -. b.e31) (a.e32 -. b.e32) (a.e33 -. b.e33)
+  let ( - ) a b = sub a b
+
+  let eq a b =
+    a.e00 =. b.e00 && a.e01 =. b.e01 && a.e02 =. b.e02 && a.e03 =. b.e03 &&
+    a.e10 =. b.e10 && a.e11 =. b.e11 && a.e02 =. b.e02 && a.e13 =. b.e13 &&
+    a.e20 =. b.e20 && a.e21 =. b.e21 && a.e02 =. b.e02 && a.e23 =. b.e23 &&
+    a.e30 =. b.e30 && a.e31 =. b.e31 && a.e02 =. b.e02 && a.e33 =. b.e33
+  let ( = ) a b = eq a b
+
+  let smul m f = create
+      (m.e00 *. f) (m.e01 *. f) (m.e02 *. f) (m.e03 *. f)
+      (m.e10 *. f) (m.e11 *. f) (m.e12 *. f) (m.e13 *. f)
+      (m.e20 *. f) (m.e21 *. f) (m.e22 *. f) (m.e23 *. f)
+      (m.e30 *. f) (m.e31 *. f) (m.e32 *. f) (m.e33 *. f)
+
+  let transpose m = create
+      m.e00 m.e10 m.e20 m.e30
+      m.e01 m.e11 m.e21 m.e31
+      m.e02 m.e12 m.e22 m.e32
+      m.e03 m.e13 m.e23 m.e33
+
+  let mul a b =
+    if a = id then b else
+    if b = id then a else
+      create
+        (a.e00 *. b.e00 +. a.e01 *. b.e10 +. a.e02 *. b.e20 +. a.e03 *. b.e30)
+        (a.e00 *. b.e01 +. a.e01 *. b.e11 +. a.e02 *. b.e21 +. a.e03 *. b.e31)
+        (a.e00 *. b.e02 +. a.e01 *. b.e12 +. a.e02 *. b.e22 +. a.e03 *. b.e32)
+        (a.e00 *. b.e03 +. a.e01 *. b.e13 +. a.e02 *. b.e23 +. a.e03 *. b.e33)
+        (a.e10 *. b.e00 +. a.e11 *. b.e10 +. a.e12 *. b.e20 +. a.e13 *. b.e30)
+        (a.e10 *. b.e01 +. a.e11 *. b.e11 +. a.e12 *. b.e21 +. a.e13 *. b.e31)
+        (a.e10 *. b.e02 +. a.e11 *. b.e12 +. a.e12 *. b.e22 +. a.e13 *. b.e32)
+        (a.e10 *. b.e03 +. a.e11 *. b.e13 +. a.e12 *. b.e23 +. a.e13 *. b.e33)
+        (a.e20 *. b.e00 +. a.e21 *. b.e10 +. a.e22 *. b.e20 +. a.e23 *. b.e30)
+        (a.e20 *. b.e01 +. a.e21 *. b.e11 +. a.e22 *. b.e21 +. a.e23 *. b.e31)
+        (a.e20 *. b.e02 +. a.e21 *. b.e12 +. a.e22 *. b.e22 +. a.e23 *. b.e32)
+        (a.e20 *. b.e03 +. a.e21 *. b.e13 +. a.e22 *. b.e23 +. a.e23 *. b.e33)
+        (a.e30 *. b.e00 +. a.e31 *. b.e10 +. a.e32 *. b.e20 +. a.e33 *. b.e30)
+        (a.e30 *. b.e01 +. a.e31 *. b.e11 +. a.e32 *. b.e21 +. a.e33 *. b.e31)
+        (a.e30 *. b.e02 +. a.e31 *. b.e12 +. a.e32 *. b.e22 +. a.e33 *. b.e32)
+        (a.e30 *. b.e03 +. a.e31 *. b.e13 +. a.e32 *. b.e23 +. a.e33 *. b.e33)
+  let ( * ) a b = mul a b
+
+  let emul a b = create
+      (a.e00 *. b.e00) (a.e01 *. b.e01) (a.e02 *. b.e02) (a.e03 *. b.e03)
+      (a.e10 *. b.e10) (a.e11 *. b.e11) (a.e12 *. b.e12) (a.e13 *. b.e13)
+      (a.e20 *. b.e20) (a.e21 *. b.e21) (a.e22 *. b.e22) (a.e23 *. b.e23)
+      (a.e30 *. b.e30) (a.e31 *. b.e31) (a.e32 *. b.e32) (a.e33 *. b.e33)
+
+  let ediv a b = create
+      (a.e00 /. b.e00) (a.e01 /. b.e01) (a.e02 /. b.e02) (a.e03 /. b.e03)
+      (a.e10 /. b.e10) (a.e11 /. b.e11) (a.e12 /. b.e12) (a.e13 /. b.e13)
+      (a.e20 /. b.e20) (a.e21 /. b.e21) (a.e22 /. b.e22) (a.e23 /. b.e23)
+      (a.e30 /. b.e30) (a.e31 /. b.e31) (a.e32 /. b.e32) (a.e33 /. b.e33)
+
+  let det a =
+    (* 16 * 6 - 1 ops = 95 ops. It may be more efficient to use
+     * http://www.geometrictools.com/Documentation/LaplaceExpansionTheorem.pdf *)
+    a.e00 *. a.e11 *. a.e22 *. a.e33 -. a.e00 *. a.e11 *. a.e23 *. a.e32 -. a.e00 *. a.e12 *. a.e21 *. a.e33 +. a.e00 *. a.e12 *. a.e23 *. a.e31 +.
+    a.e00 *. a.e13 *. a.e21 *. a.e32 -. a.e00 *. a.e13 *. a.e22 *. a.e31 -. a.e01 *. a.e10 *. a.e22 *. a.e33 +. a.e01 *. a.e10 *. a.e23 *. a.e32 +.
+    a.e01 *. a.e12 *. a.e20 *. a.e33 -. a.e01 *. a.e12 *. a.e23 *. a.e30 -. a.e01 *. a.e13 *. a.e20 *. a.e32 +. a.e01 *. a.e13 *. a.e22 *. a.e30 +.
+    a.e02 *. a.e10 *. a.e21 *. a.e33 -. a.e02 *. a.e10 *. a.e23 *. a.e31 -. a.e02 *. a.e11 *. a.e20 *. a.e33 +. a.e02 *. a.e11 *. a.e23 *. a.e30 +.
+    a.e02 *. a.e13 *. a.e20 *. a.e31 -. a.e02 *. a.e13 *. a.e21 *. a.e30 -. a.e03 *. a.e10 *. a.e21 *. a.e32 +. a.e03 *. a.e10 *. a.e22 *. a.e31 +.
+    a.e03 *. a.e11 *. a.e20 *. a.e32 -. a.e03 *. a.e11 *. a.e22 *. a.e30 -. a.e03 *. a.e12 *. a.e20 *. a.e31 +. a.e03 *. a.e12 *. a.e21 *. a.e30
+
+  let trace a = a.e00 +. a.e11 +. a.e22 +. a.e33
+
+  let inverse a = a
+  (* TODO let inverse a = TODO *)
+    (* TODO: "A matrix is invertible if and only if its determinant is nonzero." -- wiki
+     * Throw an exception? *)
+(*
+    let d = det a in
+    let i00 = (a.e11 *. a.e22) -. (a.e21 *. a.e12) in
+    let i10 = (a.e01 *. a.e22) -. (a.e21 *. a.e02) in
+    let i20 = (a.e01 *. a.e12) -. (a.e11 *. a.e02) in
+    let i01 = (a.e10 *. a.e22) -. (a.e20 *. a.e12) in
+    let i11 = (a.e00 *. a.e22) -. (a.e20 *. a.e02) in
+    let i21 = (a.e00 *. a.e12) -. (a.e10 *. a.e02) in
+    let i02 = (a.e10 *. a.e21) -. (a.e20 *. a.e11) in
+    let i12 = (a.e00 *. a.e21) -. (a.e20 *. a.e01) in
+    let i22 = (a.e00 *. a.e11) -. (a.e10 *. a.e01) in
+    create
+      (   i00 /. d) (-. i10 /. d) (   i20 /. d)
+      (-. i01 /. d) (   i11 /. d) (-. i21 /. d)
+      (   i02 /. d) (-. i12 /. d) (   i22 /. d)
+*)
+
+  let to_string m = Format.sprintf "@[<1>|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g|@]"
+      m.e00 m.e01 m.e02 m.e03
+      m.e10 m.e11 m.e12 m.e13
+      m.e20 m.e21 m.e22 m.e23
+      m.e30 m.e31 m.e32 m.e33
+end
+
+type m4 = M4.t
 
 (* Quaternions *)
 
