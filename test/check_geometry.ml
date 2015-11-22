@@ -83,6 +83,8 @@ module V2_test = struct
   let normalize0 () =
     same_bool true (V2.eq tvec2_0 (V2.normalize tvec2_0))
 
+  let to_string () =
+    same_string "(2.71828 3.14159)" (V2.to_string tvec2_2)
 end
 
 module V3_test = struct
@@ -181,6 +183,9 @@ module V3_test = struct
 
   let normalize0 () =
     same_bool true (V3.eq tvec3_0 (V3.normalize tvec3_0))
+
+  let to_string () =
+    same_string "(2.71828 3.14159 1.61803)" (V3.to_string tvec3_2)
 end
 
 module V4_test = struct
@@ -260,6 +265,9 @@ module V4_test = struct
 
   let normalize0 () =
     same_bool true (V4.eq tvec4_0 (V4.normalize tvec4_0))
+
+  let to_string () =
+    same_string "(2.71828 3.14159 1.61803 0)" (V4.to_string tvec4_2)
 end
 
 module P2_test = struct
@@ -281,6 +289,7 @@ module P2_test = struct
   let op_eq () = same_bool true (P2.( = ) P2.zero P2.zero)
   let mid () = same_bool true (P2.eq (P2.mid tp2_1 tp2_zero) (P2.create (1.5) (0.5)))
   let distance () = same_float 3.16227766 (P2.distance tp2_1 tp2_zero)
+  let to_string () = same_string "(2.71828 3.14159)" (P2.to_string tp2_2)
 end
 
 module P3_test = struct
@@ -303,7 +312,7 @@ module P3_test = struct
   let op_eq () = same_bool true (P3.( = )P3.zero P3.zero)
   let mid () = same_bool true ((P3.mid tp3_1 tp3_zero) = (P3.create (1.5) (0.5) (1.0)))
   let distance () = same_float 3.741657387 (P3.distance tp3_1 tp3_zero)
-
+  let to_string () = same_string "(2.71828 3.14159 1.61803)" (P3.to_string tp3_2)
 end
 
 module M2_test = struct
@@ -391,6 +400,7 @@ module M2_test = struct
         (3.183101550488764975e-01) (-5.347590145215230795e-01) in
     same_bool true (M2.eq (M2.inverse tm2_1) expected_1);
     same_bool true (M2.eq (M2.inverse tm2_2) expected_2)
+  let to_string () = todo ()
 end
 
 module M3_test = struct
@@ -497,6 +507,7 @@ module M3_test = struct
         (7.474782143237783671e-01) (-1.672728675790690622e-01) (-5.870675208343596463e-01) in
     same_bool true (M3.eq (M3.inverse tm3_1) expected_1);
     same_bool true (M3.eq (M3.inverse tm3_2) expected_2)
+  let to_string () = todo ()
 end
 
 module Q_test = struct
@@ -615,13 +626,16 @@ module Q_test = struct
   let log () =
     let ex1 = Q.create 1.647918433002165 0.225170286285347 (-0.900681145141387) (-0.225170286285347) in
     let ex2 = Q.create 1.494772962936871 0.813541778114865 0.419002798978605 0. in
+    Printf.eprintf "expect: %s\n" (Q.to_string ex1); flush_all ();
+    Printf.eprintf "result: %s\n" (Q.to_string (Q.log tq1)); flush_all ();
     same_bool true (Q.eq ex1 (Q.log tq1));
-    Q.print Format.err_formatter (Q.log tq1);
-    same_bool true (Q.eq ex2 (Q.log tq2));
-    Q.print Format.err_formatter (Q.log tq2)
+    Printf.eprintf "expect: %s\n" (Q.to_string ex2); flush_all ();
+    Printf.eprintf "result: %s\n" (Q.to_string (Q.log tq2)); flush_all ();
+    same_bool true (Q.eq ex2 (Q.log tq2))
 *)
   let pow () = todo ()
   let op_exp () = todo ()
+  let to_string () = todo ()
 end
 
 let () =
@@ -657,6 +671,7 @@ let () =
       "V2.normalize",            `Quick, V2_test.normalize;
       "V2.normalize2",           `Quick, V2_test.normalize2;
       "V2.normalize0",           `Quick, V2_test.normalize0;
+      "V2.to_string",            `Quick, V2_test.to_string;
     ];
     "Vector3", [
       (* 3D Vectors *)
@@ -693,6 +708,7 @@ let () =
       "V3.normalize",            `Quick, V3_test.normalize;
       "V3.normalize2",           `Quick, V3_test.normalize2;
       "V3.normalize0",           `Quick, V3_test.normalize0;
+      "V3.to_string",            `Quick, V3_test.to_string;
     ];
     "Vector4", [
       (* 4D Vectors *)
@@ -729,6 +745,7 @@ let () =
       "V4.normalize",            `Quick, V4_test.normalize;
       "V4.normalize2",           `Quick, V4_test.normalize2;
       "V4.normalize0",           `Quick, V4_test.normalize0;
+      "V4.to_string",            `Quick, V4_test.to_string;
     ];
     "Point2", [
       (* 2D Points *)
@@ -741,6 +758,7 @@ let () =
       "P2.op_eq",                `Quick, P2_test.op_eq;
       "P2.mid",                  `Quick, P2_test.mid;
       "P2.distance",             `Quick, P2_test.distance;
+      "P2.to_string",            `Quick, P2_test.to_string;
     ];
     "Point3", [
       (* 3D Points *)
@@ -754,6 +772,7 @@ let () =
       "P3.op_eq",                `Quick, P3_test.op_eq;
       "P3.mid",                  `Quick, P3_test.mid;
       "P3.distance",             `Quick, P3_test.distance;
+      "P3.to_string",            `Quick, P3_test.to_string;
     ];
     "Matrix2", [
       (* 2x2 Matrices *)
@@ -781,6 +800,7 @@ let () =
       "M2.det",                  `Quick, M2_test.det;
       "M2.trace",                `Quick, M2_test.trace;
       "M2.inverse",              `Quick, M2_test.inverse;
+      "M2.to_string",            `Quick, M2_test.to_string;
     ];
     "Matrix3", [
       (* 3x3 Matrices *)
@@ -813,6 +833,7 @@ let () =
       "M3.det",                  `Quick, M3_test.det;
       "M3.trace",                `Quick, M3_test.trace;
       "M3.inverse",              `Quick, M3_test.inverse;
+      "M3.to_string",            `Quick, M3_test.to_string;
     ];
     "Quaternion", [
       (* Quaternions *)
@@ -862,6 +883,7 @@ let () =
       "Q.nlerp",                 `Quick, Q_test.nlerp;
       "Q.exp",                   `Quick, Q_test.exp;
       "Q.log",                   `Quick, Q_test.log;
-    ]   ;
+      "Q.to_string",             `Quick, Q_test.to_string;
+    ];
   ]
 

@@ -516,7 +516,7 @@ module Q = struct
     exp (smul (log q) a)
   let ( ** ) q a = pow q a
 
-  let to_string q = Format.sprintf "@[<1>[%g@, (%g@ %g@ %g)@]" q.r q.a q.b q.c
+  let to_string q = Format.sprintf "@[<1>[%g@, (%g@ %g@ %g)@]]" q.r q.a q.b q.c
 end
 
 type q = Q.t
