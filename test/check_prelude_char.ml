@@ -6,9 +6,13 @@ open Consensus.Prelude
 (* Prelude.Char *)
 
 module Char_test = struct
-  let of_string = todo
+  let of_string () =
+    Alcotest.(check char) "same char"
+      'z' (Char.of_string "z")
 
-  let to_string = todo
+  let to_string () =
+    Alcotest.(check string) "same string"
+      "z" (Char.to_string 'z')
 
   let compare = todo
 end
