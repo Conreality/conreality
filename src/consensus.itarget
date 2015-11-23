@@ -1,14 +1,7 @@
 conctl.native
 conreald.native
 consensus/libconsensus-vision.a
-consensus/prelude.cma
-consensus/prelude.cmxa
-consensus/prelude_bool.inferred.mli
-consensus/prelude_char.inferred.mli
-consensus/prelude_float.inferred.mli
-consensus/prelude_int.inferred.mli
-consensus/prelude_math.inferred.mli
-consensus/prelude_string.inferred.mli
+consensus/prelude.inferred.mli
 consensus/vision.cma
 consensus/vision.cmxa
 consensus.cmo

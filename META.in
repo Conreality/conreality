@@ -49,8 +49,8 @@ package "prelude" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus standard prelude"
   requires = ""
-  archive(byte) = "consensus.prelude.cma"
-  archive(native) = "consensus.prelude.cmxa"
+  archive(byte) = "consensus.prelude.cmo"
+  archive(native) = "consensus.prelude.cmx"
 )
 
 package "scripting" (
