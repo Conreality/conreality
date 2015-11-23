@@ -21,6 +21,14 @@ package "knowledge" (
   archive(native) = "consensus.knowledge.cmx"
 )
 
+package "machinery" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus machine drivers"
+  requires = "consensus.prelude"
+  archive(byte) = "consensus.machinery.cmo"
+  archive(native) = "consensus.machinery.cmx"
+)
+
 package "messaging" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus messaging protocols"

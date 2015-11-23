@@ -27,6 +27,10 @@ lib: [
   "_build/src/consensus/knowledge.cmi" {"consensus.knowledge.cmi"}
   "_build/src/consensus/knowledge.cmo" {"consensus.knowledge.cmo"}
   "_build/src/consensus/knowledge.cmx" {"consensus.knowledge.cmx"}
+  "src/consensus/machinery.mli" {"consensus.machinery.mli"}
+  "_build/src/consensus/machinery.cmi" {"consensus.machinery.cmi"}
+  "_build/src/consensus/machinery.cmo" {"consensus.machinery.cmo"}
+  "_build/src/consensus/machinery.cmx" {"consensus.machinery.cmx"}
   "src/consensus/messaging.mli" {"consensus.messaging.mli"}
   "_build/src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
   "_build/src/consensus/messaging.cmo" {"consensus.messaging.cmo"}

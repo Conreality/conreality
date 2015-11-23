@@ -1,5 +1,6 @@
 check_geometry.byte
 check_knowledge.byte
+check_machinery.byte
 check_messaging.byte
 check_ontology.byte
 check_physics.byte
