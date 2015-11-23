@@ -2,5 +2,4 @@
 
 include Char
 
-let of_string s =
-  String.get s 0
+let of_string s = String.get s 0
