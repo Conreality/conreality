@@ -9,6 +9,8 @@ module Bool_test = struct
   let of_string = todo
 
   let to_string = todo
+
+  let compare = todo
 end
 
 (* Test suite definition *)
@@ -18,5 +20,6 @@ let () =
     "Bool", [
       "Bool.of_string", `Quick, Bool_test.of_string;
       "Bool.to_string", `Quick, Bool_test.to_string;
+      "Bool.compare",   `Quick, Bool_test.compare;
     ];
   ]
