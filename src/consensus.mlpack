@@ -4,8 +4,10 @@ consensus/Messaging
 consensus/Ontology
 consensus/Physics
 consensus/Prelude
+consensus/Prelude_bool
 consensus/Prelude_char
 consensus/Prelude_float
+consensus/Prelude_int
 consensus/Prelude_math
 consensus/Prelude_string
 consensus/Scripting
