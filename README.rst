@@ -60,6 +60,8 @@ OCaml Dependencies
 
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
+* `ppx_include <https://opam.ocaml.org/packages/ppx_include/ppx_include.1.0/>`__ (>= 1.0)
+
 Installation
 ------------
 

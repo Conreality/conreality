@@ -20,6 +20,7 @@ depends: [
   "ctypes-foreign" {build & >= "0.4.0"} # https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/
   "lwt"            {build & >= "2.5.0"} # https://opam.ocaml.org/packages/lwt/lwt.2.5.0/
   "ocaml-lua"      {build & >= "1.2"}   # https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/
+  "ppx_include"    {build & >= "1.0"}   # https://opam.ocaml.org/packages/ppx_include/ppx_include.1.0/
 ]
 depexts: [
   [["debian"]      ["libffi-dev"   (*3.1.0 *) "libopencv-dev" (*2.4.9 *)]] # Debian Jessie

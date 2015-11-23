@@ -1,4 +1,5 @@
 "lib": -traverse, not_hygienic
+<src/**/*.{ml,mli}>: package(ppx_include)
 <src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua), thread
 <src/conctl.{byte,native}>: use_vision
 <src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua), package(lwt), package(lwt.unix), thread
@@ -9,6 +10,7 @@
 <src/consensus/vision.*>: package(ctypes.foreign)
 <src/consensus/vision.{cmo,cmx}>: use_opencv_core
 <src/consensus/vision.{cma,cmxa}>: use_vision
+<test/**/*.{ml,mli}>: package(ppx_include)
 <test/check_*.*>: package(alcotest), package(ctypes.foreign), package(lua), thread
 <test/check_*.{byte,native}>: use_vision
 <bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua), thread
