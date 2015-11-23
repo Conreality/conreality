@@ -382,6 +382,12 @@ module M3 = struct
     a.e01 *. a.e10 *. a.e22 -.
     a.e00 *. a.e12 *. a.e21
 
+  let det_exp a =
+    (* Probably slower than above. http://www.geometrictools.com/Documentation/LaplaceExpansionTheorem.pdf *)
+    a.e00 *. (M2.det (M2.create a.e11 a.e12 a.e21 a.e22)) -.
+    a.e01 *. (M2.det (M2.create a.e10 a.e12 a.e20 a.e22)) +.
+    a.e02 *. (M2.det (M2.create a.e10 a.e11 a.e20 a.e21))
+
   let trace a = a.e00 +. a.e11 +. a.e22
 
   let inverse a =
@@ -551,10 +557,26 @@ module M4 = struct
     a.e02 *. a.e13 *. a.e20 *. a.e31 -. a.e02 *. a.e13 *. a.e21 *. a.e30 -. a.e03 *. a.e10 *. a.e21 *. a.e32 +. a.e03 *. a.e10 *. a.e22 *. a.e31 +.
     a.e03 *. a.e11 *. a.e20 *. a.e32 -. a.e03 *. a.e11 *. a.e22 *. a.e30 -. a.e03 *. a.e12 *. a.e20 *. a.e31 +. a.e03 *. a.e12 *. a.e21 *. a.e30
 
+  let det_exp a =
+    a.e00 *. (M3.det (M3.create a.e11 a.e12 a.e13 a.e21 a.e22 a.e23 a.e31 a.e32 a.e33)) -.
+    a.e01 *. (M3.det (M3.create a.e10 a.e12 a.e13 a.e20 a.e22 a.e23 a.e30 a.e32 a.e33)) +.
+    a.e02 *. (M3.det (M3.create a.e10 a.e11 a.e13 a.e20 a.e21 a.e23 a.e30 a.e31 a.e33)) -.
+    a.e03 *. (M3.det (M3.create a.e10 a.e11 a.e12 a.e20 a.e21 a.e22 a.e30 a.e31 a.e32))
+
+  let det_exp_2x2 a =
+    (M2.det (M2.create a.e00 a.e01 a.e10 a.e11)) *. (M2.det (M2.create a.e22 a.e23 a.e32 a.e33)) -.
+    (M2.det (M2.create a.e00 a.e02 a.e10 a.e12)) *. (M2.det (M2.create a.e21 a.e23 a.e31 a.e33)) +.
+    (M2.det (M2.create a.e00 a.e03 a.e10 a.e13)) *. (M2.det (M2.create a.e21 a.e22 a.e31 a.e32)) +.
+    (M2.det (M2.create a.e01 a.e02 a.e11 a.e12)) *. (M2.det (M2.create a.e20 a.e23 a.e30 a.e33)) -.
+    (M2.det (M2.create a.e01 a.e03 a.e11 a.e13)) *. (M2.det (M2.create a.e20 a.e22 a.e30 a.e32)) +.
+    (M2.det (M2.create a.e02 a.e03 a.e12 a.e13)) *. (M2.det (M2.create a.e20 a.e21 a.e30 a.e31))
+
   let trace a = a.e00 +. a.e11 +. a.e22 +. a.e33
 
   let inverse a = a
   (* TODO let inverse a = TODO *)
+  (* See https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_4.C3.974_matrices
+  * and the PDF above in "det a" *)
     (* TODO: "A matrix is invertible if and only if its determinant is nonzero." -- wiki
      * Throw an exception? *)
 (*

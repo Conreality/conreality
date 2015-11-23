@@ -206,6 +206,7 @@ module M3: sig
   val emul : t -> t -> t
   val ediv : t -> t -> t
   val det : t -> float
+  val det_exp : t -> float
   val trace : t -> float
   val inverse : t -> t
   val to_string : t -> bytes
@@ -253,6 +254,8 @@ module M4: sig
   val emul : t -> t -> t
   val ediv : t -> t -> t
   val det : t -> float
+  val det_exp : t -> float
+  val det_exp_2x2 : t -> float
   val trace : t -> float
   val inverse : t -> t
   val to_string : t -> bytes

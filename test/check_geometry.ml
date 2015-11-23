@@ -491,6 +491,9 @@ module M3_test = struct
   let det () =
     same_float (21.) (M3.det tm3_1);
     same_float (8.6586068677) (M3.det tm3_2)
+  let det2 () =
+    same_float (21.) (M3.det_exp tm3_1);
+    same_float (8.6586068677) (M3.det_exp tm3_2)
 
   let trace () =
     same_float (18.) (M3.trace tm3_1);
@@ -507,6 +510,159 @@ module M3_test = struct
         (7.474782143237783671e-01) (-1.672728675790690622e-01) (-5.870675208343596463e-01) in
     same_bool true (M3.eq (M3.inverse tm3_1) expected_1);
     same_bool true (M3.eq (M3.inverse tm3_2) expected_2)
+  let to_string () = todo ()
+end
+
+module M4_test = struct
+  (* 4x4 Matrices *)
+
+  let tm4_1 = M4.create
+      (3.) (1.) (4.) (2.)
+      (2.) (7.) (5.) (-1.)
+      (6.) (-1.) (8.) (3.)
+      (1.) (2.) (3.) (4.)
+  let tm4_2 = M4.create
+      (e) (pi) (1.) (2.)
+      (phi) (0.) (2.) (1.)
+      (3.) (4.) (-1.) (6.)
+      (1.) (2.) (3.) (4.)
+  let tm4_3 = M4.create
+      (6.) (2.) (8.) (4.)
+      (4.) (14.) (10.) (-2.)
+      (12.) (-2.) (16.) (6.)
+      (2.) (4.) (6.) (8.)
+  let tm4_zero = M4.zero
+
+  let m4_to_list m = [
+    M4.e00 m; M4.e01 m; M4.e02 m; M4.e03 m;
+    M4.e10 m; M4.e11 m; M4.e12 m; M4.e13 m;
+    M4.e20 m; M4.e21 m; M4.e22 m; M4.e23 m;
+    M4.e30 m; M4.e31 m; M4.e32 m; M4.e33 m;
+  ]
+
+  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  let create () = same_float_list [
+      e; pi; (1.); (2.);
+      phi; (0.); (2.); (1.);
+      (3.); (4.); (-1.); (6.);
+      (1.); (2.); (3.); (4.)
+    ] (m4_to_list tm4_2)
+  let e00 () = same_float e (M4.e00 tm4_2)
+  let e01 () = same_float pi (M4.e01 tm4_2)
+  let e02 () = same_float 1. (M4.e02 tm4_2)
+  let e03 () = same_float 2. (M4.e03 tm4_2)
+  let e10 () = same_float phi (M4.e10 tm4_2)
+  let e11 () = same_float 0. (M4.e11 tm4_2)
+  let e12 () = same_float 2. (M4.e12 tm4_2)
+  let e13 () = same_float 1. (M4.e13 tm4_2)
+  let e20 () = same_float 3. (M4.e20 tm4_2)
+  let e21 () = same_float 4. (M4.e21 tm4_2)
+  let e22 () = same_float (-1.) (M4.e22 tm4_2)
+  let e23 () = same_float 6. (M4.e23 tm4_2)
+  let e30 () = same_float 1. (M4.e30 tm4_2)
+  let e31 () = same_float 2. (M4.e31 tm4_2)
+  let e32 () = same_float 3. (M4.e32 tm4_2)
+  let e33 () = same_float 4. (M4.e33 tm4_2)
+  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  let zero () = same_float_list [
+      0.; 0.; 0.; 0.;
+      0.; 0.; 0.; 0.;
+      0.; 0.; 0.; 0.;
+      0.; 0.; 0.; 0.;
+    ] (m4_to_list tm4_zero)
+  let id () = same_float_list [
+      1.; 0.; 0.; 0.;
+      0.; 1.; 0.; 0.;
+      0.; 0.; 1.; 0.;
+      0.; 0.; 0.; 1.;
+    ] (m4_to_list M4.id)
+  let el () = same_float 4. (M4.el 2 1 tm4_2)
+  let neg () = same_bool true (M4.eq (M4.neg tm4_1)
+                                 (M4.create
+                                    (-3.) (-1.) (-4.) (-2.)
+                                    (-2.) (-7.) (-5.) (1.)
+                                    (-6.) (1.) (-8.) (-3.)
+                                    (-1.) (-2.) (-3.) (-4.)
+                                 )
+                              )
+  let add () = same_bool true (M4.eq ((M4.add tm4_1 tm4_1)) tm4_3)
+  let op_add () = same_bool true (M4.eq ((M4.(+) tm4_1 tm4_1)) tm4_3)
+  let sub () = same_bool true (M4.eq (M4.sub tm4_1 tm4_1) tm4_zero)
+  let op_sub () = same_bool true (M4.eq (M4.( - ) tm4_1 tm4_1) tm4_zero)
+  let eq () = same_bool true (M4.eq M4.zero M4.zero)
+  let op_eq () = same_bool true (M4.( = ) M4.zero M4.zero)
+  let smul () = same_bool true (M4.eq (M4.smul tm4_1 (2.)) tm4_3)
+
+  let transpose () =
+    let expected = M4.create
+        (3.) (2.) (6.) (1.)
+        (1.) (7.) (-1.) (2.)
+        (4.) (5.) (8.) (3.)
+        (2.) (-1.) (3.) (4.) in
+    same_bool true (M4.eq (M4.transpose tm4_1) expected)
+
+  (*let m4print m = M4.print Format.std_formatter m*)
+
+  let expected_mul = M4.create
+      (23.77287) (29.42477) (7.) (39.)
+      (30.76277) (24.28318) (8.) (37.)
+      (41.69165) (56.84954) (5.) (71.)
+      (18.95434) (23.14159) (14.) (38.)
+
+  let mul () =
+    same_bool true (M4.eq (M4.mul tm4_1 M4.id) tm4_1);
+    same_bool true (M4.eq (M4.mul M4.id tm4_1) tm4_1);
+    same_bool true (M4.eq (M4.mul tm4_1 tm4_2) expected_mul)
+
+  let op_mul () =
+    same_bool true (M4.eq (M4.( * ) tm4_1 M4.id) tm4_1);
+    same_bool true (M4.eq (M4.( * ) M4.id tm4_1) tm4_1);
+    same_bool true (M4.eq (M4.( * ) tm4_1 tm4_2) expected_mul)
+
+  let emul () =
+    let expected = M4.create
+        (8.15484) (3.14159) (4.) (4.)
+        (3.23606) (0.) (10.) (-1.)
+        (18.) (-4.) (-8.) (18.)
+        (1.) (4.) (9.) (16.) in
+    same_bool true (M4.eq (M4.emul tm4_1 tm4_2) expected)
+
+  let ediv () =
+    let expected = M4.create
+        (1.10363906587989464) (0.318310155048876524) (4.) (1.)
+        (1.23607102464107588) (infinity) (2.5) (-1.)
+        (2.) (-0.25) (-1.) (0.5)
+        (1.) (1.) (1.) (1.) in
+    same_bool true (M4.eq (M4.ediv tm4_1 tm4_2) expected)
+
+  let det () =
+    same_float 125. (M4.det tm4_1);
+    same_float 89.5902510894 (M4.det tm4_2)
+  let det2 () =
+    same_float 125. (M4.det_exp tm4_1);
+    same_float 89.5902510894 (M4.det_exp tm4_2)
+  let det3 () =
+    same_float 125. (M4.det_exp_2x2 tm4_1);
+    same_float 89.5902510894 (M4.det_exp_2x2 tm4_2)
+
+  let trace () =
+    same_float 22. (M4.trace tm4_1);
+    same_float 5.71828 (M4.trace tm4_2)
+
+  let inverse () = todo ()
+(*
+  let inverse () =
+    let expected_1 = M4.create
+        (2.904761904761903324e+00) (-5.714285714285712858e-01) (-1.095238095238094456e+00)
+        (6.666666666666665186e-01) (2.775557561562891351e-17) (-3.333333333333332593e-01)
+        (-2.095238095238094456e+00) (4.285714285714284921e-01) (9.047619047619044341e-01) in
+    let expected_2 = M4.create
+        (-9.239361622760742243e-01) (8.247966571436486927e-01) (7.256571520112230500e-01)
+        (8.798216752880003710e-01) (-6.604157097525038544e-01) (-4.410097442170073379e-01)
+        (7.474782143237783671e-01) (-1.672728675790690622e-01) (-5.870675208343596463e-01) in
+    same_bool true (M4.eq (M4.inverse tm4_1) expected_1);
+    same_bool true (M4.eq (M4.inverse tm4_2) expected_2)
+*)
   let to_string () = todo ()
 end
 
@@ -831,9 +987,52 @@ let () =
       "M3.emul",                 `Quick, M3_test.emul;
       "M3.ediv",                 `Quick, M3_test.ediv;
       "M3.det",                  `Quick, M3_test.det;
+      "M3.det2",                 `Quick, M3_test.det2;
       "M3.trace",                `Quick, M3_test.trace;
       "M3.inverse",              `Quick, M3_test.inverse;
       "M3.to_string",            `Quick, M3_test.to_string;
+    ];
+    "Matrix4", [
+      (* 4x4 Matrices *)
+      "M4.create",               `Quick, M4_test.create;
+      "M4.e00",                  `Quick, M4_test.e00;
+      "M4.e01",                  `Quick, M4_test.e01;
+      "M4.e02",                  `Quick, M4_test.e02;
+      "M4.e03",                  `Quick, M4_test.e03;
+      "M4.e10",                  `Quick, M4_test.e10;
+      "M4.e11",                  `Quick, M4_test.e11;
+      "M4.e12",                  `Quick, M4_test.e12;
+      "M4.e13",                  `Quick, M4_test.e13;
+      "M4.e20",                  `Quick, M4_test.e20;
+      "M4.e21",                  `Quick, M4_test.e21;
+      "M4.e22",                  `Quick, M4_test.e22;
+      "M4.e23",                  `Quick, M4_test.e23;
+      "M4.e30",                  `Quick, M4_test.e30;
+      "M4.e31",                  `Quick, M4_test.e31;
+      "M4.e32",                  `Quick, M4_test.e32;
+      "M4.e33",                  `Quick, M4_test.e33;
+      "M4.zero",                 `Quick, M4_test.zero;
+      "M4.id",                   `Quick, M4_test.id;
+      "M4.el",                   `Quick, M4_test.el;
+      "M4.neg",                  `Quick, M4_test.neg;
+      "M4.add",                  `Quick, M4_test.add;
+      "M4.op_add",               `Quick, M4_test.op_add;
+      "M4.sub",                  `Quick, M4_test.sub;
+      "M4.op_sub",               `Quick, M4_test.op_sub;
+      "M4.eq",                   `Quick, M4_test.eq;
+      "M4.op_eq",                `Quick, M4_test.op_eq;
+      "M4.smul",                 `Quick, M4_test.smul;
+      "M4.transpose",            `Quick, M4_test.transpose;
+      "M4.mul",                  `Quick, M4_test.mul;
+      "M4.op_mul",               `Quick, M4_test.op_mul;
+      "M4.emul",                 `Quick, M4_test.emul;
+      "M4.ediv",                 `Quick, M4_test.ediv;
+      "M4.det",                  `Quick, M4_test.det;
+      "M4.det2",                 `Quick, M4_test.det2;
+      "M4.det3",                 `Quick, M4_test.det3;
+      "M4.trace",                `Quick, M4_test.trace;
+      "M4.inverse",              `Quick, M4_test.inverse;
+      "M4.to_string",            `Quick, M4_test.to_string;
     ];
     "Quaternion", [
       (* Quaternions *)
