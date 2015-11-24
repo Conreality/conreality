@@ -11,6 +11,7 @@ module BCM2836 : sig
 end
 
 (* Driver for GPIO pins via the Linux sysfs VFS interface. *)
+(* See: https://www.kernel.org/doc/Documentation/gpio/     *)
 module GPIO : sig
   [%%include "machinery/gpio.mli"]
 end
