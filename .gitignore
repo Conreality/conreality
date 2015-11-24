@@ -1,11 +1,13 @@
 .DS_Store
 META
 README.html
+_bisect
 _build
 _reports
 _tests
 check_*.byte
 debian
+tmp
 *~
 *.a
 *.byte
