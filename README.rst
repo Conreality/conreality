@@ -7,7 +7,7 @@ http://conreality.org
 
 .. image:: https://api.travis-ci.org/conreality/consensus.svg?branch=master
    :target: https://travis-ci.org/conreality/consensus
-      :alt: Travis CI build status
+   :alt: Travis CI build status
 
 .. image:: https://coveralls.io/repos/conreality/consensus/badge.svg?branch=master&service=github
    :target: https://coveralls.io/github/conreality/consensus?branch=master
