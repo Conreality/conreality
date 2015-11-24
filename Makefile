@@ -58,7 +58,9 @@ bench:
 endif
 
 covered_check:
+	ruby etc/script/precoverage.rb
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+          cd _bisect && \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
 	  #sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
