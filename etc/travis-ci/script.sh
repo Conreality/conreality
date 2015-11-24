@@ -38,4 +38,4 @@ time make clean && make covered_check
 time make report
 
 # send code coverage report to Coveralls.io
-time ocveralls --prefix _build bisect00*.out --send
+time ocveralls --prefix _bisect/_build bisect00*.out --send

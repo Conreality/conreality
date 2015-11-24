@@ -58,7 +58,7 @@ bench:
 endif
 
 covered_check:
-	ruby etc/script/precoverage.rb
+	ruby etc/script/precoverage.rb # HACK to fix bisect_ppx vs ppx_include
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
           cd _bisect && \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
@@ -67,12 +67,13 @@ covered_check:
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 clean_reports:
-	rm -rf _reports && \
-	mkdir -p _reports
+	rm -rf _reports
 
 report: clean_reports
+	mkdir -p _reports && \
+	cd _bisect && \
 	cd _build && \
-	bisect-ppx-report -verbose -html ../_reports ../bisect*.out && \
+	bisect-ppx-report -verbose -html ../../_reports ../bisect*.out && \
 	cd -
 
 install: consensus.install build
