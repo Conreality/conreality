@@ -37,6 +37,16 @@ let () =
           "src/consensus/prelude/math.mli";
           "src/consensus/prelude/string.mli"];
 
+    dep  ["file:src/consensus/machinery.ml"]
+         ["src/consensus/machinery/bcm2835.ml";
+          "src/consensus/machinery/bcm2836.ml";
+          "src/consensus/machinery/gpio.ml"];
+
+    dep  ["file:src/consensus/machinery.mli"]
+         ["src/consensus/machinery/bcm2835.mli";
+          "src/consensus/machinery/bcm2836.mli";
+          "src/consensus/machinery/gpio.mli"];
+
     dep  ["link"; "ocaml"; "use_vision"] ["src/consensus/libconsensus-vision.a"];
 
     flag ["link"; "ocaml"; "library"; "byte"; "use_vision"]
