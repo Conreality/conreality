@@ -32,10 +32,10 @@ eval `opam config env`
 time opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests
-time make clean && make covered_check
+time make clean && make covered_check V=1
 
 # generate Bisect coverage reports
-time make report
+time make report V=1
 
 # send code coverage report to Coveralls.io
 time ocveralls --prefix _bisect/_build bisect00*.out --send
