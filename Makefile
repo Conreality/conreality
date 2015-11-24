@@ -83,6 +83,6 @@ uninstall: consensus.install
 
 clean:
 	$(OCAMLBUILD) -clean
-	rm -rf _build META *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
+	rm -rf META README.html _bisect _build _reports _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
 
 .PHONY: all build check bench install uninstall clean
