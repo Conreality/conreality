@@ -2,11 +2,44 @@
 
 open Prelude
 
-module Video_device = struct
+module Device_class = struct
+  type t = Unknown | Video
+
+  let of_int = function
+    | 0x0E -> Video
+    | 0x00 -> Unknown
+    | _ -> assert false
+
+  let to_int = function
+    | Video   -> 0x0E
+    | Unknown -> 0x00
+end
+
+module Generic_device = struct
   class virtual driver (id : string) = object (self)
     inherit Device.driver as super
 
+    method driver_name = "usb.basic"
+
+    method class_id = Device_class.Unknown
+
+    method virtual vendor_id : int
+
+    method virtual product_id : int
+
+    method id = (self#vendor_id, self#product_id)
+  end
+
+  type t = driver
+end
+
+module Video_device = struct
+  class virtual driver (id : string) = object (self)
+    inherit Generic_device.driver id as super
+
     method driver_name = "usb.video"
+
+    method class_id = Device_class.Video
   end
 
   type t = driver
@@ -19,6 +52,10 @@ module Camera = struct
     method driver_name = "usb.camera"
 
     method device_name = Printf.sprintf "usb/camera/%s" id
+
+    method vendor_id = 0x0000 (* TODO *)
+
+    method product_id = 0x0000 (* TODO *)
   end
 
   type t = driver
