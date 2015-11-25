@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+module Device = struct
+  [%%include "machinery/device.ml"]
+end
+
 module GPIO = struct
   [%%include "machinery/gpio.ml"]
 end

@@ -2,8 +2,8 @@
 
 open Prelude
 
-class driver = object (self)
-  inherit Device.driver as super
+class virtual driver = object (self)
+  (* TODO *)
 end
 
 type t = driver

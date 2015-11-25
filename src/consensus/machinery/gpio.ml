@@ -23,17 +23,21 @@ module Mode = struct
 end
 
 module Chip = struct
-  class virtual chip (id : int) = object (self)
+  class virtual driver (id : int) = object (self)
+    inherit Device.driver as super
+
     method id () = id
 
     (* TODO *)
   end
 
-  type t = chip
+  type t = driver
 end
 
 module Pin = struct
-  class virtual pin (id : int) = object (self)
+  class virtual driver (id : int) = object (self)
+    inherit Device.driver as super
+
     method id () = id
 
     method virtual mode : unit -> Mode.t
@@ -45,5 +49,5 @@ module Pin = struct
     method virtual write : bool -> unit
   end
 
-  type t = pin
+  type t = driver
 end

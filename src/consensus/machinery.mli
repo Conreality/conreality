@@ -1,5 +1,10 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(* Driver interfaces common to all devices. *)
+module Device : sig
+  [%%include "machinery/device.mli"]
+end
+
 (* Driver interfaces for GPIO chips and pins. *)
 module GPIO : sig
   [%%include "machinery/gpio.mli"]

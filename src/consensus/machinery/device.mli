@@ -1,9 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-open Prelude
-
-class driver = object (self)
-  inherit Device.driver as super
+class virtual driver : object
 end
 
 type t = driver

@@ -40,12 +40,14 @@ let () =
     dep  ["file:src/consensus/machinery.ml"]
          ["src/consensus/machinery/bcm2835.ml";
           "src/consensus/machinery/bcm2836.ml";
+          "src/consensus/machinery/device.ml";
           "src/consensus/machinery/gpio.ml";
           "src/consensus/machinery/sysfs.ml"];
 
     dep  ["file:src/consensus/machinery.mli"]
          ["src/consensus/machinery/bcm2835.mli";
           "src/consensus/machinery/bcm2836.mli";
+          "src/consensus/machinery/device.mli";
           "src/consensus/machinery/gpio.mli";
           "src/consensus/machinery/sysfs.mli"];
 
