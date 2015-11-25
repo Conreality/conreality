@@ -21,17 +21,19 @@ let pin_id =
 printf "Opening GPIO pin %d...\n" pin_id;;
 let pin = Sysfs.open_gpio_pin pin_id;;
 
+pin#reset;;
+
 printf "Setting GPIO pin %d mode to input...\n" pin_id;;
 pin#set_mode GPIO.Mode.Input;;
-pin#mode ();;
+pin#mode;;
 
 printf "Reading GPIO pin %d value: " pin_id;;
-let value = pin#read ();;
+let value = pin#read;;
 printf "%s.\n" (if value then "1" else "0");;
 
 printf "Setting GPIO pin %d mode to output...\n" pin_id;;
 pin#set_mode GPIO.Mode.Output;;
-pin#mode ();;
+pin#mode;;
 
 printf "Writing GPIO pin %d value: 1...\n" pin_id;;
 pin#write true;;

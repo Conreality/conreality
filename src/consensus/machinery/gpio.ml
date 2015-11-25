@@ -26,11 +26,11 @@ module Chip = struct
   class virtual driver (id : int) = object (self)
     inherit Device.driver as super
 
-    method driver_name () = "gpio.chip"
+    method driver_name = "gpio.chip"
 
-    method device_name () = Printf.sprintf "gpio/chip%d" id
+    method device_name = Printf.sprintf "gpio/chip%d" id
 
-    method id () = id
+    method id = id
 
     (* TODO *)
   end
@@ -42,17 +42,17 @@ module Pin = struct
   class virtual driver (id : int) = object (self)
     inherit Device.driver as super
 
-    method driver_name () = "gpio.pin"
+    method driver_name = "gpio.pin"
 
-    method device_name () = Printf.sprintf "gpio/pin%d" id
+    method device_name = Printf.sprintf "gpio/pin%d" id
 
-    method id () = id
+    method id = id
 
-    method virtual mode : unit -> Mode.t
+    method virtual mode : Mode.t
 
     method virtual set_mode : Mode.t -> unit
 
-    method virtual read : unit -> bool
+    method virtual read : bool
 
     method virtual write : bool -> unit
   end

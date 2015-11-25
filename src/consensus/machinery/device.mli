@@ -2,22 +2,22 @@
 
 class virtual driver : object
   (* Resets the device, if applicable. *)
-  method reset : unit -> unit
+  method reset : unit
 
   (* Returns the parent device, if any. *)
-  method parent : unit -> driver option
+  method parent : driver option
 
   (* Determines whether the driver requires superuser privileges. *)
-  method is_privileged : unit -> bool
+  method is_privileged : bool
 
   (* Returns the machine-readable name of the driver. *)
-  method virtual driver_name : unit -> string
+  method virtual driver_name : string
 
   (* Returns the machine-readable name of the device. *)
-  method virtual device_name : unit -> string
+  method virtual device_name : string
 
   (* Returns the machine-readable path of the device. *)
-  method device_path : unit -> string list
+  method device_path : string list
 end
 
 type t = driver
