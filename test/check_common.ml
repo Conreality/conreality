@@ -11,6 +11,15 @@ let float =
   end in
   (module M: Alcotest.TESTABLE with type t = M.t)
 
+let bytes =
+  let module M = struct
+    open Consensus.Prelude.String
+    type t = Bytes.t
+    let equal a b = a = b
+    let pp formatter bytes = Format.pp_print_string formatter (Bytes.to_string bytes)
+  end in
+  (module M: Alcotest.TESTABLE with type t = M.t)
+
 let todo () = Alcotest.(check bool) "PASS" true true
 
 let same_float a b = Alcotest.(check float) "same float" a b
@@ -20,6 +29,8 @@ let same_bool a b = Alcotest.(check bool) "same bool" a b
 let same_int a b = Alcotest.(check int) "same int" a b
 
 let same_string a b = Alcotest.(check string) "same string" a b
+
+let same_bytes a b = Alcotest.(check bytes) "same bytes" a b
 
 (* TODO: Genericize this, if possible *)
 let same_float_list a b = Alcotest.(check (list float)) "same float list" a b
