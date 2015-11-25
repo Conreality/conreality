@@ -21,6 +21,16 @@ module Pin = struct
   class driver (id : int) = object (self)
     inherit GPIO.Pin.driver id as super
 
+(*  TODO:
+    val mutable fd : Unix.file_descr = Unix.stdin
+*)
+
+    initializer
+      let fd = Unix.openfile (get_path id "export") write_flags 0 in
+      let buffer = Bytes.of_string (String.of_int id) in
+      Unix.write fd buffer 0 (Bytes.length buffer) |> ignore;
+      Unix.close fd
+
     method mode () =
       let fd = Unix.openfile (get_path id "direction") read_flags 0 in
       let buffer = Bytes.make 4 '\x00' in
