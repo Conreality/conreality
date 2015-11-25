@@ -19,3 +19,7 @@ end
 module Sysfs = struct
   [%%include "machinery/sysfs.ml"]
 end
+
+module USB = struct
+  [%%include "machinery/usb.ml"]
+end

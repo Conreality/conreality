@@ -25,3 +25,9 @@ end
 module Sysfs : sig
   [%%include "machinery/sysfs.mli"]
 end
+
+(* Driver implementations for various USB device classes. *)
+(* See: https://en.wikipedia.org/wiki/USB#Device_classes *)
+module USB : sig
+  [%%include "machinery/usb.mli"]
+end
