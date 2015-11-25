@@ -8,14 +8,20 @@ module Mode : sig
   val to_bytes : t -> bytes
 end
 
-module Pin : sig
-  class pin : int -> object
+module Chip : sig
+  class virtual chip : int -> object
     method id : unit -> int
-    method mode : unit -> Mode.t
-    method set_mode : Mode.t -> unit
-    method read : unit -> bool
-    method write : bool -> unit
+  end
+  type t = chip
+end
+
+module Pin : sig
+  class virtual pin : int -> object
+    method id : unit -> int
+    method virtual mode : unit -> Mode.t
+    method virtual set_mode : Mode.t -> unit
+    method virtual read : unit -> bool
+    method virtual write : bool -> unit
   end
   type t = pin
-  val make : int -> pin
 end
