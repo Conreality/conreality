@@ -1,6 +1,8 @@
 #!/usr/bin/env ocaml
 (* This is free and unencumbered software released into the public domain. *)
 
+(* Note: this program requires root privileges; run it with `sudo`. *)
+
 #use "topfind";;
 #thread;;
 
