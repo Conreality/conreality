@@ -17,3 +17,14 @@ ARGF.each_line do |line|
   end
   puts line
 end
+
+# In order to prevent the compiler from deleting the preprocessed output,
+# stored in a temporary file, we must protect the file. bisect_ppx will
+# want to access the file soon, so it better still exist at that time.
+# NB: for this to work, this script must be invoked with superuser bits.
+require 'fileutils'
+Dir['/tmp/ocamlpp*'].each do |tmp_path|
+  next if File.stat(tmp_path).uid.zero?
+  FileUtils.chmod 0444, tmp_path rescue nil
+  FileUtils.chown 'root', 'root', tmp_path rescue nil
+end

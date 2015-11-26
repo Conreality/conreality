@@ -3,7 +3,7 @@ PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
 # HACK to fix bisect_ppx vs ppx_include:
-OCAMLCFLAGS      = -pp $(CURDIR)/etc/script/pp.rb
+OCAMLCFLAGS      = -pp 'sudo $(CURDIR)/etc/script/pp.rb'
 OCAMLOPTFLAGS    = $(OCAMLCFLAGS)
 
 OCAMLBUILD      = ocamlbuild $(OCAMLCFLAGS)
