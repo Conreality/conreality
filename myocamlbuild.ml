@@ -67,6 +67,12 @@ let () =
           "src/consensus/messaging/stomp.mli";
           "src/consensus/messaging/topic.mli"];
 
+    dep  ["file:src/consensus/scripting.ml"]
+         ["src/consensus/scripting/context.ml"];
+
+    dep  ["file:src/consensus/scripting.mli"]
+         ["src/consensus/scripting/context.mli"];
+
     dep  ["link"; "ocaml"; "use_vision"] ["src/consensus/libconsensus-vision.a"];
 
     flag ["link"; "ocaml"; "library"; "byte"; "use_vision"]
