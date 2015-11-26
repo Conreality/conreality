@@ -6,12 +6,12 @@ module Mode = struct
   type t = Input | Output
 
   let of_string = function
-    | "in" -> Input
+    | "in"  -> Input
     | "out" -> Output
     | _ -> assert false
 
   let to_string = function
-    | Input -> "in"
+    | Input  -> "in"
     | Output -> "out"
 
   let of_bytes bytes =
@@ -20,6 +20,10 @@ module Mode = struct
 
   let to_bytes mode =
     Bytes.of_string (to_string mode)
+
+  let to_flags = function
+    | Input  -> [Unix.O_RDONLY]
+    | Output -> [Unix.O_WRONLY]
 end
 
 module Chip = struct
@@ -28,7 +32,7 @@ module Chip = struct
 
     method driver_name = "gpio.chip"
 
-    method device_name = Printf.sprintf "gpio/chip%d" id
+    method device_name = Printf.sprintf "gpio/chip/%d" id
 
     method id = id
 
@@ -44,13 +48,19 @@ module Pin = struct
 
     method driver_name = "gpio.pin"
 
-    method device_name = Printf.sprintf "gpio/pin%d" id
+    method device_name = Printf.sprintf "gpio/pin/%d" id
 
     method id = id
 
-    method virtual mode : Mode.t
+    method is_open = not self#is_closed
 
-    method virtual set_mode : Mode.t -> unit
+    method virtual is_closed : bool
+
+    method virtual init : Mode.t -> unit
+
+    method virtual close : unit
+
+    method virtual mode : Mode.t
 
     method virtual read : bool
 

@@ -12,12 +12,14 @@ end
 (* Device driver interface for GPIO chips. *)
 module Chip : sig
   class virtual driver : int -> object
+    (* Device interface: *)
     method reset : unit
     method parent : Device.t option
     method is_privileged : bool
     method driver_name : string
     method device_name : string
     method device_path : string list
+    (* GPIO.Chip interface: *)
     method id : int
   end
   type t = driver
@@ -26,15 +28,20 @@ end
 (* Device driver interface for GPIO pins. *)
 module Pin : sig
   class virtual driver : int -> object
+    (* Device interface: *)
     method reset : unit
     method parent : Device.t option
     method is_privileged : bool
     method driver_name : string
     method device_name : string
     method device_path : string list
+    (* GPIO.Pin interface: *)
     method id : int
+    method is_open : bool
+    method virtual is_closed : bool
+    method virtual init : Mode.t -> unit
+    method virtual close : unit
     method virtual mode : Mode.t
-    method virtual set_mode : Mode.t -> unit
     method virtual read : bool
     method virtual write : bool -> unit
   end
