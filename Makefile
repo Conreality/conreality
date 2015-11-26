@@ -2,13 +2,15 @@ PACKAGE_NAME    = consensus
 PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
-OCAMLBUILD      = ocamlbuild
-OCAMLC          = ocamlfind ocamlc
-OCAMLOPT        = ocamlfind ocamlopt
-OPAM_INSTALLER  = opam-installer
-COREBUILD	= corebuild
+# HACK to fix bisect_ppx vs ppx_include:
+OCAMLCFLAGS      = -pp $(CURDIR)/etc/script/pp.rb
+OCAMLOPTFLAGS    = $(OCAMLCFLAGS)
 
-CHECKSEDSCRIPT  = ''
+OCAMLBUILD      = ocamlbuild $(OCAMLCFLAGS)
+OCAMLC          = ocamlfind ocamlc $(OCAMLCFLAGS)
+OCAMLOPT        = ocamlfind ocamlopt $(OCAMLOPTFLAGS)
+COREBUILD       = corebuild $(OCAMLCFLAGS)
+OPAM_INSTALLER  = opam-installer
 
 BENCHABLE_ARCHITECTURES := x86_|i686
 IS_BENCHABLE_ARCHITECTURE := $(shell \
@@ -17,8 +19,7 @@ IS_BENCHABLE_ARCHITECTURE := $(shell \
   echo true || echo false)
 
 ifeq ($(V),1)
-OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose
-#CHECKSEDSCRIPT  = 's/$$/ --verbose/'
+OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose $(OCAMLCFLAGS)
 CHECKVERBOSE	= '--verbose'
 endif
 
@@ -42,7 +43,6 @@ check:
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	  #sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
@@ -58,12 +58,9 @@ bench:
 endif
 
 covered_check:
-	ruby etc/script/precoverage.rb # HACK to fix bisect_ppx vs ppx_include
 	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
-          cd _bisect && \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	  #sed -i -e $(CHECKSEDSCRIPT) _build/test/check_all.sh && \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 clean_reports:
@@ -71,9 +68,8 @@ clean_reports:
 
 report: clean_reports
 	mkdir -p _reports && \
-	cd _bisect && \
 	cd _build && \
-	bisect-ppx-report -verbose -html ../../_reports ../bisect*.out && \
+	bisect-ppx-report -verbose -html ../_reports ../bisect*.out && \
 	cd -
 
 install: consensus.install build
@@ -84,6 +80,6 @@ uninstall: consensus.install
 
 clean:
 	$(OCAMLBUILD) -clean
-	rm -rf META README.html _bisect _build _reports _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
+	rm -rf META README.html _build _reports _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
 
 .PHONY: all build check bench install uninstall clean
