@@ -56,8 +56,8 @@ let recv_line sockfd =
   Lwt_io.read_line channel
 
 let hello sockfd =
-  let frame = Stomp_protocol.make_connect_frame "localhost" "admin" "password" in
-  send sockfd (Stomp_frame.to_string frame)
+  let frame = STOMP.Protocol.make_connect_frame "localhost" "admin" "password" in
+  send sockfd (STOMP.Frame.to_string frame)
   >>= fun () -> recv_line sockfd
   >>= fun (line) -> Printf.printf "%s\n" line; Lwt.return ()
   >>= fun () -> Lwt.return ()

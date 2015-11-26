@@ -1,67 +1,22 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 module Topic : sig
-  type t
-  val separator_string : string
-  val separator_char : char
-  val create : string list -> t
-  val path : t -> string list
-  val message_type : t -> string
-  val qos_policy : t -> int
-  val of_string : string -> t
-  val to_string : t -> string
+  [%%include "messaging/topic.mli"]
 end
 
-module Stomp_command : sig
-  type t =
-    | CONNECTED
-    | MESSAGE
-    | RECEIPT
-    | ERROR
-    | CONNECT
-    | SEND
-    | SUBSCRIBE
-    | UNSUBSCRIBE
-    | ACK
-    | NACK
-    | BEGIN
-    | COMMIT
-    | ABORT
-    | DISCONNECT
-  val of_string : string -> t
-  val to_string : t -> string
-  val length : t -> int
+module IRC : sig
+  [%%include "messaging/irc.mli"]
 end
 
-module Stomp_header : sig
-  type t
-  val create : string -> string -> t
-  val key : t -> string
-  val value : t -> string
-  val of_string : string -> t
-  val to_string : t -> string
-  val length : t -> int
+module MQTT : sig
+  [%%include "messaging/mqtt.mli"]
 end
 
-module Stomp_frame : sig
-  type t
-  val create : Stomp_command.t -> Stomp_header.t list -> string -> t
-  val command : t -> Stomp_command.t
-  val headers : t -> Stomp_header.t list
-  val body : t -> string
-  val to_string : t -> string
-  val size : t -> int
+module ROS : sig
+  [%%include "messaging/ros.mli"]
 end
 
-module Stomp_protocol : sig
-  val make_connect_frame : string -> string -> string -> Stomp_frame.t
-  val make_send_frame : string -> string -> string -> Stomp_frame.t
-  val make_subscribe_frame : string -> string -> Stomp_frame.t
-  val make_unsubscribe_frame : string -> Stomp_frame.t
-  val make_ack_frame : string -> string -> Stomp_frame.t
-  val make_nack_frame : string -> string -> Stomp_frame.t
-  val make_begin_frame : string -> Stomp_frame.t
-  val make_commit_frame : string -> Stomp_frame.t
-  val make_abort_frame : string -> Stomp_frame.t
-  val make_disconnect_frame : string -> Stomp_frame.t
+(* See: https://stomp.github.io/stomp-specification-1.2.html *)
+module STOMP : sig
+  [%%include "messaging/stomp.mli"]
 end

@@ -35,18 +35,18 @@ module Topic_test = struct
       "a/b/c" (Topic.to_string abc_topic)
 end
 
-(* Messaging.Stomp_command *)
+(* Messaging.STOMP.Command *)
 
 module Stomp_command_test = struct
-  open Stomp_command
+  open STOMP.Command
 
   let check command string =
     Alcotest.(check string) "string"
-      string (Stomp_command.to_string command);
+      string (STOMP.Command.to_string command);
     Alcotest.(check string) "string"
-      string (Stomp_command.to_string (Stomp_command.of_string string));
+      string (STOMP.Command.to_string (STOMP.Command.of_string string));
     Alcotest.(check int) "int"
-      (String.length string) (Stomp_command.length command)
+      (String.length string) (STOMP.Command.length command)
 
   let connected () =
     check CONNECTED "CONNECTED"
@@ -91,48 +91,48 @@ module Stomp_command_test = struct
     check DISCONNECT "DISCONNECT"
 end
 
-(* Messaging.Stomp_header *)
+(* Messaging.STOMP.Header *)
 
 module Stomp_header_test = struct
-  open Stomp_header
+  open STOMP.Header
 
   let kv1_header =
-    Stomp_header.create "key1" "val1"
+    STOMP.Header.create "key1" "val1"
 
   let kv2_header =
-    Stomp_header.create "key2" "val2"
+    STOMP.Header.create "key2" "val2"
 
   let create () = todo ()
 
   let key () =
     Alcotest.(check string) "string"
-      "key1" (Stomp_header.key kv1_header)
+      "key1" (STOMP.Header.key kv1_header)
 
   let value () =
     Alcotest.(check string) "string"
-      "val1" (Stomp_header.value kv1_header)
+      "val1" (STOMP.Header.value kv1_header)
 
   let of_string () = todo ()
 
   let to_string () =
     Alcotest.(check string) "string"
       "key1:val1"
-      (Stomp_header.to_string kv1_header)
+      (STOMP.Header.to_string kv1_header)
 
   let length () =
     Alcotest.(check int) "int"
-      (String.length (Stomp_header.to_string kv1_header))
-      (Stomp_header.length kv1_header)
+      (String.length (STOMP.Header.to_string kv1_header))
+      (STOMP.Header.length kv1_header)
 end
 
-(* Messaging.Stomp_frame *)
+(* Messaging.STOMP.Frame *)
 
 module Stomp_frame_test = struct
-  open Stomp_frame
-  open Stomp_command
+  open STOMP.Frame
+  open STOMP.Command
 
   let message_frame =
-    Stomp_frame.create MESSAGE
+    STOMP.Frame.create MESSAGE
       [Stomp_header_test.kv1_header; Stomp_header_test.kv2_header]
       "body"
 
@@ -143,26 +143,26 @@ module Stomp_frame_test = struct
 
   let command () =
     Alcotest.(check string) "string"
-      "MESSAGE" (Stomp_command.to_string (Stomp_frame.command message_frame))
+      "MESSAGE" (STOMP.Command.to_string (STOMP.Frame.command message_frame))
 
   let headers () = todo ()
 
   let body () =
     Alcotest.(check string) "string"
-      "body" (Stomp_frame.body message_frame)
+      "body" (STOMP.Frame.body message_frame)
 
   let size () =
     Alcotest.(check int) "int"
       (String.length message_frame_bytes)
-      (Stomp_frame.size message_frame)
+      (STOMP.Frame.size message_frame)
 
   let to_string () =
     Alcotest.(check string) "string"
       message_frame_bytes
-      (Stomp_frame.to_string message_frame)
+      (STOMP.Frame.to_string message_frame)
 end
 
-(* Messaging.Stomp_protocol *)
+(* Messaging.STOMP.Protocol *)
 
 module Stomp_protocol_test = struct
   (* TODO *)
@@ -181,7 +181,7 @@ let () =
       (*"Topic.of_string",        `Quick, Topic_test.of_string;*)
       "Topic.to_string",        `Quick, Topic_test.to_string;
     ];
-    "Stomp_command", [
+    "STOMP.Command", [
       "CONNECTED",              `Quick, Stomp_command_test.connected;
       "MESSAGE",                `Quick, Stomp_command_test.message;
       "RECEIPT",                `Quick, Stomp_command_test.receipt;
@@ -197,23 +197,23 @@ let () =
       "ABORT",                  `Quick, Stomp_command_test.abort;
       "DISCONNECT",             `Quick, Stomp_command_test.disconnect;
     ];
-    "Stomp_header", [
-      "Stomp_header.create",    `Quick, Stomp_header_test.create;
-      "Stomp_header.key",       `Quick, Stomp_header_test.key;
-      "Stomp_header.value",     `Quick, Stomp_header_test.value;
-      "Stomp_header.of_string", `Quick, Stomp_header_test.of_string;
-      "Stomp_header.to_string", `Quick, Stomp_header_test.to_string;
-      "Stomp_header.length",    `Quick, Stomp_header_test.length;
+    "STOMP.Header", [
+      "STOMP.Header.create",    `Quick, Stomp_header_test.create;
+      "STOMP.Header.key",       `Quick, Stomp_header_test.key;
+      "STOMP.Header.value",     `Quick, Stomp_header_test.value;
+      "STOMP.Header.of_string", `Quick, Stomp_header_test.of_string;
+      "STOMP.Header.to_string", `Quick, Stomp_header_test.to_string;
+      "STOMP.Header.length",    `Quick, Stomp_header_test.length;
     ];
-    "Stomp_frame", [
-      "Stomp_frame.create",     `Quick, Stomp_frame_test.create;
-      "Stomp_frame.command",    `Quick, Stomp_frame_test.command;
-      "Stomp_frame.headers",    `Quick, Stomp_frame_test.headers;
-      "Stomp_frame.body",       `Quick, Stomp_frame_test.body;
-      "Stomp_frame.size",       `Quick, Stomp_frame_test.size;
-      "Stomp_frame.to_string",  `Quick, Stomp_frame_test.to_string;
+    "STOMP.Frame", [
+      "STOMP.Frame.create",     `Quick, Stomp_frame_test.create;
+      "STOMP.Frame.command",    `Quick, Stomp_frame_test.command;
+      "STOMP.Frame.headers",    `Quick, Stomp_frame_test.headers;
+      "STOMP.Frame.body",       `Quick, Stomp_frame_test.body;
+      "STOMP.Frame.size",       `Quick, Stomp_frame_test.size;
+      "STOMP.Frame.to_string",  `Quick, Stomp_frame_test.to_string;
     ];
-    "Stomp_protocol", [
+    "STOMP.Protocol", [
       (* TODO *)
     ];
   ]
