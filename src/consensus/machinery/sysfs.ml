@@ -41,8 +41,8 @@ module Pin = struct
 
   type state = { fd: Unix.file_descr; mode: GPIO.Mode.t }
 
-  class driver (id : int) = object (self)
-    inherit GPIO.Pin.driver id as super
+  class implementation (id : int) = object (self)
+    inherit GPIO.Pin.interface id as super
 
     val mutable state : state option = None
 
@@ -101,13 +101,13 @@ module Pin = struct
           Unix.write fd buffer 0 (Bytes.length buffer) |> ignore
   end
 
-  type t = driver
+  type t = implementation
 end
 
 let open_gpio_chip id : GPIO.Chip.t =
   failwith "Not implemented as yet" (* TODO *)
 
 let open_gpio_pin id mode : GPIO.Pin.t =
-  let pin = new Pin.driver id in
+  let pin = new Pin.implementation id in
   pin#init mode;
   pin

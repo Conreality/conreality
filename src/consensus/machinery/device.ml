@@ -2,10 +2,10 @@
 
 open Prelude
 
-class virtual driver = object (self)
+class virtual interface = object (self)
   method reset = ()
 
-  method parent = (None : driver option)
+  method parent = (None : interface option)
 
   method is_privileged = false (* a sensible default *)
 
@@ -20,4 +20,4 @@ class virtual driver = object (self)
       | Some parent -> parent#device_path @ device_name
 end
 
-type t = driver
+type t = interface

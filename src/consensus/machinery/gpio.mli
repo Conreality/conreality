@@ -11,8 +11,8 @@ end
 
 (* Device driver interface for GPIO chips. *)
 module Chip : sig
-  class virtual driver : int -> object
-    inherit Device.driver
+  class virtual interface : int -> object
+    inherit Device.interface
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -23,13 +23,13 @@ module Chip : sig
     (* GPIO.Chip interface: *)
     method id : int
   end
-  type t = driver
+  type t = interface
 end
 
 (* Device driver interface for GPIO pins. *)
 module Pin : sig
-  class virtual driver : int -> object
-    inherit Device.driver
+  class virtual interface : int -> object
+    inherit Device.interface
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -47,5 +47,5 @@ module Pin : sig
     method virtual read : bool
     method virtual write : bool -> unit
   end
-  type t = driver
+  type t = interface
 end

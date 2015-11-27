@@ -2,8 +2,8 @@
 
 open Prelude
 
-class driver = object (self)
-  inherit Device.driver as super
+class implementation = object (self)
+  inherit Device.interface as super
 
   method is_privileged = true
 
@@ -12,4 +12,4 @@ class driver = object (self)
   method device_name = "bcm2835"
 end
 
-type t = driver
+type t = implementation

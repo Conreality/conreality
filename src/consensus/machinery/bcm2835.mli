@@ -1,7 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-class driver : object
-  inherit Device.driver
+class implementation : object
+  inherit Device.interface
   (* Device interface: *)
   method reset : unit
   method parent : Device.t option
@@ -11,4 +11,4 @@ class driver : object
   method device_path : string list
 end
 
-type t = driver
+type t = implementation

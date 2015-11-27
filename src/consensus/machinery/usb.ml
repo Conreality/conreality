@@ -16,8 +16,8 @@ module Device_class = struct
 end
 
 module Generic_device = struct
-  class virtual driver (id : string) = object (self)
-    inherit Device.driver as super
+  class virtual interface (id : string) = object (self)
+    inherit Device.interface as super
 
     method driver_name = "usb.basic"
 
@@ -30,24 +30,24 @@ module Generic_device = struct
     method id = (self#vendor_id, self#product_id)
   end
 
-  type t = driver
+  type t = interface
 end
 
 module Video_device = struct
-  class virtual driver (id : string) = object (self)
-    inherit Generic_device.driver id as super
+  class virtual interface (id : string) = object (self)
+    inherit Generic_device.interface id as super
 
     method driver_name = "usb.video"
 
     method class_id = Device_class.Video
   end
 
-  type t = driver
+  type t = interface
 end
 
 module Camera = struct
-  class driver (id : string) = object (self)
-    inherit Video_device.driver id as super
+  class implementation (id : string) = object (self)
+    inherit Video_device.interface id as super
 
     method driver_name = "usb.camera"
 
@@ -58,5 +58,5 @@ module Camera = struct
     method product_id = 0x0000 (* TODO *)
   end
 
-  type t = driver
+  type t = implementation
 end

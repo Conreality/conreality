@@ -10,8 +10,8 @@ end
 (* Device driver interface for USB devices. *)
 (* See: https://en.wikipedia.org/wiki/Universal_serial_bus#Device_classes *)
 module Generic_device : sig
-  class virtual driver : string -> object
-    inherit Device.driver
+  class virtual interface : string -> object
+    inherit Device.interface
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -25,14 +25,14 @@ module Generic_device : sig
     method virtual product_id : int
     method id : int * int
   end
-  type t = driver
+  type t = interface
 end
 
 (* Device driver interface for USB video class (UVC) devices. *)
 (* See: https://en.wikipedia.org/wiki/USB_video_device_class *)
 module Video_device : sig
-  class virtual driver : string -> object
-    inherit Generic_device.driver
+  class virtual interface : string -> object
+    inherit Generic_device.interface
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -47,14 +47,14 @@ module Video_device : sig
     method id : int * int
     (* USB.Video_device interface: *)
   end
-  type t = driver
+  type t = interface
 end
 
 (* Device driver implementation for USB cameras. *)
 (* See: https://en.wikipedia.org/wiki/List_of_USB_video_class_devices *)
 module Camera : sig
-  class driver : string -> object
-    inherit Video_device.driver
+  class implementation : string -> object
+    inherit Video_device.interface
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -69,5 +69,5 @@ module Camera : sig
     method id : int * int
     (* USB.Video_device interface: *)
   end
-  type t = driver
+  type t = implementation
 end
