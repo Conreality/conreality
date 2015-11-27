@@ -44,13 +44,16 @@ end
 
 let () =
   Alcotest.run "Consensus.Machinery test suite" [
+    "Device", [
+      (* TODO *)
+    ];
+    "Driver", [
+      (* TODO *)
+    ];
     "GPIO.Mode", [
       "Mode.of_string", `Quick, GPIO_Mode_test.of_string;
       "Mode.to_string", `Quick, GPIO_Mode_test.to_string;
       "Mode.of_bytes",  `Quick, GPIO_Mode_test.of_bytes;
       "Mode.to_bytes",  `Quick, GPIO_Mode_test.to_bytes;
-    ];
-    "GPIO.Pin", [
-      (* TODO *)
     ];
   ]
