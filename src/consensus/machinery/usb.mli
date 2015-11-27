@@ -11,6 +11,7 @@ end
 (* See: https://en.wikipedia.org/wiki/Universal_serial_bus#Device_classes *)
 module Generic_device : sig
   class virtual driver : string -> object
+    inherit Device.driver
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -31,6 +32,7 @@ end
 (* See: https://en.wikipedia.org/wiki/USB_video_device_class *)
 module Video_device : sig
   class virtual driver : string -> object
+    inherit Generic_device.driver
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option
@@ -52,6 +54,7 @@ end
 (* See: https://en.wikipedia.org/wiki/List_of_USB_video_class_devices *)
 module Camera : sig
   class driver : string -> object
+    inherit Video_device.driver
     (* Device interface: *)
     method reset : unit
     method parent : Device.t option

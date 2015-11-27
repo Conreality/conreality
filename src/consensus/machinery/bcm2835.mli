@@ -1,6 +1,8 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 class driver : object
+  inherit Device.driver
+  (* Device interface: *)
   method reset : unit
   method parent : Device.t option
   method is_privileged : bool
