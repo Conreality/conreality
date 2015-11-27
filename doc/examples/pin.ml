@@ -40,3 +40,5 @@ pin#write true;;
 
 printf "Writing GPIO pin %d value: 0...\n" pin_id;;
 pin#write false;;
+
+pin#reset;;
