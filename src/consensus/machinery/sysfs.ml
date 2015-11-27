@@ -105,7 +105,7 @@ module Pin = struct
 end
 
 let open_gpio_chip id : GPIO.Chip.t =
-  failwith "Not implemented yet" (* TODO *)
+  failwith "Not implemented as yet" (* TODO *)
 
 let open_gpio_pin id mode : GPIO.Pin.t =
   let pin = new Pin.driver id in
