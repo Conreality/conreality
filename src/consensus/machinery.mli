@@ -31,3 +31,9 @@ end
 module USB : sig
   [%%include "machinery/usb.mli"]
 end
+
+(* Driver metadata interfaces. *)
+(* Note: this must remain the last module in this file. *)
+module Driver : sig
+  [%%include "machinery/driver.mli"]
+end

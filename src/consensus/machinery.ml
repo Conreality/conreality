@@ -23,3 +23,8 @@ end
 module USB = struct
   [%%include "machinery/usb.ml"]
 end
+
+(* Note: this must remain the last module in this file. *)
+module Driver = struct
+  [%%include "machinery/driver.ml"]
+end

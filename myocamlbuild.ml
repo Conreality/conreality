@@ -41,6 +41,7 @@ let () =
          ["src/consensus/machinery/bcm2835.ml";
           "src/consensus/machinery/bcm2836.ml";
           "src/consensus/machinery/device.ml";
+          "src/consensus/machinery/driver.ml";
           "src/consensus/machinery/gpio.ml";
           "src/consensus/machinery/sysfs.ml";
           "src/consensus/machinery/usb.ml"];
@@ -49,6 +50,7 @@ let () =
          ["src/consensus/machinery/bcm2835.mli";
           "src/consensus/machinery/bcm2836.mli";
           "src/consensus/machinery/device.mli";
+          "src/consensus/machinery/driver.mli";
           "src/consensus/machinery/gpio.mli";
           "src/consensus/machinery/sysfs.mli";
           "src/consensus/machinery/usb.mli"];
