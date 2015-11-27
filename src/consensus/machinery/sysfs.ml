@@ -14,7 +14,8 @@ module Pin = struct
   let get_path id op =
     let jail_path = "" in (* TODO: Unix.getenv "CONREAL_JAIL" *)
     match op with
-      | "export" -> jail_path ^ "/sys/class/gpio/export"
+      | "export" | "unexport" ->
+        Printf.sprintf "%s/sys/class/gpio/%s" jail_path op
       | "direction" | "value" ->
         Printf.sprintf "%s/sys/class/gpio/gpio%d/%s" jail_path id op
       | _ -> assert false
@@ -45,7 +46,10 @@ module Pin = struct
 
     val mutable state : state option = None
 
-    method reset = self#close
+    method reset =
+      match state with
+        | None -> ()
+        | Some _ -> self#close; set_exported id false
 
     method is_privileged = true
 
@@ -60,7 +64,7 @@ module Pin = struct
       match state with
         | Some { mode = mode' } when mode' = mode -> ()
         | _ ->
-          self#close;
+          self#reset;
           set_exported id true;
           set_direction id mode;
           let flags = (GPIO.Mode.to_flags mode) @ base_flags in
