@@ -565,7 +565,7 @@ module M4 = struct
 
   let det_exp_2x2 a =
     (M2.det (M2.create a.e00 a.e01 a.e10 a.e11)) *. (M2.det (M2.create a.e22 a.e23 a.e32 a.e33)) -.
-    (M2.det (M2.create a.e00 a.e02 a.e10 a.e12)) *. (M2.det (M2.create a.e21 a.e23 a.e31 a.e33)) +.
+    (M2.det (M2.create a.e00 a.e02 a.e12 a.e12)) *. (M2.det (M2.create a.e21 a.e23 a.e31 a.e33)) +.
     (M2.det (M2.create a.e00 a.e03 a.e10 a.e13)) *. (M2.det (M2.create a.e21 a.e22 a.e31 a.e32)) +.
     (M2.det (M2.create a.e01 a.e02 a.e11 a.e12)) *. (M2.det (M2.create a.e20 a.e23 a.e30 a.e33)) -.
     (M2.det (M2.create a.e01 a.e03 a.e11 a.e13)) *. (M2.det (M2.create a.e20 a.e22 a.e30 a.e32)) +.
@@ -573,30 +573,72 @@ module M4 = struct
 
   let trace a = a.e00 +. a.e11 +. a.e22 +. a.e33
 
-  let inverse a = a
-  (* TODO let inverse a = TODO *)
+  (*let inverse a = a*)
   (* See https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_4.C3.974_matrices
-  * and the PDF above in "det a" *)
-    (* TODO: "A matrix is invertible if and only if its determinant is nonzero." -- wiki
-     * Throw an exception? *)
+   * and the PDF above in "det a" *)
+  (* TODO: "A matrix is invertible if and only if its determinant is nonzero." -- wiki
+   * Throw an exception? *)
 (*
+  let inverse a =
     let d = det a in
-    let i00 = (a.e11 *. a.e22) -. (a.e21 *. a.e12) in
-    let i10 = (a.e01 *. a.e22) -. (a.e21 *. a.e02) in
-    let i20 = (a.e01 *. a.e12) -. (a.e11 *. a.e02) in
-    let i01 = (a.e10 *. a.e22) -. (a.e20 *. a.e12) in
-    let i11 = (a.e00 *. a.e22) -. (a.e20 *. a.e02) in
-    let i21 = (a.e00 *. a.e12) -. (a.e10 *. a.e02) in
-    let i02 = (a.e10 *. a.e21) -. (a.e20 *. a.e11) in
-    let i12 = (a.e00 *. a.e21) -. (a.e20 *. a.e01) in
-    let i22 = (a.e00 *. a.e11) -. (a.e10 *. a.e01) in
-    create
-      (   i00 /. d) (-. i10 /. d) (   i20 /. d)
-      (-. i01 /. d) (   i11 /. d) (-. i21 /. d)
-      (   i02 /. d) (-. i12 /. d) (   i22 /. d)
+    let adjugate = create
+        (a.e12 *. a.e23 *. a.e31 +. a.e13 *. a.e21 *. a.e32 -. a.e10 *. a.e23 *. a.e32 -. a.e12 *. a.e21 *. a.e33 +. a.e10 *. a.e22 *. a.e33 -. a.e13 *. a.e22 *. a.e31) (a.e03 *. a.e22 *. a.e31 -. a.e02 *. a.e23 *. a.e31 -. a.e03 *. a.e21 *. a.e32 +. a.e01 *. a.e23 *. a.e32 +. a.e02 *. a.e21 *. a.e33 -. a.e01 *. a.e22 *. a.e33) (a.e02 *. a.e13 *. a.e31 +. a.e03 *. a.e10 *. a.e32 -. a.e01 *. a.e13 *. a.e32 -. a.e02 *. a.e10 *. a.e33 +. a.e01 *. a.e12 *. a.e33 -. a.e03 *. a.e12 *. a.e31) (a.e03 *. a.e12 *. a.e21 -. a.e02 *. a.e13 *. a.e21 -. a.e03 *. a.e10 *. a.e22 +. a.e01 *. a.e13 *. a.e22 +. a.e02 *. a.e10 *. a.e23 -. a.e01 *. a.e12 *. a.e23)
+        (a.e13 *. a.e22 *. a.e30 -. a.e12 *. a.e23 *. a.e30 -. a.e13 *. a.e20 *. a.e32 +. a.e10 *. a.e23 *. a.e32 +. a.e12 *. a.e20 *. a.e33 -. a.e10 *. a.e22 *. a.e33) (a.e02 *. a.e23 *. a.e30 +. a.e03 *. a.e20 *. a.e32 -. a.e00 *. a.e23 *. a.e32 -. a.e02 *. a.e20 *. a.e33 +. a.e00 *. a.e22 *. a.e33 -. a.e03 *. a.e22 *. a.e30) (a.e03 *. a.e12 *. a.e30 -. a.e02 *. a.e13 *. a.e30 -. a.e03 *. a.e10 *. a.e32 +. a.e00 *. a.e13 *. a.e32 +. a.e02 *. a.e10 *. a.e33 -. a.e00 *. a.e12 *. a.e33) (a.e02 *. a.e13 *. a.e20 +. a.e03 *. a.e10 *. a.e22 -. a.e00 *. a.e13 *. a.e22 -. a.e02 *. a.e10 *. a.e23 +. a.e00 *. a.e12 *. a.e23 -. a.e03 *. a.e12 *. a.e20)
+        (a.e10 *. a.e23 *. a.e30 +. a.e13 *. a.e20 *. a.e31 -. a.e10 *. a.e23 *. a.e31 -. a.e10 *. a.e20 *. a.e33 +. a.e10 *. a.e21 *. a.e33 -. a.e13 *. a.e21 *. a.e30) (a.e03 *. a.e21 *. a.e30 -. a.e01 *. a.e23 *. a.e30 -. a.e03 *. a.e20 *. a.e31 +. a.e00 *. a.e23 *. a.e31 +. a.e01 *. a.e20 *. a.e33 -. a.e00 *. a.e21 *. a.e33) (a.e01 *. a.e13 *. a.e30 +. a.e03 *. a.e10 *. a.e31 -. a.e00 *. a.e13 *. a.e31 -. a.e01 *. a.e10 *. a.e33 +. a.e00 *. a.e10 *. a.e33 -. a.e03 *. a.e10 *. a.e30) (a.e03 *. a.e10 *. a.e20 -. a.e01 *. a.e13 *. a.e20 -. a.e03 *. a.e10 *. a.e21 +. a.e00 *. a.e13 *. a.e21 +. a.e01 *. a.e10 *. a.e23 -. a.e00 *. a.e10 *. a.e23)
+        (a.e12 *. a.e21 *. a.e30 -. a.e10 *. a.e22 *. a.e30 -. a.e12 *. a.e20 *. a.e31 +. a.e10 *. a.e22 *. a.e31 +. a.e10 *. a.e20 *. a.e32 -. a.e10 *. a.e21 *. a.e32) (a.e01 *. a.e22 *. a.e30 +. a.e02 *. a.e20 *. a.e31 -. a.e00 *. a.e22 *. a.e31 -. a.e01 *. a.e20 *. a.e32 +. a.e00 *. a.e21 *. a.e32 -. a.e02 *. a.e21 *. a.e30) (a.e02 *. a.e10 *. a.e30 -. a.e01 *. a.e12 *. a.e30 -. a.e02 *. a.e10 *. a.e31 +. a.e00 *. a.e12 *. a.e31 +. a.e01 *. a.e10 *. a.e32 -. a.e00 *. a.e10 *. a.e32) (a.e01 *. a.e12 *. a.e20 +. a.e02 *. a.e10 *. a.e21 -. a.e00 *. a.e12 *. a.e21 -. a.e01 *. a.e10 *. a.e22 +. a.e00 *. a.e10 *. a.e22 -. a.e02 *. a.e10 *. a.e20) in
+    smul adjugate (1. /. d)
 *)
+(* This, from gg, works *)
+(*
+  let inverse a =
+    let d1 = (a.e22 *. a.e33) -. (a.e32 *. a.e23) in        (* second minor. *)
+    let d2 = (a.e21 *. a.e33) -. (a.e31 *. a.e23) in
+    let d3 = (a.e21 *. a.e32) -. (a.e31 *. a.e22) in
+    let m00 = (a.e11 *. d1) -. (a.e12 *. d2) +. (a.e13 *. d3) in   (* minor. *)
+    let m10 = (a.e01 *. d1) -. (a.e02 *. d2) +. (a.e03 *. d3) in
+    let d4 = (a.e02 *. a.e13) -. (a.e12 *. a.e03) in
+    let d5 = (a.e01 *. a.e13) -. (a.e11 *. a.e03) in
+    let d6 = (a.e01 *. a.e12) -. (a.e11 *. a.e02) in
+    let m20 = (a.e31 *. d4) -. (a.e32 *. d5) +. (a.e33 *. d6) in
+    let m30 = (a.e21 *. d4) -. (a.e22 *. d5) +. (a.e23 *. d6) in
+    let d7 = (a.e20 *. a.e33) -. (a.e30 *. a.e23) in
+    let d8 = (a.e20 *. a.e32) -. (a.e30 *. a.e22) in
+    let m01 = (a.e10 *. d1) -. (a.e12 *. d7) +. (a.e13 *. d8) in
+    let m11 = (a.e00 *. d1) -. (a.e02 *. d7) +. (a.e03 *. d8) in
+    let d9 = (a.e00 *. a.e13) -. (a.e10 *. a.e03) in
+    let d10 = (a.e00 *. a.e12) -. (a.e10 *. a.e02) in
+    let m21 = (a.e30 *. d4) -. (a.e32 *. d9) +. (a.e33 *. d10) in
+    let m31 = (a.e20 *. d4) -. (a.e22 *. d9) +. (a.e23 *. d10) in
+    let d11 = (a.e20 *. a.e31) -. (a.e30 *. a.e21) in
+    let m02 = (a.e10 *. d2) -. (a.e11 *. d7) +. (a.e13 *. d11) in
+    let m12 = (a.e00 *. d2) -. (a.e01 *. d7) +. (a.e03 *. d11) in
+    let d12 = (a.e00 *. a.e11) -. (a.e10 *. a.e01) in
+    let m22 = (a.e30 *. d5) -. (a.e31 *. d9) +. (a.e33 *. d12) in
+    let m32  =(a.e20 *. d5) -. (a.e21 *. d9) +. (a.e23 *. d12) in
+    let m03 = (a.e10 *. d3) -. (a.e11 *. d8) +. (a.e12 *. d11) in
+    let m13 = (a.e00 *. d3) -. (a.e01 *. d8) +. (a.e02 *. d11) in
+    let m23 = (a.e30 *. d6) -. (a.e31 *. d10) +. (a.e32 *. d12) in
+    let m33 = (a.e20 *. d6) -. (a.e21 *. d10) +. (a.e22 *. d12) in
+    let d =
+      (a.e00 *. m00) -. (a.e10 *. m10) +. (a.e20 *. m20) -. (a.e30 *. m30)
+    in
+    create
+      (   m00 /. d) (-. m10 /. d) (   m20 /. d) (-. m30 /. d)
+      (-. m01 /. d) (   m11 /. d) (-. m21 /. d) (   m31 /. d)
+      (   m02 /. d) (-. m12 /. d) (   m22 /. d) (-. m32 /. d)
+      (-. m03 /. d) (   m13 /. d) (-. m23 /. d) (   m33 /. d)
+*)
+  let inverse a =
+    let adjugate = create
+        ((a.e11 *. a.e22 *. a.e33) -. (a.e11 *. a.e23 *. a.e32) -. (a.e12 *. a.e21 *. a.e33) +. (a.e12 *. a.e23 *. a.e31) +. (a.e13 *. a.e21 *. a.e32) -. (a.e13 *. a.e22 *. a.e31)) ((-. (a.e01 *. a.e22 *. a.e33)) +. (a.e01 *. a.e23 *. a.e32) +. (a.e12 *. a.e21 *. a.e33) -. (a.e12 *. a.e23 *. a.e31) -. (a.e13 *. a.e21 *. a.e32) +. (a.e13 *. a.e22 *. a.e31)) ((a.e01 *. a.e12 *. a.e33) -. (a.e01 *. a.e13 *. a.e32) -. (a.e12 *. a.e11 *. a.e33) +. (a.e12 *. a.e13 *. a.e31) +. (a.e13 *. a.e11 *. a.e32) -. (a.e13 *. a.e12 *. a.e31)) ((-. (a.e01 *. a.e12 *. a.e23)) +. (a.e01 *. a.e13 *. a.e22) +. (a.e12 *. a.e11 *. a.e23) -. (a.e12 *. a.e13 *. a.e21) -. (a.e13 *. a.e11 *. a.e22) +. (a.e13 *. a.e12 *. a.e21))
+        ((-. (a.e10 *. a.e22 *. a.e33)) +. (a.e10 *. a.e23 *. a.e32) +. (a.e12 *. a.e20 *. a.e33) -. (a.e12 *. a.e23 *. a.e30) -. (a.e13 *. a.e20 *. a.e32) +. (a.e13 *. a.e22 *. a.e30)) ((a.e00 *. a.e22 *. a.e33) -. (a.e00 *. a.e23 *. a.e32) -. (a.e12 *. a.e20 *. a.e33) +. (a.e12 *. a.e23 *. a.e30) +. (a.e13 *. a.e20 *. a.e32) -. (a.e13 *. a.e22 *. a.e30)) ((-. (a.e00 *. a.e12 *. a.e33)) +. (a.e00 *. a.e13 *. a.e32) +. (a.e12 *. a.e10 *. a.e33) -. (a.e12 *. a.e13 *. a.e30) -. (a.e13 *. a.e10 *. a.e32) +. (a.e13 *. a.e12 *. a.e30)) ((a.e00 *. a.e12 *. a.e23) -. (a.e00 *. a.e13 *. a.e22) -. (a.e12 *. a.e10 *. a.e23) +. (a.e12 *. a.e13 *. a.e20) +. (a.e13 *. a.e10 *. a.e22) -. (a.e13 *. a.e12 *. a.e20))
+        ((a.e10 *. a.e21 *. a.e33) -. (a.e10 *. a.e23 *. a.e31) -. (a.e11 *. a.e20 *. a.e33) +. (a.e11 *. a.e23 *. a.e30) +. (a.e13 *. a.e20 *. a.e31) -. (a.e13 *. a.e21 *. a.e30)) ((-. (a.e00 *. a.e21 *. a.e33)) +. (a.e00 *. a.e23 *. a.e31) +. (a.e01 *. a.e20 *. a.e33) -. (a.e01 *. a.e23 *. a.e30) -. (a.e13 *. a.e20 *. a.e31) +. (a.e13 *. a.e21 *. a.e30)) ((a.e00 *. a.e11 *. a.e33) -. (a.e00 *. a.e13 *. a.e31) -. (a.e01 *. a.e10 *. a.e33) +. (a.e01 *. a.e13 *. a.e30) +. (a.e13 *. a.e10 *. a.e31) -. (a.e13 *. a.e11 *. a.e30)) ((-. (a.e00 *. a.e11 *. a.e23)) +. (a.e00 *. a.e13 *. a.e21) +. (a.e01 *. a.e10 *. a.e23) -. (a.e01 *. a.e13 *. a.e20) -. (a.e13 *. a.e10 *. a.e21) +. (a.e13 *. a.e11 *. a.e20))
+        ((-. (a.e10 *. a.e21 *. a.e32)) +. (a.e10 *. a.e22 *. a.e31) +. (a.e11 *. a.e20 *. a.e32) -. (a.e11 *. a.e22 *. a.e30) -. (a.e12 *. a.e20 *. a.e31) +. (a.e12 *. a.e21 *. a.e30)) ((a.e00 *. a.e21 *. a.e32) -. (a.e00 *. a.e22 *. a.e31) -. (a.e01 *. a.e20 *. a.e32) +. (a.e01 *. a.e22 *. a.e30) +. (a.e12 *. a.e20 *. a.e31) -. (a.e12 *. a.e21 *. a.e30)) ((-. (a.e00 *. a.e11 *. a.e32)) +. (a.e00 *. a.e12 *. a.e31) +. (a.e01 *. a.e10 *. a.e32) -. (a.e01 *. a.e12 *. a.e30) -. (a.e12 *. a.e10 *. a.e31) +. (a.e12 *. a.e11 *. a.e30)) ((a.e00 *. a.e11 *. a.e22) -. (a.e00 *. a.e12 *. a.e21) -. (a.e01 *. a.e10 *. a.e22) +. (a.e01 *. a.e12 *. a.e20) +. (a.e12 *. a.e10 *. a.e21) -. (a.e12 *. a.e11 *. a.e20)) in
+    let d = det a in
+    smul adjugate (1. /. d)
 
-  let to_string m = Format.sprintf "@[<1>|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g@|\n|%g@ %g@ %g@ %g|@]"
+
+  let to_string m = Format.sprintf "@[<1>|%g@ %g@ %g@ %g|\n|%g@ %g@ %g@ %g|\n|%g@ %g@ %g@ %g|\n|%g@ %g@ %g@ %g|@]"
       m.e00 m.e01 m.e02 m.e03
       m.e10 m.e11 m.e12 m.e13
       m.e20 m.e21 m.e22 m.e23

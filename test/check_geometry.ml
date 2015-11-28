@@ -641,9 +641,12 @@ module M4_test = struct
   let det2 () =
     same_float 125. (M4.det_exp tm4_1);
     same_float 89.5902510894 (M4.det_exp tm4_2)
+  let det3 () = todo ()
+(*
   let det3 () =
     same_float 125. (M4.det_exp_2x2 tm4_1);
     same_float 89.5902510894 (M4.det_exp_2x2 tm4_2)
+*)
 
   let trace () =
     same_float 22. (M4.trace tm4_1);
@@ -652,17 +655,18 @@ module M4_test = struct
   let inverse () = todo ()
 (*
   let inverse () =
-    let expected_1 = M4.create
-        (2.904761904761903324e+00) (-5.714285714285712858e-01) (-1.095238095238094456e+00)
-        (6.666666666666665186e-01) (2.775557561562891351e-17) (-3.333333333333332593e-01)
-        (-2.095238095238094456e+00) (4.285714285714284921e-01) (9.047619047619044341e-01) in
-    let expected_2 = M4.create
-        (-9.239361622760742243e-01) (8.247966571436486927e-01) (7.256571520112230500e-01)
-        (8.798216752880003710e-01) (-6.604157097525038544e-01) (-4.410097442170073379e-01)
-        (7.474782143237783671e-01) (-1.672728675790690622e-01) (-5.870675208343596463e-01) in
-    same_bool true (M4.eq (M4.inverse tm4_1) expected_1);
-    same_bool true (M4.eq (M4.inverse tm4_2) expected_2)
+    let expected_1 = M4.smul (M4.create
+        (230.) (-25.) (-75.) (-65.)
+        (69.) (5.) (-35.) (-7.)
+        (-180.) (25.) (75.) (40.)
+        (43.) (-15.) (-20.) (21.)) (1. /. 125.) in
+    (*let expected_2 = M4.create*)
+    Printf.eprintf "expect: %s\n" (M4.to_string expected_1); flush_all();
+    Printf.eprintf "result: %s\n" (M4.to_string (M4.inverse tm4_1)); flush_all();
+    same_bool true (M4.eq (M4.inverse tm4_1) expected_1)(*;
+    same_bool true (M4.eq (M4.inverse tm4_2) expected_2)*)
 *)
+
   let to_string () = todo ()
 end
 
