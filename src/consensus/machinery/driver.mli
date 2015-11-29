@@ -1,7 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+type t = string * (string -> Device.t)
+
 (** The list of supported device drivers. *)
-val list : (string * (string -> Device.t)) list
+val list : t list
 
 (** The count of supported device drivers. *)
 val count : int
@@ -10,7 +12,7 @@ val count : int
 val exists : string -> bool
 
 (** Returns the instantiation function for a given named device driver. *)
-val find : string -> (string -> Device.t)
+val find : string -> t
 
 (** Invokes the given function for every supported device driver. *)
-val iter : (string -> (string -> Device.t) -> unit) -> unit
+val iter : (t -> unit) -> unit

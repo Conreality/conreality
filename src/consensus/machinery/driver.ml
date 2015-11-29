@@ -2,6 +2,8 @@
 
 open Prelude
 
+type t = string * (string -> Device.t)
+
 let bcm2835_gpio_pin (id : string) : Device.t =
   failwith "Not implemented as yet" (* TODO *)
 
@@ -26,7 +28,7 @@ let exists name =
   List.exists (fun (k, v) -> k = name) list
 
 let find name =
-  let (k, v) = List.find (fun (k, v) -> k = name) list in v
+  List.find (fun (k, v) -> k = name) list
 
-let iter (f : (string -> (string -> Device.t) -> unit)) =
-  List.iter (fun (k, v) -> f k v |> ignore) list
+let iter (f : (t -> unit)) =
+  List.iter (fun driver -> f driver |> ignore) list
