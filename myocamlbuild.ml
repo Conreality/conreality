@@ -44,7 +44,8 @@ let () =
           "src/consensus/machinery/device.ml";
           "src/consensus/machinery/driver.ml";
           "src/consensus/machinery/sysfs.ml";
-          "src/consensus/machinery/usb.ml"];
+          "src/consensus/machinery/usb.ml";
+          "src/consensus/machinery/v4l2.ml"];
 
     dep  ["file:src/consensus/machinery.mli"]
          ["src/consensus/machinery/abstract.mli";
@@ -53,7 +54,8 @@ let () =
           "src/consensus/machinery/device.mli";
           "src/consensus/machinery/driver.mli";
           "src/consensus/machinery/sysfs.mli";
-          "src/consensus/machinery/usb.mli"];
+          "src/consensus/machinery/usb.mli";
+          "src/consensus/machinery/v4l2.mli"];
 
     dep  ["file:src/consensus/messaging.ml"]
          ["src/consensus/messaging/irc.ml";

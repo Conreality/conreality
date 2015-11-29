@@ -10,7 +10,8 @@ let list =
   [register "bcm2835.gpio.pin" BCM2835.GPIO.Pin.construct;
    register "bcm2836.gpio.pin" BCM2836.GPIO.Pin.construct;
    register "sysfs.gpio.chip"  Sysfs.GPIO.Chip.construct;
-   register "sysfs.gpio.pin"   Sysfs.GPIO.Pin.construct]
+   register "sysfs.gpio.pin"   Sysfs.GPIO.Pin.construct;
+   register "v4l2.camera"      V4L2.Camera.construct]
 
 let count = List.length list
 

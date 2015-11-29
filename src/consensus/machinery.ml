@@ -24,6 +24,10 @@ module USB = struct
   [%%include "machinery/usb.ml"]
 end
 
+module V4L2 = struct
+  [%%include "machinery/v4l2.ml"]
+end
+
 (* Note: this must remain the last module in this file. *)
 module Driver = struct
   [%%include "machinery/driver.ml"]

@@ -32,6 +32,12 @@ module USB : sig
   [%%include "machinery/usb.mli"]
 end
 
+(* Driver implementations for V4L2 devices. *)
+(* See: http://linuxtv.org/downloads/v4l-dvb-apis/ *)
+module V4L2 : sig
+  [%%include "machinery/v4l2.mli"]
+end
+
 (* Driver metadata interfaces. *)
 (* Note: this must remain the last module in this file. *)
 module Driver : sig
