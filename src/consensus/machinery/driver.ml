@@ -2,7 +2,7 @@
 
 open Prelude
 
-type t = string * (string -> Device.t)
+type t = { name: string; constructor: (string -> Device.t) }
 
 let bcm2835_gpio_pin (id : string) : Device.t =
   failwith "Not implemented as yet" (* TODO *)
@@ -17,18 +17,17 @@ let sysfs_gpio_pin (id : string) : Device.t =
   ((Sysfs.open_gpio_pin (Int.of_string id) GPIO.Mode.Input) :> Device.t)
 
 let list =
-  [("bcm2835.gpio.pin", bcm2835_gpio_pin);
-   ("bcm2836.gpio.pin", bcm2836_gpio_pin);
-   ("sysfs.gpio.chip" , sysfs_gpio_chip);
-   ("sysfs.gpio.pin",   sysfs_gpio_pin)]
+  [{ name = "bcm2835.gpio.pin"; constructor = bcm2835_gpio_pin };
+   { name = "bcm2836.gpio.pin"; constructor = bcm2836_gpio_pin };
+   { name = "sysfs.gpio.chip";  constructor = sysfs_gpio_chip  };
+   { name = "sysfs.gpio.pin";   constructor = sysfs_gpio_pin   }]
 
 let count = List.length list
 
 let exists name =
-  List.exists (fun (k, v) -> k = name) list
+  List.exists (fun driver -> driver.name = name) list
 
 let find name =
-  List.find (fun (k, v) -> k = name) list
+  List.find (fun driver -> driver.name = name) list
 
-let iter (f : (t -> unit)) =
-  List.iter (fun driver -> f driver |> ignore) list
+let iter (f : (t -> unit)) = List.iter f list
