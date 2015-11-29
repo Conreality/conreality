@@ -2,6 +2,18 @@
 
 open Prelude
 
+module Camera = struct
+  class virtual interface = object (self)
+    inherit Device.interface as super
+
+    method virtual init : unit
+
+    method virtual close : unit
+  end
+
+  type t = interface
+end
+
 module GPIO = struct
   module Mode = struct
     type t = Input | Output
