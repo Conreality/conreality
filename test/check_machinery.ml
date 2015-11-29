@@ -7,7 +7,7 @@ open Consensus.Machinery
 
 let mode =
   let module M = struct
-    open Consensus.Machinery.GPIO
+    open Consensus.Machinery.Abstract.GPIO
     type t = Mode.t
     let equal a b = a = b
     let pp formatter mode = Format.pp_print_string formatter (Mode.to_string mode)
@@ -17,7 +17,7 @@ let mode =
 let same_mode a b = Alcotest.(check mode) "same GPIO mode" a b
 
 module GPIO_Mode_test = struct
-  open GPIO
+  open Abstract.GPIO
 
   let of_string () =
     same_mode Mode.Input (Mode.of_string "in");
@@ -50,7 +50,7 @@ let () =
     "Driver", [
       (* TODO *)
     ];
-    "GPIO.Mode", [
+    "Abstract.GPIO.Mode", [
       "Mode.of_string", `Quick, GPIO_Mode_test.of_string;
       "Mode.to_string", `Quick, GPIO_Mode_test.to_string;
       "Mode.of_bytes",  `Quick, GPIO_Mode_test.of_bytes;
