@@ -4,23 +4,13 @@ open Prelude
 
 type t = { name: string; constructor: (string -> Device.t) }
 
-let bcm2835_gpio_pin (id : string) : Device.t =
-  failwith "Not implemented as yet" (* TODO *)
-
-let bcm2836_gpio_pin (id : string) : Device.t =
-  failwith "Not implemented as yet" (* TODO *)
-
-let sysfs_gpio_chip (id : string) : Device.t =
-  ((Sysfs.open_gpio_chip (Int.of_string id)) :> Device.t)
-
-let sysfs_gpio_pin (id : string) : Device.t =
-  ((Sysfs.open_gpio_pin (Int.of_string id) GPIO.Mode.Input) :> Device.t)
+let register name constructor = { name; constructor }
 
 let list =
-  [{ name = "bcm2835.gpio.pin"; constructor = bcm2835_gpio_pin };
-   { name = "bcm2836.gpio.pin"; constructor = bcm2836_gpio_pin };
-   { name = "sysfs.gpio.chip";  constructor = sysfs_gpio_chip  };
-   { name = "sysfs.gpio.pin";   constructor = sysfs_gpio_pin   }]
+  [register "bcm2835.gpio.pin" BCM2835.GPIO.Pin.construct;
+   register "bcm2836.gpio.pin" BCM2836.GPIO.Pin.construct;
+   register "sysfs.gpio.chip"  Sysfs.GPIO.Chip.construct;
+   register "sysfs.gpio.pin"   Sysfs.GPIO.Pin.construct]
 
 let count = List.length list
 

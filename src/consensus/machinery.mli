@@ -5,9 +5,9 @@ module Device : sig
   [%%include "machinery/device.mli"]
 end
 
-(* Driver interfaces for GPIO chips and pins. *)
-module GPIO : sig
-  [%%include "machinery/gpio.mli"]
+(* Driver interfaces for abstract devices. *)
+module Abstract : sig
+  [%%include "machinery/abstract.mli"]
 end
 
 (* Driver implementation for the Broadcom BCM2835 SoC (e.g., Raspberry Pi 1). *)

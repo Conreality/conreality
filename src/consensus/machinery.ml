@@ -4,8 +4,8 @@ module Device = struct
   [%%include "machinery/device.ml"]
 end
 
-module GPIO = struct
-  [%%include "machinery/gpio.ml"]
+module Abstract = struct
+  [%%include "machinery/abstract.ml"]
 end
 
 module BCM2835 = struct

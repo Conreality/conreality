@@ -1,14 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-class implementation : object
-  inherit Device.interface
-  (* Device interface: *)
-  method reset : unit
-  method parent : Device.t option
-  method is_privileged : bool
-  method driver_name : string
-  method device_name : string
-  method device_path : string list
+module GPIO : sig
+  module Pin : sig
+    val construct : string -> Device.t
+  end
 end
-
-type t = implementation

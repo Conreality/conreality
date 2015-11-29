@@ -2,14 +2,21 @@
 
 open Prelude
 
-class implementation = object (self)
-  inherit Device.interface as super
+module GPIO = struct
+  module Pin = struct
+    class implementation = object (self)
+      inherit Device.interface as super
 
-  method is_privileged = true
+      method is_privileged = true
 
-  method driver_name = "bcm2835"
+      method driver_name = "bcm2835"
 
-  method device_name = "bcm2835"
+      method device_name = "bcm2835"
+    end
+
+    type t = implementation
+
+    let construct (id : string) : Device.t =
+      failwith "Not implemented as yet" (* TODO *)
+  end
 end
-
-type t = implementation
