@@ -4,6 +4,10 @@ module Bool = struct
   [%%include "prelude/bool.ml"]
 end
 
+module Bytes = struct
+  [%%include "prelude/bytes.ml"]
+end
+
 module Char = struct
   [%%include "prelude/char.ml"]
 end
@@ -18,6 +22,14 @@ end
 
 module Math = struct
   [%%include "prelude/math.ml"]
+end
+
+module Option = struct
+  [%%include "prelude/option.ml"]
+end
+
+module POSIX = struct
+  [%%include "prelude/posix.ml"]
 end
 
 module String = struct

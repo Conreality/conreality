@@ -23,18 +23,24 @@ let () =
 
     dep  ["file:src/consensus/prelude.ml"]
          ["src/consensus/prelude/bool.ml";
+          "src/consensus/prelude/bytes.ml";
           "src/consensus/prelude/char.ml";
           "src/consensus/prelude/float.ml";
           "src/consensus/prelude/int.ml";
           "src/consensus/prelude/math.ml";
+          "src/consensus/prelude/option.ml";
+          "src/consensus/prelude/posix.ml";
           "src/consensus/prelude/string.ml"];
 
     dep  ["file:src/consensus/prelude.mli"]
          ["src/consensus/prelude/bool.mli";
+          "src/consensus/prelude/bytes.mli";
           "src/consensus/prelude/char.mli";
           "src/consensus/prelude/float.mli";
           "src/consensus/prelude/int.mli";
           "src/consensus/prelude/math.mli";
+          "src/consensus/prelude/option.mli";
+          "src/consensus/prelude/posix.mli";
           "src/consensus/prelude/string.mli"];
 
     dep  ["file:src/consensus/machinery.ml"]
