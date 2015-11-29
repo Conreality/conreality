@@ -31,6 +31,10 @@ lib: [
   "_build/src/consensus/machinery.cmi" {"consensus.machinery.cmi"}
   "_build/src/consensus/machinery.cmo" {"consensus.machinery.cmo"}
   "_build/src/consensus/machinery.cmx" {"consensus.machinery.cmx"}
+  "src/consensus/measures.mli" {"consensus.measures.mli"}
+  "_build/src/consensus/measures.cmi" {"consensus.measures.cmi"}
+  "_build/src/consensus/measures.cmo" {"consensus.measures.cmo"}
+  "_build/src/consensus/measures.cmx" {"consensus.measures.cmx"}
   "src/consensus/messaging.mli" {"consensus.messaging.mli"}
   "_build/src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
   "_build/src/consensus/messaging.cmo" {"consensus.messaging.cmo"}
