@@ -1,7 +1,16 @@
 conctl.native
 conreald.native
+consensus/geometry.inferred.mli
+consensus/knowledge.inferred.mli
 consensus/machinery.inferred.mli
+consensus/measures.inferred.mli
+consensus/messaging.inferred.mli
+consensus/model.inferred.mli
+consensus/ontology.inferred.mli
+consensus/physics.inferred.mli
 consensus/prelude.inferred.mli
+consensus/scripting.inferred.mli
+consensus/vision.inferred.mli
 consensus/vision.cma
 consensus/vision.cmxa
 consensus.cmo
