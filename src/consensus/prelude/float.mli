@@ -53,3 +53,4 @@ val float_of_string : string -> float
 val print_float : float -> unit
 val prerr_float : float -> unit
 val read_float : unit -> float
+val inverse : float -> float

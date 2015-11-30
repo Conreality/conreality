@@ -112,6 +112,11 @@ module Float_test = struct
     same_float 2. (Float.max 1. 2.)
 
   let string_of_float () = same_string "3.14159" (Float.string_of_float 3.14159)
+
+  let inverse () =
+    same_float 0.5 (Float.inverse 2.);
+    same_float 0. (Float.inverse Float.infinity);
+    same_float Float.infinity (Float.inverse 0.)
 end
 
 let () =
@@ -147,6 +152,7 @@ let () =
       "Float.min",                  `Quick, Float_test.min;
       "Float.max",                  `Quick, Float_test.max;
       "Float.string_of_float",      `Quick, Float_test.string_of_float;
+      "Float.inverse",              `Quick, Float_test.inverse;
     ];
   ]
 

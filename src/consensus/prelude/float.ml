@@ -152,3 +152,5 @@ let print_float x = Pervasives.print_float x
 let prerr_float x = Pervasives.prerr_float x
 let read_float () = Pervasives.read_float ()
 (*BISECT-IGNORE-END*)
+
+let inverse f = if is_infinite f then 0. else 1. /. f
