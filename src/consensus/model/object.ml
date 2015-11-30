@@ -100,3 +100,6 @@ class virtual interface (id : int) = object (self)
 end
 
 type t = interface
+
+let compare a b =
+  Pervasives.compare a#id b#id

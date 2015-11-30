@@ -68,3 +68,5 @@ class virtual interface : int -> object
 end
 
 type t = interface
+
+val compare : t -> t -> int
