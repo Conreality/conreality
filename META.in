@@ -48,7 +48,7 @@ package "messaging" (
 package "model" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus world model"
-  requires = "consensus.prelude consensus.geometry consensus.measures"
+  requires = "consensus.prelude consensus.geometry consensus.knowledge consensus.measures"
   archive(byte) = "consensus.model.cmo"
   archive(native) = "consensus.model.cmx"
 )

@@ -78,14 +78,28 @@ let () =
           "src/consensus/messaging/topic.mli"];
 
     dep  ["file:src/consensus/model.ml"]
-         ["src/consensus/model/object.ml";
-          "src/consensus/model/shape.ml";
-          "src/consensus/model/theater.ml"];
+         ["src/consensus/model/asset.ml";
+          "src/consensus/model/intent_designation.ml";
+          "src/consensus/model/network.ml";
+          "src/consensus/model/object.ml";
+          "src/consensus/model/object_color.ml";
+          "src/consensus/model/object_shape.ml";
+          "src/consensus/model/swarm.ml";
+          "src/consensus/model/target.ml";
+          "src/consensus/model/theater.ml";
+          "src/consensus/model/threat_level.ml"];
 
     dep  ["file:src/consensus/model.mli"]
-         ["src/consensus/model/object.mli";
-          "src/consensus/model/shape.mli";
-          "src/consensus/model/theater.mli"];
+         ["src/consensus/model/asset.mli";
+          "src/consensus/model/intent_designation.mli";
+          "src/consensus/model/network.mli";
+          "src/consensus/model/object.mli";
+          "src/consensus/model/object_color.mli";
+          "src/consensus/model/object_shape.mli";
+          "src/consensus/model/swarm.mli";
+          "src/consensus/model/target.mli";
+          "src/consensus/model/theater.mli";
+          "src/consensus/model/threat_level.mli"];
 
     dep  ["file:src/consensus/scripting.ml"]
          ["src/consensus/scripting/context.ml"];

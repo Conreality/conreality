@@ -47,7 +47,7 @@ class virtual interface (id : int) = object (self)
   method mass =
     Some (Mass (0., kilogram)) (* TODO *)
 
-  method shape : Shape.t option =
+  method shape : Object_shape.t option =
     None (* TODO *)
 
   method color : unit option =
@@ -91,6 +91,12 @@ class virtual interface (id : int) = object (self)
 
   method to_string : string =
     failwith "Not implemented as yet" (* TODO *)
+
+  method intent_assessment =
+    Intent_designation.Unknown
+
+  method threat_assessment =
+    Threat_level.Unknown
 end
 
 type t = interface

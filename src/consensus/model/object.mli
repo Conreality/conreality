@@ -26,7 +26,7 @@ class virtual interface : int -> object
   method mass : Measures.Quantity.t option
 
   (** The approximated shape, if any, of this object. *)
-  method shape : Shape.t option
+  method shape : Object_shape.t option
 
   (** The approximated color, if any, of this object. *)
   method color : unit option
@@ -59,6 +59,12 @@ class virtual interface : int -> object
 
   (** Returns a human-readable string representation of this object. *)
   method to_string : string
+
+  (** TODO *)
+  method intent_assessment : Intent_designation.t
+
+  (** TODO *)
+  method threat_assessment : Threat_level.t
 end
 
 type t = interface
