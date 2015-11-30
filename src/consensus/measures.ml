@@ -156,4 +156,41 @@ type quantity =
 
 module Quantity = struct
   type t = quantity
+
+  let length = function
+    | Length (magnitude, _) -> magnitude
+    | _ -> assert false
+
+  let mass = function
+    | Mass (magnitude, _) -> magnitude
+    | _ -> assert false
+
+  let time = function
+    | Time (magnitude, _) -> magnitude
+    | _ -> assert false
+
+  let current = function
+    | Current (magnitude, _) -> magnitude
+    | _ -> assert false
+
+  let temperature = function
+    | Temperature (magnitude, _) -> magnitude
+    | _ -> assert false
+
+  let magnitude = function
+    | Length (magnitude, _) -> magnitude
+    | Mass (magnitude, _) -> magnitude
+    | Time (magnitude, _) -> magnitude
+    | Current (magnitude, _) -> magnitude
+    | Temperature (magnitude, _) -> magnitude
+
+  let is_infinite value =
+    Float.is_infinite (magnitude value)
+
+  let inverse = function
+    | Length (magnitude, unit) -> Length (Float.inverse magnitude, unit)
+    | Mass (magnitude, unit) -> Mass (Float.inverse magnitude, unit)
+    | Time (magnitude, unit) -> Time (Float.inverse magnitude, unit)
+    | Current (magnitude, unit) -> Current (Float.inverse magnitude, unit)
+    | Temperature (magnitude, unit) -> Temperature (Float.inverse magnitude, unit)
 end

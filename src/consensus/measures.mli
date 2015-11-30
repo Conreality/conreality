@@ -111,3 +111,14 @@ type quantity    =
   | Time of time * Unit.t
   | Current of current * Unit.t
   | Temperature of temperature * Unit.t
+module Quantity : sig
+  type t = quantity
+  val length : t -> length
+  val mass : t -> mass
+  val time : t -> time
+  val current : t -> current
+  val temperature : t -> temperature
+  val magnitude : t -> float
+  val is_infinite : t -> bool
+  val inverse : t -> t
+end
