@@ -4,6 +4,7 @@ _build/src/consensus/knowledge.cmi      usr/lib/ocaml/consensus/
 _build/src/consensus/machinery.cmi      usr/lib/ocaml/consensus/
 _build/src/consensus/measures.cmi       usr/lib/ocaml/consensus/
 _build/src/consensus/messaging.cmi      usr/lib/ocaml/consensus/
+_build/src/consensus/model.cmi          usr/lib/ocaml/consensus/
 _build/src/consensus/ontology.cmi       usr/lib/ocaml/consensus/
 _build/src/consensus/physics.cmi        usr/lib/ocaml/consensus/
 _build/src/consensus/prelude.cmi        usr/lib/ocaml/consensus/

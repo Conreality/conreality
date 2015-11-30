@@ -77,6 +77,14 @@ let () =
           "src/consensus/messaging/stomp.mli";
           "src/consensus/messaging/topic.mli"];
 
+    dep  ["file:src/consensus/model.ml"]
+         ["src/consensus/model/object.ml";
+          "src/consensus/model/theater.ml"];
+
+    dep  ["file:src/consensus/model.mli"]
+         ["src/consensus/model/object.mli";
+          "src/consensus/model/theater.mli"];
+
     dep  ["file:src/consensus/scripting.ml"]
          ["src/consensus/scripting/context.ml"];
 

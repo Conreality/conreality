@@ -31,7 +31,7 @@ package "machinery" (
 
 package "measures" (
   version = "@PACKAGE_VERSION@"
-  description = "Consensus physical measures"
+  description = "Consensus measures & quantities"
   requires = "consensus.prelude"
   archive(byte) = "consensus.measures.cmo"
   archive(native) = "consensus.measures.cmx"
@@ -43,6 +43,14 @@ package "messaging" (
   requires = "consensus.prelude"
   archive(byte) = "consensus.scripting.cmo"
   archive(native) = "consensus.scripting.cmx"
+)
+
+package "model" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus world model"
+  requires = "consensus.prelude consensus.geometry consensus.measures"
+  archive(byte) = "consensus.model.cmo"
+  archive(native) = "consensus.model.cmx"
 )
 
 package "ontology" (

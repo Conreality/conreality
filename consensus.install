@@ -39,6 +39,10 @@ lib: [
   "_build/src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
   "_build/src/consensus/messaging.cmo" {"consensus.messaging.cmo"}
   "_build/src/consensus/messaging.cmx" {"consensus.messaging.cmx"}
+  "src/consensus/model.mli" {"consensus.model.mli"}
+  "_build/src/consensus/model.cmi" {"consensus.model.cmi"}
+  "_build/src/consensus/model.cmo" {"consensus.model.cmo"}
+  "_build/src/consensus/model.cmx" {"consensus.model.cmx"}
   "src/consensus/ontology.mli" {"consensus.ontology.mli"}
   "_build/src/consensus/ontology.cmi" {"consensus.ontology.cmi"}
   "_build/src/consensus/ontology.cmo" {"consensus.ontology.cmo"}

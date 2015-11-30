@@ -3,6 +3,7 @@ consensus/Knowledge
 consensus/Machinery
 consensus/Measures
 consensus/Messaging
+consensus/Model
 consensus/Ontology
 consensus/Physics
 consensus/Prelude
