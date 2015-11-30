@@ -107,24 +107,24 @@ let () =
     dep  ["file:src/consensus/scripting.mli"]
          ["src/consensus/scripting/context.mli"];
 
-    dep  ["link"; "ocaml"; "use_vision"] ["src/consensus/libconsensus-vision.a"];
+    dep  ["link"; "ocaml"; "use_cxx"] ["src/libconreality.a"];
 
-    flag ["link"; "ocaml"; "library"; "byte"; "use_vision"]
-      (S[A"-dllib"; A"-lconsensus-vision";
-         A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
+    flag ["link"; "ocaml"; "library"; "byte"; "use_cxx"]
+      (S[A"-dllib"; A"-lconreality";
+         A"-cclib"; A"src/libconreality.a"]);
 
-    flag ["link"; "ocaml"; "library"; "native"; "use_vision"]
-      (S[A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
+    flag ["link"; "ocaml"; "library"; "native"; "use_cxx"]
+      (S[A"-cclib"; A"src/libconreality.a"]);
 
-    flag ["link"; "ocaml"; "program"; "byte"; "use_vision"]
-      (S[A"-dllpath"; A"_build/src/consensus";
-         A"-dllib"; A"-lconsensus-vision";
-         A"-cclib"; A"src/consensus/libconsensus-vision.a"]);
+    flag ["link"; "ocaml"; "program"; "byte"; "use_cxx"]
+      (S[A"-dllpath"; A"_build/src";
+         A"-dllib"; A"-lconreality";
+         A"-cclib"; A"src/libconreality.a"]);
 
-    flag ["link"; "ocaml"; "program"; "native"; "use_vision"]
+    flag ["link"; "ocaml"; "program"; "native"; "use_cxx"]
       (S[A"-cclib"; A"-rdynamic";
          A"-cclib"; A"-Wl,--whole-archive";
-         A"-cclib"; A"src/consensus/libconsensus-vision.a";
+         A"-cclib"; A"src/libconreality.a";
          A"-cclib"; A"-Wl,--no-whole-archive"]);
 
     rule "ocaml C++ stubs: cc -> o"

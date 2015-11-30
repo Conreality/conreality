@@ -1,9 +1,9 @@
 conctl.native
 conreald.native
-consensus/libconsensus-vision.a
 consensus/machinery.inferred.mli
 consensus/prelude.inferred.mli
 consensus/vision.cma
 consensus/vision.cmxa
 consensus.cmo
 consensus.cmx
+libconreality.a

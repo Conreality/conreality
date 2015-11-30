@@ -40,14 +40,14 @@ _build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
 build: META $(BINARIES)
 
 check:
-	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
 bench:
-	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(COREBUILD) -Is bench,src bench/bench.otarget && \
 	  cp -p bench/bench_all.sh _build/bench/ && \
 	  _build/bench/bench_all.sh
@@ -58,7 +58,7 @@ bench:
 endif
 
 covered_check:
-	CAML_LD_LIBRARY_PATH=src/consensus:$(CAML_LD_LIBRARY_PATH) \
+	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
