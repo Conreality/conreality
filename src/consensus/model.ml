@@ -2,6 +2,10 @@
 
 open Prelude
 
+module Shape = struct
+  [%%include "model/shape.ml"]
+end
+
 module Object = struct
   [%%include "model/object.ml"]
 end
