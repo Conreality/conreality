@@ -10,6 +10,7 @@
 #include <caml/alloc.h>         /* for caml_copy_*() */
 #include <caml/memory.h>        /* for CAMLlocal1(), CAMLparam?(), CAMLreturn() */
 #include <caml/mlvalues.h>      /* for value */
+#include <caml/threads.h>       /* for caml_{enter,leave}_blocking_section() */
 #include <caml/unixsupport.h>   /* for uerror() */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +31,10 @@ caml_conreality_ioctl_void(value v_fd,
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
 
+  caml_enter_blocking_section();
   const int rc = ioctl(fd, cmd, NULL);
+  caml_leave_blocking_section();
+
   if (rc == -1) {
     char arg_string[64];
     std::snprintf(arg_string, sizeof(arg_string), "%d, 0x%08lx", fd, cmd);
@@ -54,7 +58,10 @@ caml_conreality_ioctl_int64(value v_fd,
   const unsigned long cmd = Int64_val(v_cmd);
   const unsigned long arg = Int64_val(v_arg);
 
+  caml_enter_blocking_section();
   const int rc = ioctl(fd, cmd, arg);
+  caml_leave_blocking_section();
+
   if (rc == -1) {
     char arg_string[64];
     std::snprintf(arg_string, sizeof(arg_string), "%d, 0x%08lx, 0x%08lx", fd, cmd, arg);
