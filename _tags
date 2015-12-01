@@ -1,5 +1,4 @@
 "lib": -traverse, not_hygienic
-<src/**/*.{ml,mli}>: package(ppx_include)
 <src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua), thread
 <src/conctl.{byte,native}>: use_cxx
 <src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua), package(lwt), package(lwt.unix), thread
@@ -10,7 +9,6 @@
 <src/consensus/prelude.{cma,cmxa}>: use_cxx
 <src/consensus/scripting.*>: package(lua), thread
 <src/consensus/vision.*>: package(ctypes.foreign)
-<test/**/*.{ml,mli}>: package(ppx_include)
 <test/check_*.*>: package(alcotest), package(ctypes.foreign), package(lua), thread
 <test/check_*.{byte,native}>: use_cxx
 <bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua), thread

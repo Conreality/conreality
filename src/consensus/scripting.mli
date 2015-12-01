@@ -5,5 +5,5 @@ exception Parse_error of string
 exception Runtime_error of string
 
 module Context : sig
-  [%%include "scripting/context.mli"]
+  #include "scripting/context.mli"
 end

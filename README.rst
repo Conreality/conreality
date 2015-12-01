@@ -52,6 +52,8 @@ OCaml Dependencies
 * `Core_bench <https://github.com/janestreet/core_bench>`__ (>= 112.35.00)
   (not automatically installed. ``opam install core_bench`` to run the benchmarks with ``make bench``)
 
+* `Cppo <https://opam.ocaml.org/packages/cppo/cppo.1.3.1/>`__ (>= 1.3.1)
+
 * `Ctypes <https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/>`__ (>= 0.4.0)
 
 * `Ctypes.Foreign <https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/>`__ (>= 0.4.0)
@@ -59,8 +61,6 @@ OCaml Dependencies
 * `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
 
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
-
-* `ppx_include <https://opam.ocaml.org/packages/ppx_include/ppx_include.1.0/>`__ (>= 1.0)
 
 Installation
 ------------

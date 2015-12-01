@@ -3,21 +3,21 @@
 open Prelude
 
 module Topic = struct
-  [%%include "messaging/topic.ml"]
+  #include "messaging/topic.ml"
 end
 
 module IRC = struct
-  [%%include "messaging/irc.ml"]
+  #include "messaging/irc.ml"
 end
 
 module MQTT = struct
-  [%%include "messaging/mqtt.ml"]
+  #include "messaging/mqtt.ml"
 end
 
 module ROS = struct
-  [%%include "messaging/ros.ml"]
+  #include "messaging/ros.ml"
 end
 
 module STOMP = struct
-  [%%include "messaging/stomp.ml"]
+  #include "messaging/stomp.ml"
 end

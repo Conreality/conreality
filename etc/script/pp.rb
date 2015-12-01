@@ -4,9 +4,9 @@
 # as a workaround for bisect_ppx otherwise choking on those files.
 ARGF.each_line do |line|
   line = case
-    when line.include?('%%include')
+    when line.include?('#include')
       # Some preprocessing required.
-      line.gsub(/\[%%include "([^"]+)"\]/) do |match|
+      line.gsub(/#include "([^"]+)"/) do |match|
         source_path = ARGF.filename # the current file
         source_dir = File.dirname(source_path)
         File.read(File.join(source_dir, $1))

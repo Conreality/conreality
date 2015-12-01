@@ -5,8 +5,8 @@ require 'fileutils'
 Dir['src/**/*.{ml,mli}'].sort.each do |source_path|
   source_dir  = File.dirname(source_path)
   source_text = File.read(source_path)
-  if source_text.each_line.any? { |line| line.include?('%%include') }
-    build_text = source_text.gsub(/\[%%include "([^"]+)"\]/) do |match|
+  if source_text.each_line.any? { |line| line.include?('#include') }
+    build_text = source_text.gsub(/#include "([^"]+)"/) do |match|
       File.read(File.join(source_dir, $1))
     end
     build_path = File.join('_build', source_path)

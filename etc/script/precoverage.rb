@@ -32,9 +32,9 @@ Dir["{#{SOURCE_DIRS}}/**/*.{ml,mli}"].sort.each do |source_path|
   source_dir  = File.dirname(source_path)
   source_text = File.read(source_path)
 
-  if source_text.each_line.any? { |line| line.include?('%%include') }
+  if source_text.each_line.any? { |line| line.include?('#include') }
     # Some preprocessing required.
-    target_text = source_text.gsub(/\[%%include "([^"]+)"\]/) do |match|
+    target_text = source_text.gsub(/#include "([^"]+)"/) do |match|
       File.read(File.join(source_dir, $1))
     end
     File.open(target_path, 'w+') do |target_file|

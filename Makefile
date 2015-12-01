@@ -2,11 +2,11 @@ PACKAGE_NAME    = consensus
 PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
-# HACK to fix bisect_ppx vs ppx_include:
-OCAMLCFLAGS      = -pp 'sudo $(CURDIR)/etc/script/pp.rb'
-OCAMLOPTFLAGS    = $(OCAMLCFLAGS)
+OCAMLBUILDFLAGS = -use-ocamlfind -plugin-tag 'package(cppo_ocamlbuild)'
+OCAMLCFLAGS     = -pp cppo
+OCAMLOPTFLAGS   = $(OCAMLCFLAGS)
 
-OCAMLBUILD      = ocamlbuild $(OCAMLCFLAGS)
+OCAMLBUILD      = ocamlbuild $(OCAMLBUILDFLAGS) $(OCAMLCFLAGS)
 OCAMLC          = ocamlfind ocamlc $(OCAMLCFLAGS)
 OCAMLOPT        = ocamlfind ocamlopt $(OCAMLOPTFLAGS)
 COREBUILD       = corebuild $(OCAMLCFLAGS)
@@ -19,7 +19,7 @@ IS_BENCHABLE_ARCHITECTURE := $(shell \
   echo true || echo false)
 
 ifeq ($(V),1)
-OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose $(OCAMLCFLAGS)
+OCAMLBUILD      = ocamlbuild -verbose 1 -cflag -verbose -lflag -verbose $(OCAMLBUILDFLAGS) $(OCAMLCFLAGS)
 CHECKVERBOSE	= '--verbose'
 endif
 
@@ -43,6 +43,7 @@ check:
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
+	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
@@ -50,6 +51,7 @@ bench:
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(COREBUILD) -Is bench,src bench/bench.otarget && \
 	  cp -p bench/bench_all.sh _build/bench/ && \
+	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
 	  _build/bench/bench_all.sh
 else
 bench:
@@ -61,6 +63,7 @@ covered_check:
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
           $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
+	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 clean_reports:
