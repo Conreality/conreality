@@ -3,9 +3,12 @@
 module Ioctl : sig
   type t =
     | None
-    | Int_in of int
-    | Int32_in of int32
-    | Int64_in of int64
+    | Int_val   of int
+    | Int_ref   of int
+    | Int32_val of int32
+    | Int32_ref of int32
+    | Int64_val of int64
+    | Int64_ref of int64
 end
 
-val ioctl : Unix.file_descr -> int64 -> Ioctl.t -> int32
+val ioctl : Unix.file_descr -> int64 -> Ioctl.t -> int64

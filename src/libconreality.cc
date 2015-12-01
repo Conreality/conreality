@@ -26,7 +26,7 @@ extern "C" CAMLprim value
 caml_conreality_ioctl_void(value v_fd,
                            value v_cmd) {
   CAMLparam2(v_fd, v_cmd);
-  CAMLlocal1(v_rc);
+  CAMLlocal1(v_result);
 
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
@@ -41,18 +41,18 @@ caml_conreality_ioctl_void(value v_fd,
     uerror(const_cast<char*>("ioctl"), caml_copy_string(arg_string));
   }
 
-  v_rc = caml_copy_int32(rc);
-  CAMLreturn(v_rc);
+  v_result = caml_copy_int64(rc);
+  CAMLreturn(v_result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 extern "C" CAMLprim value
-caml_conreality_ioctl_int64(value v_fd,
-                            value v_cmd,
-                            value v_arg) {
+caml_conreality_ioctl_int64_val(value v_fd,
+                                value v_cmd,
+                                value v_arg) {
   CAMLparam3(v_fd, v_cmd, v_arg);
-  CAMLlocal1(v_rc);
+  CAMLlocal1(v_result);
 
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
@@ -68,6 +68,33 @@ caml_conreality_ioctl_int64(value v_fd,
     uerror(const_cast<char*>("ioctl"), caml_copy_string(arg_string));
   }
 
-  v_rc = caml_copy_int32(rc);
-  CAMLreturn(v_rc);
+  v_result = caml_copy_int64(rc);
+  CAMLreturn(v_result);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+extern "C" CAMLprim value
+caml_conreality_ioctl_int64_ref(value v_fd,
+                                value v_cmd,
+                                value v_arg) {
+  CAMLparam3(v_fd, v_cmd, v_arg);
+  CAMLlocal1(v_result);
+
+  const int fd = Int_val(v_fd);
+  const unsigned long cmd = Int64_val(v_cmd);
+  unsigned long arg = Int64_val(v_arg);
+
+  caml_enter_blocking_section();
+  const int rc = ioctl(fd, cmd, &arg);
+  caml_leave_blocking_section();
+
+  if (rc == -1) {
+    char arg_string[64];
+    std::snprintf(arg_string, sizeof(arg_string), "%d, 0x%08lx, 0x%08lx", fd, cmd, arg);
+    uerror(const_cast<char*>("ioctl"), caml_copy_string(arg_string));
+  }
+
+  v_result = caml_copy_int64(arg);
+  CAMLreturn(v_result);
 }
