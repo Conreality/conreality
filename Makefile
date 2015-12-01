@@ -3,7 +3,7 @@ PACKAGE_TARNAME = $(PACKAGE_NAME)
 PACKAGE_VERSION = $(shell cat VERSION)
 
 OCAMLBUILDFLAGS = -use-ocamlfind -plugin-tag 'package(cppo_ocamlbuild)'
-OCAMLCFLAGS     = -pp cppo
+OCAMLCFLAGS     =
 OCAMLOPTFLAGS   = $(OCAMLCFLAGS)
 
 OCAMLBUILD      = ocamlbuild $(OCAMLBUILDFLAGS) $(OCAMLCFLAGS)
@@ -61,7 +61,7 @@ endif
 
 covered_check:
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
-          $(OCAMLBUILD) -package bisect_ppx -Is test,src test/check.otarget && \
+	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
 	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
