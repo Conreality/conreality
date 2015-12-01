@@ -9,6 +9,7 @@ module Ioctl : sig
     | Int32_ref of int32
     | Int64_val of int64
     | Int64_ref of int64
+    | Bigarray  of Bigarray.int8_unsigned_elt
 end
 
 val ioctl : Unix.file_descr -> int64 -> Ioctl.t -> int64
