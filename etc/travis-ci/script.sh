@@ -32,11 +32,11 @@ eval `opam config env`
 time opam install -q -y ${OPAM_PACKAGES}
 
 # compile & run tests with coverage instrumentation
-time make clean && make covered_check V=1
+time make clean && make check V=1
 
 # generate Bisect coverage reports
 #time make report V=1
 
 # send code coverage report to Coveralls.io
-#time ocveralls --prefix _build bisect00*.out --send
-time ocveralls --prefix '' bisect00*.out --send
+#time ocveralls --prefix _build tmp/check/bisect00*.out --send
+time ocveralls --prefix '' tmp/check/bisect00*.out --send

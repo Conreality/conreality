@@ -40,10 +40,11 @@ _build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
 build: META $(BINARIES)
 
 check:
+	mkdir -p tmp/check && \
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
+	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) BISECT_FILE=tmp/check/bisect \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
@@ -59,20 +60,13 @@ bench:
 	  architectures: $(BENCHABLE_ARCHITECTURES)"
 endif
 
-covered_check:
-	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
-	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
-	  cp -p test/check_all.sh _build/test/ && \
-	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) \
-	  _build/test/check_all.sh $(CHECKVERBOSE)
+clean-reports:
+	rm -rf tmp/report
 
-clean_reports:
-	rm -rf _reports
-
-report: clean_reports
-	mkdir -p _reports && \
+report: clean-reports
+	mkdir -p tmp/report && \
 	cd _build && \
-	bisect-ppx-report -verbose -html ../_reports ../bisect*.out && \
+	bisect-ppx-report -verbose -html ../tmp/report ../tmp/check/bisect*.out && \
 	cd -
 
 install: consensus.install build
@@ -83,6 +77,6 @@ uninstall: consensus.install
 
 clean:
 	$(OCAMLBUILD) -clean
-	rm -rf META README.html _build _reports _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} bisect*.out
+	rm -rf META README.html _build _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} tmp _bisect _reports
 
 .PHONY: all build check bench install uninstall clean

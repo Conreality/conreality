@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 # This script copies the contents of the src/ and test/ top-level
-# directories into a _bisect/ temporary directory, preprocessing any
+# directories into a tmp/bisect/ temporary directory, preprocessing any
 # *.{ml,mli} source files containing %%include directives in order to
 # remove their ppx_include dependency (for bisect_ppx compatibility).
 require 'fileutils'
 
 # This is the target directory, which will be created if needed:
-TARGET_DIR    = ENV['TARGET_DIR'] || '_bisect'
+TARGET_DIR    = ENV['TARGET_DIR'] || 'tmp/bisect'
 
 # The *.{ml,mli} files in these directories get preprocessed:
 SOURCE_DIRS   = %w(src test).join(',')
