@@ -8,11 +8,11 @@ consensus/messaging.inferred.mli
 consensus/model.inferred.mli
 consensus/ontology.inferred.mli
 consensus/physics.inferred.mli
+consensus/prelude.cma
+consensus/prelude.cmxa
 consensus/prelude.inferred.mli
 consensus/scripting.inferred.mli
 consensus/vision.inferred.mli
-consensus/vision.cma
-consensus/vision.cmxa
 consensus.cmo
 consensus.cmx
 libconreality.a

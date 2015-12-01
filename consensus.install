@@ -53,16 +53,16 @@ lib: [
   "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
   "src/consensus/prelude.mli" {"consensus.prelude.mli"}
   "_build/src/consensus/prelude.cmi" {"consensus.prelude.cmi"}
-  "_build/src/consensus/prelude.cmo" {"consensus.prelude.cmo"}
-  "_build/src/consensus/prelude.cmx" {"consensus.prelude.cmx"}
+  "_build/src/consensus/prelude.cma" {"consensus.prelude.cma"}
+  "_build/src/consensus/prelude.cmxa" {"consensus.prelude.cmxa"}
   "src/consensus/scripting.mli" {"consensus.scripting.mli"}
   "_build/src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
   "_build/src/consensus/scripting.cmo" {"consensus.scripting.cmo"}
   "_build/src/consensus/scripting.cmx" {"consensus.scripting.cmx"}
   "src/consensus/vision.mli" {"consensus.vision.mli"}
   "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
-  "_build/src/consensus/vision.cma" {"consensus.vision.cma"}
-  "_build/src/consensus/vision.cmxa" {"consensus.vision.cmxa"}
+  "_build/src/consensus/vision.cmo" {"consensus.vision.cmo"}
+  "_build/src/consensus/vision.cmx" {"consensus.vision.cmx"}
   "_build/src/libconreality.a" {"libconreality.a"}
 ]
 stublibs: [

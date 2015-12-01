@@ -73,8 +73,8 @@ package "prelude" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus standard prelude"
   requires = ""
-  archive(byte) = "consensus.prelude.cmo"
-  archive(native) = "consensus.prelude.cmx"
+  archive(byte) = "consensus.prelude.cma"
+  archive(native) = "consensus.prelude.cmxa"
 )
 
 package "scripting" (
@@ -89,6 +89,6 @@ package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"
   requires = "consensus.prelude ctypes.foreign"
-  archive(byte) = "consensus.vision.cma"
-  archive(native) = "consensus.vision.cmxa"
+  archive(byte) = "consensus.vision.cmo"
+  archive(native) = "consensus.vision.cmx"
 )
