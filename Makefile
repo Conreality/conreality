@@ -11,6 +11,7 @@ OCAMLC          = ocamlfind ocamlc $(OCAMLCFLAGS)
 OCAMLOPT        = ocamlfind ocamlopt $(OCAMLOPTFLAGS)
 COREBUILD       = corebuild $(OCAMLCFLAGS)
 OPAM_INSTALLER  = opam-installer
+RUBY            = ruby
 
 BENCHABLE_ARCHITECTURES := x86_|i686
 IS_BENCHABLE_ARCHITECTURE := $(shell \
@@ -41,10 +42,12 @@ build: META $(BINARIES)
 
 check:
 	mkdir -p tmp/check && \
+	$(RUBY) etc/script/precoverage.rb && \
+	cd tmp/check && \
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
 	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
-	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) BISECT_FILE=tmp/check/bisect \
+	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) BISECT_FILE=bisect \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
 
 ifeq "$(IS_BENCHABLE_ARCHITECTURE)" "true"
@@ -65,8 +68,8 @@ clean-reports:
 
 report: clean-reports
 	mkdir -p tmp/report && \
-	cd _build && \
-	bisect-ppx-report -verbose -html ../tmp/report ../tmp/check/bisect*.out && \
+	cd tmp/check/_build && \
+	bisect-ppx-report -verbose -html ../../report ../bisect*.out && \
 	cd -
 
 install: consensus.install build
