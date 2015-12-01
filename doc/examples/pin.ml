@@ -11,6 +11,7 @@
 
 open Consensus.Prelude;;
 open Consensus.Machinery;;
+open Consensus.Machinery.Abstract;;
 open Printf;;
 
 let pin_id =
