@@ -118,5 +118,6 @@ uninstall: consensus.install
 clean:
 	$(OCAMLBUILD) -clean
 	rm -rf META README.html _build _tests *~ src/*~ src/*.{a,cma,cmi,cmo,cmp,cmx,cmxa,ml.depends,mli.depends,o} tmp _bisect _reports
+	find $(CURDIR) -name '*~' -delete
 
 .PHONY: all build check bench install uninstall clean
