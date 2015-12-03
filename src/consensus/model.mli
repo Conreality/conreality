@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** World model. *)
+
 module Object_color : sig
   #include "model/object_color.mli"
 end

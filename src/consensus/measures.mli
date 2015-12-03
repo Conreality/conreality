@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** Measures & quantities. *)
+
 (* Dimensions of measurement *)
 module Dimension : sig
   type t =

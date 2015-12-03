@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** Geometry library. *)
+
 (* Points *)
 
 type p2     (** 2D point *)

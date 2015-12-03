@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** Knowledge base. *)
+
 module Term : sig
   type t =
     | URI of string

@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** The `conctl` command-line interface. *)
+
 open Cmdliner
 open Consensus
 open Consensus.Prelude

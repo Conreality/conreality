@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** The `conreald` server daemon. *)
+
 open Cmdliner
 open Consensus
 open Consensus.Prelude

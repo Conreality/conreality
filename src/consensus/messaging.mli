@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** Messaging protocols. *)
+
 module Topic : sig
   #include "messaging/topic.mli"
 end

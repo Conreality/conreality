@@ -1,5 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(** Standard prelude. *)
+
 module Bool : sig
   #include "prelude/bool.mli"
 end
