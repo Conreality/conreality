@@ -1,1 +1,13 @@
-consensus.mlpack
+Conctl
+Conreald
+consensus/Geometry
+consensus/Knowledge
+consensus/Machinery
+consensus/Measures
+consensus/Messaging
+consensus/Model
+consensus/Ontology
+consensus/Physics
+consensus/Prelude
+consensus/Scripting
+consensus/Vision
