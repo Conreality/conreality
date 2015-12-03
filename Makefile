@@ -36,9 +36,46 @@ META: META.in Makefile VERSION
 	    META.in > META
 
 _build/src/consensus.otarget: src/consensus.itarget src/consensus.mlpack _tags
-	$(OCAMLBUILD) -Is src src/consensus.otarget
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/conctl.native: src/conctl.ml _tags
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/conreald.native: src/conreald.ml _tags
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/consensus.docdir/index.html: src/consensus.odocl
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/consensus.docdir/man: src/consensus.odocl
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/consensus.docdir/reference.tex: src/consensus.odocl
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/consensus.docdir/reference.texi: src/consensus.odocl
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
+
+_build/src/consensus.docdir/reference.dot: src/consensus.odocl
+	$(OCAMLBUILD) -Is src $(patsubst _build/%,%,$@)
 
 build: META $(BINARIES)
+
+conctl: _build/src/conctl.native
+
+conreald: _build/src/conreald.native
+
+html: _build/src/consensus.docdir/index.html
+
+man: _build/src/consensus.docdir/man
+
+tex: _build/src/consensus.docdir/reference.tex
+
+texi: _build/src/consensus.docdir/reference.texi
+
+dot: _build/src/consensus.docdir/reference.dot
+
+doc: html man tex texi dot
 
 check:
 	mkdir -p tmp/check && \
