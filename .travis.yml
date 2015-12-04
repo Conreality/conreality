@@ -1,4 +1,4 @@
-# https://travis-ci.org/conreality/consensus
+# https://travis-ci.org/conreality/conreality
 language: c
 script: bash -ex etc/travis-ci/script.sh
 sudo: required

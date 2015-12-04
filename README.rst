@@ -5,12 +5,12 @@ Consensus Reality
 
 http://conreality.org
 
-.. image:: https://api.travis-ci.org/conreality/consensus.svg?branch=master
-   :target: https://travis-ci.org/conreality/consensus
+.. image:: https://api.travis-ci.org/conreality/conreality.svg?branch=master
+   :target: https://travis-ci.org/conreality/conreality
    :alt: Travis CI build status
 
-.. image:: https://coveralls.io/repos/conreality/consensus/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/github/conreality/consensus?branch=master
+.. image:: https://coveralls.io/repos/conreality/conreality/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/github/conreality/conreality?branch=master
    :alt: Coveralls.io code coverage
 
 Prerequisites
@@ -93,7 +93,7 @@ General initialization of local OCaml environment::
 General local installation procedure using the `OPAM <opam.ocaml.org>`__
 package manager::
 
-   $ git clone --recursive https://github.com/conreality/consensus.git
+   $ git clone --recursive https://github.com/conreality/conreality.git
    $ cd consensus
 
    $ opam pin add consensus . --no-action --yes
