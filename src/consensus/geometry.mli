@@ -1,7 +1,5 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-(** Geometry library. *)
-
 (* Points *)
 
 type p2     (** 2D point *)
@@ -159,6 +157,8 @@ module M2: sig
   val add : t -> t -> t
   val ( + ) : t -> t -> t
   val sub : t -> t-> t
+  val ( + ) : t -> t -> t
+  val sub : t -> t-> t
   val ( - ) : t -> t -> t
   val eq : t -> t-> bool
   val ( = ) : t -> t -> bool
@@ -259,7 +259,6 @@ module M4: sig
   val det_exp : t -> float
   val det_exp_2x2 : t -> float
   val trace : t -> float
-  val inverse : t -> t
   val to_string : t -> bytes
 end
 
@@ -303,8 +302,6 @@ module Q: sig
   val neg : t -> t
   val unit : t -> t
   val dot : t -> t -> float
-  val alpha : t -> t -> float
-  val cos_alpha : t -> t -> float
   val distance : t -> t -> float
   val slerp : t -> t -> float -> t
   val squad : t -> t -> t -> t -> float -> t

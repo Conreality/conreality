@@ -540,7 +540,7 @@ module M4_test = struct
     M4.e30 m; M4.e31 m; M4.e32 m; M4.e33 m;
   ]
 
-  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  (* Keep this one operating on floats to avoid depending on M4.eq *)
   let create () = same_float_list [
       e; pi; (1.); (2.);
       phi; (0.); (2.); (1.);
@@ -563,7 +563,7 @@ module M4_test = struct
   let e31 () = same_float 2. (M4.e31 tm4_2)
   let e32 () = same_float 3. (M4.e32 tm4_2)
   let e33 () = same_float 4. (M4.e33 tm4_2)
-  (* Keep this one operating on floats to avoid depending on P3.eq *)
+  (* Keep this one operating on floats to avoid depending on M4.eq *)
   let zero () = same_float_list [
       0.; 0.; 0.; 0.;
       0.; 0.; 0.; 0.;
@@ -651,21 +651,6 @@ module M4_test = struct
   let trace () =
     same_float 22. (M4.trace tm4_1);
     same_float 5.71828 (M4.trace tm4_2)
-
-  let inverse () = todo ()
-(*
-  let inverse () =
-    let expected_1 = M4.smul (M4.create
-        (230.) (-25.) (-75.) (-65.)
-        (69.) (5.) (-35.) (-7.)
-        (-180.) (25.) (75.) (40.)
-        (43.) (-15.) (-20.) (21.)) (1. /. 125.) in
-    (*let expected_2 = M4.create*)
-    Printf.eprintf "expect: %s\n" (M4.to_string expected_1); flush_all();
-    Printf.eprintf "result: %s\n" (M4.to_string (M4.inverse tm4_1)); flush_all();
-    same_bool true (M4.eq (M4.inverse tm4_1) expected_1)(*;
-    same_bool true (M4.eq (M4.inverse tm4_2) expected_2)*)
-*)
 
   let to_string () = todo ()
 end
@@ -1035,7 +1020,6 @@ let () =
       "M4.det2",                 `Quick, M4_test.det2;
       "M4.det3",                 `Quick, M4_test.det3;
       "M4.trace",                `Quick, M4_test.trace;
-      "M4.inverse",              `Quick, M4_test.inverse;
       "M4.to_string",            `Quick, M4_test.to_string;
     ];
     "Quaternion", [
