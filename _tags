@@ -1,6 +1,6 @@
 "lib": -traverse, not_hygienic
 <src/**/*.{ml,mli}>: pp(cppo)
-<src/**/*.*>: package(lwt), package(lwt.unix), thread
+<src/**/*.*>: thread, package(lwt), package(lwt.unix)
 <src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua)
 <src/conctl.{byte,native}>: use_cxx
 <src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua)
@@ -11,7 +11,7 @@
 <src/consensus/prelude.{cma,cmxa}>: use_cxx
 <src/consensus/scripting.*>: package(lua)
 <src/consensus/vision.*>: package(ctypes.foreign)
-<test/check_*.*>: package(bisect_ppx), package(alcotest), package(ctypes.foreign), package(lua)
+<test/check_*.*>: thread, package(lwt), package(lwt.unix), package(bisect_ppx), package(alcotest), package(ctypes.foreign), package(lua)
 <test/check_*.{byte,native}>: use_cxx
-<bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua)
+<bench/bench_*.*>: thread, package(lwt), package(lwt.unix), package(core), package(core_bench), package(ctypes.foreign), package(lua)
 <bench/bench_*.{byte,native}>: use_cxx
