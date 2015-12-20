@@ -20,4 +20,7 @@ end
 
 module Packet = struct
   let max_data_size = 64 * 1024 (* rounded up from 65,507 *)
+
+  let make_buffer () =
+    Lwt_bytes.create max_data_size
 end

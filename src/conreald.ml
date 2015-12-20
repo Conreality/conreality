@@ -66,7 +66,7 @@ let hello sockfd =
   >>= fun () -> Lwt.return ()
 
 let recv_udp_packet socket =
-  let buffer = Lwt_bytes.create UDP.Packet.max_data_size in
+  let buffer = (UDP.Packet.make_buffer ()) in
   let rec loop () =
     UDP.Socket.recvfrom socket buffer >>= fun (len, sa) ->
     Lwt_log.ign_warning_f "Received %d bytes from %s..." len "?"; (* TODO *)

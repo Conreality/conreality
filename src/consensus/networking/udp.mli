@@ -8,4 +8,5 @@ end
 
 module Packet : sig
   val max_data_size : int
+  val make_buffer : unit -> Lwt_bytes.t
 end
