@@ -6,9 +6,9 @@ module Topic : sig
   #include "messaging/topic.mli"
 end
 
-(** Consensus Reality Peer Protocol (CRPP). *)
-module CRPP : sig
-  #include "messaging/crpp.mli"
+(** Consensus Command and Control Protocol (CCCP). *)
+module CCCP : sig
+  #include "messaging/cccp.mli"
 end
 
 module IRC : sig

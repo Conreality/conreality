@@ -3,6 +3,12 @@
 open Check_common
 open Consensus.Messaging
 
+(* Messaging.CCCP *)
+
+module CCCP_test = struct
+  (* TODO *)
+end
+
 (* Messaging.Topic *)
 
 module Topic_test = struct
@@ -172,6 +178,9 @@ end
 
 let () =
   Alcotest.run "Consensus.Messaging test suite" [
+    "CCCP", [
+      (* TODO *)
+    ];
     "Topic", [
       "Topic.create",           `Quick, Topic_test.create;
       "Topic.path",             `Quick, Topic_test.path;
