@@ -5,7 +5,7 @@ maintainer: "Arto Bendiken <arto@bendiken.net>"
 authors: ["Arto Bendiken <arto@bendiken.net>"
           "Mike Gogulski <mike@gogulski.com>"]
 homepage: "http://conreality.org"
-bug-reports: "https://github.com/conreality/conreality/issues"
+bug-reports: "http://bugs.conreality.org"
 license: "Public Domain"
 tags: "org:conreality"
 dev-repo: "https://github.com/conreality/conreality.git"

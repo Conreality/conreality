@@ -18,7 +18,7 @@ let man_sections = [
   `S "DESCRIPTION";
   `P "Runs the Conreality daemon.";
   `S "BUGS";
-  `P "Check open bug reports at <https://github.com/conreality/conreality/issues>.";
+  `P "Check open bug reports at <http://bugs.conreality.org>.";
   `S "SEE ALSO";
   `P "$(b,concfg)(8), $(b,conctl)(8)";
 ]

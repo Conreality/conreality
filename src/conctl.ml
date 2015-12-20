@@ -62,7 +62,7 @@ let help_sections = [
   `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command."; `Noblank;
   `P "Use `$(mname) help environment' for help on environment variables.";
   `S "BUGS";
-  `P "Check open bug reports at <https://github.com/conreality/conreality/issues>.";
+  `P "Check open bug reports at <http://bugs.conreality.org>.";
 ]
 
 (* Options common to all commands *)
