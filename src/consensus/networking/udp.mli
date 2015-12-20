@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+module Protocol : sig
+  val to_int : unit -> int
+end
+
 module Socket : sig
   type t = Lwt_unix.file_descr
   val bind : string -> int -> t

@@ -3,13 +3,17 @@
 open Prelude
 open Lwt.Infix
 
+module Protocol = struct
+  let to_int () =
+    (Unix.getprotobyname "udp").Unix.p_proto
+end
+
 module Socket = struct
   type t = Lwt_unix.file_descr
 
   let bind addr port =
-    let getproto name = (Unix.getprotobyname name).Unix.p_proto in
     let sockaddr addr port = Lwt_unix.(ADDR_INET (Unix.inet_addr_of_string addr, port)) in
-    let socket = Lwt_unix.socket Unix.PF_INET Unix.SOCK_DGRAM (getproto "udp") in
+    let socket = Lwt_unix.socket Unix.PF_INET Unix.SOCK_DGRAM (Protocol.to_int ()) in
     Lwt_unix.setsockopt socket Unix.SO_REUSEADDR true;
     Lwt_unix.bind socket (sockaddr addr port);
     socket
