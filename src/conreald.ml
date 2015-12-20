@@ -78,8 +78,16 @@ end
 module Server = struct
   type t = { context: Scripting.Context.t; clients: string list }
 
+  module Protocol = struct
+    let hello context =
+      Lwt_log.ign_error "Hello from Lua!";
+      0
+  end
+
   let create () =
-    { context = Scripting.Context.create (); clients = [] }
+    let server = { context = Scripting.Context.create (); clients = [] } in
+    Scripting.Context.define server.context "hello" Protocol.hello;
+    server
 
   let evaluate server script =
     try

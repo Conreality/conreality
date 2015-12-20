@@ -16,6 +16,9 @@ let create () =
   LuaL.openlibs context;
   context
 
+let define context name callback =
+  Lua.register context name callback
+
 let call_tos context = (* not public *)
   match Lua.pcall context 0 0 0 with
   | Lua.LUA_OK -> ()
