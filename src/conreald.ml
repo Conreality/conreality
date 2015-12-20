@@ -65,18 +65,10 @@ let hello sockfd =
   >>= fun (line) -> Printf.printf "%s\n" line; Lwt.return ()
   >>= fun () -> Lwt.return ()
 
-let bind_udp_socket port =
-  let getproto name = (Unix.getprotobyname name).Unix.p_proto in
-  let sockaddr addr port = Lwt_unix.(ADDR_INET (Unix.inet_addr_of_string addr, port)) in
-  let socket = Lwt_unix.socket Unix.PF_INET Unix.SOCK_DGRAM (getproto "udp") in
-  Lwt_unix.setsockopt socket Unix.SO_REUSEADDR true;
-  Lwt_unix.bind socket (sockaddr "127.0.0.1" port);
-  socket
-
 let recv_udp_packet socket =
   let buffer = Lwt_bytes.create 4096 in
   let rec loop () =
-    Lwt_bytes.recvfrom socket buffer 0 (Lwt_bytes.length buffer) [] >>= fun (len, sa) ->
+    UDP.Socket.recvfrom socket buffer >>= fun (len, sa) ->
     Lwt_log.ign_warning_f "Received %d bytes from %s..." len "?"; (* TODO *)
     loop ()
   in loop ()
@@ -90,7 +82,7 @@ let run () =
   Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
   Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
   Lwt_log.ign_notice "Starting up...";
-  let udp_socket = bind_udp_socket 1984 in
+  let udp_socket = UDP.Socket.bind "127.0.0.1" 1984 in
   Lwt.async (fun () -> recv_udp_packet udp_socket);
   fst (Lwt.wait ())
 (*

@@ -1,16 +1,17 @@
 "lib": -traverse, not_hygienic
 <src/**/*.{ml,mli}>: pp(cppo)
-<src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua), thread
+<src/**/*.*>: package(lwt), package(lwt.unix), thread
+<src/conctl.*>: package(cmdliner), package(ctypes.foreign), package(lua)
 <src/conctl.{byte,native}>: use_cxx
-<src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua), package(lwt), package(lwt.unix), thread
+<src/conreald.*>: package(cmdliner), package(ctypes.foreign), package(lua)
 <src/conreald.{byte,native}>: use_cxx
 <src/consensus/*.cmx>: for-pack(Consensus)
 <src/consensus/prelude.*>: no_alias_deps
 <src/consensus/prelude.{cmo,cmx}>: use_opencv_core
 <src/consensus/prelude.{cma,cmxa}>: use_cxx
-<src/consensus/scripting.*>: package(lua), thread
+<src/consensus/scripting.*>: package(lua)
 <src/consensus/vision.*>: package(ctypes.foreign)
-<test/check_*.*>: package(bisect_ppx), package(alcotest), package(ctypes.foreign), package(lua), thread
+<test/check_*.*>: package(bisect_ppx), package(alcotest), package(ctypes.foreign), package(lua)
 <test/check_*.{byte,native}>: use_cxx
-<bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua), thread
+<bench/bench_*.*>: package(core), package(core_bench), package(ctypes.foreign), package(lua)
 <bench/bench_*.{byte,native}>: use_cxx
