@@ -24,7 +24,7 @@ let man_sections = [
 ]
 
 let udp_interface = "127.0.0.1"
-let udp_port = 1984
+let udp_port = CCCP.Protocol.port
 
 let broker_name = "localhost"
 let broker_port = 61613 (* Apache ActiveMQ Apollo *)
