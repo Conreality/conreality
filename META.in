@@ -41,8 +41,8 @@ package "messaging" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus messaging protocols"
   requires = "consensus.prelude"
-  archive(byte) = "consensus.scripting.cmo"
-  archive(native) = "consensus.scripting.cmx"
+  archive(byte) = "consensus.messaging.cmo"
+  archive(native) = "consensus.messaging.cmx"
 )
 
 package "model" (
@@ -51,6 +51,14 @@ package "model" (
   requires = "consensus.prelude consensus.geometry consensus.knowledge consensus.measures"
   archive(byte) = "consensus.model.cmo"
   archive(native) = "consensus.model.cmx"
+)
+
+package "networking" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus networking protocols"
+  requires = "consensus.prelude"
+  archive(byte) = "consensus.networking.cmo"
+  archive(native) = "consensus.networking.cmx"
 )
 
 package "ontology" (

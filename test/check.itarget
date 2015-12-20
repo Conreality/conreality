@@ -4,6 +4,7 @@ check_machinery.byte
 check_measures.byte
 check_messaging.byte
 check_model.byte
+check_networking.byte
 check_ontology.byte
 check_physics.byte
 check_prelude.byte

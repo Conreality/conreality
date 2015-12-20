@@ -6,6 +6,7 @@ consensus/machinery.inferred.mli
 consensus/measures.inferred.mli
 consensus/messaging.inferred.mli
 consensus/model.inferred.mli
+consensus/networking.inferred.mli
 consensus/ontology.inferred.mli
 consensus/physics.inferred.mli
 consensus/prelude.cma

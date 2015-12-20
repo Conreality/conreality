@@ -43,6 +43,10 @@ lib: [
   "_build/src/consensus/model.cmi" {"consensus.model.cmi"}
   "_build/src/consensus/model.cmo" {"consensus.model.cmo"}
   "_build/src/consensus/model.cmx" {"consensus.model.cmx"}
+  "src/consensus/networking.mli" {"consensus.networking.mli"}
+  "_build/src/consensus/networking.cmi" {"consensus.networking.cmi"}
+  "_build/src/consensus/networking.cmo" {"consensus.networking.cmo"}
+  "_build/src/consensus/networking.cmx" {"consensus.networking.cmx"}
   "src/consensus/ontology.mli" {"consensus.ontology.mli"}
   "_build/src/consensus/ontology.cmi" {"consensus.ontology.cmi"}
   "_build/src/consensus/ontology.cmo" {"consensus.ontology.cmo"}

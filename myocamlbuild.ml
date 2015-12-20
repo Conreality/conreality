@@ -101,6 +101,12 @@ let () =
           "src/consensus/model/theater.mli";
           "src/consensus/model/threat_level.mli"];
 
+    dep  ["file:src/consensus/networking.ml"]
+         ["src/consensus/networking/udp.ml"];
+
+    dep  ["file:src/consensus/networking.mli"]
+         ["src/consensus/networking/udp.mli"];
+
     dep  ["file:src/consensus/scripting.ml"]
          ["src/consensus/scripting/context.ml"];
 

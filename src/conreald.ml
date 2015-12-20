@@ -6,6 +6,7 @@ open Cmdliner
 open Consensus
 open Consensus.Prelude
 open Consensus.Messaging
+open Consensus.Networking
 open Lwt.Infix
 open Lwt_unix
 
