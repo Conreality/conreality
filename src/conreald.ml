@@ -81,21 +81,32 @@ end
 module Client = struct
   type t = Lwt_unix.sockaddr
 
+  let compare (a : t) (b : t) =
+    Pervasives.compare a b
+
   let to_string = function
     | ADDR_INET (addr, port) ->
       Printf.sprintf "%s:%d" (Unix.string_of_inet_addr addr) port
     | ADDR_UNIX _ -> assert false
 end
 
+module Client_set = Set.Make(Client)
+
 module Server = struct
-  type t = { context: Scripting.Context.t; clients: Client.t list; mutable client: Client.t }
+  type t = {
+    context: Scripting.Context.t;
+    mutable clients: Client_set.t;
+    mutable client: Client.t
+  }
 
   module Protocol = struct
     let hello server client =
-      Lwt_log.ign_notice_f "Received a hello from %s." (Client.to_string client)
+      Lwt_log.ign_notice_f "Received a hello from %s." (Client.to_string client);
+      (server.clients <- Client_set.add client server.clients) |> ignore
 
     let bye server client =
-      Lwt_log.ign_notice_f "Received a goodbye from %s." (Client.to_string client)
+      Lwt_log.ign_notice_f "Received a goodbye from %s." (Client.to_string client);
+      (server.clients <- Client_set.remove client server.clients) |> ignore
   end
 
   let define server name callback =
@@ -105,7 +116,7 @@ module Server = struct
   let create () =
     let server = {
       context = Scripting.Context.create ();
-      clients = [];
+      clients = Client_set.empty;
       client  = Unix.(ADDR_INET (Unix.inet_addr_any, 0))
     } in
     define server "hello" Protocol.hello;
