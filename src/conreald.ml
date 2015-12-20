@@ -23,6 +23,9 @@ let man_sections = [
   `P "$(b,concfg)(8), $(b,conctl)(8)";
 ]
 
+let udp_interface = "127.0.0.1"
+let udp_port = 1984
+
 let broker_name = "localhost"
 let broker_port = 61613 (* Apache ActiveMQ Apollo *)
 
@@ -75,22 +78,43 @@ module Experiments = struct
 *)
 end
 
+module Client = struct
+  type t = Lwt_unix.sockaddr
+
+  let to_string = function
+    | ADDR_INET (addr, port) ->
+      Printf.sprintf "%s:%d" (Unix.string_of_inet_addr addr) port
+    | ADDR_UNIX _ -> assert false
+end
+
 module Server = struct
-  type t = { context: Scripting.Context.t; clients: string list }
+  type t = { context: Scripting.Context.t; clients: Client.t list; mutable client: Client.t }
 
   module Protocol = struct
-    let hello context =
-      Lwt_log.ign_error "Hello from Lua!";
-      0
+    let hello server client =
+      Lwt_log.ign_notice_f "Received a hello from %s." (Client.to_string client)
+
+    let bye server client =
+      Lwt_log.ign_notice_f "Received a goodbye from %s." (Client.to_string client)
   end
 
+  let define server name callback =
+    Scripting.Context.define server.context name
+      (fun _ -> callback server server.client |> ignore; 0)
+
   let create () =
-    let server = { context = Scripting.Context.create (); clients = [] } in
-    Scripting.Context.define server.context "hello" Protocol.hello;
+    let server = {
+      context = Scripting.Context.create ();
+      clients = [];
+      client  = Unix.(ADDR_INET (Unix.inet_addr_any, 0))
+    } in
+    define server "hello" Protocol.hello;
+    define server "bye" Protocol.bye;
     server
 
-  let evaluate server script =
+  let evaluate server client script =
     try
+      server.client <- client; (* needed in Server.define callbacks *)
       Scripting.Context.eval_code server.context script
     with
     | Out_of_memory ->
@@ -103,14 +127,14 @@ module Server = struct
   let recv_command socket callback =
     let buffer = (UDP.Packet.make_buffer ()) in
     let rec loop () =
-      UDP.Socket.recvfrom socket buffer >>= fun (len, sa) ->
-      let command = String.sub (Lwt_bytes.to_string buffer) 0 len in
-      Lwt_log.ign_notice_f "Received %d bytes from %s: %s" len "?" command; (* TODO *)
-      callback (if (String.length command) > 1 then command else ""); (* for `nc` probe packets *)
+      UDP.Socket.recvfrom socket buffer >>= fun (length, client) ->
+      let command = String.sub (Lwt_bytes.to_string buffer) 0 length in
+      Lwt_log.ign_notice_f "Received %d bytes from %s: %s" length (Client.to_string client) command;
+      callback client (if (String.length command) > 1 then command else ""); (* for `nc` probe packets *)
       loop ()
     in loop ()
 
-  let run server =
+  let init server =
     Lwt_log.default := Lwt_log.syslog
       ~facility:`Daemon
       ~template:"$(name)[$(pid)]: $(message)" ();
@@ -119,15 +143,19 @@ module Server = struct
     Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
     Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
     Lwt_log.ign_notice "Starting up...";
-    let udp_socket = UDP.Socket.bind "127.0.0.1" 1984 in
+    let udp_socket = UDP.Socket.bind udp_interface udp_port in
+    Lwt_log.ign_notice_f "Listening at udp://%s:%d." udp_interface udp_port;
     Lwt.async (fun () -> recv_command udp_socket (evaluate server));
+    server
+
+  let loop server =
     fst (Lwt.wait ())
 end
 
 let main options mission =
   if String.is_empty mission
   then `Error (true, "no mission scenario script specified")
-  else `Ok (Lwt_main.run (Server.run (Server.create ())))
+  else `Ok (Lwt_main.run (Server.create () |> Server.init |> Server.loop))
 
 (* Options common to all commands *)
 
