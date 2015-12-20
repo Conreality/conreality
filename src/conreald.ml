@@ -82,7 +82,15 @@ module Server = struct
     { context = Scripting.Context.create (); clients = [] }
 
   let evaluate server script =
-    Scripting.Context.eval_code server.context script (* TODO: error handling *)
+    try
+      Scripting.Context.eval_code server.context script
+    with
+    | Out_of_memory ->
+      Lwt_log.ign_error "Failed to evaluate command due to memory exhaustion"
+    | Scripting.Parse_error _ ->
+      Lwt_log.ign_error "Failed to evaluate command due to a parse error"
+    | Scripting.Runtime_error message ->
+      Lwt_log.ign_error_f "Failed to evaluate command due to a runtime error: %s" message
 
   let recv_command socket callback =
     let buffer = (UDP.Packet.make_buffer ()) in
