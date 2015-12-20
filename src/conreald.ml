@@ -107,6 +107,24 @@ module Server = struct
     let bye server client =
       Lwt_log.ign_notice_f "Received a goodbye from %s." (Client.to_string client);
       (server.clients <- Client_set.remove client server.clients) |> ignore
+
+    let enable server client = () (* TODO *)
+
+    let disable server client = () (* TODO *)
+
+    let toggle server client = () (* TODO *)
+
+    let hold server client = () (* TODO *)
+
+    let pan server client = () (* TODO *)
+
+    let tilt server client = () (* TODO *)
+
+    let track server client = () (* TODO *)
+
+    let join server client = () (* TODO *)
+
+    let leave server client = () (* TODO *)
   end
 
   let define server name callback =
@@ -121,6 +139,7 @@ module Server = struct
     } in
     define server "hello" Protocol.hello;
     define server "bye" Protocol.bye;
+    (* TODO *)
     server
 
   let evaluate server client script =
