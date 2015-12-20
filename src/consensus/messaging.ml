@@ -6,6 +6,10 @@ module Topic = struct
   #include "messaging/topic.ml"
 end
 
+module CRPP = struct
+  #include "messaging/crpp.ml"
+end
+
 module IRC = struct
   #include "messaging/irc.ml"
 end

@@ -64,14 +64,16 @@ let () =
           "src/consensus/machinery/v4l2.mli"];
 
     dep  ["file:src/consensus/messaging.ml"]
-         ["src/consensus/messaging/irc.ml";
+         ["src/consensus/messaging/crpp.ml";
+          "src/consensus/messaging/irc.ml";
           "src/consensus/messaging/mqtt.ml";
           "src/consensus/messaging/ros.ml";
           "src/consensus/messaging/stomp.ml";
           "src/consensus/messaging/topic.ml"];
 
     dep  ["file:src/consensus/messaging.mli"]
-         ["src/consensus/messaging/irc.mli";
+         ["src/consensus/messaging/crpp.mli";
+          "src/consensus/messaging/irc.mli";
           "src/consensus/messaging/mqtt.mli";
           "src/consensus/messaging/ros.mli";
           "src/consensus/messaging/stomp.mli";
