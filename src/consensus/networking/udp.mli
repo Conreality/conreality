@@ -5,3 +5,7 @@ module Socket : sig
   val bind : string -> int -> t
   val recvfrom : t -> Lwt_bytes.t -> (int * Unix.sockaddr) Lwt.t
 end
+
+module Packet : sig
+  val max_data_size : int
+end

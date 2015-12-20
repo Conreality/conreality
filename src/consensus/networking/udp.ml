@@ -17,3 +17,7 @@ module Socket = struct
   let recvfrom socket buffer =
     Lwt_bytes.recvfrom socket buffer 0 (Lwt_bytes.length buffer) []
 end
+
+module Packet = struct
+  let max_data_size = 64 * 1024 (* rounded up from 65,507 *)
+end
