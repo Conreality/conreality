@@ -5,8 +5,8 @@
   exception Error of string
 }
 
-rule token = parse
-  | [' ' '\t' '\n'] { token lexbuf }
+rule lex = parse
+  | [' ' '\t' '\n'] { lex lexbuf }
   | ['0'-'9']+ as n { INTEGER (int_of_string n) }
   | eof             { EOF }
-  | _ { raise (Error (Printf.sprintf "At offset %d: unexpected character.\n" (Lexing.lexeme_start lexbuf))) }
+  | _ { raise (Error (Printf.sprintf "unexpected character at offset %d" (Lexing.lexeme_start lexbuf))) }

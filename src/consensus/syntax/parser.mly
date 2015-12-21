@@ -1,12 +1,18 @@
+(* This is free and unencumbered software released into the public domain. *)
+
 %token <int> INTEGER
 %token EOF
 
-%start <int> parse_command
+%{
+  open Node
+%}
+
+%start <Node.t> parse
 
 %%
 
-command:
-  | n = INTEGER { n }
-
-parse_command:
+parse:
   | command EOF { $1 }
+
+command:
+  | n = INTEGER { Integer (n) }
