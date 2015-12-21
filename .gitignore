@@ -5,6 +5,8 @@ _build
 _tests
 check_*.byte
 debian
+lexer.ml
+parser.ml
 tmp
 *~
 *.a

@@ -1,3 +1,4 @@
+true: use_menhir
 "lib": -traverse, not_hygienic
 <src/**/*.{ml,mli}>: pp(cppo)
 <src/**/*.*>: thread, package(lwt), package(lwt.unix)

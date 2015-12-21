@@ -115,6 +115,14 @@ let () =
     dep  ["file:src/consensus/scripting.mli"]
          ["src/consensus/scripting/context.mli"];
 
+    dep  ["file:src/consensus/syntax.ml"]
+         ["src/consensus/syntax/lexer.ml";
+          "src/consensus/syntax/parser.ml"];
+
+    dep  ["file:src/consensus/syntax.mli"]
+         ["src/consensus/syntax/lexer.inferred.mli";
+          "src/consensus/syntax/parser.mli"];
+
     dep  ["link"; "ocaml"; "use_cxx"] ["src/libconreality.a"];
 
     flag ["link"; "ocaml"; "library"; "byte"; "use_cxx"]

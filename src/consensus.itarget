@@ -13,6 +13,9 @@ consensus/prelude.cma
 consensus/prelude.cmxa
 consensus/prelude.inferred.mli
 consensus/scripting.inferred.mli
+consensus/syntax/lexer.ml
+consensus/syntax/lexer.inferred.mli
+consensus/syntax/parser.ml
 consensus/syntax.inferred.mli
 consensus/vision.inferred.mli
 consensus.cmo

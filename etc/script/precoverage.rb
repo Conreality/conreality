@@ -35,7 +35,7 @@ Dir["_tags"].sort.each do |source_path|
   end
 end
 
-Dir["{#{SOURCE_DIRS}}/**/*.{ml,mli}"].sort.each do |source_path|
+Dir["{#{SOURCE_DIRS}}/**/*.{ml,mli,mll,mly}"].sort.each do |source_path|
   target_path = File.join(TARGET_DIR, source_path)
   FileUtils.mkdir_p File.dirname(target_path)
 
@@ -45,7 +45,8 @@ Dir["{#{SOURCE_DIRS}}/**/*.{ml,mli}"].sort.each do |source_path|
   if source_text.each_line.any? { |line| line.include?('#include') }
     # Some preprocessing required.
     target_text = source_text.gsub(/#include "([^"]+)"/) do |match|
-      File.read(File.join(source_dir, $1))
+      include_path = File.join(source_dir, $1)
+      File.exist?(include_path) ? File.read(include_path) : ''
     end
     File.open(target_path, 'w+') do |target_file|
       target_file.write target_text
