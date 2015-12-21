@@ -5,7 +5,7 @@ export OPAM_SWITCH=4.02.3
 # OPAM version to install
 export OPAM_VERSION=1.2.2
 # OPAM packages needed to build tests
-export OPAM_PACKAGES='alcotest bisect_ppx cmdliner cppo ctypes ctypes-foreign lwt ocaml-lua ocamlfind ocveralls'
+export OPAM_PACKAGES='alcotest bisect_ppx cmdliner cppo ctypes ctypes-foreign lwt menhir ocaml-lua ocamlfind ocveralls'
 
 # install OPAM and OCaml
 sudo bash -c "echo 'APT::Default-Release \"wily\";' > /etc/apt/apt.conf.d/01ubuntu"

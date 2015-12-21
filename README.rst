@@ -60,6 +60,8 @@ OCaml Dependencies
 
 * `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
 
+* `Menhir <https://opam.ocaml.org/packages/menhir/menhir.20151112/>`__ (>= 20151112)
+
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
 Installation
