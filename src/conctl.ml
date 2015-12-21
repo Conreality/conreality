@@ -5,6 +5,11 @@
 open Cmdliner
 open Consensus
 open Consensus.Prelude
+open Consensus.Messaging
+open Consensus.Networking
+open Consensus.Syntax
+open Lwt.Infix
+open Lwt_unix
 
 (* Configuration *)
 
@@ -48,8 +53,14 @@ let execute options script =
 let report options = (* TODO *)
   Consensus.Vision.hello ()
 
-let toggle options device = Printf.printf
-  "Toggled the %s device.\n" device (* TODO *)
+let enable options device =
+  Printf.printf "Enabled the %s device.\n" device (* TODO *)
+
+let disable options device =
+  Printf.printf "Disabled the %s device.\n" device (* TODO *)
+
+let toggle options device =
+  Printf.printf "Toggled the %s device.\n" device (* TODO *)
 
 (* Help sections common to all commands *)
 
@@ -84,7 +95,7 @@ let common_options_term =
   in
   Term.(const common_options $ debug $ verbosity)
 
-(* Command definitions *)
+(* Metacommand definitions *)
 
 let help_command =
   let topic =
@@ -100,6 +111,16 @@ let help_command =
   Term.(ret (const help $ common_options_term $ Term.man_format $ Term.choice_names $ topic)),
   Term.info "help" ~doc ~man
 
+let report_command =
+  let doc = "Display a self-diagnosis report." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Runs a self-diagnosis test."
+  ] @ help_sections
+  in
+  Term.(const report $ common_options_term),
+  Term.info "report" ~doc ~man ~sdocs:common_options_section
+
 let execute_command =
   let script =
     let doc = "The file path to the script to execute." in
@@ -114,15 +135,35 @@ let execute_command =
   Term.(ret (const execute $ common_options_term $ script)),
   Term.info "execute" ~doc ~man ~sdocs:common_options_section
 
-let report_command =
-  let doc = "Display a self-diagnosis report." in
+(* Subcommand definitions *)
+
+let enable_command =
+  let device =
+    let doc = "The name of the device to enable." in
+    Arg.(value & pos 0 string "" & info [] ~docv:"DEVICE" ~doc)
+  in
+  let doc = "Toggle power to a device." in
   let man = [
     `S "DESCRIPTION";
-    `P "Runs a self-diagnosis test."
+    `P "Enables direct current to a given device."
   ] @ help_sections
   in
-  Term.(const report $ common_options_term),
-  Term.info "report" ~doc ~man ~sdocs:common_options_section
+  Term.(const enable $ common_options_term $ device),
+  Term.info "enable" ~doc ~man ~sdocs:common_options_section
+
+let disable_command =
+  let device =
+    let doc = "The name of the device to disable." in
+    Arg.(value & pos 0 string "" & info [] ~docv:"DEVICE" ~doc)
+  in
+  let doc = "Toggle power to a device." in
+  let man = [
+    `S "DESCRIPTION";
+    `P "Disables direct current to a given device."
+  ] @ help_sections
+  in
+  Term.(const disable $ common_options_term $ device),
+  Term.info "disable" ~doc ~man ~sdocs:common_options_section
 
 let toggle_command =
   let device =
@@ -138,13 +179,23 @@ let toggle_command =
   Term.(const toggle $ common_options_term $ device),
   Term.info "toggle" ~doc ~man ~sdocs:common_options_section
 
+(* Command table *)
+
+let commands = [
+  help_command;
+  report_command;
+  execute_command;
+  (* ... *)
+  enable_command;
+  disable_command;
+  toggle_command;
+]
+
 let default_command =
   let doc = "Control devices on the local node." in
   let man = help_sections in
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ common_options_term)),
   Term.info "conctl" ~version ~doc ~man ~sdocs:common_options_section
-
-let commands = [help_command; execute_command; report_command; toggle_command]
 
 let () =
   match Term.eval_choice default_command commands with
