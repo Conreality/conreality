@@ -5,4 +5,4 @@ S src/**
 B _build/**
 B test/check_common.ml
 
-PKG cppo lwt alcotest cmdliner ctypes consensus consensus.prelude core_bench
+PKG alcotest cmdliner consensus consensus.prelude core_bench cppo ctypes lwt
