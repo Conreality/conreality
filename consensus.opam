@@ -13,6 +13,7 @@ build: [make]
 build-test: [make check]
 remove: ["ocamlfind" "remove" "consensus"]
 depends: [
+  "ocamlbuild"     {build}
   "ocamlfind"      {build}
   "alcotest"       {test  & >= "0.4.5"}    # https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/
   "cmdliner"       {build & >= "0.9.8"}    # https://opam.ocaml.org/packages/cmdliner/cmdliner.0.9.8/
