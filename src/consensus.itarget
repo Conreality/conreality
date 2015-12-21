@@ -13,6 +13,7 @@ consensus/prelude.cma
 consensus/prelude.cmxa
 consensus/prelude.inferred.mli
 consensus/scripting.inferred.mli
+consensus/syntax.inferred.mli
 consensus/vision.inferred.mli
 consensus.cmo
 consensus.cmx

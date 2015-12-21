@@ -63,6 +63,10 @@ lib: [
   "_build/src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
   "_build/src/consensus/scripting.cmo" {"consensus.scripting.cmo"}
   "_build/src/consensus/scripting.cmx" {"consensus.scripting.cmx"}
+  "src/consensus/syntax.mli" {"consensus.syntax.mli"}
+  "_build/src/consensus/syntax.cmi" {"consensus.syntax.cmi"}
+  "_build/src/consensus/syntax.cmo" {"consensus.syntax.cmo"}
+  "_build/src/consensus/syntax.cmx" {"consensus.syntax.cmx"}
   "src/consensus/vision.mli" {"consensus.vision.mli"}
   "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
   "_build/src/consensus/vision.cmo" {"consensus.vision.cmo"}

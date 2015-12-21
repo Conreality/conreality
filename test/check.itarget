@@ -18,4 +18,5 @@ check_prelude_option.byte
 check_prelude_posix.byte
 check_prelude_string.byte
 check_scripting.byte
+check_syntax.byte
 check_vision.byte

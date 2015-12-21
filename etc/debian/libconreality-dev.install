@@ -9,4 +9,5 @@ _build/src/consensus/ontology.mli       usr/lib/ocaml/consensus/
 _build/src/consensus/physics.mli        usr/lib/ocaml/consensus/
 _build/src/consensus/prelude.mli        usr/lib/ocaml/consensus/
 _build/src/consensus/scripting.mli      usr/lib/ocaml/consensus/
+_build/src/consensus/syntax.mli         usr/lib/ocaml/consensus/
 _build/src/consensus/vision.mli         usr/lib/ocaml/consensus/

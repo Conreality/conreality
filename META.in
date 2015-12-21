@@ -93,6 +93,14 @@ package "scripting" (
   archive(native) = "consensus.scripting.cmx"
 )
 
+package "syntax" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus surface syntax"
+  requires = "consensus.prelude"
+  archive(byte) = "consensus.syntax.cmo"
+  archive(native) = "consensus.syntax.cmx"
+)
+
 package "vision" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus vision algorithms"

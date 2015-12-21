@@ -11,4 +11,5 @@ consensus/Ontology
 consensus/Physics
 consensus/Prelude
 consensus/Scripting
+consensus/Syntax
 consensus/Vision
