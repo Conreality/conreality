@@ -14,15 +14,31 @@ signal.signal(signal.SIGINT, function(signum)
   os.exit(128 + signum)
 end)
 
+local function sockaddr(addr, port)
+  return {family = socket.AF_INET, addr = addr, port = port}
+end
+
 local sock = assert(socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0))
-assert(socket.bind(sock, {family = socket.AF_INET, addr = '127.0.0.1', port = 0}))
-assert(socket.connect(sock, {family = socket.AF_INET, addr = '127.0.0.1', port = 1984}))
+assert(socket.bind(sock, sockaddr('127.0.0.1', 0)))
+assert(socket.connect(sock, sockaddr('127.0.0.1', 1984)))
 
 while true do
   io.write("> ")
   io.stdout:flush()
+
   local command = io.read()
-  if not command then break end
-  assert(socket.send(sock, command))
+
+  if not command then break end -- EOF
+
+  if not (command == "") then
+    local _, err = loadstring(command, 'stdin') -- TODO: load() in Lua 5.2+
+    if err then
+      io.stderr:write(err .. "\n") -- parse error
+    else
+      assert(socket.send(sock, command))
+    end
+  end
 end
+
 io.write("\n")
+os.exit()
