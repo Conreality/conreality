@@ -2,8 +2,8 @@
 
 (** Surface syntax. *)
 
-module Node : sig
-  #include "syntax/node.mli"
+module Command : sig
+  #include "syntax/command.mli"
 end
 
 module Parser : sig
@@ -14,5 +14,5 @@ module Lexer : sig
   #include "syntax/lexer.inferred.mli"
 end
 
-val parse_from_channel : in_channel -> Node.t
-val parse_from_string : string -> Node.t
+val parse_from_channel : in_channel -> Command.t
+val parse_from_string : string -> Command.t

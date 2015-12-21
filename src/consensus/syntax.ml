@@ -2,8 +2,8 @@
 
 open Prelude
 
-module Node = struct
-  #include "syntax/node.ml"
+module Command = struct
+  #include "syntax/command.ml"
 end
 
 module Parser = struct
