@@ -14,6 +14,21 @@ module Lexer = struct
   #include "syntax/lexer.ml"
 end
 
+open Parser
+
+let is_verb = function
+  | ABORT | DISABLE | ENABLE | FIRE | HOLD | JOIN | LEAVE
+  | PAN | PING | RESUME | TILT | TOGGLE | TRACK -> true
+  | _ -> false
+
+let is_keyword string =
+  let keyword = String.lowercase string in
+  Hashtbl.mem Lexer.keyword_table keyword
+
+let keyword_to_token string =
+  let keyword = String.lowercase string in
+  Hashtbl.find Lexer.keyword_table keyword
+
 let parse_from_lexbuf input =
   Parser.parse Lexer.lex input
 
