@@ -5,28 +5,24 @@
 --
 -- Requires: https://luarocks.org/modules/gvvaughan/luaposix
 -- $ sudo luarocks install luaposix
---
--- Requires: https://luarocks.org/modules/luarocks/luasocket
--- $ sudo luarocks install luasocket
 
-local signal = require("posix.signal")
-local socket = require("socket")
+local signal = require('posix.signal')
+local socket = require('posix.sys.socket')
 
 signal.signal(signal.SIGINT, function(signum)
   io.write("\n")
   os.exit(128 + signum)
 end)
 
-local sock = socket.udp()
-sock:setsockname('*', 0)
-sock:setpeername("127.0.0.1", 1984)
-sock:settimeout(nil)
+local sock = assert(socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0))
+assert(socket.bind(sock, {family = socket.AF_INET, addr = '127.0.0.1', port = 0}))
+assert(socket.connect(sock, {family = socket.AF_INET, addr = '127.0.0.1', port = 1984}))
 
 while true do
-  io.write('> ')
+  io.write("> ")
   io.stdout:flush()
   local command = io.read()
   if not command then break end
-  sock:send(command)
+  assert(socket.send(sock, command))
 end
 io.write("\n")
