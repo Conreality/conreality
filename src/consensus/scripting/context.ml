@@ -58,6 +58,10 @@ let pop_string context =
   Lua.pop context 1;
   result
 
+let get_field_as_string context field =
+  Lua.getfield context (-1) field;
+  pop_string context
+
 let get_string context code =
   load_code context ("_=(" ^ code ^ ")"); (* TODO: use "return ..." instead? *)
   call_tos context;

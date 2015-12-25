@@ -18,4 +18,6 @@ val eval_file : t -> string -> unit
 
 val pop_string : t -> string
 
+val get_field_as_string : t -> string -> string
+
 val get_string : t -> string -> string
