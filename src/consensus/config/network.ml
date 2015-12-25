@@ -5,7 +5,27 @@ open Lua_api
 open Lwt.Infix
 open Scripting
 
+let require_keys section table keys =
+  List.iter
+    (fun key ->
+      if Hashtbl.mem table (Value.of_string key) then ()
+      else Lwt_log.ign_error_f "Missing configuration key %s.%s." section key)
+    keys
+
+module Section = struct
+  let load context section (create : unit -> 'a) (of_table : Table.t -> 'a) : 'a =
+    match Context.pop_value context with
+    | Value.Nil -> create ()
+    | Value.Table table -> of_table table
+    | _ -> begin
+      Lwt_log.ign_error_f "Skipped invalid %s configuration." section;
+      create ()
+    end
+end
+
 module IRC = struct
+  let section = "network.irc"
+
   type t = {
     host:     string;
     port:     int;
@@ -26,6 +46,7 @@ module IRC = struct
     { host; port; password; nick; username; realname; channel; }
 
   let of_table table =
+    require_keys section table required_keys;
     let host     = Entry.required_string table "host" in
     let port     = Entry.optional_int    table "port" 6667 in
     let password = Entry.optional_string table "password" "" in
@@ -34,9 +55,15 @@ module IRC = struct
     let realname = Entry.optional_string table "realname" "" in
     let channel  = Entry.required_string table "channel" in
     create ~host ~port ~password ~nick ~username ~realname ~channel ()
+
+  let load context =
+    Lua.getfield context (-1) "irc";
+    Section.load context section create of_table
 end
 
 module ROS = struct
+  let section = "network.ros"
+
   type t = Table.t
 
   let required_keys = []
@@ -45,10 +72,18 @@ module ROS = struct
 
   let create () = Table.create 0
 
-  let of_table table = table
+  let of_table table =
+    require_keys section table required_keys;
+    table
+
+  let load context =
+    Lua.getfield context (-1) "ros";
+    Section.load context section create of_table
 end
 
 module STOMP = struct
+  let section = "network.stomp"
+
   type t = Table.t
 
   let required_keys = []
@@ -57,7 +92,13 @@ module STOMP = struct
 
   let create () = Table.create 0
 
-  let of_table table = table
+  let of_table table =
+    require_keys section table required_keys;
+    table
+
+  let load context =
+    Lua.getfield context (-1) "stomp";
+    Section.load context section create of_table
 end
 
 type t = {
@@ -72,36 +113,8 @@ let create () = {
   stomp = STOMP.create ();
 }
 
-let require_keys section table keys =
-  List.iter
-    (fun key ->
-      if Hashtbl.mem table (Value.of_string key) then ()
-      else Lwt_log.ign_error_f "Missing key \"%s\" in %s configuration." key section)
-    keys
-
-let load_irc_table context =
-  let section = "network.irc" in
-  let table = Context.pop_table context in
-  require_keys section table IRC.required_keys;
-  IRC.of_table table
-
-let load_ros_table context =
-  let section = "network.ros" in
-  let table = Context.pop_table context in
-  require_keys section table ROS.required_keys;
-  ROS.of_table table
-
-let load_stomp_table context =
-  let section = "network.stomp" in
-  let table = Context.pop_table context in
-  require_keys section table STOMP.required_keys;
-  STOMP.of_table table
-
 let load network context =
   LuaL.checktype context (-1) Lua.LUA_TTABLE;
-  Lua.getfield context (-1) "irc";
-  network.irc <- load_irc_table context;
-  Lua.getfield context (-1) "ros";
-  network.ros <- load_ros_table context;
-  Lua.getfield context (-1) "stomp";
-  network.stomp <- load_stomp_table context
+  network.irc   <- IRC.load context;
+  network.ros   <- ROS.load context;
+  network.stomp <- STOMP.load context
