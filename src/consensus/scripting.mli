@@ -6,15 +6,15 @@ exception Input_error of string
 exception Parse_error of string
 exception Runtime_error of string
 
-module Type : sig
+module rec Type : sig
   #include "scripting/type.mli"
 end
 
-module Value : sig
+and Value : sig
   #include "scripting/value.mli"
 end
 
-module Table : sig
+and Table : sig
   #include "scripting/table.mli"
 end
 

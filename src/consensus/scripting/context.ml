@@ -26,14 +26,7 @@ let push_float = Lua.pushnumber
 
 let push_string = Lua.pushstring
 
-let push_value context = function
-  | Value.Nil -> push_nil context
-  | Value.Boolean value -> push_bool context value
-  | Value.Integer value -> push_int context value
-  | Value.Number value -> push_float context value
-  | Value.String value -> push_string context value
-
-let push_table context table =
+let rec push_table context table =
   Lua.newtable context;
   Table.iter table
     (fun k v ->
@@ -41,14 +34,26 @@ let push_table context table =
       push_value context v;
       Lua.settable context (-3) |> ignore)
 
+and push_value context = function
+  | Value.Nil           -> push_nil context
+  | Value.Boolean value -> push_bool context value
+  | Value.Integer value -> push_int context value
+  | Value.Number value  -> push_float context value
+  | Value.String value  -> push_string context value
+  | Value.Table value   -> push_table context value
+
 let get_type context =
   match (Lua.type_ context (-1)) with
-  | Lua.LUA_TNIL -> Type.Nil
-  | Lua.LUA_TBOOLEAN -> Type.Boolean
-  | Lua.LUA_TNUMBER -> Type.Number
-  | Lua.LUA_TSTRING -> Type.String
-  | Lua.LUA_TTABLE -> Type.Table
-  | _ -> assert false
+  | Lua.LUA_TNONE          -> assert false
+  | Lua.LUA_TNIL           -> Type.Nil
+  | Lua.LUA_TBOOLEAN       -> Type.Boolean
+  | Lua.LUA_TLIGHTUSERDATA -> assert false
+  | Lua.LUA_TNUMBER        -> Type.Number
+  | Lua.LUA_TSTRING        -> Type.String
+  | Lua.LUA_TTABLE         -> Type.Table
+  | Lua.LUA_TFUNCTION      -> assert false
+  | Lua.LUA_TUSERDATA      -> assert false
+  | Lua.LUA_TTHREAD        -> assert false
 
 let get_bool context =
   Lua.toboolean context (-1)
@@ -62,14 +67,28 @@ let get_float context =
 let get_string context =
   Lua.tostring context (-1) |> Option.value_exn
 
-let get_value context =
+let rec get_table context =
+  let pop context = Lua.pop context 1 in
+  let pop_value context =
+    let result = get_value context in pop context; result
+  in
+  let table = Table.create 0 in
+  push_nil context;
+  while (Lua.next context (-2)) <> 0 do
+    let v = pop_value context in
+    let k = get_value context in
+    Table.insert table k v
+  done;
+  table
+
+and get_value context =
   match (get_type context) with
-  | Type.Nil -> Value.of_unit
+  | Type.Nil     -> Value.of_unit
   | Type.Boolean -> Value.of_bool (get_bool context)
   | Type.Integer -> assert false (* Lua 5.2+ *)
-  | Type.Number -> Value.of_float (get_float context)
-  | Type.String -> Value.of_string (get_string context)
-  | Type.Table -> assert false (* TODO *)
+  | Type.Number  -> Value.of_float (get_float context)
+  | Type.String  -> Value.of_string (get_string context)
+  | Type.Table   -> Value.of_table (get_table context)
 
 let pop context =
   Lua.pop context 1
@@ -86,21 +105,11 @@ let pop_float context =
 let pop_string context =
   let result = get_string context in pop context; result
 
-let pop_value context =
-  let result = get_value context in pop context; result
-
-let get_table context =
-  let table = Table.create 0 in
-  push_nil context;
-  while (Lua.next context (-2)) <> 0 do
-    let v = pop_value context in
-    let k = get_value context in
-    Table.insert table k v
-  done;
-  table
-
 let pop_table context =
   let result = get_table context in pop context; result
+
+let pop_value context =
+  let result = get_value context in pop context; result
 
 let define context name callback =
   Lua.register context name callback

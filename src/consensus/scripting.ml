@@ -6,15 +6,21 @@ exception Input_error of string
 exception Parse_error of string
 exception Runtime_error of string
 
-module Type = struct
+module rec Type : sig
+  #include "scripting/type.mli"
+end = struct
   #include "scripting/type.ml"
 end
 
-module Value = struct
+and Value : sig
+  #include "scripting/value.mli"
+end = struct
   #include "scripting/value.ml"
 end
 
-module Table = struct
+and Table : sig
+  #include "scripting/table.mli"
+end = struct
   #include "scripting/table.ml"
 end
 

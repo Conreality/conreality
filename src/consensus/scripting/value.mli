@@ -6,6 +6,7 @@ type t =
   | Integer of int
   | Number of float
   | String of string
+  | Table of Table.t
 
 val of_unit : t
 
@@ -16,6 +17,8 @@ val of_int : int -> t
 val of_float : float -> t
 
 val of_string : string -> t
+
+val of_table : Table.t -> t
 
 val to_type : t -> Type.t
 
