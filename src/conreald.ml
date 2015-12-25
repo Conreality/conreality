@@ -99,6 +99,14 @@ module Server = struct
     mutable client: Client.t
   }
 
+  module Config = struct
+    let irc server = () (* TODO *)
+
+    let ros server = () (* TODO *)
+
+    let stomp server = () (* TODO *)
+  end
+
   module Protocol = struct
     let hello server client =
       Lwt_log.ign_notice_f "Received a hello from %s." (Client.to_string client);
@@ -127,19 +135,32 @@ module Server = struct
     let leave server client = () (* TODO *)
   end
 
+  let load_config server config_path =
+    Scripting.Context.define server.context "irc"
+      (fun _ -> Config.irc server |> ignore; 0);
+    Scripting.Context.define server.context "ros"
+      (fun _ -> Config.ros server |> ignore; 0);
+    Scripting.Context.define server.context "stomp"
+      (fun _ -> Config.stomp server |> ignore; 0);
+    Scripting.Context.eval_file server.context config_path
+
   let define server name callback =
     Scripting.Context.define server.context name
       (fun _ -> callback server server.client |> ignore; 0)
 
-  let create () =
+  let load_protocol server =
+    define server "hello" Protocol.hello;
+    define server "bye" Protocol.bye
+    (* TODO *)
+
+  let create config_path =
     let server = {
       context = Scripting.Context.create ();
       clients = Client_set.empty;
       client  = Unix.(ADDR_INET (Unix.inet_addr_any, 0))
     } in
-    define server "hello" Protocol.hello;
-    define server "bye" Protocol.bye;
-    (* TODO *)
+    load_config server config_path;
+    load_protocol server;
     server
 
   let evaluate server client script =
@@ -182,10 +203,10 @@ module Server = struct
     fst (Lwt.wait ())
 end
 
-let main options mission =
-  if String.is_empty mission
-  then `Error (true, "no mission scenario script specified")
-  else `Ok (Lwt_main.run (Server.create () |> Server.init |> Server.loop))
+let main options config_path =
+  if String.is_empty config_path
+  then `Error (true, "no configuration file specified")
+  else `Ok (Lwt_main.run (Server.create config_path |> Server.init |> Server.loop))
 
 (* Options common to all commands *)
 
@@ -208,13 +229,13 @@ let common_options_term =
 (* Command definitions *)
 
 let command =
-  let mission =
-    let doc = "A file path to a mission scenario script." in
-    Arg.(value & pos 0 string "" & info [] ~docv:"MISSION" ~doc)
+  let config_path =
+    let doc = "A file path to a configuration script." in
+    Arg.(value & pos 0 string "" & info [] ~docv:"CONFIG" ~doc)
   in
   let doc = "Conreality daemon." in
   let man = man_sections in
-  Term.(ret (const main $ common_options_term $ mission)),
+  Term.(ret (const main $ common_options_term $ config_path)),
   Term.info "conreald" ~version ~doc ~man
 
 let () =
