@@ -81,8 +81,11 @@ check:
 	mkdir -p tmp/check && \
 	$(RUBY) etc/script/precoverage.rb && \
 	cd tmp/check && \
+	ocamllex src/consensus/syntax/lexer.mll && \
+	menhir src/consensus/syntax/parser.mly && \
+	rsync -a src/ _build/
 	CAML_LD_LIBRARY_PATH=src:$(CAML_LD_LIBRARY_PATH) \
-	  $(OCAMLBUILD) -Is test,src test/check.otarget && \
+	  $(OCAMLBUILD) -no-hygiene -Is test,src test/check.otarget && \
 	  cp -p test/check_all.sh _build/test/ && \
 	CAML_LD_LIBRARY_PATH=_build/src:$(CAML_LD_LIBRARY_PATH) BISECT_FILE=bisect \
 	  _build/test/check_all.sh $(CHECKVERBOSE)
