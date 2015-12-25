@@ -16,6 +16,10 @@ val eval_code : t -> string -> unit
 
 val eval_file : t -> string -> unit
 
+val get_value : t -> Value.t
+
+val pop_value : t -> Value.t
+
 val pop_string : t -> string
 
 val get_field_as_string : t -> string -> string

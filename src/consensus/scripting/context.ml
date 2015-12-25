@@ -53,6 +53,20 @@ let eval_file context filepath =
   load_file context filepath;
   call_tos context
 
+let get_value context =
+  match (Lua.type_ context (-1)) with
+  | Lua.LUA_TNIL -> Value.of_unit
+  | Lua.LUA_TBOOLEAN -> Value.of_bool (Lua.toboolean context (-1))
+  | Lua.LUA_TNUMBER -> Value.of_float (Lua.tonumber context (-1))
+  | Lua.LUA_TSTRING -> Value.of_string (Lua.tostring context (-1) |> Option.value_exn)
+  | Lua.LUA_TTABLE -> assert false (* TODO *)
+  | _ -> assert false
+
+let pop_value context =
+  let result = get_value context in
+  Lua.pop context 1;
+  result
+
 let pop_string context =
   let result = (Lua.tostring context (-1) |> Option.value_exn) in
   Lua.pop context 1;
