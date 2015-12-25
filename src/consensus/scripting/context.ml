@@ -35,12 +35,11 @@ let push_value context = function
 
 let push_table context table =
   Lua.newtable context;
-  Hashtbl.iter
+  Table.iter table
     (fun k v ->
       push_value context k;
       push_value context v;
       Lua.settable context (-3) |> ignore)
-    table
 
 let get_type context =
   match (Lua.type_ context (-1)) with
@@ -91,12 +90,12 @@ let pop_value context =
   let result = get_value context in pop context; result
 
 let get_table context =
-  let table = Hashtbl.create 0 in
+  let table = Table.create 0 in
   push_nil context;
   while (Lua.next context (-2)) <> 0 do
     let v = pop_value context in
     let k = get_value context in
-    Hashtbl.replace table k v
+    Table.insert table k v
   done;
   table
 
