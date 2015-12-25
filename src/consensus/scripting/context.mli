@@ -16,6 +16,8 @@ val eval_code : t -> string -> unit
 
 val eval_file : t -> string -> unit
 
+val push_value : t -> Value.t -> unit
+
 val get_value : t -> Value.t
 
 val pop_value : t -> Value.t

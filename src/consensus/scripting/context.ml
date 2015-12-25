@@ -53,6 +53,12 @@ let eval_file context filepath =
   load_file context filepath;
   call_tos context
 
+let push_value context = function
+  | Value.Nil -> Lua.pushnil context
+  | Value.Boolean value -> Lua.pushboolean context value
+  | Value.Number value -> Lua.pushnumber context value
+  | Value.String value -> Lua.pushstring context value
+
 let get_value context =
   match (Lua.type_ context (-1)) with
   | Lua.LUA_TNIL -> Value.of_unit
