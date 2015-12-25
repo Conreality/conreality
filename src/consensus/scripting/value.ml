@@ -20,3 +20,9 @@ let of_float value =
 
 let of_string value =
   String value
+
+let to_string = function
+  | Nil -> "nil"
+  | Boolean value -> Bool.to_string value
+  | Number value -> Float.string_of_float value
+  | String value -> value

@@ -13,3 +13,5 @@ val of_bool : bool -> t
 val of_float : float -> t
 
 val of_string : string -> t
+
+val to_string : t -> string
