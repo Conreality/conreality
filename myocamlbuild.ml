@@ -21,6 +21,14 @@ let () =
     ocaml_lib ~extern:true "opencv_core";
     ocaml_lib ~extern:true "opencv_objdetect";
 
+    dep  ["file:src/consensus/config.ml"]
+         ["src/consensus/config/devices.ml";
+          "src/consensus/config/network.ml"];
+
+    dep  ["file:src/consensus/config.mli"]
+         ["src/consensus/config/devices.mli";
+          "src/consensus/config/network.mli"];
+
     dep  ["file:src/consensus/prelude.ml"]
          ["src/consensus/prelude/bool.ml";
           "src/consensus/prelude/bytes.ml";

@@ -1,30 +1,31 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Prelude
+open Lua_api
+open Lwt.Infix
 open Scripting
 
+module Entry = struct
+  let required_string table key =
+    Value.to_string (Table.lookup table (Value.of_string key))
+
+  let optional_string table key default =
+    Value.to_string (Table.lookup table (Value.of_string key))
+
+  let optional_int table key default =
+    match (Table.lookup table (Value.of_string key)) with
+    | Value.Integer value -> value
+    | Value.Number value -> Int.of_float value
+    | Value.String value -> Int.of_string value
+    | _ -> assert false
+end
+
 module Devices = struct
-  type t = unit
-
-  let create () = () (* TODO *)
-
-  let load devices context = () (* TODO *)
+  #include "config/devices.ml"
 end
 
 module Network = struct
-  type t = {
-    irc: Table.t;
-    ros: Table.t;
-    stomp: Table.t;
-  }
-
-  let create () = {
-    irc   = Table.create 0;
-    ros   = Table.create 0;
-    stomp = Table.create 0;
-  }
-
-  let load network context = ()
+  #include "config/network.ml"
 end
 
 type t = {

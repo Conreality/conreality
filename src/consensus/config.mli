@@ -3,11 +3,11 @@
 (** Configuration. *)
 
 module Devices : sig
-  type t
+  #include "config/devices.mli"
 end
 
 module Network : sig
-  type t
+  #include "config/network.mli"
 end
 
 type t
