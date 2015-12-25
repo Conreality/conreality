@@ -59,15 +59,16 @@ let get_bool context =
   Lua.toboolean context (-1)
 
 let get_int context =
-  Int.of_float (Lua.tonumber context (-1))
+  LuaL.checkint context (-1)
 
 let get_float context =
-  Lua.tonumber context (-1)
+  LuaL.checknumber context (-1)
 
 let get_string context =
-  Lua.tostring context (-1) |> Option.value_exn
+  LuaL.checkstring context (-1)
 
 let rec get_table context =
+  LuaL.checktype context (-1) Lua.LUA_TTABLE;
   let pop context = Lua.pop context 1 in
   let pop_value context =
     let result = get_value context in pop context; result

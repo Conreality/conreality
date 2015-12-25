@@ -38,7 +38,7 @@ let to_type = function
   | Table _   -> Type.Table
 
 let to_string = function
-  | Nil           -> "nil"
+  | Nil           -> ""
   | Boolean value -> Bool.to_string value
   | Integer value -> Int.to_string value
   | Number value  -> Float.string_of_float value
