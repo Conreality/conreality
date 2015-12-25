@@ -6,6 +6,10 @@ exception Input_error of string
 exception Parse_error of string
 exception Runtime_error of string
 
+module Type = struct
+  #include "scripting/type.ml"
+end
+
 module Value = struct
   #include "scripting/value.ml"
 end

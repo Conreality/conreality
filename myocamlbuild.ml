@@ -112,11 +112,13 @@ let () =
     dep  ["file:src/consensus/scripting.ml"]
          ["src/consensus/scripting/context.ml";
           "src/consensus/scripting/table.ml";
+          "src/consensus/scripting/type.ml";
           "src/consensus/scripting/value.ml"];
 
     dep  ["file:src/consensus/scripting.mli"]
          ["src/consensus/scripting/context.mli";
           "src/consensus/scripting/table.mli";
+          "src/consensus/scripting/type.mli";
           "src/consensus/scripting/value.mli"];
 
     dep  ["file:src/consensus/syntax.ml"]
