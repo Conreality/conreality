@@ -16,15 +16,75 @@ let create () =
   LuaL.openlibs context;
   context
 
+let push_nil = Lua.pushnil
+
+let push_bool = Lua.pushboolean
+
+let push_int = Lua.pushinteger
+
+let push_float = Lua.pushnumber
+
+let push_string = Lua.pushstring
+
+let push_value context = function
+  | Value.Nil -> push_nil context
+  | Value.Boolean value -> push_bool context value
+  | Value.Integer value -> push_int context value
+  | Value.Number value -> push_float context value
+  | Value.String value -> push_string context value
+
+let get_bool context =
+  Lua.toboolean context (-1)
+
+let get_int context =
+  Int.of_float (Lua.tonumber context (-1))
+
+let get_float context =
+  Lua.tonumber context (-1)
+
+let get_string context =
+  Lua.tostring context (-1) |> Option.value_exn
+
+let get_value context =
+  match (Lua.type_ context (-1)) with
+  | Lua.LUA_TNIL -> Value.of_unit
+  | Lua.LUA_TBOOLEAN -> Value.of_bool (get_bool context)
+  | Lua.LUA_TNUMBER -> Value.of_float (get_float context)
+  | Lua.LUA_TSTRING -> Value.of_string (get_string context)
+  | Lua.LUA_TTABLE -> assert false (* TODO *)
+  | _ -> assert false
+
+let pop context =
+  Lua.pop context 1
+
+let pop_bool context =
+  let result = get_bool context in pop context; result
+
+let pop_int context =
+  let result = get_int context in pop context; result
+
+let pop_float context =
+  let result = get_float context in pop context; result
+
+let pop_string context =
+  let result = get_string context in pop context; result
+
+let pop_value context =
+  let result = get_value context in pop context; result
+
 let define context name callback =
   Lua.register context name callback
+
+let undefine context name =
+  push_nil context;
+  Lua.setglobal context name
 
 let call_tos context = (* not public *)
   match Lua.pcall context 0 0 0 with
   | Lua.LUA_OK -> ()
   | Lua.LUA_ERRRUN -> begin
-      let error_message = (Lua.tostring context (-1) |> Option.value_exn) in
-      Lua.pop context 1;
+      let error_message = (get_string context) in
+      pop context;
       raise (Runtime_error error_message)
     end
   | Lua.LUA_ERRMEM -> raise Out_of_memory
@@ -53,38 +113,6 @@ let eval_file context filepath =
   load_file context filepath;
   call_tos context
 
-let push_value context = function
-  | Value.Nil -> Lua.pushnil context
-  | Value.Boolean value -> Lua.pushboolean context value
-  | Value.Integer value -> Lua.pushinteger context value
-  | Value.Number value -> Lua.pushnumber context value
-  | Value.String value -> Lua.pushstring context value
-
-let get_value context =
-  match (Lua.type_ context (-1)) with
-  | Lua.LUA_TNIL -> Value.of_unit
-  | Lua.LUA_TBOOLEAN -> Value.of_bool (Lua.toboolean context (-1))
-  | Lua.LUA_TNUMBER -> Value.of_float (Lua.tonumber context (-1))
-  | Lua.LUA_TSTRING -> Value.of_string (Lua.tostring context (-1) |> Option.value_exn)
-  | Lua.LUA_TTABLE -> assert false (* TODO *)
-  | _ -> assert false
-
-let pop_value context =
-  let result = get_value context in
-  Lua.pop context 1;
-  result
-
-let pop_string context =
-  let result = (Lua.tostring context (-1) |> Option.value_exn) in
-  Lua.pop context 1;
-  result
-
 let get_field_as_string context field =
   Lua.getfield context (-1) field;
-  pop_string context
-
-let get_string context code =
-  load_code context ("_=(" ^ code ^ ")"); (* TODO: use "return ..." instead? *)
-  call_tos context;
-  Lua.getglobal context "_";
   pop_string context
