@@ -14,4 +14,6 @@ val remove : t -> Value.t -> unit
 
 val insert : t -> Value.t -> Value.t -> unit
 
+val lookup : t -> Value.t -> Value.t
+
 val iter : t -> (Value.t -> Value.t -> unit) -> unit

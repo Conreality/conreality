@@ -16,4 +16,6 @@ let remove (table : t) = Hashtbl.remove table
 
 let insert (table : t) = Hashtbl.replace table
 
+let lookup (table : t) = Hashtbl.find table
+
 let iter (table : t) f = Hashtbl.iter f table
