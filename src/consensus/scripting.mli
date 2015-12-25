@@ -6,6 +6,10 @@ exception Input_error of string
 exception Parse_error of string
 exception Runtime_error of string
 
+module Value : sig
+  #include "scripting/value.mli"
+end
+
 module Context : sig
   #include "scripting/context.mli"
 end

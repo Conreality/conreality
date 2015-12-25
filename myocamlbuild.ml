@@ -110,10 +110,12 @@ let () =
          ["src/consensus/networking/udp.mli"];
 
     dep  ["file:src/consensus/scripting.ml"]
-         ["src/consensus/scripting/context.ml"];
+         ["src/consensus/scripting/context.ml";
+          "src/consensus/scripting/value.ml"];
 
     dep  ["file:src/consensus/scripting.mli"]
-         ["src/consensus/scripting/context.mli"];
+         ["src/consensus/scripting/context.mli";
+          "src/consensus/scripting/value.mli"];
 
     dep  ["file:src/consensus/syntax.ml"]
          ["src/consensus/syntax/command.ml";
