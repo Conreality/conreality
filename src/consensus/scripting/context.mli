@@ -17,6 +17,8 @@ val push_string : t -> string -> unit
 
 val push_value : t -> Value.t -> unit
 
+val push_table : t -> Table.t -> unit
+
 val get_bool : t -> bool
 
 val get_int : t -> int
@@ -26,6 +28,8 @@ val get_float : t -> float
 val get_string : t -> string
 
 val get_value : t -> Value.t
+
+val get_table : t -> Table.t
 
 val pop : t -> unit
 
@@ -38,6 +42,8 @@ val pop_float : t -> float
 val pop_string : t -> string
 
 val pop_value : t -> Value.t
+
+val pop_table : t -> Table.t
 
 (** Defines a global function in a scripting context. *)
 val define : t -> string -> (t -> int) -> unit

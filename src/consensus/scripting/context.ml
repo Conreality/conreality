@@ -33,6 +33,15 @@ let push_value context = function
   | Value.Number value -> push_float context value
   | Value.String value -> push_string context value
 
+let push_table context table =
+  Lua.newtable context;
+  Hashtbl.iter
+    (fun k v ->
+      push_value context k;
+      push_value context v;
+      Lua.settable context (-3) |> ignore)
+    table
+
 let get_bool context =
   Lua.toboolean context (-1)
 
@@ -71,6 +80,19 @@ let pop_string context =
 
 let pop_value context =
   let result = get_value context in pop context; result
+
+let get_table context =
+  let table = Hashtbl.create 0 in
+  push_nil context;
+  while (Lua.next context (-2)) <> 0 do
+    let v = pop_value context in
+    let k = get_value context in
+    Hashtbl.replace table k v
+  done;
+  table
+
+let pop_table context =
+  let result = get_table context in pop context; result
 
 let define context name callback =
   Lua.register context name callback
