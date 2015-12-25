@@ -19,6 +19,8 @@ val push_value : t -> Value.t -> unit
 
 val push_table : t -> Table.t -> unit
 
+val get_type : t -> Type.t
+
 val get_bool : t -> bool
 
 val get_int : t -> int

@@ -42,6 +42,15 @@ let push_table context table =
       Lua.settable context (-3) |> ignore)
     table
 
+let get_type context =
+  match (Lua.type_ context (-1)) with
+  | Lua.LUA_TNIL -> Type.Nil
+  | Lua.LUA_TBOOLEAN -> Type.Boolean
+  | Lua.LUA_TNUMBER -> Type.Number
+  | Lua.LUA_TSTRING -> Type.String
+  | Lua.LUA_TTABLE -> Type.Table
+  | _ -> assert false
+
 let get_bool context =
   Lua.toboolean context (-1)
 
@@ -55,13 +64,13 @@ let get_string context =
   Lua.tostring context (-1) |> Option.value_exn
 
 let get_value context =
-  match (Lua.type_ context (-1)) with
-  | Lua.LUA_TNIL -> Value.of_unit
-  | Lua.LUA_TBOOLEAN -> Value.of_bool (get_bool context)
-  | Lua.LUA_TNUMBER -> Value.of_float (get_float context)
-  | Lua.LUA_TSTRING -> Value.of_string (get_string context)
-  | Lua.LUA_TTABLE -> assert false (* TODO *)
-  | _ -> assert false
+  match (get_type context) with
+  | Type.Nil -> Value.of_unit
+  | Type.Boolean -> Value.of_bool (get_bool context)
+  | Type.Integer -> assert false (* Lua 5.2+ *)
+  | Type.Number -> Value.of_float (get_float context)
+  | Type.String -> Value.of_string (get_string context)
+  | Type.Table -> assert false (* TODO *)
 
 let pop context =
   Lua.pop context 1
