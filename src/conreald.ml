@@ -95,19 +95,14 @@ module Client_set = Set.Make(Client)
 module Server = struct
   type t = {
     context: Scripting.Context.t;
+    mutable config: Config.t;
     mutable clients: Client_set.t;
     mutable client: Client.t
   }
 
-  module Config = struct
-    let irc server = () (* TODO *)
-
-    let ros server = () (* TODO *)
-
-    let stomp server = () (* TODO *)
-  end
-
   module Protocol = struct
+    open Scripting
+
     let hello server client =
       Lwt_log.ign_notice_f "Received a hello from %s." (Client.to_string client);
       (server.clients <- Client_set.add client server.clients) |> ignore
@@ -135,15 +130,6 @@ module Server = struct
     let leave server client = () (* TODO *)
   end
 
-  let load_config server config_path =
-    Scripting.Context.define server.context "irc"
-      (fun _ -> Config.irc server |> ignore; 0);
-    Scripting.Context.define server.context "ros"
-      (fun _ -> Config.ros server |> ignore; 0);
-    Scripting.Context.define server.context "stomp"
-      (fun _ -> Config.stomp server |> ignore; 0);
-    Scripting.Context.eval_file server.context config_path
-
   let define server name callback =
     Scripting.Context.define server.context name
       (fun _ -> callback server server.client |> ignore; 0)
@@ -156,10 +142,10 @@ module Server = struct
   let create config_path =
     let server = {
       context = Scripting.Context.create ();
+      config  = Config.load_file config_path;
       clients = Client_set.empty;
       client  = Unix.(ADDR_INET (Unix.inet_addr_any, 0))
     } in
-    load_config server config_path;
     load_protocol server;
     server
 
@@ -186,9 +172,11 @@ module Server = struct
     in loop ()
 
   let init server =
+(*
     Lwt_log.default := Lwt_log.syslog
       ~facility:`Daemon
       ~template:"$(name)[$(pid)]: $(message)" ();
+*)
     Lwt_engine.on_timer 60. true (fun _ ->
       Lwt_log.ign_info "Processed no requests in the last minute.") |> ignore; (* TODO *)
     Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
