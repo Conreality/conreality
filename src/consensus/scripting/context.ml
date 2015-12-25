@@ -113,6 +113,10 @@ let eval_file context filepath =
   load_file context filepath;
   call_tos context
 
+let eval_as_value context code =
+  eval_code context code;
+  pop_value context
+
 let get_field_as_string context field =
   Lua.getfield context (-1) field;
   pop_string context

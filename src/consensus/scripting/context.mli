@@ -52,4 +52,6 @@ val eval_code : t -> string -> unit
 
 val eval_file : t -> string -> unit
 
+val eval_as_value : t -> string -> Value.t
+
 val get_field_as_string : t -> string -> string
