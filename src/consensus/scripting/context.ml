@@ -56,6 +56,7 @@ let eval_file context filepath =
 let push_value context = function
   | Value.Nil -> Lua.pushnil context
   | Value.Boolean value -> Lua.pushboolean context value
+  | Value.Integer value -> Lua.pushinteger context value
   | Value.Number value -> Lua.pushnumber context value
   | Value.String value -> Lua.pushstring context value
 

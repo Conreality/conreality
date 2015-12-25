@@ -6,6 +6,7 @@ open Prelude
 type t =
   | Nil
   | Boolean of bool
+  | Integer of int
   | Number of float
   | String of string
 
@@ -14,6 +15,9 @@ let of_unit =
 
 let of_bool value =
   Boolean value
+
+let of_int value =
+  Integer value
 
 let of_float value =
   Number value
@@ -24,5 +28,6 @@ let of_string value =
 let to_string = function
   | Nil -> "nil"
   | Boolean value -> Bool.to_string value
+  | Integer value -> Int.to_string value
   | Number value -> Float.string_of_float value
   | String value -> value
