@@ -17,4 +17,6 @@ val of_float : float -> t
 
 val of_string : string -> t
 
+val to_type : t -> Type.t
+
 val to_string : t -> string

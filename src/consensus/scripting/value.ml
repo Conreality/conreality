@@ -25,6 +25,13 @@ let of_float value =
 let of_string value =
   String value
 
+let to_type = function
+  | Nil -> Type.Nil
+  | Boolean _ -> Type.Boolean
+  | Integer _ -> Type.Integer
+  | Number _ -> Type.Number
+  | String _ -> Type.String
+
 let to_string = function
   | Nil -> "nil"
   | Boolean value -> Bool.to_string value
