@@ -59,6 +59,22 @@ module IRC = struct
   let load context =
     Lua.getfield context (-1) "irc";
     Section.load context section create of_table
+
+  let is_configured (config : t) =
+    not (String.is_empty config.host) &&
+    not (String.is_empty config.nick) &&
+    not (String.is_empty config.channel)
+
+  let connect { host; port; password; nick; username; realname; channel; } =
+    Lwt_unix.gethostbyname host
+    >>= fun hostent -> begin
+      Irc_client_lwt.connect ~addr:(hostent.Lwt_unix.h_addr_list.(0))
+        ~port ~password ~nick ~username ~realname ~mode:0 ()
+    end
+    >>= fun connection -> begin
+      Lwt_log.ign_notice_f "Connected to irc://%s:%d." host port;
+      Lwt.return (connection)
+    end
 end
 
 module ROS = struct
@@ -79,6 +95,9 @@ module ROS = struct
   let load context =
     Lua.getfield context (-1) "ros";
     Section.load context section create of_table
+
+  let is_configured (config : t) =
+    false
 end
 
 module STOMP = struct
@@ -99,6 +118,9 @@ module STOMP = struct
   let load context =
     Lua.getfield context (-1) "stomp";
     Section.load context section create of_table
+
+  let is_configured (config : t) =
+    false
 end
 
 type t = {

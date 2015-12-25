@@ -10,6 +10,9 @@ module Network : sig
   #include "config/network.mli"
 end
 
-type t
+type t = {
+  devices: Devices.t;
+  network: Network.t;
+}
 
 val load_file : string -> t
