@@ -5,3 +5,11 @@ type t =
   | Boolean of bool
   | Number of float
   | String of string
+
+val of_unit : t
+
+val of_bool : bool -> t
+
+val of_float : float -> t
+
+val of_string : string -> t
