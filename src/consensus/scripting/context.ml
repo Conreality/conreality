@@ -53,10 +53,13 @@ let eval_file context filepath =
   load_file context filepath;
   call_tos context
 
-let get_string context code =
-  load_code context ("_=(" ^ code ^ ")");
-  call_tos context;
-  Lua.getglobal context "_";
+let pop_string context =
   let result = (Lua.tostring context (-1) |> Option.value_exn) in
   Lua.pop context 1;
   result
+
+let get_string context code =
+  load_code context ("_=(" ^ code ^ ")"); (* TODO: use "return ..." instead? *)
+  call_tos context;
+  Lua.getglobal context "_";
+  pop_string context
