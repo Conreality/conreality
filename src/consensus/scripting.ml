@@ -10,6 +10,10 @@ module Value = struct
   #include "scripting/value.ml"
 end
 
+module Table = struct
+  #include "scripting/table.ml"
+end
+
 module Context = struct
   #include "scripting/context.ml"
 end

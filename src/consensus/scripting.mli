@@ -10,6 +10,10 @@ module Value : sig
   #include "scripting/value.mli"
 end
 
+module Table : sig
+  #include "scripting/table.mli"
+end
+
 module Context : sig
   #include "scripting/context.mli"
 end
