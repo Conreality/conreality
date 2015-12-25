@@ -1,3 +1,4 @@
+_build/src/consensus/config.mli         usr/lib/ocaml/consensus/
 _build/src/consensus/geometry.mli       usr/lib/ocaml/consensus/
 _build/src/consensus/knowledge.mli      usr/lib/ocaml/consensus/
 _build/src/consensus/machinery.mli      usr/lib/ocaml/consensus/

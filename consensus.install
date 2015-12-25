@@ -19,6 +19,10 @@ lib: [
   "_build/src/consensus.cmi" {"consensus.cmi"}
   "_build/src/consensus.cmo" {"consensus.cmo"}
   "_build/src/consensus.cmx" {"consensus.cmx"}
+  "src/consensus/config.mli" {"consensus.config.mli"}
+  "_build/src/consensus/config.cmi" {"consensus.config.cmi"}
+  "_build/src/consensus/config.cmo" {"consensus.config.cmo"}
+  "_build/src/consensus/config.cmx" {"consensus.config.cmx"}
   "src/consensus/geometry.mli" {"consensus.geometry.mli"}
   "_build/src/consensus/geometry.cmi" {"consensus.geometry.cmi"}
   "_build/src/consensus/geometry.cmo" {"consensus.geometry.cmo"}

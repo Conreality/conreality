@@ -1,3 +1,4 @@
+check_config.byte
 check_geometry.byte
 check_knowledge.byte
 check_machinery.byte

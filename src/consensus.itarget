@@ -1,5 +1,6 @@
 conctl.native
 conreald.native
+consensus/config.inferred.mli
 consensus/geometry.inferred.mli
 consensus/knowledge.inferred.mli
 consensus/machinery.inferred.mli

@@ -1,4 +1,5 @@
 _build/src/consensus.cmi                usr/lib/ocaml/
+_build/src/consensus/config.cmi         usr/lib/ocaml/consensus/
 _build/src/consensus/geometry.cmi       usr/lib/ocaml/consensus/
 _build/src/consensus/knowledge.cmi      usr/lib/ocaml/consensus/
 _build/src/consensus/machinery.cmi      usr/lib/ocaml/consensus/

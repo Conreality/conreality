@@ -5,6 +5,14 @@ requires = "consensus.scripting consensus.vision"
 archive(byte) = "@PACKAGE_TARNAME@.cmo"
 archive(native) = "@PACKAGE_TARNAME@.cmx"
 
+package "config" (
+  version = "@PACKAGE_VERSION@"
+  description = "Consensus configuration"
+  requires = "consensus.prelude"
+  archive(byte) = "consensus.config.cmo"
+  archive(native) = "consensus.config.cmx"
+)
+
 package "geometry" (
   version = "@PACKAGE_VERSION@"
   description = "Consensus geometry library"
