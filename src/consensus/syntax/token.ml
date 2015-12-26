@@ -68,3 +68,25 @@ let to_string  = function
   | TOGGLE    -> "toggle"
   | TRACK     -> "track"
   | UP        -> "up"
+
+let action_for tokens =
+  match tokens with
+  | [] -> None
+  | ABORT as k :: _   -> Some (to_string k)
+  | DISABLE as k :: _ -> Some (to_string k)
+  | ENABLE as k :: _  -> Some (to_string k)
+  | FIRE as k :: _    -> Some (to_string k)
+  | HOLD as k :: _    -> Some (to_string k)
+  | JOIN as k :: _    -> Some (to_string k)
+  | LEAVE as k :: _   -> Some (to_string k)
+  | PAN as k :: (TO as k' :: _)  ->
+    Some (Printf.sprintf "%s %s" (to_string k) (to_string k'))
+  | PAN as k :: _     -> Some (to_string k)
+  | PING as k :: _    -> Some (to_string k)
+  | RESUME as k :: _  -> Some (to_string k)
+  | TILT as k :: (TO as k' :: _) ->
+    Some (Printf.sprintf "%s %s" (to_string k) (to_string k'))
+  | TILT as k :: _    -> Some (to_string k)
+  | TOGGLE as k :: _  -> Some (to_string k)
+  | TRACK as k :: _   -> Some (to_string k)
+  | _  -> None
