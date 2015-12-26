@@ -14,6 +14,10 @@ module Lexer = struct
   #include "syntax/lexer.ml"
 end
 
+module Token = struct
+  #include "syntax/token.ml"
+end
+
 open Parser
 
 let is_verb = function

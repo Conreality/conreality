@@ -14,6 +14,10 @@ module Lexer : sig
   #include "syntax/lexer.inferred.mli"
 end
 
+module Token : sig
+  #include "syntax/token.mli"
+end
+
 val is_verb : Parser.token -> bool
 val is_keyword : string -> bool
 val is_valid : string -> bool

@@ -132,12 +132,14 @@ let () =
     dep  ["file:src/consensus/syntax.ml"]
          ["src/consensus/syntax/command.ml";
           "src/consensus/syntax/lexer.ml";
-          "src/consensus/syntax/parser.ml"];
+          "src/consensus/syntax/parser.ml";
+          "src/consensus/syntax/token.ml"];
 
     dep  ["file:src/consensus/syntax.mli"]
          ["src/consensus/syntax/command.mli";
           "src/consensus/syntax/lexer.inferred.mli";
-          "src/consensus/syntax/parser.mli"];
+          "src/consensus/syntax/parser.mli";
+          "src/consensus/syntax/token.mli"];
 
     dep  ["link"; "ocaml"; "use_cxx"] ["src/libconreality.a"];
 
