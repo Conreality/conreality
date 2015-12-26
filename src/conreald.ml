@@ -25,9 +25,6 @@ let man_sections = [
   `P "$(b,concfg)(8), $(b,conctl)(8)";
 ]
 
-let udp_interface = "127.0.0.1"
-let udp_port = CCCP.Protocol.port
-
 (* Option types *)
 
 type verbosity = Normal | Quiet | Verbose
@@ -152,18 +149,14 @@ module Server = struct
     | Scripting.Runtime_error message ->
       Lwt_log.ign_error_f "Failed to evaluate command due to a runtime error: %s" message
 
-  let recv_command socket callback =
-    let buffer = (UDP.Packet.make_buffer ()) in
-    let rec loop () =
-      UDP.Socket.recvfrom socket buffer >>= fun (length, client) ->
-      let command = String.sub (Lwt_bytes.to_string buffer) 0 length in
-      Lwt_log.ign_notice_f "Received %d bytes from %s: %s" length (Client.to_string client) command;
-      callback client (if (String.length command) > 1 then command else ""); (* for `nc` probe packets *)
-      loop ()
-    in loop ()
-
-  let listen_on_cccp server udp_socket =
-    (fun () -> recv_command udp_socket (evaluate server))
+  let listen_for_cccp server =
+    let cccp_config = server.config.network.cccp in
+    if not (Config.Network.CCCP.is_configured cccp_config)
+    then (fun () -> Lwt.return ())
+    else (fun () -> begin
+      Config.Network.CCCP.listen cccp_config (evaluate server)
+      >>= (fun cccp_server -> Lwt.return ())
+    end)
 
   let recv_irc_message server irc_connection irc_result =
     let open IRC.Message in
@@ -173,7 +166,7 @@ module Server = struct
         | PRIVMSG (target, message) ->
           Lwt_log.warning_f "IRC PRIVMSG: %s %s" target message
         | _ ->
-          Lwt_log.notice_f "IRC: %s" (IRC.Message.to_string irc_message)
+          Lwt_log.notice_f "IRC Notice: %s" (IRC.Message.to_string irc_message)
       end
     | `Error irc_error -> Lwt_log.error_f "IRC Error: %s" irc_error
 
@@ -182,8 +175,8 @@ module Server = struct
     if not (Config.Network.IRC.is_configured irc_config)
     then (fun () -> Lwt.return ())
     else (fun () -> begin
-      Config.Network.IRC.connect irc_config (recv_irc_message server) |> ignore;
-      Lwt.return ()
+      Config.Network.IRC.connect irc_config (recv_irc_message server)
+      >>= (fun irc_connection -> Lwt.return ())
     end)
 
   let connect_to_ros server =
@@ -209,9 +202,7 @@ module Server = struct
     Lwt_unix.on_signal Sys.sigint (fun _ -> Lwt_unix.cancel_jobs (); exit 0) |> ignore;
     Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
     Lwt_log.ign_notice "Starting up...";
-    let udp_socket = UDP.Socket.bind udp_interface udp_port in
-    Lwt_log.ign_notice_f "Listening at udp://%s:%d." udp_interface udp_port;
-    Lwt.async (listen_on_cccp server udp_socket);
+    Lwt.async (listen_for_cccp server);
     Lwt.async (connect_to_irc server);
     Lwt.async (connect_to_ros server);
     Lwt.async (connect_to_stomp server);
