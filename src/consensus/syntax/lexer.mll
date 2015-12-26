@@ -2,7 +2,7 @@
 
 {
   open Exception
-  open Parser
+  open Token
 
   let keyword_table =
     let table = Hashtbl.create 0 in

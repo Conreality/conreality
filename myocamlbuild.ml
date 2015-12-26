@@ -141,7 +141,7 @@ let () =
           "src/consensus/syntax/exception.mli";
           "src/consensus/syntax/lexer.inferred.mli";
           "src/consensus/syntax/parser.mli";
-          "src/consensus/syntax/token.mli"];
+          "src/consensus/syntax/token.inferred.mli"];
 
     dep  ["link"; "ocaml"; "use_cxx"] ["src/libconreality.a"];
 

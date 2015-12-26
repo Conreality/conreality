@@ -12,17 +12,16 @@ module Command = struct
   #include "syntax/command.ml"
 end
 
-module Parser = struct
-  #include "syntax/parser.ml"
+module Token = struct
+  #include "syntax/token.ml"
 end
 
 module Lexer = struct
   #include "syntax/lexer.ml"
 end
 
-module Token = struct
-  include Parser
-  #include "syntax/token.ml"
+module Parser = struct
+  #include "syntax/parser.ml"
 end
 
 let is_keyword string =
