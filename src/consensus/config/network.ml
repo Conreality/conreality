@@ -4,6 +4,7 @@ open Prelude
 open Lua_api
 open Lwt.Infix
 open Messaging
+open Networking
 open Scripting
 
 let require_keys section table keys =
@@ -13,7 +14,7 @@ let require_keys section table keys =
       else Lwt_log.ign_error_f "Missing configuration key %s.%s." section key)
     keys
 
-module Section = struct
+module Protocol = struct
   let load context section (create : unit -> 'a) (of_table : Table.t -> 'a) : 'a =
     match Context.pop_value context with
     | Value.Nil -> create ()
@@ -27,27 +28,35 @@ end
 module CCCP = struct
   let section = "network.cccp"
 
-  type t = Table.t
+  type t = { bind: string; port: int; }
 
-  let required_keys = []
+  let required_keys = ["bind"]
+  let optional_keys = ["port"]
+  let default_port = Messaging.CCCP.Protocol.port
 
-  let optional_keys = []
-
-  let create () = Table.create 0
+  let create ?(bind="") ?(port=0) () =
+    { bind; port; }
 
   let of_table table =
     require_keys section table required_keys;
-    table
+    let bind = Entry.required_string table "bind" in
+    let port = Entry.optional_int    table "port" default_port in
+    create ~bind ~port ()
 
   let load context =
     Lua.getfield context (-1) "cccp";
-    Section.load context section create of_table
+    Protocol.load context section create of_table
 
-  let is_configured (config : t) =
-    false
+  let is_configured { bind; _ } =
+    not (String.is_empty bind)
 
-  let listen (config : t) =
-    Lwt.return () (* TODO *)
+  let listen { bind; port; } =
+    let cccp_url = Printf.sprintf "cccp://%s:%d" bind port in
+    Lwt_log.ign_info_f "Binding to %s..." cccp_url;
+    let udp_socket = UDP.Socket.bind bind port in
+    let cccp_server = CCCP.Server.create udp_socket in
+    Lwt_log.ign_notice_f "Listening at %s." cccp_url;
+    Lwt.return cccp_server
 end
 
 module IRC = struct
@@ -64,8 +73,8 @@ module IRC = struct
   }
 
   let required_keys = ["host"; "nick"; "channel"]
-
   let optional_keys = ["port"; "password"; "username"; "realname"]
+  let default_port = 6667
 
   let create ?(host="") ?(port=0) ?(password="")
              ?(nick="") ?(username="") ?(realname="")
@@ -75,7 +84,7 @@ module IRC = struct
   let of_table table =
     require_keys section table required_keys;
     let host     = Entry.required_string table "host" in
-    let port     = Entry.optional_int    table "port" 6667 in
+    let port     = Entry.optional_int    table "port" default_port in
     let password = Entry.optional_string table "password" "" in
     let nick     = Entry.required_string table "nick" in
     let username = Entry.optional_string table "username" nick in
@@ -85,7 +94,7 @@ module IRC = struct
 
   let load context =
     Lua.getfield context (-1) "irc";
-    Section.load context section create of_table
+    Protocol.load context section create of_table
 
   let is_configured (config : t) =
     not (String.is_empty config.host) &&
@@ -117,9 +126,7 @@ module ROS = struct
   type t = Table.t
 
   let required_keys = []
-
   let optional_keys = []
-
   let create () = Table.create 0
 
   let of_table table =
@@ -128,7 +135,7 @@ module ROS = struct
 
   let load context =
     Lua.getfield context (-1) "ros";
-    Section.load context section create of_table
+    Protocol.load context section create of_table
 
   let is_configured (config : t) =
     false
@@ -143,9 +150,7 @@ module STOMP = struct
   type t = Table.t
 
   let required_keys = []
-
   let optional_keys = []
-
   let create () = Table.create 0
 
   let of_table table =
@@ -154,7 +159,7 @@ module STOMP = struct
 
   let load context =
     Lua.getfield context (-1) "stomp";
-    Section.load context section create of_table
+    Protocol.load context section create of_table
 
   let is_configured (config : t) =
     false
