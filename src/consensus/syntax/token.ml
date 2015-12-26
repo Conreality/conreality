@@ -30,10 +30,16 @@ type t =
 
 type token = t
 
+let is_eof = function
+  | EOF -> true | _ -> false
+
 let is_verb = function
   | ABORT | DISABLE | ENABLE | FIRE | HOLD | JOIN | LEAVE
   | PAN | PING | RESUME | TILT | TOGGLE | TRACK -> true
   | _ -> false
+
+let is_numeric = function
+  | FLOAT _ | INTEGER _ -> true | _ -> false
 
 let to_string  = function
   | ABORT     -> "abort"
