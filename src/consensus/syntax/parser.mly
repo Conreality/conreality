@@ -37,9 +37,9 @@
 
 %{
   open Command
+  open Exception
 
-  exception Error
-
+  let sprintf = Printf.sprintf
   let pi = 4. *. atan 1.
 
   let radians rad = rad
@@ -47,12 +47,12 @@
   let degrees_to_radians deg =
     if deg >= 0. && deg <= 360.
     then (mod_float deg 360.) *. (pi /. 180.)
-    else raise Error
+    else semantic_error (sprintf "degrees must be in range 0 to 360 (got %f)" deg)
 
   let clock_to_radians pos =
     if pos >= 0. && pos <= 12.
     then degrees_to_radians (360. /. 12.) *. (mod_float pos 12.)
-    else raise Error
+    else semantic_error (sprintf "clock positions must be in range 0 to 12 (got %f)" pos)
 %}
 
 %start <Command.t> parse

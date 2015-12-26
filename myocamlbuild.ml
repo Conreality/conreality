@@ -131,17 +131,22 @@ let () =
 
     dep  ["file:src/consensus/syntax.ml"]
          ["src/consensus/syntax/command.ml";
+          "src/consensus/syntax/exception.ml";
           "src/consensus/syntax/lexer.ml";
           "src/consensus/syntax/parser.ml";
           "src/consensus/syntax/token.ml"];
 
     dep  ["file:src/consensus/syntax.mli"]
          ["src/consensus/syntax/command.mli";
+          "src/consensus/syntax/exception.mli";
           "src/consensus/syntax/lexer.inferred.mli";
           "src/consensus/syntax/parser.mli";
           "src/consensus/syntax/token.mli"];
 
     dep  ["link"; "ocaml"; "use_cxx"] ["src/libconreality.a"];
+
+    flag ["ocaml"; "menhir"; "fixed_exception"] (S[A "--fixed-exception"]);
+    flag ["ocaml"; "menhir_ocamldep"; "fixed_exception"] (S[A "--fixed-exception"]);
 
     flag ["link"; "ocaml"; "library"; "byte"; "use_cxx"]
       (S[A"-dllib"; A"-lconreality";

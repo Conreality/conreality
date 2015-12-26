@@ -2,6 +2,10 @@
 
 open Prelude
 
+module Exception = struct
+  #include "syntax/exception.ml"
+end
+
 module Command = struct
   #include "syntax/command.ml"
 end
@@ -15,6 +19,7 @@ module Lexer = struct
 end
 
 module Token = struct
+  include Parser
   #include "syntax/token.ml"
 end
 
@@ -37,12 +42,12 @@ let parse_from_string input =
 
 let is_valid string =
   try (parse_from_string string |> ignore; true) with
-  | Lexer.Error _ | Parser.Error -> false
+  | Exception.Error _ | Parsing.Parse_error -> false
 
 let lexbuf_to_list lexbuf =
   let rec consume input output =
     match Lexer.lex input with
-    | Parser.EOF -> output
+    | Token.EOF -> output
     | token -> consume input (token :: output)
   in List.rev (consume lexbuf [])
 

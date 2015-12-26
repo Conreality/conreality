@@ -189,7 +189,7 @@ module Server = struct
         | PRIVMSG (target, message) -> begin
             Lwt_log.ign_warning_f "IRC PRIVMSG: %s %s" target message;
             try eval_irc_message server irc_connection target message with
-            | Syntax.Lexer.Error _ | Syntax.Parser.Error ->
+            | Syntax.Exception.Error _ | Parsing.Parse_error ->
               IRC.Client.send_privmsg ~connection:irc_connection
                 ~target ~message:"ERR"
           end

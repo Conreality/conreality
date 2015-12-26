@@ -2,6 +2,10 @@
 
 (** Surface syntax. *)
 
+module Exception : sig
+  #include "syntax/exception.mli"
+end
+
 module Command : sig
   #include "syntax/command.mli"
 end

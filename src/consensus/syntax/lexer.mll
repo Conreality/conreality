@@ -1,8 +1,8 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 {
+  open Exception
   open Parser
-  exception Error of string
 
   let keyword_table =
     let table = Hashtbl.create 0 in
@@ -66,4 +66,4 @@ rule lex = parse
   { EOF }
 
   | _
-  { raise (Error (Printf.sprintf "unexpected character at offset %d" (Lexing.lexeme_start lexbuf))) }
+  { lexical_error (Printf.sprintf "unexpected character at offset %d" (Lexing.lexeme_start lexbuf)) }
