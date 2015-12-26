@@ -105,6 +105,8 @@ module Server = struct
 
     let toggle server client = () (* TODO *)
 
+    let help server client = () (* TODO *)
+
     let hold server client = () (* TODO *)
 
     let pan server client = () (* TODO *)
@@ -159,28 +161,43 @@ module Server = struct
     end)
 
   let eval_irc_message server irc_connection target message =
+    let send_msg message =
+      IRC.Client.send_privmsg ~connection:irc_connection ~target ~message
+    in
+    let send_ack () = send_msg "ACK" in
     let open Syntax.Command in
     begin
       match Syntax.parse_from_string message with
-      | Abort -> ()
-      | Disable device -> ()
-      | Enable device -> ()
-      | Fire (device, duration) -> ()
-      | Help command -> ()
-      | Hold -> ()
-      | Join swarm -> ()
-      | Leave swarm -> ()
-      | Pan radians -> ()
-      | PanTo radians -> ()
-      | Ping node -> ()
-      | Resume -> ()
-      | Tilt radians -> ()
-      | TiltTo radians -> ()
-      | Toggle device -> ()
-      | Track target -> ()
-    end;
-    IRC.Client.send_privmsg ~connection:irc_connection
-      ~target ~message:"ACK"
+      | Abort          -> send_ack ()
+      | Disable device -> send_ack ()
+      | Enable device  -> send_ack ()
+      | Fire (device, duration) ->
+        send_ack ()
+      | Help command   -> begin
+          if not (String.is_empty command)
+          then begin
+            match Syntax.help_for (String.lowercase command) with
+            | Some help -> send_msg help
+            | None -> send_msg "ERR: Unknown command."
+          end
+          else begin
+            let help = Syntax.Command.help () in
+            let helps = Hashtbl.fold (fun _ hd tl -> hd :: tl) help [] in
+            Lwt_list.iter_s send_msg helps
+          end
+        end
+      | Hold           -> send_ack ()
+      | Join swarm     -> send_ack ()
+      | Leave swarm    -> send_ack ()
+      | Pan radians    -> send_ack ()
+      | PanTo radians  -> send_ack ()
+      | Ping node      -> send_ack ()
+      | Resume         -> send_ack ()
+      | Tilt radians   -> send_ack ()
+      | TiltTo radians -> send_ack ()
+      | Toggle device  -> send_ack ()
+      | Track target   -> send_ack ()
+    end
 
   let recv_irc_message server irc_connection irc_result =
     let open IRC.Message in

@@ -76,11 +76,8 @@ command:
   | FIRE device=symbol duration=duration
     { Fire (device, duration) }
 
-  | HELP command=symbol
-    { Help command }
-
-  | HELP
-    { Help "" }
+  | HELP command=option(command_verb)
+    { Help (match command with Some s -> s | None -> "") }
 
   | HOLD
     { Hold }
@@ -114,6 +111,26 @@ command:
 
   | TRACK target=symbol
     { Track (target) }
+
+command_verb:
+  | command=command_verbs { command }
+  | command=symbol { command }
+
+command_verbs:
+  | ABORT   { "abort" }
+  | DISABLE { "disable" }
+  | ENABLE  { "enable" }
+  | FIRE    { "fire" }
+  | HELP    { "help" }
+  | HOLD    { "hold" }
+  | JOIN    { "join" }
+  | LEAVE   { "leave" }
+  | PAN     { "pan" }
+  | PING    { "ping" }
+  | RESUME  { "resume" }
+  | TILT    { "tilt" }
+  | TOGGLE  { "toggle" }
+  | TRACK   { "track" }
 
 pan_direction:
   | LEFT      { -1. }
