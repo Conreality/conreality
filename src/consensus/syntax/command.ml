@@ -7,6 +7,7 @@ type t =
   | Disable of string
   | Enable of string
   | Fire of string * float
+  | Help of string
   | Hold
   | Join of string
   | Leave of string
@@ -27,6 +28,8 @@ let to_string = function
     Printf.sprintf "enable(%s)" device
   | Fire (device, duration) ->
     Printf.sprintf "fire(%s, %f)" device duration
+  | Help command ->
+    Printf.sprintf "help(%s)" command
   | Hold -> "hold()"
   | Join swarm ->
     Printf.sprintf "join(%s)" swarm
@@ -58,6 +61,7 @@ let help () =
   define "disable" "DISABLE <device>";
   define "enable"  "ENABLE <device>";
   define "fire"    "FIRE <device> [<duration>]";
+  define "help"    "HELP [<command>]";
   define "hold"    "HOLD";
   define "join"    "JOIN <swarm>";
   define "leave"   "LEAVE <swarm>";

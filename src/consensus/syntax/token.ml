@@ -9,6 +9,7 @@ type t =
   | EOF
   | FIRE
   | FLOAT of float
+  | HELP
   | HOLD
   | INTEGER of int
   | JOIN
@@ -34,7 +35,7 @@ let is_eof = function
   | EOF -> true | _ -> false
 
 let is_verb = function
-  | ABORT | DISABLE | ENABLE | FIRE | HOLD | JOIN | LEAVE
+  | ABORT | DISABLE | ENABLE | FIRE | HELP | HOLD | JOIN | LEAVE
   | PAN | PING | RESUME | TILT | TOGGLE | TRACK -> true
   | _ -> false
 
@@ -50,6 +51,7 @@ let to_string  = function
   | EOF       -> ""
   | FIRE      -> "fire"
   | FLOAT f   -> Printf.sprintf "%f" f
+  | HELP      -> "help"
   | HOLD      -> "hold"
   | INTEGER n -> Printf.sprintf "%d" n
   | JOIN      -> "join"
@@ -76,6 +78,7 @@ let action_for tokens =
   | DISABLE as k :: _ -> Some (to_string k)
   | ENABLE as k :: _  -> Some (to_string k)
   | FIRE as k :: _    -> Some (to_string k)
+  | HELP as k :: _    -> Some (to_string k)
   | HOLD as k :: _    -> Some (to_string k)
   | JOIN as k :: _    -> Some (to_string k)
   | LEAVE as k :: _   -> Some (to_string k)

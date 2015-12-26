@@ -166,6 +166,7 @@ module Server = struct
       | Disable device -> ()
       | Enable device -> ()
       | Fire (device, duration) -> ()
+      | Help command -> ()
       | Hold -> ()
       | Join swarm -> ()
       | Leave swarm -> ()

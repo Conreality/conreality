@@ -12,6 +12,7 @@
     define "disable"  DISABLE;
     define "enable"   ENABLE;
     define "fire"     FIRE;
+    define "help"     HELP;
     define "hold"     HOLD;
     define "join"     JOIN;
     define "leave"    LEAVE;

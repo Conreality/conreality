@@ -10,6 +10,7 @@
 %token DISABLE
 %token ENABLE
 %token FIRE
+%token HELP
 %token HOLD
 %token JOIN
 %token LEAVE
@@ -74,6 +75,12 @@ command:
 
   | FIRE device=symbol duration=duration
     { Fire (device, duration) }
+
+  | HELP command=symbol
+    { Help command }
+
+  | HELP
+    { Help "" }
 
   | HOLD
     { Hold }

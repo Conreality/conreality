@@ -5,6 +5,7 @@ type t =
   | Disable of string
   | Enable of string
   | Fire of string * float
+  | Help of string
   | Hold
   | Join of string
   | Leave of string
