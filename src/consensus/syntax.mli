@@ -18,7 +18,6 @@ module Token : sig
   #include "syntax/token.mli"
 end
 
-val is_verb : Parser.token -> bool
 val is_keyword : string -> bool
 val is_valid : string -> bool
 val keyword_to_token : string -> Parser.token
