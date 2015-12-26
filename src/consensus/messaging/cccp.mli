@@ -11,10 +11,14 @@ module Client : sig
   val to_string : t -> string
 end
 
+module Callback : sig
+  type t = Client.t -> string -> unit
+end
+
 module Server : sig
   type t
   val create : Networking.UDP.Socket.t -> t
   val socket : t -> Networking.UDP.Socket.t
   val buffer : t -> Lwt_bytes.t
-  val loop : t -> (Client.t -> string -> unit) -> unit Lwt.t
+  val loop : t -> Callback.t -> unit Lwt.t
 end

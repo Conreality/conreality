@@ -50,11 +50,12 @@ module CCCP = struct
   let is_configured { bind; _ } =
     not (String.is_empty bind)
 
-  let listen { bind; port; } =
+  let listen { bind; port; } callback =
     let cccp_url = Printf.sprintf "cccp://%s:%d" bind port in
     Lwt_log.ign_info_f "Binding to %s..." cccp_url;
     let udp_socket = UDP.Socket.bind bind port in
     let cccp_server = CCCP.Server.create udp_socket in
+    Lwt.async (fun () -> CCCP.Server.loop cccp_server callback);
     Lwt_log.ign_notice_f "Listening at %s." cccp_url;
     Lwt.return cccp_server
 end

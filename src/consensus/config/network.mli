@@ -3,7 +3,7 @@
 module CCCP : sig
   type t
   val is_configured : t -> bool
-  val listen : t -> Messaging.CCCP.Server.t Lwt.t
+  val listen : t -> Messaging.CCCP.Callback.t -> Messaging.CCCP.Server.t Lwt.t
 end
 
 module IRC : sig

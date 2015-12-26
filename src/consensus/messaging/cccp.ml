@@ -24,6 +24,10 @@ module Client = struct
     | Unix.ADDR_UNIX _ -> assert false
 end
 
+module Callback = struct
+  type t = Client.t -> string -> unit
+end
+
 module Server = struct
   type t = {
     socket: UDP.Socket.t;
@@ -37,7 +41,7 @@ module Server = struct
 
   let buffer { buffer; _ } = buffer
 
-  let rec loop server (callback : Client.t -> string -> unit) =
+  let rec loop server (callback : Callback.t) =
     let { socket; buffer } = server in
     UDP.Socket.recvfrom socket buffer >>= fun (length, client) ->
     let command = String.sub (Lwt_bytes.to_string buffer) 0 length in
