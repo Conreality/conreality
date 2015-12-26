@@ -24,6 +24,32 @@ module Section = struct
     end
 end
 
+module CCCP = struct
+  let section = "network.cccp"
+
+  type t = Table.t
+
+  let required_keys = []
+
+  let optional_keys = []
+
+  let create () = Table.create 0
+
+  let of_table table =
+    require_keys section table required_keys;
+    table
+
+  let load context =
+    Lua.getfield context (-1) "cccp";
+    Section.load context section create of_table
+
+  let is_configured (config : t) =
+    false
+
+  let listen (config : t) =
+    Lwt.return () (* TODO *)
+end
+
 module IRC = struct
   let section = "network.irc"
 
@@ -138,12 +164,14 @@ module STOMP = struct
 end
 
 type t = {
+  mutable cccp:  CCCP.t;
   mutable irc:   IRC.t;
   mutable ros:   ROS.t;
   mutable stomp: STOMP.t;
 }
 
 let create () = {
+  cccp  = CCCP.create ();
   irc   = IRC.create ();
   ros   = ROS.create ();
   stomp = STOMP.create ();
@@ -151,6 +179,7 @@ let create () = {
 
 let load network context =
   LuaL.checktype context (-1) Lua.LUA_TTABLE;
+  network.cccp  <- CCCP.load context;
   network.irc   <- IRC.load context;
   network.ros   <- ROS.load context;
   network.stomp <- STOMP.load context
