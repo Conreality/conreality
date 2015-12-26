@@ -1,6 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Prelude
+open Networking
 open Syntax
 
 module Protocol = struct
@@ -23,5 +24,9 @@ module Client = struct
 end
 
 module Server = struct
-  type t = Lwt_unix.file_descr
+  type t = { socket: Networking.UDP.Socket.t }
+
+  let create socket = { socket; }
+
+  let socket { socket; _ } = socket
 end

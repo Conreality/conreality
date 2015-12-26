@@ -13,4 +13,6 @@ end
 
 module Server : sig
   type t
+  val create : Networking.UDP.Socket.t -> t
+  val socket : t -> Networking.UDP.Socket.t
 end
