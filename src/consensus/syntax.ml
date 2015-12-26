@@ -37,3 +37,7 @@ let parse_from_channel input =
 
 let parse_from_string input =
   Lexing.from_string input |> parse_from_lexbuf
+
+let is_valid string =
+  try (parse_from_string string |> ignore; true) with
+  | Lexer.Error _ | Parser.Error -> false
