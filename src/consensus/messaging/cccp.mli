@@ -5,7 +5,10 @@ module Protocol : sig
 end
 
 module Client : sig
-  type t
+  type t = Lwt_unix.sockaddr
+  val any : t
+  val compare : t -> t -> int
+  val to_string : t -> string
 end
 
 module Server : sig
