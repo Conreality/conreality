@@ -5,6 +5,8 @@
 open Cmdliner
 open Consensus
 open Consensus.Prelude
+open Consensus.Config
+open Consensus.Config.Network
 open Consensus.Messaging
 open Consensus.Networking
 open Lwt.Infix
@@ -171,6 +173,24 @@ module Server = struct
       loop ()
     in loop ()
 
+  let listen_on_cccp server udp_socket =
+    (fun () -> recv_command udp_socket (evaluate server))
+
+  let connect_to_irc server =
+    let irc_config = server.config.network.irc in
+    if not (Config.Network.IRC.is_configured irc_config)
+    then (fun () -> Lwt.return ())
+    else (fun () -> begin
+      Config.Network.IRC.connect irc_config |> ignore;
+      Lwt.return ()
+    end)
+
+  let connect_to_ros server =
+    (fun () -> Lwt.return ()) (* TODO *)
+
+  let connect_to_stomp server =
+    (fun () -> Lwt.return ()) (* TODO *)
+
   let init server =
 (*
     Lwt_log.default := Lwt_log.syslog
@@ -184,7 +204,10 @@ module Server = struct
     Lwt_log.ign_notice "Starting up...";
     let udp_socket = UDP.Socket.bind udp_interface udp_port in
     Lwt_log.ign_notice_f "Listening at udp://%s:%d." udp_interface udp_port;
-    Lwt.async (fun () -> recv_command udp_socket (evaluate server));
+    Lwt.async (listen_on_cccp server udp_socket);
+    Lwt.async (connect_to_irc server);
+    Lwt.async (connect_to_ros server);
+    Lwt.async (connect_to_stomp server);
     server
 
   let loop server =
