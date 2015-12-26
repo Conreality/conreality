@@ -159,20 +159,38 @@ module Server = struct
     end)
 
   let eval_irc_message server irc_connection target message =
-    let is_valid = Syntax.is_valid message in
-    Lwt_log.warning_f "IRC PRIVMSG: %s %s" target message
-    >>= fun () -> begin
-      IRC.Client.send_privmsg ~connection:irc_connection
-        ~target ~message:(if is_valid then "ACK" else "ERR")
-    end
+    let open Syntax.Command in
+    begin
+      match Syntax.parse_from_string message with
+      | Abort -> ()
+      | Disable device -> ()
+      | Enable device -> ()
+      | Fire (device, duration) -> ()
+      | Hold -> ()
+      | Join swarm -> ()
+      | Leave swarm -> ()
+      | Pan degrees -> ()
+      | Ping node -> ()
+      | Resume -> ()
+      | Tilt degrees -> ()
+      | Toggle device -> ()
+      | Track target -> ()
+    end;
+    IRC.Client.send_privmsg ~connection:irc_connection
+      ~target ~message:"ACK"
 
   let recv_irc_message server irc_connection irc_result =
     let open IRC.Message in
     match irc_result with
     | `Ok irc_message -> begin
         match irc_message.command with
-        | PRIVMSG (target, message) ->
-          eval_irc_message server irc_connection target message
+        | PRIVMSG (target, message) -> begin
+            Lwt_log.ign_warning_f "IRC PRIVMSG: %s %s" target message;
+            try eval_irc_message server irc_connection target message with
+            | Syntax.Lexer.Error _ | Syntax.Parser.Error ->
+              IRC.Client.send_privmsg ~connection:irc_connection
+                ~target ~message:"ERR"
+          end
         | _ ->
           Lwt_log.notice_f "IRC Notice: %s" (IRC.Message.to_string irc_message)
       end
