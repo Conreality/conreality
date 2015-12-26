@@ -59,21 +59,23 @@ let help_key_for input =
   let open Token in
   match tokenize input with
   | [] -> None
-  | ABORT :: _      -> Some "abort"
-  | DISABLE :: _    -> Some "disable"
-  | ENABLE :: _     -> Some "enable"
-  | FIRE :: _       -> Some "fire"
-  | HOLD :: _       -> Some "hold"
-  | JOIN :: _       -> Some "join"
-  | LEAVE :: _      -> Some "leave"
-  | PAN :: TO :: _  -> Some "pan to"
-  | PAN :: _        -> Some "pan"
-  | PING :: _       -> Some "ping"
-  | RESUME :: _     -> Some "resume"
-  | TILT :: TO :: _ -> Some "tilt to"
-  | TILT :: _       -> Some "tilt"
-  | TOGGLE :: _     -> Some "toggle"
-  | TRACK :: _      -> Some "track"
+  | ABORT as k :: _   -> Some (Token.to_string k)
+  | DISABLE as k :: _ -> Some (Token.to_string k)
+  | ENABLE as k :: _  -> Some (Token.to_string k)
+  | FIRE as k :: _    -> Some (Token.to_string k)
+  | HOLD as k :: _    -> Some (Token.to_string k)
+  | JOIN as k :: _    -> Some (Token.to_string k)
+  | LEAVE as k :: _   -> Some (Token.to_string k)
+  | PAN as k :: (TO as k' :: _)  ->
+    Some (Printf.sprintf "%s %s" (Token.to_string k) (Token.to_string k'))
+  | PAN as k :: _     -> Some (Token.to_string k)
+  | PING as k :: _    -> Some (Token.to_string k)
+  | RESUME as k :: _  -> Some (Token.to_string k)
+  | TILT as k :: (TO as k' :: _) ->
+    Some (Printf.sprintf "%s %s" (Token.to_string k) (Token.to_string k'))
+  | TILT as k :: _    -> Some (Token.to_string k)
+  | TOGGLE as k :: _  -> Some (Token.to_string k)
+  | TRACK as k :: _   -> Some (Token.to_string k)
   | _  -> None
 
 let help_for input =
