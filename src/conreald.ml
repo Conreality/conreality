@@ -158,13 +158,21 @@ module Server = struct
       >>= (fun cccp_server -> Lwt.return ())
     end)
 
+  let eval_irc_message server irc_connection target message =
+    let is_valid = Syntax.is_valid message in
+    Lwt_log.warning_f "IRC PRIVMSG: %s %s" target message
+    >>= fun () -> begin
+      IRC.Client.send_privmsg ~connection:irc_connection
+        ~target ~message:(if is_valid then "ACK" else "ERR")
+    end
+
   let recv_irc_message server irc_connection irc_result =
     let open IRC.Message in
     match irc_result with
     | `Ok irc_message -> begin
         match irc_message.command with
         | PRIVMSG (target, message) ->
-          Lwt_log.warning_f "IRC PRIVMSG: %s %s" target message
+          eval_irc_message server irc_connection target message
         | _ ->
           Lwt_log.notice_f "IRC Notice: %s" (IRC.Message.to_string irc_message)
       end
