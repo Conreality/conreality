@@ -53,7 +53,7 @@ let length command =
 
 let help () =
   let table = Hashtbl.create 0 in
-  let define cmd usage = Hashtbl.replace table cmd usage in
+  let define verb usage = Hashtbl.replace table verb usage in
   define "abort"   "ABORT";
   define "disable" "DISABLE <device>";
   define "enable"  "ENABLE <device>";

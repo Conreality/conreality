@@ -41,3 +41,13 @@ let parse_from_string input =
 let is_valid string =
   try (parse_from_string string |> ignore; true) with
   | Lexer.Error _ | Parser.Error -> false
+
+let lexbuf_to_list lexbuf =
+  let rec consume input output =
+    match Lexer.lex input with
+    | Parser.EOF -> output
+    | token -> consume input (token :: output)
+  in List.rev (consume lexbuf [])
+
+let tokenize input =
+  Lexing.from_string input |> lexbuf_to_list
