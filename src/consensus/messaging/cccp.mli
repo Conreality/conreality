@@ -15,4 +15,6 @@ module Server : sig
   type t
   val create : Networking.UDP.Socket.t -> t
   val socket : t -> Networking.UDP.Socket.t
+  val buffer : t -> Lwt_bytes.t
+  val loop : t -> (Client.t -> string -> unit) -> unit Lwt.t
 end
