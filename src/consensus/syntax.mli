@@ -30,3 +30,4 @@ val keyword_to_token : string -> Parser.token
 val parse_from_channel : in_channel -> Command.t
 val parse_from_string : string -> Command.t
 val tokenize : string -> Parser.token list
+val help_for : string -> string option

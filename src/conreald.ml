@@ -190,8 +190,9 @@ module Server = struct
             Lwt_log.ign_warning_f "IRC PRIVMSG: %s %s" target message;
             try eval_irc_message server irc_connection target message with
             | Syntax.Error _ | Parsing.Parse_error ->
+              let usage = match Syntax.help_for message with Some help -> help | None -> "" in
               IRC.Client.send_privmsg ~connection:irc_connection
-                ~target ~message:"ERR"
+                ~target ~message:(Printf.sprintf "ERR. Syntax: %s" usage)
           end
         | _ ->
           Lwt_log.notice_f "IRC Notice: %s" (IRC.Message.to_string irc_message)
