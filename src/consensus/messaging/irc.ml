@@ -2,4 +2,10 @@
 
 open Prelude
 
+module Message = Irc_message
+
+module Connection = struct
+  type t = Irc_client_lwt.connection_t
+end
+
 module Client = Irc_client_lwt
