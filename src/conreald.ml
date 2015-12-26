@@ -28,9 +28,6 @@ let man_sections = [
 let udp_interface = "127.0.0.1"
 let udp_port = CCCP.Protocol.port
 
-let broker_name = "localhost"
-let broker_port = 61613 (* Apache ActiveMQ Apollo *)
-
 (* Option types *)
 
 type verbosity = Normal | Quiet | Verbose
@@ -45,6 +42,9 @@ let verbosity_str = function
 (* Command implementations *)
 
 module Experiments = struct
+  let broker_name = "localhost"
+  let broker_port = 61613 (* Apache ActiveMQ Apollo *)
+
   let connect addr port =
     let sockfd = Lwt_unix.socket Lwt_unix.PF_INET Lwt_unix.SOCK_STREAM 0 in
     let sockaddr = Lwt_unix.ADDR_INET (addr, port) in
@@ -80,18 +80,7 @@ module Experiments = struct
 *)
 end
 
-module Client = struct
-  type t = Lwt_unix.sockaddr
-
-  let compare (a : t) (b : t) =
-    Pervasives.compare a b
-
-  let to_string = function
-    | ADDR_INET (addr, port) ->
-      Printf.sprintf "%s:%d" (Unix.string_of_inet_addr addr) port
-    | ADDR_UNIX _ -> assert false
-end
-
+module Client = CCCP.Client
 module Client_set = Set.Make(Client)
 
 module Server = struct
@@ -146,7 +135,7 @@ module Server = struct
       context = Scripting.Context.create ();
       config  = Config.load_file config_path;
       clients = Client_set.empty;
-      client  = Unix.(ADDR_INET (Unix.inet_addr_any, 0))
+      client  = Client.any;
     } in
     load_protocol server;
     server
@@ -176,20 +165,38 @@ module Server = struct
   let listen_on_cccp server udp_socket =
     (fun () -> recv_command udp_socket (evaluate server))
 
+  let recv_irc_message server irc_connection irc_result =
+    let open IRC.Message in
+    match irc_result with
+    | `Ok irc_message -> begin
+        match irc_message.command with
+        | PRIVMSG (target, message) ->
+          Lwt_log.warning_f "IRC PRIVMSG: %s %s" target message
+        | _ ->
+          Lwt_log.notice_f "IRC: %s" (IRC.Message.to_string irc_message)
+      end
+    | `Error irc_error -> Lwt_log.error_f "IRC Error: %s" irc_error
+
   let connect_to_irc server =
     let irc_config = server.config.network.irc in
     if not (Config.Network.IRC.is_configured irc_config)
     then (fun () -> Lwt.return ())
     else (fun () -> begin
-      Config.Network.IRC.connect irc_config |> ignore;
+      Config.Network.IRC.connect irc_config (recv_irc_message server) |> ignore;
       Lwt.return ()
     end)
 
   let connect_to_ros server =
-    (fun () -> Lwt.return ()) (* TODO *)
+    let ros_config = server.config.network.ros in
+    if not (Config.Network.ROS.is_configured ros_config)
+    then (fun () -> Lwt.return ())
+    else (fun () -> Lwt.return ()) (* TODO *)
 
   let connect_to_stomp server =
-    (fun () -> Lwt.return ()) (* TODO *)
+    let stomp_config = server.config.network.stomp in
+    if not (Config.Network.STOMP.is_configured stomp_config)
+    then (fun () -> Lwt.return ())
+    else (fun () -> Lwt.return ()) (* TODO *)
 
   let init server =
 (*
@@ -216,7 +223,7 @@ end
 
 let main options config_path =
   if String.is_empty config_path
-  then `Error (true, "no configuration file specified")
+  then `Error (true, "no configuration file specified.")
   else `Ok (Lwt_main.run (Server.create config_path |> Server.init |> Server.loop))
 
 (* Options common to all commands *)
