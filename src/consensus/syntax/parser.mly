@@ -126,9 +126,11 @@ command_verbs:
   | JOIN    { "join" }
   | LEAVE   { "leave" }
   | PAN     { "pan" }
+  | PAN TO  { "pan to" }
   | PING    { "ping" }
   | RESUME  { "resume" }
   | TILT    { "tilt" }
+  | TILT TO { "tilt to" }
   | TOGGLE  { "toggle" }
   | TRACK   { "track" }
 

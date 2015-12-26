@@ -160,44 +160,44 @@ module Server = struct
       >>= (fun cccp_server -> Lwt.return ())
     end)
 
+  let exec_command server respond command =
+    let open Syntax.Command in
+    match command with
+    | Abort          -> respond "ACK" (* TODO *)
+    | Disable device -> respond "ACK" (* TODO *)
+    | Enable device  -> respond "ACK" (* TODO *)
+    | Fire (device, duration) -> respond "ACK" (* TODO *)
+    | Help command   -> begin
+        if not (String.is_empty command)
+        then begin
+          match Syntax.help_for (String.lowercase command) with
+          | Some help -> respond help
+          | None -> respond "ERR: Unknown command."
+        end
+        else begin
+          let help = Syntax.Command.help () in
+          let helps = Hashtbl.fold (fun _ hd tl -> hd :: tl) help [] in
+          Lwt_list.iter_s respond helps
+        end
+      end
+    | Hold           -> respond "ACK" (* TODO *)
+    | Join swarm     -> respond "ACK" (* TODO *)
+    | Leave swarm    -> respond "ACK" (* TODO *)
+    | Pan angle      -> respond "ACK" (* TODO *)
+    | PanTo angle    -> respond "ACK" (* TODO *)
+    | Ping node      -> respond "ACK" (* TODO *)
+    | Resume         -> respond "ACK" (* TODO *)
+    | Tilt angle     -> respond "ACK" (* TODO *)
+    | TiltTo angle   -> respond "ACK" (* TODO *)
+    | Toggle device  -> respond "ACK" (* TODO *)
+    | Track target   -> respond "ACK" (* TODO *)
+
   let eval_irc_message server irc_connection target message =
-    let send_msg message =
+    let command = Syntax.parse_from_string message in
+    let respond message =
       IRC.Client.send_privmsg ~connection:irc_connection ~target ~message
     in
-    let send_ack () = send_msg "ACK" in
-    let open Syntax.Command in
-    begin
-      match Syntax.parse_from_string message with
-      | Abort          -> send_ack ()
-      | Disable device -> send_ack ()
-      | Enable device  -> send_ack ()
-      | Fire (device, duration) ->
-        send_ack ()
-      | Help command   -> begin
-          if not (String.is_empty command)
-          then begin
-            match Syntax.help_for (String.lowercase command) with
-            | Some help -> send_msg help
-            | None -> send_msg "ERR: Unknown command."
-          end
-          else begin
-            let help = Syntax.Command.help () in
-            let helps = Hashtbl.fold (fun _ hd tl -> hd :: tl) help [] in
-            Lwt_list.iter_s send_msg helps
-          end
-        end
-      | Hold           -> send_ack ()
-      | Join swarm     -> send_ack ()
-      | Leave swarm    -> send_ack ()
-      | Pan radians    -> send_ack ()
-      | PanTo radians  -> send_ack ()
-      | Ping node      -> send_ack ()
-      | Resume         -> send_ack ()
-      | Tilt radians   -> send_ack ()
-      | TiltTo radians -> send_ack ()
-      | Toggle device  -> send_ack ()
-      | Track target   -> send_ack ()
-    end
+    exec_command server respond command
 
   let recv_irc_message server irc_connection irc_result =
     let open IRC.Message in
