@@ -3,6 +3,7 @@
 open Prelude
 open Lua_api
 open Lwt.Infix
+open Messaging
 open Scripting
 
 let require_keys section table keys =
@@ -65,16 +66,23 @@ module IRC = struct
     not (String.is_empty config.nick) &&
     not (String.is_empty config.channel)
 
-  let connect { host; port; password; nick; username; realname; channel; } =
-    Lwt_unix.gethostbyname host
-    >>= fun hostent -> begin
-      Irc_client_lwt.connect ~addr:(hostent.Lwt_unix.h_addr_list.(0))
+  let connect { host; port; password; nick; username; realname; channel; } callback =
+    let irc_url = Printf.sprintf "irc://%s:%d/%s" host port channel in
+    Lwt_log.info_f "Connecting to %s..." irc_url
+    >>= fun () -> Lwt_unix.gethostbyname host
+    >>= fun hostent -> Lwt.return ()
+    >>= fun () -> begin
+      IRC.Client.connect ~addr:(hostent.Lwt_unix.h_addr_list.(0))
         ~port ~password ~nick ~username ~realname ~mode:0 ()
     end
-    >>= fun connection -> begin
-      Lwt_log.ign_notice_f "Connected to irc://%s:%d." host port;
-      Lwt.return (connection)
-    end
+    >>= fun connection -> Lwt.return ()
+    >>= fun () -> Lwt_log.notice_f "Connected to %s." irc_url
+    >>= fun () -> IRC.Client.send_join ~connection ~channel
+    >>= fun () -> IRC.Client.listen ~connection ~callback (* event loop *)
+    >>= fun () -> Lwt_log.info_f "Disconnecting from %s..." irc_url
+    >>= fun () -> IRC.Client.send_quit ~connection
+    >>= fun () -> Lwt_log.info_f "Disconnected from %s." irc_url
+    >>= fun () -> Lwt.return connection
 end
 
 module ROS = struct
@@ -98,6 +106,9 @@ module ROS = struct
 
   let is_configured (config : t) =
     false
+
+  let connect (config : t) =
+    Lwt.return () (* TODO *)
 end
 
 module STOMP = struct
@@ -121,6 +132,9 @@ module STOMP = struct
 
   let is_configured (config : t) =
     false
+
+  let connect (config : t) =
+    Lwt.return () (* TODO *)
 end
 
 type t = {
