@@ -9,9 +9,11 @@ type t =
   | Join of string
   | Leave of string
   | Pan of float
+  | PanTo of float
   | Ping of string
   | Resume
   | Tilt of float
+  | TiltTo of float
   | Toggle of string
   | Track of string
 

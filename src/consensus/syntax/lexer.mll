@@ -30,14 +30,19 @@
     define "left"     LEFT;
     define "right"    RIGHT;
     define "up"       UP;
+    (* Prepositions: *)
+    define "to"       TO;
     table
 }
 
 let digit = ['0'-'9']
 let frac  = '.' digit*
 let exp   = ['e' 'E'] ['-' '+']? digit+
+
 let float = digit* frac? exp?
 let int   = '-'? digit+
+
+let ident = ['A'-'Z' 'a'-'z' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_' '-']*
 
 rule lex = parse
   | [' ' '\t' '\n']
@@ -49,11 +54,13 @@ rule lex = parse
   | float as f
   { FLOAT (float_of_string f) }
 
-  | ['A'-'Z' 'a'-'z' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_' '-']* as s
-  { try Hashtbl.find keyword_table s with Not_found -> SYMBOL (s) }
+  | "o'clock"               { OCLOCK  }
+  | "deg" | "degrees"       { DEGREES }
+  | "rad" | "radians"       { RADIANS }
+  | "s" | "sec" | "seconds" { SECONDS }
 
-  | "s"
-  { SECS }
+  | ident as s
+  { try Hashtbl.find keyword_table s with Not_found -> SYMBOL (s) }
 
   | eof
   { EOF }

@@ -26,10 +26,33 @@
 %token RIGHT
 %token UP
 
-%token SECS
+(* Prepositions: *)
+%token TO
+
+(* Quantifiers: *)
+%token DEGREES
+%token OCLOCK
+%token RADIANS
+%token SECONDS
 
 %{
   open Command
+
+  exception Error
+
+  let pi = 4. *. atan 1.
+
+  let radians rad = rad
+
+  let degrees_to_radians deg =
+    if deg >= 0. && deg <= 360.
+    then (mod_float deg 360.) *. (pi /. 180.)
+    else raise Error
+
+  let clock_to_radians pos =
+    if pos >= 0. && pos <= 12.
+    then degrees_to_radians (360. /. 12.) *. (mod_float pos 12.)
+    else raise Error
 %}
 
 %start <Command.t> parse
@@ -41,43 +64,49 @@ parse:
 
 command:
   | ABORT
-  { Abort }
+    { Abort }
 
   | DISABLE device=symbol
-  { Disable (device) }
+    { Disable (device) }
 
   | ENABLE device=symbol
-  { Enable (device) }
+    { Enable (device) }
 
   | FIRE device=symbol duration=duration
-  { Fire (device, duration) }
+    { Fire (device, duration) }
 
   | HOLD
-  { Hold }
+    { Hold }
 
   | JOIN swarm=symbol
-  { Join (swarm) }
+    { Join (swarm) }
 
   | LEAVE swarm=symbol
-  { Leave (swarm) }
+    { Leave (swarm) }
 
-  | PAN direction=pan_direction degrees=integer
-  { Pan (direction *. (float_of_int degrees)) }
+  | PAN direction=pan_direction radians=angle
+    { Pan (direction *. radians) }
+
+  | PAN TO radians=angle
+    { PanTo radians }
 
   | PING node=symbol
-  { Ping (node) }
+    { Ping (node) }
 
   | RESUME
-  { Resume }
+    { Resume }
 
-  | TILT direction=tilt_direction degrees=integer
-  { Tilt (direction *. (float_of_int degrees)) }
+  | TILT direction=tilt_direction radians=angle
+    { Tilt (direction *. radians) }
+
+  | TILT TO radians=angle
+    { TiltTo radians }
 
   | TOGGLE device=symbol
-  { Toggle (device) }
+    { Toggle (device) }
 
   | TRACK target=symbol
-  { Track (target) }
+    { Track (target) }
 
 pan_direction:
   | LEFT      { -1. }
@@ -87,24 +116,17 @@ tilt_direction:
   | DOWN      { -1. }
   | UP        { +1. }
 
-duration:
-  | number=number SECS? { number }
-
-(*
-value:
-  | symbol    { $1 }
-  | integer   { $1 }
-*)
-
 symbol:
-  | string=SYMBOL   { String.lowercase string }
+  | string=SYMBOL { String.lowercase string }
+
+angle:
+  | rad=number RADIANS { radians rad }
+  | deg=number DEGREES { degrees_to_radians deg }
+  | pos=number OCLOCK  { clock_to_radians pos }
+
+duration:
+  | sec=number SECONDS { sec }
 
 number:
-  | float     { $1 }
-  | integer   { float_of_int $1 }
-
-float:
   | float=FLOAT     { float }
-
-integer:
-  | integer=INTEGER { integer }
+  | integer=INTEGER { float_of_int integer }

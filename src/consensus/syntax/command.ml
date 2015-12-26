@@ -11,9 +11,11 @@ type t =
   | Join of string
   | Leave of string
   | Pan of float
+  | PanTo of float
   | Ping of string
   | Resume
   | Tilt of float
+  | TiltTo of float
   | Toggle of string
   | Track of string
 
@@ -30,13 +32,17 @@ let to_string = function
     Printf.sprintf "join(%s)" swarm
   | Leave swarm ->
     Printf.sprintf "leave(%s)" swarm
-  | Pan degrees ->
-    Printf.sprintf "pan(%f)" degrees
+  | Pan radians ->
+    Printf.sprintf "pan(%f)" radians
+  | PanTo radians ->
+    Printf.sprintf "pan_to(%f)" radians
   | Ping node ->
     Printf.sprintf "ping(%s)" node
   | Resume -> "resume()"
-  | Tilt degrees ->
-    Printf.sprintf "tilt(%f)" degrees
+  | Tilt radians ->
+    Printf.sprintf "tilt(%f)" radians
+  | TiltTo radians ->
+    Printf.sprintf "tilt_to(%f)" radians
   | Toggle device ->
     Printf.sprintf "toggle(%s)" device
   | Track target ->
