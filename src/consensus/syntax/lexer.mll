@@ -5,8 +5,8 @@
   exception Error of string
 
   let keyword_table =
-    let table = Hashtbl.create 20 in
-    let define kwd tok = Hashtbl.add table kwd tok in
+    let table = Hashtbl.create 0 in
+    let define kwd tok = Hashtbl.replace table kwd tok in
     (* Command verbs: *)
     define "abort"    ABORT;
     define "disable"  DISABLE;

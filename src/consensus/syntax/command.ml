@@ -50,3 +50,23 @@ let to_string = function
 
 let length command =
   (String.length (to_string command))
+
+let help () =
+  let table = Hashtbl.create 0 in
+  let define cmd usage = Hashtbl.replace table cmd usage in
+  define "abort"   "ABORT";
+  define "disable" "DISABLE <device>";
+  define "enable"  "ENABLE <device>";
+  define "fire"    "FIRE <device> [<duration>]";
+  define "hold"    "HOLD";
+  define "join"    "JOIN <swarm>";
+  define "leave"   "LEAVE <swarm>";
+  define "pan"     "PAN LEFT|RIGHT <angle>";
+  define "pan to"  "PAN TO <angle>";
+  define "ping"    "PING <node>";
+  define "resume"  "RESUME";
+  define "tilt"    "TILT DOWN|UP <angle>";
+  define "tilt to" "TILT TO <angle>";
+  define "toggle"  "TOGGLE <device>";
+  define "track"   "TRACK <target>";
+  table

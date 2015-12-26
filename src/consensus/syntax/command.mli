@@ -19,3 +19,4 @@ type t =
 
 val to_string : t -> string
 val length : t -> int
+val help : unit -> (string, string) Hashtbl.t
