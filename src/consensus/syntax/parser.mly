@@ -2,6 +2,7 @@
 
 %token <string> SYMBOL
 %token <int> INTEGER
+%token <float> FLOAT
 %token EOF
 
 (* Command verbs: *)
@@ -25,6 +26,8 @@
 %token RIGHT
 %token UP
 
+%token SECS
+
 %{
   open Command
 %}
@@ -46,8 +49,8 @@ command:
   | ENABLE device=symbol
   { Enable (device) }
 
-  | FIRE device=symbol duration=integer
-  { Fire (device, float_of_int duration) }
+  | FIRE device=symbol duration=duration
+  { Fire (device, duration) }
 
   | HOLD
   { Hold }
@@ -84,6 +87,9 @@ tilt_direction:
   | DOWN      { -1. }
   | UP        { +1. }
 
+duration:
+  | number=number SECS? { number }
+
 (*
 value:
   | symbol    { $1 }
@@ -92,6 +98,13 @@ value:
 
 symbol:
   | string=SYMBOL   { String.lowercase string }
+
+number:
+  | float     { $1 }
+  | integer   { float_of_int $1 }
+
+float:
+  | float=FLOAT     { float }
 
 integer:
   | integer=INTEGER { integer }

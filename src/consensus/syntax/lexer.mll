@@ -33,18 +33,30 @@
     table
 }
 
+let digit = ['0'-'9']
+let frac  = '.' digit*
+let exp   = ['e' 'E'] ['-' '+']? digit+
+let float = digit* frac? exp?
+let int   = '-'? digit+
+
 rule lex = parse
   | [' ' '\t' '\n']
-    { lex lexbuf } (* skip whitespace *)
+  { lex lexbuf } (* skip whitespace *)
 
-  | ['0'-'9']+ as n
-    { INTEGER (int_of_string n) }
+  | int as n
+  { INTEGER (int_of_string n) }
+
+  | float as f
+  { FLOAT (float_of_string f) }
 
   | ['A'-'Z' 'a'-'z' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_' '-']* as s
-    { try Hashtbl.find keyword_table s with Not_found -> SYMBOL (s) }
+  { try Hashtbl.find keyword_table s with Not_found -> SYMBOL (s) }
+
+  | "s"
+  { SECS }
 
   | eof
-    { EOF }
+  { EOF }
 
   | _
-    { raise (Error (Printf.sprintf "unexpected character at offset %d" (Lexing.lexeme_start lexbuf))) }
+  { raise (Error (Printf.sprintf "unexpected character at offset %d" (Lexing.lexeme_start lexbuf))) }
