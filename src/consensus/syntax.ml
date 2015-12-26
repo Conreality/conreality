@@ -6,6 +6,8 @@ module Exception = struct
   #include "syntax/exception.ml"
 end
 
+exception Error = Exception.Error
+
 module Command = struct
   #include "syntax/command.ml"
 end
@@ -42,7 +44,7 @@ let parse_from_string input =
 
 let is_valid string =
   try (parse_from_string string |> ignore; true) with
-  | Exception.Error _ | Parsing.Parse_error -> false
+  | Error _ | Parsing.Parse_error -> false
 
 let lexbuf_to_list lexbuf =
   let rec consume input output =

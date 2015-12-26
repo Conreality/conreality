@@ -6,6 +6,8 @@ module Exception : sig
   #include "syntax/exception.mli"
 end
 
+exception Error of Exception.t * string
+
 module Command : sig
   #include "syntax/command.mli"
 end
