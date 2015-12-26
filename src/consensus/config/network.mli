@@ -3,9 +3,7 @@
 module IRC : sig
   type t
   val is_configured : t -> bool
-  val connect : t ->
-    (Messaging.IRC.Connection.t -> Messaging.IRC.Message.parse_result -> unit Lwt.t) ->
-    Messaging.IRC.Connection.t Lwt.t
+  val connect : t -> Messaging.IRC.Callback.t -> Messaging.IRC.Connection.t Lwt.t
 end
 
 module ROS : sig
