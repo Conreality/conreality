@@ -88,6 +88,112 @@ module Server = struct
     mutable client: Client.t
   }
 
+  let exec_command server respond command = begin
+    let sprintf = Printf.sprintf in
+    let devices_config = server.config.devices in
+    let open Syntax.Command in
+    match command with
+    | Abort -> begin
+        respond "ACK: Aborting mission."
+        (* TODO *)
+      end
+
+    | Disable device -> begin
+        let valid = Config.Devices.is_registered devices_config device in
+        if not valid
+        then respond "ERR: Unknown device."
+        else respond (sprintf "ACK: Disabled the device /%s." device)
+        (* TODO *)
+      end
+
+    | Enable device -> begin
+        let valid = Config.Devices.is_registered devices_config device in
+        if not valid
+        then respond "ERR: Unknown device."
+        else respond (sprintf "ACK: Enabled the device /%s." device)
+        (* TODO *)
+      end
+
+    | Fire (device, duration) -> begin
+        let valid = Config.Devices.is_registered devices_config device in
+        if not valid
+        then respond "ERR: Unknown device."
+        else respond (sprintf "ACK: Firing the device /%s..." device)
+        (* TODO *)
+      end
+
+    | Help command -> begin
+        if not (String.is_empty command)
+        then begin
+          match Syntax.help_for (String.lowercase command) with
+          | Some help -> respond help
+          | None -> respond "ERR: Unknown command."
+        end
+        else begin
+          let help = Syntax.Command.help () in
+          let helps = Hashtbl.fold (fun _ hd tl -> hd :: tl) help [] in
+          Lwt_list.iter_s respond helps
+        end
+      end
+
+    | Hold -> begin
+        respond "ACK: Holding position." (* TODO *)
+      end
+
+    | Join swarm -> begin
+        (* TODO: Config.Swarms *)
+        respond (sprintf "ACK: Registering with the swarm /%s..." swarm)
+      end
+
+    | Leave swarm -> begin
+        (* TODO: Config.Swarms *)
+        respond (sprintf "ACK: Unregistering with the swarm /%s..." swarm)
+      end
+
+    | Pan angle -> begin
+        (* TODO *)
+        respond (sprintf "ACK: Panning %f radians..." angle)
+      end
+
+    | PanTo angle -> begin
+        (* TODO *)
+        respond (sprintf "ACK: Panning to an angle of %f radians." angle)
+      end
+
+    | Ping node -> begin
+        (* TODO: Lwt_unix.gethostbyname *)
+        respond (sprintf "ACK: Pinging node %s..." node)
+      end
+
+    | Resume -> begin
+        (* TODO *)
+        respond "ACK: Resuming motion."
+      end
+
+    | Tilt angle -> begin
+        (* TODO *)
+        respond (sprintf "ACK: Tilting %f radians..." angle)
+      end
+
+    | TiltTo angle -> begin
+        (* TODO *)
+        respond (sprintf "ACK: Tilting to an angle of %f radians." angle)
+      end
+
+    | Toggle device -> begin
+        let valid = Config.Devices.is_registered devices_config device in
+        if not valid
+        then respond "ERR: Unknown device."
+        else respond (sprintf "ACK: Toggled the device /%s." device)
+        (* TODO *)
+      end
+
+    | Track target -> begin
+        (* TODO: validate the target. *)
+        respond (sprintf "ACK: Tracking the target /%s..." target)
+      end
+  end
+
   module Protocol = struct
     open Scripting
 
@@ -159,38 +265,6 @@ module Server = struct
       Config.Network.CCCP.listen cccp_config (evaluate server)
       >>= (fun cccp_server -> Lwt.return ())
     end)
-
-  let exec_command server respond command =
-    let open Syntax.Command in
-    match command with
-    | Abort          -> respond "ACK" (* TODO *)
-    | Disable device -> respond "ACK" (* TODO *)
-    | Enable device  -> respond "ACK" (* TODO *)
-    | Fire (device, duration) -> respond "ACK" (* TODO *)
-    | Help command   -> begin
-        if not (String.is_empty command)
-        then begin
-          match Syntax.help_for (String.lowercase command) with
-          | Some help -> respond help
-          | None -> respond "ERR: Unknown command."
-        end
-        else begin
-          let help = Syntax.Command.help () in
-          let helps = Hashtbl.fold (fun _ hd tl -> hd :: tl) help [] in
-          Lwt_list.iter_s respond helps
-        end
-      end
-    | Hold           -> respond "ACK" (* TODO *)
-    | Join swarm     -> respond "ACK" (* TODO *)
-    | Leave swarm    -> respond "ACK" (* TODO *)
-    | Pan angle      -> respond "ACK" (* TODO *)
-    | PanTo angle    -> respond "ACK" (* TODO *)
-    | Ping node      -> respond "ACK" (* TODO *)
-    | Resume         -> respond "ACK" (* TODO *)
-    | Tilt angle     -> respond "ACK" (* TODO *)
-    | TiltTo angle   -> respond "ACK" (* TODO *)
-    | Toggle device  -> respond "ACK" (* TODO *)
-    | Track target   -> respond "ACK" (* TODO *)
 
   let eval_irc_message server irc_connection target message =
     let command = Syntax.parse_from_string message in
