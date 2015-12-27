@@ -118,8 +118,12 @@ module Server = struct
         let valid = Config.Devices.is_registered devices_config device in
         if not valid
         then respond "ERR: Unknown device."
-        else respond (sprintf "ACK: Firing the device /%s..." device)
-        (* TODO *)
+        else begin
+          respond (sprintf "ACK: Firing the device /%s..." device)
+          >>= fun () -> Lwt_unix.sleep duration
+          >>= fun () -> respond (sprintf "ACK: Fired the device /%s for %f seconds." device duration)
+          (* TODO *)
+        end
       end
 
     | Help command -> begin
