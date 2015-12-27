@@ -15,6 +15,9 @@ let create () = {
   instances = Hashtbl.create 0;
 }
 
+let is_registered devices name =
+  Hashtbl.mem devices.instances name
+
 let register devices name config =
   Hashtbl.replace devices.instances name (); (* TODO *)
   Lwt_log.ign_notice_f "Registered the device /%s." name

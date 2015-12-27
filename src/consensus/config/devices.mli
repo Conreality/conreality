@@ -5,5 +5,6 @@ type t = {
   instances: (string, unit) Hashtbl.t;
 }
 
+val is_registered : t -> string -> bool
 val register : t -> string -> Scripting.Table.t -> unit
 val unregister : t -> string -> unit
