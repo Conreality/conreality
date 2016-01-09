@@ -1,1 +1,1 @@
-SUBDIRS = libconreality
+SUBDIRS = libconreality consensus

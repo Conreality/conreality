@@ -86,6 +86,7 @@ AC_CONFIG_FILES([
   Makefile
   src/Makefile
   src/libconreality/Makefile
+  src/consensus/Makefile
   test/Makefile
 ])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])
