@@ -1,4 +1,13 @@
+# GNU Autotools
+config.h
+config.h.in
+config.h.in~
+
+# C/C++
 *.a
+*.o
+
+# OCaml
 *.cma
 *.cmi
 *.cmo
@@ -6,4 +15,3 @@
 *.cmxa
 *.ml.depends
 *.mli.depends
-*.o

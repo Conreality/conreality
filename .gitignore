@@ -1,15 +1,33 @@
 .DS_Store
 META
 README.html
-_build
 _tests
 check_*.byte
 debian
-lexer.ml
-parser.ml
 tmp
 *~
+bisect[0-9]*.out
+.*.s[a-w][a-z]
+
+# GNU Autotools
+etc/aclocal/
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+configure
+libtool
+stamp-h1
+
+# C/C++
 *.a
+*.o
+
+# OCaml
+lexer.ml
+parser.ml
 *.byte
 *.cma
 *.cmo
@@ -18,6 +36,6 @@ tmp
 *.cmxa
 *.inferred.mli
 *.native
-*.o
-bisect[0-9]*.out
-.*.s[a-w][a-z]
+
+# OCamlbuild
+_build
