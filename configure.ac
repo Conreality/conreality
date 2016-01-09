@@ -28,7 +28,7 @@ AC_CONFIG_MACRO_DIR([etc/aclocal])
 AC_CONFIG_LIBOBJ_DIR([lib])
 
 dnl Configure Automake:
-AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2 subdir-objects nostdinc])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-override dist-bzip2 subdir-objects nostdinc no-exeext])
 AM_SILENT_RULES([yes])
 
 dnl Check for programs:
@@ -87,6 +87,8 @@ AC_CONFIG_FILES([
   src/Makefile
   src/libconreality/Makefile
   src/consensus/Makefile
+  src/conctl/Makefile
+  src/conreald/Makefile
   test/Makefile
 ])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])

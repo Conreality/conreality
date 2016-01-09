@@ -1,1 +1,1 @@
-SUBDIRS = libconreality consensus
+SUBDIRS = libconreality consensus conctl conreald
