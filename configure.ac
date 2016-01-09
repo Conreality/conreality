@@ -37,6 +37,7 @@ AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_CXXCPP
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+AC_PROG_RANLIB
 dnl LT_INIT
 AC_LANG([C++])
 AC_PROG_OCAML
@@ -73,13 +74,20 @@ dnl Check for structures:
 
 dnl Check for compiler characteristics:
 AC_CANONICAL_HOST
+AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_srcdir)/src"
+AC_SUBST([AM_CPPFLAGS])
 
 dnl Check for library functions:
 
 dnl Check for system services:
 
 dnl Generate output:
-AC_CONFIG_FILES([Makefile src/Makefile test/Makefile])
+AC_CONFIG_FILES([
+  Makefile
+  src/Makefile
+  src/libconreality/Makefile
+  test/Makefile
+])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])
 AC_SUBST([PACKAGE_VERSION_MINOR], ["VERSION_MINOR"])
 AC_SUBST([PACKAGE_VERSION_PATCH], ["VERSION_PATCH"])
