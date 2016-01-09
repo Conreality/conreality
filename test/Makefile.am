@@ -1,0 +1,5 @@
+check_PROGRAMS =
+
+TESTS = $(check_PROGRAMS)
+
+AM_DEFAULT_SOURCE_EXT = .ml
