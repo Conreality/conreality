@@ -22,7 +22,7 @@ AC_INIT([Conreality], [VERSION_STRING],
 
 dnl Configure Autoconf:
 AC_CONFIG_HEADERS([src/config.h])
-AC_CONFIG_SRCDIR([src/consensus.itarget])
+AC_CONFIG_SRCDIR([src/consensus.odocl])
 AC_CONFIG_AUX_DIR([etc/aclocal])
 AC_CONFIG_MACRO_DIR([etc/aclocal])
 AC_CONFIG_LIBOBJ_DIR([lib])
