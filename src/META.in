@@ -2,8 +2,8 @@ name = "@PACKAGE_TARNAME@"
 version = "@PACKAGE_VERSION@"
 description = "Consensus Reality wargame"
 requires = "consensus.scripting consensus.vision"
-archive(byte) = "@PACKAGE_TARNAME@.cmo"
-archive(native) = "@PACKAGE_TARNAME@.cmx"
+archive(byte) = "consensus.cmo"
+archive(native) = "consensus.cmx"
 
 package "config" (
   version = "@PACKAGE_VERSION@"

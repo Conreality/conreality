@@ -1,1 +1,2 @@
-SUBDIRS = libconreality consensus conctl conreald
+SUBDIRS    = libconreality consensus conctl conreald
+EXTRA_DIST = META.in
