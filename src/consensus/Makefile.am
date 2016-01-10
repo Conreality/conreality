@@ -5,6 +5,8 @@ $(eval include $(top_srcdir)/src/Makefile.conf)
 OCAMLCFLAGS  = $(AM_OCAMLCFLAGS)
 OCAMLCFLAGS += -for-pack Consensus
 
+include $(top_srcdir)/src/Makefile.rules
+
 consensus_TARGETS = \
   consensus.cmi  \
   consensus.cmx
@@ -56,21 +58,6 @@ consensus.cmi: $(consensus_INTERFACES)
 
 consensus.cmx: $(consensus_OBJECTS)
 	$(OCAMLOPT) -o $@ -pack $^
-
-.ml.cmo:
-	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
-
-.ml.cmx:
-	$(OCAMLOPT) -o $@ -c $(OCAMLCFLAGS) $<
-
-.ml.mli:
-	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
-
-.mli.cmi:
-	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
-
-.mll.ml:
-	$(OCAMLLEX) -o $@ -q $<
 
 MOSTLYCLEANFILES = $(consensus_TARGETS) $(consensus_INTERFACES) $(consensus_OBJECTS)
 CLEANFILES       = syntax/lexer.ml syntax/parser.ml syntax/parser.mli syntax/token.mli

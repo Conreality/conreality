@@ -1,0 +1,14 @@
+.ml.cmo:
+	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
+
+.ml.cmx:
+	$(OCAMLOPT) -o $@ -c $(OCAMLCFLAGS) $<
+
+.ml.mli:
+	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
+
+.mli.cmi:
+	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
+
+.mll.ml:
+	$(OCAMLLEX) -o $@ -q $<
