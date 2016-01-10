@@ -22,7 +22,7 @@ AC_INIT([Conreality], [VERSION_STRING],
 
 dnl Configure Autoconf:
 AC_CONFIG_HEADERS([src/config.h])
-AC_CONFIG_SRCDIR([src/consensus.odocl])
+AC_CONFIG_SRCDIR([src/libconreality/libconreality.cc])
 AC_CONFIG_AUX_DIR([etc/aclocal])
 AC_CONFIG_MACRO_DIR([etc/aclocal])
 AC_CONFIG_LIBOBJ_DIR([lib])
@@ -55,7 +55,6 @@ AS_IF([test "x$enable_debug" != "xno"],
 AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
 
 dnl Check for libraries:
-AC_CHECK_OCAML_PKG([ocamlbuild])
 AC_CHECK_OCAML_PKG([alcotest])
 AC_CHECK_OCAML_PKG([cmdliner])
 AC_CHECK_OCAML_PKG([cppo_ocamlbuild])

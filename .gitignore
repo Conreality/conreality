@@ -2,7 +2,6 @@
 META
 README.html
 _tests
-check_*.byte
 debian
 tmp
 *~
@@ -24,18 +23,3 @@ stamp-h1
 # C/C++
 *.a
 *.o
-
-# OCaml
-lexer.ml
-parser.ml
-*.byte
-*.cma
-*.cmo
-*.cmp
-*.cmx
-*.cmxa
-*.inferred.mli
-*.native
-
-# OCamlbuild
-_build

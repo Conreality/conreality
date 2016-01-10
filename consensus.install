@@ -9,74 +9,74 @@ doc: [
 ]
 man: []
 bin: [
-  "_build/src/conctl.native" {"conctl"}
+  "src/conctl/conctl" {"conctl"}
 ]
 sbin: [
-  "_build/src/conreald.native" {"conreald"}
+  "src/conreald/conreald" {"conreald"}
 ]
 lib: [
   "META"
-  "_build/src/consensus.cmi" {"consensus.cmi"}
-  "_build/src/consensus.cmo" {"consensus.cmo"}
-  "_build/src/consensus.cmx" {"consensus.cmx"}
+  "src/consensus.cmi" {"consensus.cmi"}
+  "src/consensus.cmo" {"consensus.cmo"}
+  "src/consensus.cmx" {"consensus.cmx"}
   "src/consensus/config.mli" {"consensus.config.mli"}
-  "_build/src/consensus/config.cmi" {"consensus.config.cmi"}
-  "_build/src/consensus/config.cmo" {"consensus.config.cmo"}
-  "_build/src/consensus/config.cmx" {"consensus.config.cmx"}
+  "src/consensus/config.cmi" {"consensus.config.cmi"}
+  "src/consensus/config.cmo" {"consensus.config.cmo"}
+  "src/consensus/config.cmx" {"consensus.config.cmx"}
   "src/consensus/geometry.mli" {"consensus.geometry.mli"}
-  "_build/src/consensus/geometry.cmi" {"consensus.geometry.cmi"}
-  "_build/src/consensus/geometry.cmo" {"consensus.geometry.cmo"}
-  "_build/src/consensus/geometry.cmx" {"consensus.geometry.cmx"}
+  "src/consensus/geometry.cmi" {"consensus.geometry.cmi"}
+  "src/consensus/geometry.cmo" {"consensus.geometry.cmo"}
+  "src/consensus/geometry.cmx" {"consensus.geometry.cmx"}
   "src/consensus/knowledge.mli" {"consensus.knowledge.mli"}
-  "_build/src/consensus/knowledge.cmi" {"consensus.knowledge.cmi"}
-  "_build/src/consensus/knowledge.cmo" {"consensus.knowledge.cmo"}
-  "_build/src/consensus/knowledge.cmx" {"consensus.knowledge.cmx"}
+  "src/consensus/knowledge.cmi" {"consensus.knowledge.cmi"}
+  "src/consensus/knowledge.cmo" {"consensus.knowledge.cmo"}
+  "src/consensus/knowledge.cmx" {"consensus.knowledge.cmx"}
   "src/consensus/machinery.mli" {"consensus.machinery.mli"}
-  "_build/src/consensus/machinery.cmi" {"consensus.machinery.cmi"}
-  "_build/src/consensus/machinery.cmo" {"consensus.machinery.cmo"}
-  "_build/src/consensus/machinery.cmx" {"consensus.machinery.cmx"}
+  "src/consensus/machinery.cmi" {"consensus.machinery.cmi"}
+  "src/consensus/machinery.cmo" {"consensus.machinery.cmo"}
+  "src/consensus/machinery.cmx" {"consensus.machinery.cmx"}
   "src/consensus/measures.mli" {"consensus.measures.mli"}
-  "_build/src/consensus/measures.cmi" {"consensus.measures.cmi"}
-  "_build/src/consensus/measures.cmo" {"consensus.measures.cmo"}
-  "_build/src/consensus/measures.cmx" {"consensus.measures.cmx"}
+  "src/consensus/measures.cmi" {"consensus.measures.cmi"}
+  "src/consensus/measures.cmo" {"consensus.measures.cmo"}
+  "src/consensus/measures.cmx" {"consensus.measures.cmx"}
   "src/consensus/messaging.mli" {"consensus.messaging.mli"}
-  "_build/src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
-  "_build/src/consensus/messaging.cmo" {"consensus.messaging.cmo"}
-  "_build/src/consensus/messaging.cmx" {"consensus.messaging.cmx"}
+  "src/consensus/messaging.cmi" {"consensus.messaging.cmi"}
+  "src/consensus/messaging.cmo" {"consensus.messaging.cmo"}
+  "src/consensus/messaging.cmx" {"consensus.messaging.cmx"}
   "src/consensus/model.mli" {"consensus.model.mli"}
-  "_build/src/consensus/model.cmi" {"consensus.model.cmi"}
-  "_build/src/consensus/model.cmo" {"consensus.model.cmo"}
-  "_build/src/consensus/model.cmx" {"consensus.model.cmx"}
+  "src/consensus/model.cmi" {"consensus.model.cmi"}
+  "src/consensus/model.cmo" {"consensus.model.cmo"}
+  "src/consensus/model.cmx" {"consensus.model.cmx"}
   "src/consensus/networking.mli" {"consensus.networking.mli"}
-  "_build/src/consensus/networking.cmi" {"consensus.networking.cmi"}
-  "_build/src/consensus/networking.cmo" {"consensus.networking.cmo"}
-  "_build/src/consensus/networking.cmx" {"consensus.networking.cmx"}
+  "src/consensus/networking.cmi" {"consensus.networking.cmi"}
+  "src/consensus/networking.cmo" {"consensus.networking.cmo"}
+  "src/consensus/networking.cmx" {"consensus.networking.cmx"}
   "src/consensus/ontology.mli" {"consensus.ontology.mli"}
-  "_build/src/consensus/ontology.cmi" {"consensus.ontology.cmi"}
-  "_build/src/consensus/ontology.cmo" {"consensus.ontology.cmo"}
-  "_build/src/consensus/ontology.cmx" {"consensus.ontology.cmx"}
+  "src/consensus/ontology.cmi" {"consensus.ontology.cmi"}
+  "src/consensus/ontology.cmo" {"consensus.ontology.cmo"}
+  "src/consensus/ontology.cmx" {"consensus.ontology.cmx"}
   "src/consensus/physics.mli" {"consensus.physics.mli"}
-  "_build/src/consensus/physics.cmi" {"consensus.physics.cmi"}
-  "_build/src/consensus/physics.cmo" {"consensus.physics.cmo"}
-  "_build/src/consensus/physics.cmx" {"consensus.physics.cmx"}
+  "src/consensus/physics.cmi" {"consensus.physics.cmi"}
+  "src/consensus/physics.cmo" {"consensus.physics.cmo"}
+  "src/consensus/physics.cmx" {"consensus.physics.cmx"}
   "src/consensus/prelude.mli" {"consensus.prelude.mli"}
-  "_build/src/consensus/prelude.cmi" {"consensus.prelude.cmi"}
-  "_build/src/consensus/prelude.cma" {"consensus.prelude.cma"}
-  "_build/src/consensus/prelude.cmxa" {"consensus.prelude.cmxa"}
+  "src/consensus/prelude.cmi" {"consensus.prelude.cmi"}
+  "src/consensus/prelude.cma" {"consensus.prelude.cma"}
+  "src/consensus/prelude.cmxa" {"consensus.prelude.cmxa"}
   "src/consensus/scripting.mli" {"consensus.scripting.mli"}
-  "_build/src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
-  "_build/src/consensus/scripting.cmo" {"consensus.scripting.cmo"}
-  "_build/src/consensus/scripting.cmx" {"consensus.scripting.cmx"}
+  "src/consensus/scripting.cmi" {"consensus.scripting.cmi"}
+  "src/consensus/scripting.cmo" {"consensus.scripting.cmo"}
+  "src/consensus/scripting.cmx" {"consensus.scripting.cmx"}
   "src/consensus/syntax.mli" {"consensus.syntax.mli"}
-  "_build/src/consensus/syntax.cmi" {"consensus.syntax.cmi"}
-  "_build/src/consensus/syntax.cmo" {"consensus.syntax.cmo"}
-  "_build/src/consensus/syntax.cmx" {"consensus.syntax.cmx"}
+  "src/consensus/syntax.cmi" {"consensus.syntax.cmi"}
+  "src/consensus/syntax.cmo" {"consensus.syntax.cmo"}
+  "src/consensus/syntax.cmx" {"consensus.syntax.cmx"}
   "src/consensus/vision.mli" {"consensus.vision.mli"}
-  "_build/src/consensus/vision.cmi" {"consensus.vision.cmi"}
-  "_build/src/consensus/vision.cmo" {"consensus.vision.cmo"}
-  "_build/src/consensus/vision.cmx" {"consensus.vision.cmx"}
-  "_build/src/libconreality.a" {"libconreality.a"}
+  "src/consensus/vision.cmi" {"consensus.vision.cmi"}
+  "src/consensus/vision.cmo" {"consensus.vision.cmo"}
+  "src/consensus/vision.cmx" {"consensus.vision.cmx"}
+  "src/libconreality.a" {"libconreality.a"}
 ]
 stublibs: [
-  "_build/src/dllconreality.so" {"dllconreality.so"}
+  #"src/dllconreality.so" {"dllconreality.so"}
 ]
