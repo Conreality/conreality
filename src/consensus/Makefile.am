@@ -1,12 +1,8 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
-OCAMLC       = $(OCAMLFIND) ocamlc -verbose
-OCAMLOPT     = $(OCAMLFIND) ocamlopt -verbose
-OCAMLCFLAGS  = -pp $(CPPO) -thread
-OCAMLCFLAGS += -package ctypes.foreign
-OCAMLCFLAGS += -package irc-client.lwt
-OCAMLCFLAGS += -package lua
-OCAMLCFLAGS += -package lwt -package lwt.unix
+$(eval include $(top_srcdir)/src/Makefile.conf)
+
+OCAMLCFLAGS  = $(AM_OCAMLCFLAGS)
 OCAMLCFLAGS += -for-pack Consensus
 
 consensus_TARGETS = \

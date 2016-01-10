@@ -1,16 +1,12 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/A-Program.html
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
-OCAMLC       = $(OCAMLFIND) ocamlc -verbose
-OCAMLOPT     = $(OCAMLFIND) ocamlopt -verbose
-OCAMLCFLAGS  = -pp $(CPPO) -thread
-OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib ../libconreality/libconreality.a -cclib -Wl,--no-whole-archive
-OCAMLCFLAGS += -I ../consensus ../consensus/consensus.cmx
+$(eval include $(top_srcdir)/src/Makefile.conf)
+
+OCAMLCFLAGS  = $(AM_OCAMLCFLAGS)
 OCAMLCFLAGS += -package cmdliner
-OCAMLCFLAGS += -package ctypes.foreign
-OCAMLCFLAGS += -package irc-client.lwt
-OCAMLCFLAGS += -package lua
-OCAMLCFLAGS += -package lwt -package lwt.unix
+OCAMLCFLAGS += -I $(top_srcdir)/src/consensus $(top_srcdir)/src/consensus/consensus.cmx
+OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 
 bin_PROGRAMS = conreald
 

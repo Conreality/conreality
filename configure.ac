@@ -28,7 +28,7 @@ AC_CONFIG_MACRO_DIR([etc/aclocal])
 AC_CONFIG_LIBOBJ_DIR([lib])
 
 dnl Configure Automake:
-AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-override dist-bzip2 subdir-objects nostdinc no-exeext])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-override -Wno-portability dist-bzip2 subdir-objects nostdinc no-exeext])
 AM_SILENT_RULES([yes])
 
 dnl Check for programs:
