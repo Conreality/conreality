@@ -14,7 +14,7 @@ open Lwt_unix
 
 (* Configuration *)
 
-let version = "0.0.0"
+let version = Consensus.Version.string
 
 let man_sections = [
   `S "DESCRIPTION";

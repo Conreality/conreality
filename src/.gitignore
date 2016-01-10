@@ -15,3 +15,6 @@ config.h.in~
 *.cmxa
 *.ml.depends
 *.mli.depends
+
+# OCamlfind
+META

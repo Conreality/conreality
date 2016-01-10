@@ -26,6 +26,7 @@ consensus_MODULES = \
   model.ml      \
   ontology.ml   \
   physics.ml    \
+  version.ml    \
   vision.ml
 
 config.cmi:     $(wildcard config/*.mli)
@@ -79,6 +80,10 @@ scripting.cmx:  $(wildcard scripting/*.ml)
 syntax.cmi:     $(wildcard syntax/*.mli)
 syntax.cmo:     $(wildcard syntax/*.ml)
 syntax.cmx:     $(wildcard syntax/*.ml)
+
+version.cmi:
+version.cmo:
+version.cmx:
 
 vision.cmi:     $(wildcard vision/*.mli)
 vision.cmo:     $(wildcard vision/*.ml)

@@ -13,7 +13,7 @@ open Lwt_unix
 
 (* Configuration *)
 
-let version = "0.0.0"
+let version = Consensus.Version.string
 
 (* Option types *)
 
@@ -51,7 +51,10 @@ let execute options script =
   else `Ok (execute_script script)
 
 let report options = (* TODO *)
+  ()
+(*
   Consensus.Vision.hello ()
+*)
 
 let enable options device =
   Printf.printf "Enabled the %s device.\n" device (* TODO *)
