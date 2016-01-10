@@ -43,6 +43,8 @@ AC_LANG([C++])
 AC_PROG_OCAML
 AC_PROG_OCAMLLEX
 AC_PROG_FINDLIB
+AC_CHECK_PROGS([MENHIR], [menhir])
+AC_CHECK_PROGS([CPPO], [cppo])
 
 dnl Check for configuration options:
 # --enable-debug/--disable-debug
@@ -57,12 +59,10 @@ AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
 dnl Check for libraries:
 AC_CHECK_OCAML_PKG([alcotest])
 AC_CHECK_OCAML_PKG([cmdliner])
-AC_CHECK_OCAML_PKG([cppo_ocamlbuild])
 AC_CHECK_OCAML_PKG([ctypes])
 AC_CHECK_OCAML_PKG([ctypes.foreign])
 AC_CHECK_OCAML_PKG([irc-client])
 AC_CHECK_OCAML_PKG([lwt])
-AC_CHECK_OCAML_PKG([menhirLib])
 AC_CHECK_OCAML_PKG([lua])
 
 dnl Check for header files:

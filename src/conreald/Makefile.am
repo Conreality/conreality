@@ -3,7 +3,7 @@
 
 OCAMLC       = $(OCAMLFIND) ocamlc -verbose
 OCAMLOPT     = $(OCAMLFIND) ocamlopt -verbose
-OCAMLCFLAGS  = -pp cppo -thread
+OCAMLCFLAGS  = -pp $(CPPO) -thread
 OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib ../libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 OCAMLCFLAGS += -I ../consensus ../consensus/consensus.cmx
 OCAMLCFLAGS += -package cmdliner

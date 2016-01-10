@@ -1,9 +1,8 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
-MENHIR       = menhir
 OCAMLC       = $(OCAMLFIND) ocamlc -verbose
 OCAMLOPT     = $(OCAMLFIND) ocamlopt -verbose
-OCAMLCFLAGS  = -pp cppo -thread
+OCAMLCFLAGS  = -pp $(CPPO) -thread
 OCAMLCFLAGS += -package ctypes.foreign
 OCAMLCFLAGS += -package irc-client.lwt
 OCAMLCFLAGS += -package lua
