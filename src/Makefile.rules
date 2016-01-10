@@ -1,3 +1,8 @@
+# .cma: Library of object bytecode
+.cmo.cma:
+	$(OCAMLC) -o $@ -a $(OCAMLCFLAGS) $^
+
+# .cmo: Compiled object bytecode
 .ml.cmo:
 	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
 
@@ -7,6 +12,7 @@
 .ml.mli:
 	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
 
+# .cmi: Compiled interface
 .mli.cmi:
 	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
 
