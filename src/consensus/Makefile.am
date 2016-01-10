@@ -9,6 +9,7 @@ include $(top_srcdir)/src/Makefile.rules
 
 consensus_TARGETS = \
   consensus.cmi  \
+  consensus.cmo  \
   consensus.cmx
 
 consensus_INTERFACES = \
@@ -26,6 +27,22 @@ consensus_INTERFACES = \
   ontology.cmi   \
   physics.cmi    \
   vision.cmi
+
+consensus_BYTECODE = \
+  prelude.cmo    \
+  networking.cmo \
+  syntax.cmo     \
+  messaging.cmo  \
+  scripting.cmo  \
+  config.cmo     \
+  geometry.cmo   \
+  knowledge.cmo  \
+  machinery.cmo  \
+  measures.cmo   \
+  model.cmo      \
+  ontology.cmo   \
+  physics.cmo    \
+  vision.cmo
 
 consensus_OBJECTS = \
   prelude.cmx    \
@@ -47,17 +64,18 @@ all-local: $(consensus_TARGETS)
 
 syntax.cmi: syntax.mli syntax/token.mli
 
-syntax.cmx: syntax.ml syntax/lexer.ml syntax/parser.ml
+syntax.cmo syntax.cmx: syntax.ml syntax/lexer.ml syntax/parser.ml
 
-syntax/parser.ml: syntax/parser.mly
+syntax/parser.ml syntax/parser.mli: syntax/parser.mly
 	$(MENHIR) --fixed-exception --external-tokens Token $<
 
-syntax/parser.mli: syntax/parser.ml
-
 consensus.cmi: $(consensus_INTERFACES)
+
+consensus.cmo: $(consensus_BYTECODE)
+	$(OCAMLC) -o $@ -pack $^
 
 consensus.cmx: $(consensus_OBJECTS)
 	$(OCAMLOPT) -o $@ -pack $^
 
-MOSTLYCLEANFILES = $(consensus_TARGETS) $(consensus_INTERFACES) $(consensus_OBJECTS)
+MOSTLYCLEANFILES = $(consensus_TARGETS) $(consensus_INTERFACES) $(consensus_BYTECODE) $(consensus_OBJECTS)
 CLEANFILES       = syntax/lexer.ml syntax/parser.ml syntax/parser.mli syntax/token.mli
