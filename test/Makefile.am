@@ -3,7 +3,7 @@ $(eval include $(top_srcdir)/src/Makefile.conf)
 OCAMLCFLAGS  = $(AM_OCAMLCFLAGS)
 OCAMLCFLAGS += -package alcotest
 OCAMLCFLAGS += -I $(top_srcdir)/src/consensus $(top_srcdir)/src/consensus/consensus.cmo check_common.cmo
-#OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
+#OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/.libs/libconreality.a -cclib -Wl,--no-whole-archive
 
 include $(top_srcdir)/src/Makefile.rules
 

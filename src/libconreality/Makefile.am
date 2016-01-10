@@ -2,6 +2,6 @@
 
 $(eval include $(top_srcdir)/src/Makefile.conf)
 
-noinst_LIBRARIES = libconreality.a
+lib_LTLIBRARIES = libconreality.la
 
-libconreality_a_SOURCES = libconreality.cc
+libconreality_la_SOURCES = libconreality.cc
