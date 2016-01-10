@@ -1,5 +1,6 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
+MENHIR       = menhir
 OCAMLC       = $(OCAMLFIND) ocamlc -verbose
 OCAMLOPT     = $(OCAMLFIND) ocamlopt -verbose
 OCAMLCFLAGS  = -pp cppo -thread
@@ -47,19 +48,34 @@ consensus_OBJECTS = \
 
 all-local: $(consensus_TARGETS)
 
+syntax.cmi: syntax.mli syntax/token.mli
+
+syntax.cmx: syntax.ml syntax/lexer.ml syntax/parser.ml
+
+syntax/parser.ml: syntax/parser.mly
+	$(MENHIR) --fixed-exception --external-tokens Token $<
+
+syntax/parser.mli: syntax/parser.ml
+
 consensus.cmi: $(consensus_INTERFACES)
 
 consensus.cmx: $(consensus_OBJECTS)
 	$(OCAMLOPT) -o $@ -pack $^
 
-.mli.cmi:
-	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $^
-
 .ml.cmo:
-	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $^
+	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
 
 .ml.cmx:
-	$(OCAMLOPT) -o $@ -c $(OCAMLCFLAGS) $^
+	$(OCAMLOPT) -o $@ -c $(OCAMLCFLAGS) $<
+
+.ml.mli:
+	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
+
+.mli.cmi:
+	$(OCAMLC) -o $@ -c $(OCAMLCFLAGS) $<
+
+.mll.ml:
+	$(OCAMLLEX) -o $@ -q $<
 
 MOSTLYCLEANFILES = $(consensus_TARGETS) $(consensus_INTERFACES) $(consensus_OBJECTS)
-CLEANFILES       =
+CLEANFILES       = syntax/lexer.ml syntax/parser.ml syntax/parser.mli syntax/token.mli

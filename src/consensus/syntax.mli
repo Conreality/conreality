@@ -13,7 +13,7 @@ module Command : sig
 end
 
 module Token : sig
-  #include "syntax/token.inferred.mli"
+  #include "syntax/token.mli"
 end
 
 val is_keyword : string -> bool

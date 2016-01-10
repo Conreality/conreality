@@ -3,3 +3,4 @@ lexer.mli
 parser.automaton
 parser.ml
 parser.mli
+token.mli
