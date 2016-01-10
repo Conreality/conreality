@@ -108,6 +108,11 @@ consensus.cmo: $(consensus_BYTECODE)
 consensus.cmx: $(consensus_OBJECTS)
 	$(OCAMLOPT) -o $@ -pack $^
 
-EXTRA_DIST       = $(consensus_MODULES) $(consensus_MODULES:.ml=.mli)
-MOSTLYCLEANFILES = $(consensus_TARGETS) $(consensus_INTERFACES) $(consensus_BYTECODE) $(consensus_OBJECTS) $(consensus_MODULES:.ml=.o)
-CLEANFILES       = syntax/lexer.ml syntax/parser.ml syntax/parser.mli syntax/token.mli
+EXTRA_DIST        = $(consensus_MODULES) $(consensus_MODULES:.ml=.mli)
+MOSTLYCLEANFILES  = consensus.o
+MOSTLYCLEANFILES += $(consensus_TARGETS)
+MOSTLYCLEANFILES += $(consensus_INTERFACES)
+MOSTLYCLEANFILES += $(consensus_BYTECODE)
+MOSTLYCLEANFILES += $(consensus_OBJECTS)
+MOSTLYCLEANFILES += $(consensus_MODULES:.ml=.o)
+CLEANFILES        = syntax/lexer.ml syntax/parser.ml syntax/parser.mli syntax/token.mli

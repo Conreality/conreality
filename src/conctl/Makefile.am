@@ -14,3 +14,8 @@ conctl_SOURCES = main.ml
 
 conctl: $(conctl_SOURCES)
 	$(OCAMLOPT) -o $@ -linkpkg $(OCAMLCFLAGS) $^
+
+MOSTLYCLEANFILES  =
+MOSTLYCLEANFILES += $(conctl_SOURCES:.ml=.cmi)
+MOSTLYCLEANFILES += $(conctl_SOURCES:.ml=.cmo)
+MOSTLYCLEANFILES += $(conctl_SOURCES:.ml=.cmx)

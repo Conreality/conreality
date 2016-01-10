@@ -14,3 +14,8 @@ conreald_SOURCES = main.ml
 
 conreald: $(conreald_SOURCES)
 	$(OCAMLOPT) -o $@ -linkpkg $(OCAMLCFLAGS) $^
+
+MOSTLYCLEANFILES  =
+MOSTLYCLEANFILES += $(conreald_SOURCES:.ml=.cmi)
+MOSTLYCLEANFILES += $(conreald_SOURCES:.ml=.cmo)
+MOSTLYCLEANFILES += $(conreald_SOURCES:.ml=.cmx)
