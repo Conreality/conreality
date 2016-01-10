@@ -45,6 +45,7 @@ AC_PROG_OCAMLLEX
 AC_PROG_FINDLIB
 AC_CHECK_PROGS([MENHIR], [menhir])
 AC_CHECK_PROGS([CPPO], [cppo])
+AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for configuration options:
 # --enable-debug/--disable-debug

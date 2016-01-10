@@ -1,3 +1,8 @@
 SUBDIRS         = src test
 EXTRA_DIST      = AUTHORS CHANGES CREDITS README TODO UNLICENSE VERSION
 ACLOCAL_AMFLAGS = -I etc/aclocal
+
+README.html: README.rst
+	$(PANDOC) -o $@ -t html5 -s $<
+
+CLEANFILES = README.html
