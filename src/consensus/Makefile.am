@@ -97,6 +97,9 @@ syntax.cmo syntax.cmx: syntax.ml syntax/lexer.ml syntax/parser.ml
 syntax/parser.ml syntax/parser.mli: syntax/parser.mly
 	$(MENHIR) --fixed-exception --external-tokens Token $<
 
+syntax/token.mli: syntax/token.ml
+	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
+
 consensus.cmi: $(consensus_INTERFACES)
 
 consensus.cmo: $(consensus_BYTECODE)

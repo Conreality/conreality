@@ -9,8 +9,9 @@
 .ml.cmx:
 	$(OCAMLOPT) -o $@ -c $(OCAMLCFLAGS) $<
 
-.ml.mli:
-	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
+# FIXME: this is too dangerous, overwriting manually-managed .mli files.
+#.ml.mli:
+#	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
 
 # .cmi: Compiled interface
 .mli.cmi:
@@ -18,3 +19,7 @@
 
 .mll.ml:
 	$(OCAMLLEX) -o $@ -q $<
+
+# FIXME: this is too dangerous, overwriting manually-managed .mli files.
+#%.mli: %.ml
+#	$(OCAMLFIND) ocamlc -i $(OCAMLCFLAGS) $< > $@
