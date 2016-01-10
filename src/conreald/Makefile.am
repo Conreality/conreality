@@ -14,7 +14,7 @@ OCAMLCFLAGS += -package lwt -package lwt.unix
 
 bin_PROGRAMS = conreald
 
-conreald_SOURCES = conreald.ml
+conreald_SOURCES = main.ml
 
 conreald: $(conreald_SOURCES)
 	$(OCAMLOPT) -o $@ -linkpkg $(OCAMLCFLAGS) $^

@@ -14,7 +14,7 @@ OCAMLCFLAGS += -package lwt -package lwt.unix
 
 bin_PROGRAMS = conctl
 
-conctl_SOURCES = conctl.ml
+conctl_SOURCES = main.ml
 
 conctl: $(conctl_SOURCES)
 	$(OCAMLOPT) -o $@ -linkpkg $(OCAMLCFLAGS) $^
