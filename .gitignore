@@ -22,3 +22,6 @@ stamp-h1
 # C/C++
 *.a
 *.o
+
+# make dist
+conreality-*.tar.*
