@@ -4,7 +4,9 @@
 
 #include <cstdio>               /* for stderr, std::*printf() */
 
+#ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>          /* for ioctl() */
+#endif
 
 #define CAML_NAME_SPACE
 #include <caml/alloc.h>         /* for caml_copy_*() */
@@ -29,6 +31,7 @@ caml_conreality_ioctl_void(value v_fd,
   CAMLparam2(v_fd, v_cmd);
   CAMLlocal1(v_result);
 
+#ifdef HAVE_SYS_IOCTL_H
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
 
@@ -43,6 +46,9 @@ caml_conreality_ioctl_void(value v_fd,
   }
 
   v_result = caml_copy_int64(rc);
+#else
+  v_result = caml_copy_int64(0);
+#endif /* HAVE_SYS_IOCTL_H */
   CAMLreturn(v_result);
 }
 
@@ -55,6 +61,7 @@ caml_conreality_ioctl_int64_val(value v_fd,
   CAMLparam3(v_fd, v_cmd, v_arg);
   CAMLlocal1(v_result);
 
+#ifdef HAVE_SYS_IOCTL_H
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
   const unsigned long arg = Int64_val(v_arg);
@@ -70,6 +77,9 @@ caml_conreality_ioctl_int64_val(value v_fd,
   }
 
   v_result = caml_copy_int64(rc);
+#else
+  v_result = caml_copy_int64(0);
+#endif /* HAVE_SYS_IOCTL_H */
   CAMLreturn(v_result);
 }
 
@@ -82,6 +92,7 @@ caml_conreality_ioctl_int64_ref(value v_fd,
   CAMLparam3(v_fd, v_cmd, v_arg);
   CAMLlocal1(v_result);
 
+#ifdef HAVE_SYS_IOCTL_H
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
   unsigned long arg = Int64_val(v_arg);
@@ -97,6 +108,9 @@ caml_conreality_ioctl_int64_ref(value v_fd,
   }
 
   v_result = caml_copy_int64(arg);
+#else
+  v_result = caml_copy_int64(0);
+#endif /* HAVE_SYS_IOCTL_H */
   CAMLreturn(v_result);
 }
 
@@ -109,6 +123,7 @@ caml_conreality_ioctl_bigarray(value v_fd,
   CAMLparam3(v_fd, v_cmd, v_arg);
   CAMLlocal1(v_result);
 
+#ifdef HAVE_SYS_IOCTL_H
   const int fd = Int_val(v_fd);
   const unsigned long cmd = Int64_val(v_cmd);
   void* arg = Caml_ba_data_val(v_arg);
@@ -124,5 +139,8 @@ caml_conreality_ioctl_bigarray(value v_fd,
   }
 
   v_result = caml_copy_int64(rc);
+#else
+  v_result = caml_copy_int64(0);
+#endif /* HAVE_SYS_IOCTL_H */
   CAMLreturn(v_result);
 }
