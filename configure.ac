@@ -87,6 +87,12 @@ AC_ARG_ENABLE([develop],
     [build development packages and a custom toplevel])],
   [], [enable_develop=no])
 AM_CONDITIONAL([ENABLE_DEVELOP], [test "x$enable_develop" != "xno"])
+# --enable-irc/--disable-irc
+AC_ARG_ENABLE([irc],
+  [AS_HELP_STRING([--disable-irc],
+    [omit support for the IRC protocol])],
+  [], [enable_irc=yes])
+AM_CONDITIONAL([ENABLE_IRC], [test "x$enable_irc" != "xno"])
 
 dnl Check for libraries:
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
@@ -108,8 +114,9 @@ AC_CHECK_OCAML_PKG([cmdliner])
 AS_IF([test "x$OCAML_PKG_cmdliner" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'cmdliner' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([irc-client])
-AS_IF([test "x$OCAML_PKG_irc_client" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml package 'irc-client' not found (install it using OPAM?) ***]))
+AS_IF([test "x$enable_irc" == "xno"], [],
+  AS_IF([test "x$OCAML_PKG_irc_client" != "xno"], [],
+    AC_MSG_ERROR([*** OCaml package 'irc-client' not found (install it using OPAM?) ***])))
 AC_CHECK_OCAML_PKG([lwt])
 AS_IF([test "x$OCAML_PKG_lwt" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'lwt' not found (install it using OPAM?) ***]))
