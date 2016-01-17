@@ -60,21 +60,27 @@ AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
 AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for configuration options:
+# --enable-compile/--disable-compile
+AC_ARG_ENABLE([compile],
+  [AS_HELP_STRING([--disable-compile],
+    [do not use the native code compiler for target])],
+  [], [enable_compile=yes])
+AM_CONDITIONAL([ENABLE_COMPILE], [test "x$enable_compile" != "xno"])
+# --enable-coverage/--disable-coverage
+AC_ARG_ENABLE([coverage],
+  [AS_HELP_STRING([--enable-coverage],
+    [instrument binaries for code coverage reporting])],
+  [], [enable_coverage=no])
+AM_CONDITIONAL([ENABLE_COVERAGE], [test "x$enable_coverage" != "xno"])
 # --enable-debug/--disable-debug
 AC_ARG_ENABLE([debug],
   [AS_HELP_STRING([--enable-debug],
-    [build with debugging support [default=no]])],
+    [instrument binaries with debugging support])],
   [], [enable_debug=no])
 AS_IF([test "x$enable_debug" != "xno"],
   [AC_DEFINE([DEBUG], [1], [Enable debugging support.])],
   [AC_DEFINE([NDEBUG], [1], [Disable assertions.])])
 AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
-# --enable-coverage/--disable-coverage
-AC_ARG_ENABLE([coverage],
-  [AS_HELP_STRING([--enable-coverage],
-    [build with code coverage instrumentation [default=no]])],
-  [], [enable_coverage=no])
-AM_CONDITIONAL([ENABLE_COVERAGE], [test "x$enable_coverage" != "xno"])
 
 dnl Check for libraries:
 # libffi (libffi-dev on Ubuntu, libffi on Mac OS X + MacPorts)
