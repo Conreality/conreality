@@ -92,16 +92,11 @@ General initialization of local OCaml environment::
    $ opam switch 4.02.3
    $ eval `opam config env`
 
-General local installation procedure using the `OPAM <opam.ocaml.org>`__
-package manager::
+General local installation procedure::
 
    $ git clone --recursive https://github.com/conreality/conreality.git
-   $ cd consensus
 
-   $ opam pin add consensus . --no-action --yes
-   $ opam uninstall consensus           # not needed the first time around
-   $ opam install consensus --verbose
-   $ ocamlfind query consensus          # should print a path
+   TODO
 
 If you want to run the test suite, you need to install Alcotest::
 
