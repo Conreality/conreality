@@ -1,9 +1,10 @@
+*****************
 Consensus Reality
-=================
+*****************
 
 *"Don't panic, it's just a game."*
 
-http://conreality.org
+https://conreality.org
 
 .. image:: https://api.travis-ci.org/conreality/conreality.svg?branch=master
    :target: https://travis-ci.org/conreality/conreality
@@ -14,7 +15,7 @@ http://conreality.org
    :alt: Coveralls.io code coverage
 
 Prerequisites
--------------
+=============
 
 To build the development version from a Git checkout, you will need a POSIX
 system and the following tooling:
@@ -25,14 +26,14 @@ system and the following tooling:
 * GNU Make
 
 Dependencies
-------------
+============
 
-C/C++ Dependencies
-~~~~~~~~~~~~~~~~~~
+C/C++ Libraries
+---------------
 
 * `libffi <https://sourceware.org/libffi/>`__ (>= 3.0.13)
 
-* `liblua <http://www.lua.org/download.html>`__ (= 5.1.x)
+* `Lua <http://www.lua.org/download.html>`__ (= 5.1.x)
 
 * `OpenCV <http://opencv.org/>`__ (>= 2.4)
 
@@ -41,8 +42,15 @@ libraries and header files as follows::
 
    $ sudo apt-get install libffi-dev liblua5.1-0-dev libopencv-dev
 
-OCaml Dependencies
-~~~~~~~~~~~~~~~~~~
+OCaml Tooling
+-------------
+
+* `Cppo <https://opam.ocaml.org/packages/cppo/cppo.1.3.1/>`__ (>= 1.3.1)
+
+* `Menhir <https://opam.ocaml.org/packages/menhir/menhir.20151112/>`__ (>= 20151112)
+
+OCaml Packages
+--------------
 
 * `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
   (not automatically installed. ``opam install alcotest`` to run the tests with ``make check``)
@@ -52,20 +60,16 @@ OCaml Dependencies
 * `Core_bench <https://github.com/janestreet/core_bench>`__ (>= 112.35.00)
   (not automatically installed. ``opam install core_bench`` to run the benchmarks with ``make bench``)
 
-* `Cppo <https://opam.ocaml.org/packages/cppo/cppo.1.3.1/>`__ (>= 1.3.1)
-
 * `Ctypes <https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/>`__ (>= 0.4.0)
 
 * `Ctypes.Foreign <https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/>`__ (>= 0.4.0)
 
 * `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
 
-* `Menhir <https://opam.ocaml.org/packages/menhir/menhir.20151112/>`__ (>= 20151112)
-
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
 
 Installation
-------------
+============
 
 Prerequisites for Ubuntu 14.04 LTS (Trusty Tahr) and 15.10 (Wily Werewolf)::
 
@@ -73,7 +77,7 @@ Prerequisites for Ubuntu 14.04 LTS (Trusty Tahr) and 15.10 (Wily Werewolf)::
    $ sudo apt-get update
    $ sudo apt-get install ocaml-nox opam m4
 
-Prerequisites for Raspberry Pi running Raspbian/Jessie::
+Prerequisites for Raspberry Pi running Raspbian or Debian Jessie::
 
    $ sudo apt-get install ocaml-nox m4
    $ git clone https://github.com/ocaml/opam.git
@@ -85,7 +89,7 @@ Prerequisites for Raspberry Pi running Raspbian/Jessie::
    $ sudo make install
    $ cd ..
 
-General initialization of local OCaml environment::
+General initialization of a local OCaml development environment::
 
    $ opam init
    $ eval `opam config env`
