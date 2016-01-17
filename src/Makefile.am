@@ -1,5 +1,5 @@
 SUBDIRS    = libconreality consensus conctl conreald
-EXTRA_DIST = Makefile.conf META.in
+EXTRA_DIST = Makefile.conf
 
 if ENABLE_DEVELOP
   SUBDIRS += contop
