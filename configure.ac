@@ -85,6 +85,7 @@ AC_CHECK_OCAML_PKG([lwt])
 AC_CHECK_OCAML_PKG([lua])
 
 dnl Check for header files:
+AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
 
 dnl Check for types:
 
