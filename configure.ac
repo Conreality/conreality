@@ -89,11 +89,6 @@ AC_ARG_ENABLE([develop],
 AM_CONDITIONAL([ENABLE_DEVELOP], [test "x$enable_develop" != "xno"])
 
 dnl Check for libraries:
-# libffi (libffi-dev on Ubuntu, libffi on Mac OS X + MacPorts)
-AC_CHECK_HEADERS([ffi.h],
-  AC_SEARCH_LIBS([ffi_call], [ffi], [],
-    AC_MSG_ERROR([*** FFI native library libffi not found ***])),
-  AC_MSG_ERROR([*** FFI header file <ffi.h> not found ***]))
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
 AC_CHECK_HEADERS([lua5.1/lua.h],
   AC_SEARCH_LIBS([lua_load], [lua5.1], [],
@@ -111,12 +106,6 @@ AS_IF([test "x$OCAML_PKG_alcotest" != "xno"], [],
 AC_CHECK_OCAML_PKG([cmdliner])
 AS_IF([test "x$OCAML_PKG_cmdliner" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'cmdliner' not found (install it using OPAM?) ***]))
-AC_CHECK_OCAML_PKG([ctypes])
-AS_IF([test "x$OCAML_PKG_ctypes" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml package 'ctypes' not found (install it using OPAM?) ***]))
-AC_CHECK_OCAML_PKG([ctypes.foreign])
-AS_IF([test "x$OCAML_PKG_ctypes_foreign" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml package 'ctypes.foreign' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([irc-client])
 AS_IF([test "x$OCAML_PKG_irc_client" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'irc-client' not found (install it using OPAM?) ***]))

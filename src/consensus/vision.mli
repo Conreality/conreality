@@ -2,4 +2,4 @@
 
 (** Vision algorithms. *)
 
-val hello : unit -> unit
+external hello : unit -> unit = "caml_hello"

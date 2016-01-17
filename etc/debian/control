@@ -25,7 +25,6 @@ Section: libdevel
 Architecture: any
 Depends: ${misc:Depends},
  libconreality0 (= ${binary:Version}),
- libffi-dev,
  liblua5.1-0-dev,
  libopencv-core-dev
 Description: TODO: up to 60 chars description
@@ -35,7 +34,6 @@ Package: libconreality0
 Section: libs
 Architecture: any
 Depends: ${misc:Depends},
- libffi6,
  liblua5.1-0,
  libopencv-core2.4
 Description: TODO: up to 60 chars description

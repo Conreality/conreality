@@ -5,7 +5,7 @@ export OPAM_SWITCH=4.02.3
 # OPAM version to install
 export OPAM_VERSION=1.2.2
 # OPAM packages needed to build tests
-export OPAM_PACKAGES='alcotest bisect_ppx cmdliner cppo ctypes ctypes-foreign lwt menhir ocaml-lua ocamlfind ocveralls'
+export OPAM_PACKAGES='alcotest bisect_ppx cmdliner cppo lwt menhir ocaml-lua ocamlfind ocveralls'
 
 # install OPAM and OCaml
 sudo bash -c "echo 'APT::Default-Release \"wily\";' > /etc/apt/apt.conf.d/01ubuntu"
@@ -20,7 +20,7 @@ Pin: release n=wily
 Pin-Priority: 900
 EOF"
 time sudo apt-get update -qq
-time sudo apt-get install -qq -y opam ocaml-nox m4 libffi-dev liblua5.1-0-dev libopencv-dev
+time sudo apt-get install -qq -y opam ocaml-nox m4 liblua5.1-0-dev libopencv-dev
 
 # set up the OPAM/OCaml environment with our desired OCaml version
 time opam init -y

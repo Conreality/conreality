@@ -5,4 +5,4 @@ S src/**
 B _build/**
 B test/check_common.ml
 
-PKG alcotest cmdliner consensus consensus.prelude core_bench cppo ctypes lwt menhir
+PKG alcotest cmdliner consensus consensus.prelude core_bench cppo lwt menhir

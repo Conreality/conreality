@@ -31,8 +31,6 @@ Dependencies
 C/C++ Libraries
 ---------------
 
-* `libffi <https://sourceware.org/libffi/>`__ (>= 3.0.13)
-
 * `Lua <http://www.lua.org/download.html>`__ (= 5.1.x)
 
 * `OpenCV <http://opencv.org/>`__ (>= 2.4)
@@ -40,7 +38,7 @@ C/C++ Libraries
 On a Debian or Ubuntu Linux system, install the needed native runtime
 libraries and header files as follows::
 
-   $ sudo apt-get install libffi-dev liblua5.1-0-dev libopencv-dev
+   $ sudo apt-get install liblua5.1-0-dev libopencv-dev
 
 OCaml Tooling
 -------------
@@ -59,10 +57,6 @@ OCaml Packages
 
 * `Core_bench <https://github.com/janestreet/core_bench>`__ (>= 112.35.00)
   (not automatically installed. ``opam install core_bench`` to run the benchmarks with ``make bench``)
-
-* `Ctypes <https://opam.ocaml.org/packages/ctypes/ctypes.0.4.0/>`__ (>= 0.4.0)
-
-* `Ctypes.Foreign <https://opam.ocaml.org/packages/ctypes-foreign/ctypes-foreign.0.4.0/>`__ (>= 0.4.0)
 
 * `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
 
