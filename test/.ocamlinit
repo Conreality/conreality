@@ -1,10 +1,1 @@
-#use "topfind";;
-#thread;;
-#require "alcotest";;
-#require "ctypes.foreign";;
-#require "ctypes.top";;
-#require "irc-client.lwt";;
-#require "lua";;
-#require "lwt";;
-#require "lwt.unix";;
-#require "lwt.syntax";;
+#directory "../src/consensus";;
