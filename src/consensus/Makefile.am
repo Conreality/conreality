@@ -10,8 +10,11 @@ include $(top_srcdir)/src/Makefile.rules
 
 consensus_TARGETS = \
   consensus.cmi \
-  consensus.cmo \
-  consensus.cmx
+  consensus.cmo
+
+if ENABLE_COMPILE
+  consensus_TARGETS += consensus.cmx
+endif
 
 consensus_MODULES = \
   prelude.ml    \

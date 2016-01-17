@@ -5,8 +5,13 @@ $(eval include $(top_srcdir)/src/Makefile.conf)
 
 OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -package cmdliner
-OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmx
 OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
+
+if ENABLE_COMPILE
+OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmx
+else
+OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmo
+endif
 
 include $(top_srcdir)/src/Makefile.flags
 
@@ -15,7 +20,7 @@ bin_PROGRAMS = conreald
 conreald_SOURCES = main.ml
 
 conreald: $(conreald_SOURCES)
-	$(OCAMLOPT) -o $@ -linkpkg $(OCAMLCFLAGS) $^
+	$(OCAMLCOMPILE) -o $@ -linkpkg $(OCAMLCFLAGS) $^
 
 MOSTLYCLEANFILES  =
 MOSTLYCLEANFILES += $(conreald_SOURCES:.ml=.cmi)
