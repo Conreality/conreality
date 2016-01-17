@@ -3,6 +3,9 @@ dnl
 dnl Process this file with `autoconf` to produce a configure script.
 dnl
 dnl This is free and unencumbered software released into the public domain.
+
+dnl The build system requires M4, Autoconf, Automake, and GNU Make.
+dnl It does _not_ and _should_ not require GNU Libtool nor pkg-config.
 AC_PREREQ([2.68])
 
 dnl Define version information:
@@ -38,7 +41,6 @@ AC_PROG_CXX
 AC_PROG_CXXCPP
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_RANLIB
-dnl LT_INIT
 AC_LANG([C++])
 AC_PROG_OCAML
 AC_PROG_OCAMLLEX
@@ -58,6 +60,22 @@ AS_IF([test "x$enable_debug" != "xno"],
 AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
 
 dnl Check for libraries:
+# libffi (libffi-dev on Ubuntu, libffi on Mac OS X + MacPorts)
+AC_CHECK_HEADERS([ffi.h],
+  AC_SEARCH_LIBS([ffi_call], [ffi], [],
+    AC_MSG_ERROR([*** FFI native library libffi not found ***])),
+  AC_MSG_ERROR([*** FFI header file <ffi.h> not found ***]))
+# Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
+AC_CHECK_HEADERS([lua5.1/lua.h],
+  AC_SEARCH_LIBS([lua_load], [lua5.1], [],
+    AC_MSG_ERROR([*** Lua native library liblua5.1 not found ***])),
+  AC_MSG_ERROR([*** Lua header file <lua5.1/lua.h> not found ***]))
+# OpenCV (libopencv-dev on Ubuntu, opencv on Mac OS X + MacPorts)
+AC_CHECK_HEADERS([opencv2/opencv.hpp],
+  AC_SEARCH_LIBS([cvLoad], [opencv_core], [],
+    AC_MSG_ERROR([*** OpenCV native library libopencv_core not found ***])),
+  AC_MSG_ERROR([*** OpenCV header file <opencv2/opencv.hpp> not found ***]))
+# OCaml packages (install with OPAM as needed)
 AC_CHECK_OCAML_PKG([alcotest])
 AC_CHECK_OCAML_PKG([cmdliner])
 AC_CHECK_OCAML_PKG([ctypes])
