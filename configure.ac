@@ -81,6 +81,12 @@ AS_IF([test "x$enable_debug" != "xno"],
   [AC_DEFINE([DEBUG], [1], [Enable debugging support.])],
   [AC_DEFINE([NDEBUG], [1], [Disable assertions.])])
 AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
+# --enable-develop/--disable-develop
+AC_ARG_ENABLE([develop],
+  [AS_HELP_STRING([--enable-develop],
+    [build development packages and a custom toplevel])],
+  [], [enable_develop=no])
+AM_CONDITIONAL([ENABLE_DEVELOP], [test "x$enable_develop" != "xno"])
 
 dnl Check for libraries:
 # libffi (libffi-dev on Ubuntu, libffi on Mac OS X + MacPorts)
