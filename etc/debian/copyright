@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Conreality
 Upstream-Contact: Arto Bendiken <arto@bendiken.net>
-Source: http://conreality.org
+Source: https://conreality.org
 
 Files: *
 Copyright: Public Domain
