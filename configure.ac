@@ -74,6 +74,21 @@ dnl Check for structures:
 
 dnl Check for compiler characteristics:
 AC_CANONICAL_HOST
+AS_CASE([$host_cpu],
+  [amd64],    [host_cpu="x86_64"],
+  [armv6l],   [host_cpu="arm"],
+  [armv7l],   [host_cpu="arm"],
+  [i?86],     [host_cpu="x86"],
+  [x86],      [host_cpu="x86"],
+  [x86_64],   [host_cpu="x86_64"],
+  [AC_MSG_ERROR([unsupported CPU architecture: $host_cpu])])
+AS_CASE([$host_os],
+  [darwin*],  [host_type="posix" host_os="darwin"],
+  [freebsd*], [host_type="posix" host_os="bsd"],
+  [linux*],   [host_type="posix" host_os="linux"],
+  [netbsd*],  [host_type="posix" host_os="bsd"],
+  [openbsd*], [host_type="posix" host_os="bsd"],
+  [AC_MSG_ERROR([unsupported OS platform: $host_os])])
 AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_srcdir)/src"
 AC_SUBST([AM_CPPFLAGS])
 
