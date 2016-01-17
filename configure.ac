@@ -101,8 +101,9 @@ AC_CHECK_HEADERS([opencv2/opencv.hpp],
   AC_MSG_ERROR([*** OpenCV header file <opencv2/opencv.hpp> not found ***]))
 # OCaml packages (install with OPAM as needed)
 AC_CHECK_OCAML_PKG([alcotest])
-AS_IF([test "x$OCAML_PKG_alcotest" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml package 'alcotest' not found (install it using OPAM?) ***]))
+AS_IF([test "x$enable_develop" == "xno"], [],
+  AS_IF([test "x$OCAML_PKG_alcotest" != "xno"], [],
+    AC_MSG_ERROR([*** OCaml package 'alcotest' not found (install it using OPAM?) ***])))
 AC_CHECK_OCAML_PKG([cmdliner])
 AS_IF([test "x$OCAML_PKG_cmdliner" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'cmdliner' not found (install it using OPAM?) ***]))
@@ -118,8 +119,10 @@ AS_IF([test "x$OCAML_PKG_lua" != "xno"], [],
 AC_CHECK_OCAML_PKG([unix])
 AS_IF([test "x$OCAML_PKG_unix" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'unix' not found (install it using OPAM?) ***]))
-AS_IF([test "x$enable_develop" != "xno"],
-  AC_CHECK_OCAML_PKG([utop]), [])
+AC_CHECK_OCAML_PKG([utop])
+AS_IF([test "x$enable_develop" == "xno"], [],
+  AS_IF([test "x$OCAML_PKG_utop" != "xno"], [],
+    AC_MSG_ERROR([*** OCaml package 'utop' not found (install it using OPAM?) ***])))
 
 dnl Check for header files:
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
