@@ -8,6 +8,8 @@ OCAMLCFLAGS += -package cmdliner
 OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmx
 OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 
+include $(top_srcdir)/src/Makefile.flags
+
 bin_PROGRAMS = conctl
 
 conctl_SOURCES = main.ml

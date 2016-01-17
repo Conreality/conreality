@@ -5,6 +5,7 @@ OCAMLCFLAGS += -package alcotest
 OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmo check_common.cmo
 OCAMLCFLAGS += -custom -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 
+include $(top_srcdir)/src/Makefile.flags
 include $(top_srcdir)/src/Makefile.rules
 
 check_PROGRAMS = \

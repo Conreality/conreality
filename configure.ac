@@ -52,12 +52,19 @@ AC_CHECK_PROGS([PANDOC], [pandoc])
 dnl Check for configuration options:
 # --enable-debug/--disable-debug
 AC_ARG_ENABLE([debug],
-  [AS_HELP_STRING([--enable-debug], [build with debugging support [default=no]])],
+  [AS_HELP_STRING([--enable-debug],
+    [build with debugging support [default=no]])],
   [], [enable_debug=no])
 AS_IF([test "x$enable_debug" != "xno"],
   [AC_DEFINE([DEBUG], [1], [Enable debugging support.])],
   [AC_DEFINE([NDEBUG], [1], [Disable assertions.])])
 AM_CONDITIONAL([ENABLE_DEBUG], [test "x$enable_debug" != "xno"])
+# --enable-coverage/--disable-coverage
+AC_ARG_ENABLE([coverage],
+  [AS_HELP_STRING([--enable-coverage],
+    [build with code coverage instrumentation [default=no]])],
+  [], [enable_coverage=no])
+AM_CONDITIONAL([ENABLE_COVERAGE], [test "x$enable_coverage" != "xno"])
 
 dnl Check for libraries:
 # libffi (libffi-dev on Ubuntu, libffi on Mac OS X + MacPorts)

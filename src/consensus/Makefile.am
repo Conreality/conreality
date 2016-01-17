@@ -5,6 +5,7 @@ $(eval include $(top_srcdir)/src/Makefile.conf)
 OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -for-pack Consensus
 
+include $(top_srcdir)/src/Makefile.flags
 include $(top_srcdir)/src/Makefile.rules
 
 consensus_TARGETS = \

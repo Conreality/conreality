@@ -1,0 +1,4 @@
+# See: https://www.gnu.org/software/automake/manual/html_node/Conditionals.html
+
+if ENABLE_COVERAGE
+endif

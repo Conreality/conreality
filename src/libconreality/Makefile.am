@@ -2,6 +2,8 @@
 
 $(eval include $(top_srcdir)/src/Makefile.conf)
 
+include $(top_srcdir)/src/Makefile.flags
+
 noinst_LIBRARIES = libconreality.a
 
 libconreality_a_SOURCES = ioctl.cc hello.cc
