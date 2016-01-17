@@ -43,14 +43,20 @@ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_RANLIB
 AC_LANG([C++])
 AC_PROG_OCAML
+AS_IF([test "x$OCAMLC" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml toolchain not found in \$PATH ***]))
 AC_PROG_OCAMLLEX
+AS_IF([test "x$OCAMLLEX" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml lexer generator program `ocamllex' not found in \$PATH ***]))
 AC_PROG_FINDLIB
+AS_IF([test "x$OCAMLFIND" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package manager program `ocamlfind' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([MENHIR], [menhir])
 AS_IF([test "x$ac_cv_prog_MENHIR" != "x"], [],
-  AC_MSG_ERROR([*** Parser generator program `menhir' not found in \$PATH (install it using OPAM?) ***]))
+  AC_MSG_ERROR([*** OCaml parser generator program `menhir' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([CPPO], [cppo])
 AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
-  AC_MSG_ERROR([*** Preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
+  AC_MSG_ERROR([*** OCaml preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for configuration options:
