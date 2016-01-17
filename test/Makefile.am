@@ -114,4 +114,6 @@ TESTS = $(check_PROGRAMS)
 
 AM_DEFAULT_SOURCE_EXT = .ml
 
-MOSTLYCLEANFILES = check_common.cmi check_common.cmo $(check_PROGRAMS:=.cmi) $(check_PROGRAMS:=.cmo)
+MOSTLYCLEANFILES  = check_common.cmi check_common.cmo
+MOSTLYCLEANFILES += $(check_PROGRAMS:=.cmi)
+MOSTLYCLEANFILES += $(check_PROGRAMS:=.cmo)

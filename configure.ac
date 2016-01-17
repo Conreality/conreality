@@ -187,6 +187,7 @@ AC_CONFIG_FILES([
   src/consensus/Makefile
   src/conctl/Makefile
   src/conreald/Makefile
+  src/contop/Makefile
   test/Makefile
 ])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])
