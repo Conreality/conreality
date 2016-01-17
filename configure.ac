@@ -86,6 +86,21 @@ AC_CHECK_OCAML_PKG([lua])
 
 dnl Check for header files:
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
+AC_CHECK_HEADERS_ONCE([caml/alloc.h])
+AC_CHECK_HEADERS_ONCE([caml/bigarray.h])
+AC_CHECK_HEADERS_ONCE([caml/memory.h])
+AC_CHECK_HEADERS_ONCE([caml/misc.h])
+AC_CHECK_HEADERS_ONCE([caml/mlvalues.h])
+AC_CHECK_HEADERS([caml/threads.h], [], [], [
+  #ifdef HAVE_CAML_MISC_H
+  #include <caml/misc.h>
+  #endif
+])
+AC_CHECK_HEADERS([caml/unixsupport.h], [], [], [
+  #ifdef HAVE_CAML_MLVALUES_H
+  #include <caml/mlvalues.h>
+  #endif
+])
 
 dnl Check for types:
 
