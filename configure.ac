@@ -47,10 +47,10 @@ AC_PROG_OCAMLLEX
 AC_PROG_FINDLIB
 AC_CHECK_PROGS([MENHIR], [menhir])
 AS_IF([test "x$ac_cv_prog_MENHIR" != "x"], [],
-  AC_MSG_ERROR([*** Parser generator program `menhir' not found in \$PATH ***]))
+  AC_MSG_ERROR([*** Parser generator program `menhir' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([CPPO], [cppo])
 AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
-  AC_MSG_ERROR([*** Preprocessor program `cppo' not found in \$PATH ***]))
+  AC_MSG_ERROR([*** Preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for configuration options:
@@ -88,12 +88,29 @@ AC_CHECK_HEADERS([opencv2/opencv.hpp],
   AC_MSG_ERROR([*** OpenCV header file <opencv2/opencv.hpp> not found ***]))
 # OCaml packages (install with OPAM as needed)
 AC_CHECK_OCAML_PKG([alcotest])
+AS_IF([test "x$OCAML_PKG_alcotest" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'alcotest' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([cmdliner])
+AS_IF([test "x$OCAML_PKG_cmdliner" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'cmdliner' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([ctypes])
+AS_IF([test "x$OCAML_PKG_ctypes" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'ctypes' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([ctypes.foreign])
+AS_IF([test "x$OCAML_PKG_ctypes_foreign" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'ctypes.foreign' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([irc-client])
+AS_IF([test "x$OCAML_PKG_irc_client" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'irc-client' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([lwt])
+AS_IF([test "x$OCAML_PKG_lwt" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'lwt' not found (install it using OPAM?) ***]))
 AC_CHECK_OCAML_PKG([lua])
+AS_IF([test "x$OCAML_PKG_lua" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'lua' not found (install it using OPAM?) ***]))
+AC_CHECK_OCAML_PKG([unix])
+AS_IF([test "x$OCAML_PKG_unix" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package 'unix' not found (install it using OPAM?) ***]))
 
 dnl Check for header files:
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
