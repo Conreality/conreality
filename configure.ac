@@ -129,6 +129,8 @@ AS_IF([test "x$OCAML_PKG_lua" != "xno"], [],
 AC_CHECK_OCAML_PKG([unix])
 AS_IF([test "x$OCAML_PKG_unix" != "xno"], [],
   AC_MSG_ERROR([*** OCaml package 'unix' not found (install it using OPAM?) ***]))
+AS_IF([test "x$enable_develop" != "xno"],
+  AC_CHECK_OCAML_PKG([utop]), [])
 
 dnl Check for header files:
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
