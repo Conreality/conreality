@@ -1,1 +1,2 @@
 #directory "../../src/consensus";;
+open Consensus;;
