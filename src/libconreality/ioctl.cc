@@ -2,26 +2,19 @@
 #include <config.h>
 #endif
 
-#include <cstdio>               /* for stderr, std::*printf() */
+#include <cstdio>             /* for std::snprintf() */
 
 #ifdef HAVE_SYS_IOCTL_H
-#include <sys/ioctl.h>          /* for ioctl() */
+#include <sys/ioctl.h>        /* for ioctl() */
 #endif
 
 #define CAML_NAME_SPACE
-#include <caml/alloc.h>         /* for caml_copy_*() */
-#include <caml/bigarray.h>      /* for Caml_ba_data_val() */
-#include <caml/memory.h>        /* for CAMLlocal1(), CAMLparam?(), CAMLreturn() */
-#include <caml/mlvalues.h>      /* for value */
-#include <caml/threads.h>       /* for caml_{enter,leave}_blocking_section() */
-#include <caml/unixsupport.h>   /* for uerror() */
-
-////////////////////////////////////////////////////////////////////////////////
-
-extern "C" void
-hello(void) {
-  std::fprintf(stderr, "Greetings from C++ via libffi!\n");
-}
+#include <caml/alloc.h>       /* for caml_copy_*() */
+#include <caml/bigarray.h>    /* for Caml_ba_data_val() */
+#include <caml/memory.h>      /* for CAMLlocal1(), CAMLparam?(), CAMLreturn() */
+#include <caml/mlvalues.h>    /* for value */
+#include <caml/threads.h>     /* for caml_{enter,leave}_blocking_section() */
+#include <caml/unixsupport.h> /* for uerror() */
 
 ////////////////////////////////////////////////////////////////////////////////
 
