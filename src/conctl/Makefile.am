@@ -3,9 +3,9 @@
 
 $(eval include $(top_srcdir)/src/Makefile.conf)
 
-OCAMLCFLAGS  = $(AM_OCAMLCFLAGS)
+OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -package cmdliner
-OCAMLCFLAGS += -I $(top_srcdir)/src/consensus $(top_srcdir)/src/consensus/consensus.cmx
+OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmx
 OCAMLCFLAGS += -cclib -rdynamic -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 
 bin_PROGRAMS = conctl
