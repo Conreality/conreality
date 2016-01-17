@@ -46,7 +46,11 @@ AC_PROG_OCAML
 AC_PROG_OCAMLLEX
 AC_PROG_FINDLIB
 AC_CHECK_PROGS([MENHIR], [menhir])
+AS_IF([test "x$ac_cv_prog_MENHIR" != "x"], [],
+  AC_MSG_ERROR([*** Parser generator program `menhir' not found in \$PATH ***]))
 AC_CHECK_PROGS([CPPO], [cppo])
+AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
+  AC_MSG_ERROR([*** Preprocessor program `cppo' not found in \$PATH ***]))
 AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for configuration options:
