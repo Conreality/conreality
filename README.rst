@@ -94,7 +94,11 @@ General local installation procedure::
 
    $ git clone --recursive https://github.com/conreality/conreality.git
 
-   TODO
+   $ ./autogen.sh
+   $ ./configure
+   $ make
+   $ make check
+   $ make install
 
 If you want to run the test suite, you need to install Alcotest::
 
