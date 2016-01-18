@@ -1,0 +1,5 @@
+ocaml-lua (1.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Arto Bendiken <arto@bendiken.net>  Mon, 18 Jan 2016 04:21:10 +0000
