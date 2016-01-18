@@ -4,11 +4,17 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-%:
-	dh $@
-
 DESTDIR ?= $(CURDIR)/debian/tmp
-OCAMLFIND_DESTDIR = $(DESTDIR)/usr/lib/ocaml
+
+include /usr/share/ocaml/ocamlvars.mk
+
+export OCAMLFIND_DESTDIR=$(DESTDIR)/usr/lib/ocaml
+
+%:
+	dh $@ --with ocaml
+
+override_dh_gencontrol:
+	dh_gencontrol -- -VF:OCamlABI="$(OCAML_ABI)"
 
 .PHONY: override_dh_auto_configure
 override_dh_auto_configure:
@@ -19,14 +25,31 @@ override_dh_auto_configure:
 	  --sysconfdir /etc                                  \
 	  --localstatedir /var                               \
 	  --libdir \$${prefix}/lib/$(DEB_HOST_MULTIARCH)     \
-	  --libexecdir \$${prefix}/lib/$(DEB_HOST_MULTIARCH)
+	  --libexecdir \$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
+	  --enable-debug --enable-tests
+
+.PHONY: override_dh_auto_build
+override_dh_auto_build:
+	ocaml setup.ml -build
+	ocaml setup.ml -doc
+
+.PHONY: override_dh_auto_test
+override_dh_auto_test:
+	ocaml setup.ml -test
 
 .PHONY: override_dh_installdirs
 override_dh_installdirs:
 	dh_installdirs $@
 	mkdir -p "$(OCAMLFIND_DESTDIR)"
 
+.PHONY: override_dh_install
+override_dh_install:
+	dh_install --list-missing
+
 .PHONY: override_dh_auto_install
 override_dh_auto_install:
-	OCAMLFIND_DESTDIR="$(OCAMLFIND_DESTDIR)"             \
 	ocaml setup.ml -install
+
+.PHONY: override_dh_auto_clean
+override_dh_auto_clean:
+	ocaml setup.ml -distclean

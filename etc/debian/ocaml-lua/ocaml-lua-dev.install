@@ -1,1 +1,16 @@
+usr/lib/ocaml/lua/META
 usr/lib/ocaml/lua/liblua_stubs.a
+usr/lib/ocaml/lua/lua.cma
+usr/lib/ocaml/lua/lua.cmxa
+#usr/lib/ocaml/lua/lua.cmxs
+usr/lib/ocaml/lua/lua.a
+usr/lib/ocaml/lua/lua_api.cmi
+usr/lib/ocaml/lua/lua_api.cmx
+usr/lib/ocaml/lua/lua_api.ml
+usr/lib/ocaml/lua/lua_api_lib.cmi
+usr/lib/ocaml/lua/lua_api_lib.cmx
+usr/lib/ocaml/lua/lua_api_lib.mli
+usr/lib/ocaml/lua/lua_aux_lib.mli
+usr/lib/ocaml/lua/lua_aux_lib.cmi
+usr/lib/ocaml/lua/lua_aux_lib.cmx
+usr/share/doc/ocaml-lua/html/*

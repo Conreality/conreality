@@ -1,26 +1,38 @@
 Source: ocaml-lua
 Priority: optional
 Maintainer: Arto Bendiken <arto@bendiken.net>
-Build-Depends: debhelper (>= 9),
+Build-Depends:
+ debhelper (>= 9),
+ dh-ocaml (>= 0.9.0),
  ocaml-nox (>= 3.12.1) | ocaml-best-compilers
 Standards-Version: 3.9.6
-Section: libs
+Section: ocaml
 Homepage: http://ocaml-lua.forge.ocamlcore.org
 Vcs-Git: https://github.com/pdonadeo/ocaml-lua.git
 Vcs-Browser: https://github.com/pdonadeo/ocaml-lua
 
 Package: ocaml-lua-dev
-Section: libdevel
+Section: ocaml
 Architecture: any
-Depends: ocaml-lua0 (= ${binary:Version}),
- liblua5.1-0-dev
+Depends:
+ ocaml-nox-${F:OCamlABI},
+ ocaml-lua0 (= ${binary:Version}),
+ liblua5.1-0-dev,
+ ${ocaml:Depends},
+ ${misc:Depends}
+Suggests: ocaml-findlib
+Provides: ${ocaml:Provides}
 Description: Lua bindings for OCaml (development)
  OCaml-Lua provides bindings to the Lua programming language.
 
 Package: ocaml-lua0
-Section: libs
+Section: ocaml
 Architecture: any
-Depends: ${misc:Depends},
- liblua5.1-0
-Description: Lua bindings for OCaml (binaries)
+Depends:
+ ocaml-base-nox-${F:OCamlABI},
+ liblua5.1-0,
+ ${shlibs:Depends},
+ ${misc:Depends}
+Provides: ${ocaml:Provides}
+Description: Lua bindings for OCaml (runtime)
  OCaml-Lua provides bindings to the Lua programming language.
