@@ -22,7 +22,7 @@ Depends:
  ${misc:Depends}
 Suggests: ocaml-findlib
 Provides: ${ocaml:Provides}
-Description: Lua bindings for OCaml (development)
+Description: OCaml bindings for embedding the Lua runtime (development)
  OCaml-Lua provides bindings to the Lua programming language.
 
 Package: ocaml-lua0
@@ -34,5 +34,5 @@ Depends:
  ${shlibs:Depends},
  ${misc:Depends}
 Provides: ${ocaml:Provides}
-Description: Lua bindings for OCaml (runtime)
+Description: OCaml bindings for embedding the Lua runtime (runtime)
  OCaml-Lua provides bindings to the Lua programming language.

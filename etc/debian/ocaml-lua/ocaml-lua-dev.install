@@ -13,4 +13,4 @@ usr/lib/ocaml/lua/lua_api_lib.mli
 usr/lib/ocaml/lua/lua_aux_lib.mli
 usr/lib/ocaml/lua/lua_aux_lib.cmi
 usr/lib/ocaml/lua/lua_aux_lib.cmx
-usr/share/doc/ocaml-lua/html/*
+usr/share/doc/ocaml-lua/html/*          usr/share/doc/ocaml-lua-dev/html/
