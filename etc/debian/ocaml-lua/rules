@@ -37,17 +37,13 @@ override_dh_auto_build:
 override_dh_auto_test:
 	ocaml setup.ml -test
 
-.PHONY: override_dh_installdirs
-override_dh_installdirs:
-	dh_installdirs $@
-	mkdir -p "$(OCAMLFIND_DESTDIR)"
-
 .PHONY: override_dh_install
 override_dh_install:
 	dh_install --list-missing
 
 .PHONY: override_dh_auto_install
 override_dh_auto_install:
+	mkdir -p "$(OCAMLFIND_DESTDIR)"
 	ocaml setup.ml -install
 
 .PHONY: override_dh_auto_clean

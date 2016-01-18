@@ -1,0 +1,5 @@
+ocaml-lua source: newer-standards-version *
+ocaml-lua-dev binary: new-package-should-close-itp-bug *
+ocaml-lua-dev binary: wrong-bug-number-in-closes *
+ocaml-lua0 binary: new-package-should-close-itp-bug *
+ocaml-lua0 binary: wrong-bug-number-in-closes *
