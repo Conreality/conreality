@@ -18,7 +18,7 @@ Vcs-Git: https://github.com/conreality/conreality.git
 Vcs-Browser: https://github.com/conreality/conreality
 
 Package: conreality
-Section: games
+Section: electronics
 Architecture: any
 Depends:
  liblua5.1-0,
@@ -27,7 +27,7 @@ Depends:
  ${misc:Depends}
 Suggests:
  conreality-doc (= ${binary:Version}),
-Description: Conreality wargame
+Description: Augmented-reality wargame
  Program binaries for the Conreality wargame.
 
 Package: conreality-dev
@@ -35,19 +35,21 @@ Section: devel
 Architecture: any
 Depends:
  conreality (= ${binary:Version}),
+ ${shlibs:Depends},
  ${misc:Depends}
 Enhances:
  conreality (= ${binary:Version}),
-Description: Conreality wargame (development)
+Description: Augmented-reality wargame (development)
  Developer resources for the Conreality wargame.
 
 Package: conreality-doc
 Section: doc
 Architecture: all
 Depends:
- conreality (= ${binary:Version}),
  ${misc:Depends}
+Suggests:
+ conreality
 Enhances:
  conreality (= ${binary:Version}),
-Description: Conreality wargame (documentation)
+Description: Augmented-reality wargame (documentation)
  Documentation for the Conreality wargame.
