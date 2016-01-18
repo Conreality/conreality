@@ -95,12 +95,13 @@ General initialization of a local OCaml development environment::
 General local installation procedure::
 
    $ git clone --recursive https://github.com/conreality/conreality.git
+   $ cd conreality
 
-   $ ./autogen.sh
+   $ ./autogen.sh      # only needed for Git checkouts, not for tarballs
    $ ./configure
    $ make
    $ make check
-   $ make install
+   $ sudo make install
 
 If you want to run the test suite, you need to install Alcotest::
 
