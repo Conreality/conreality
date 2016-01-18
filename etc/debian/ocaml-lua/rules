@@ -5,4 +5,28 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@  --with autotools-dev
+	dh $@
+
+DESTDIR ?= $(CURDIR)/debian/tmp
+OCAMLFIND_DESTDIR = $(DESTDIR)/usr/lib/ocaml
+
+.PHONY: override_dh_auto_configure
+override_dh_auto_configure:
+	ocaml setup.ml -configure                            \
+	  --prefix /usr --destdir "$(DESTDIR)"               \
+	  --mandir \$${prefix}/share/man                     \
+	  --infodir \$${prefix}/share/info                   \
+	  --sysconfdir /etc                                  \
+	  --localstatedir /var                               \
+	  --libdir \$${prefix}/lib/$(DEB_HOST_MULTIARCH)     \
+	  --libexecdir \$${prefix}/lib/$(DEB_HOST_MULTIARCH)
+
+.PHONY: override_dh_installdirs
+override_dh_installdirs:
+	dh_installdirs $@
+	mkdir -p "$(OCAMLFIND_DESTDIR)"
+
+.PHONY: override_dh_auto_install
+override_dh_auto_install:
+	OCAMLFIND_DESTDIR="$(OCAMLFIND_DESTDIR)"             \
+	ocaml setup.ml -install
