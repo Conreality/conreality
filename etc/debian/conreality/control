@@ -2,10 +2,15 @@ Source: conreality
 Priority: extra
 Maintainer: Arto Bendiken <arto@bendiken.net>
 Uploaders: Mike Gogulski <mike@gogulski.com>
-Build-Depends: debhelper (>= 9),
-  autotools-dev,
-  ocaml-nox (>= 4.01.0) | ocaml-best-compilers,
-  g++ (>= 4.9) | c++-compiler
+Build-Depends:
+ debhelper (>= 9),
+ dh-ocaml (>= 0.9.0),
+ autotools-dev,
+ ocaml-nox (>= 4.01.0) | ocaml-best-compilers,
+ g++ (>= 4.9) | c++-compiler,
+ ocaml-lua-dev (>= 1.2),
+ liblua5.1-0-dev,
+ libopencv-core-dev,
 Standards-Version: 3.9.6
 Section: games
 Homepage: https://conreality.org
@@ -15,26 +20,34 @@ Vcs-Browser: https://github.com/conreality/conreality
 Package: conreality
 Section: games
 Architecture: any
-Depends: ${misc:Depends},
- libconreality0 (= ${binary:Version})
-Description: TODO: up to 60 chars description
- long description, indented with spaces
-
-Package: libconreality-dev
-Section: libdevel
-Architecture: any
-Depends: ${misc:Depends},
- libconreality0 (= ${binary:Version}),
- liblua5.1-0-dev,
- libopencv-core-dev
-Description: TODO: up to 60 chars description
- long description, indented with spaces
-
-Package: libconreality0
-Section: libs
-Architecture: any
-Depends: ${misc:Depends},
+Depends:
  liblua5.1-0,
- libopencv-core2.4
-Description: TODO: up to 60 chars description
- long description, indented with spaces
+ libopencv-core2.4,
+ ${shlibs:Depends},
+ ${misc:Depends}
+Suggests:
+ conreality-doc (= ${binary:Version}),
+Description: Conreality wargame
+ Program binaries for the Conreality wargame.
+
+Package: conreality-dev
+Section: devel
+Architecture: any
+Depends:
+ conreality (= ${binary:Version}),
+ ${misc:Depends}
+Enhances:
+ conreality (= ${binary:Version}),
+Description: Conreality wargame (development)
+ Developer resources for the Conreality wargame.
+
+Package: conreality-doc
+Section: doc
+Architecture: all
+Depends:
+ conreality (= ${binary:Version}),
+ ${misc:Depends}
+Enhances:
+ conreality (= ${binary:Version}),
+Description: Conreality wargame (documentation)
+ Documentation for the Conreality wargame.

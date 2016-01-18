@@ -1,3 +1,4 @@
 conreality source: new-package-should-close-itp-bug *
-libconreality-dev source: new-package-should-close-itp-bug *
-libconreality0 source: new-package-should-close-itp-bug *
+conreality binary: new-package-should-close-itp-bug *
+conreality-dev binary: new-package-should-close-itp-bug *
+conreality-doc binary: new-package-should-close-itp-bug *

@@ -4,9 +4,15 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-# This has to be exported to make some magic below work.
-export DH_OPTIONS
+DESTDIR ?= $(CURDIR)/debian/tmp
 
+include /usr/share/ocaml/ocamlvars.mk
+
+export OCAMLFIND_DESTDIR=$(DESTDIR)/usr/lib/ocaml
 
 %:
-	dh $@  --with autotools-dev
+	dh $@ --with autotools-dev --with ocaml
+
+.PHONY: override_dh_auto_configure
+override_dh_auto_configure:
+	dh_auto_configure -- --enable-debug --enable-develop --disable-irc
