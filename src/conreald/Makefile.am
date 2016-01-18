@@ -15,7 +15,7 @@ endif
 
 include $(top_srcdir)/src/Makefile.flags
 
-bin_PROGRAMS = conreald
+sbin_PROGRAMS = conreald
 
 conreald_SOURCES = main.ml
 
