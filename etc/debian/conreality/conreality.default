@@ -1,10 +1,5 @@
-# Defaults for conreality initscript
-# sourced by /etc/init.d/conreality
-# installed at /etc/default/conreality by the maintainer scripts
+# Default settings for the Conreality daemon.
+# This file is sourced by the /etc/init.d/conreality initscript.
 
-#
-# This is a POSIX shell fragment
-#
-
-# Additional options that are passed to the Daemon.
+# Additional options to pass the conreald(8) daemon:
 DAEMON_OPTS=""

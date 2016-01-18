@@ -5,10 +5,10 @@
 # Required-Stop:     $local_fs $network $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: <Enter a short description of the software>
-# Description:       <Enter a long description of the software>
-#                    <...>
-#                    <...>
+# Short-Description: Conreality daemon
+# Description:       This is the initscript for the Conreality daemon.
+#                    It manages the /usr/sbin/conreald process using
+#                    configuration sourced from /etc/default/conreality.
 ### END INIT INFO
 
 # Author: Arto Bendiken <arto@bendiken.net>
