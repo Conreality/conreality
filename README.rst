@@ -58,6 +58,8 @@ OCaml Packages
 * `Core_bench <https://github.com/janestreet/core_bench>`__ (>= 112.35.00)
   (not automatically installed. ``opam install core_bench`` to run the benchmarks with ``make bench``)
 
+* `IRC-Client <https://opam.ocaml.org/packages/irc-client/irc-client.0.3.0/>`__ (>= 0.3.0)
+
 * `Lwt <https://opam.ocaml.org/packages/lwt/lwt.2.5.0/>`__ (>= 2.5.0)
 
 * `OCaml-Lua <https://opam.ocaml.org/packages/ocaml-lua/ocaml-lua.1.2/>`__ (>= 1.2)
