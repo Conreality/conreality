@@ -4,13 +4,16 @@ Maintainer: Arto Bendiken <arto@bendiken.net>
 Uploaders: Mike Gogulski <mike@gogulski.com>
 Build-Depends:
  debhelper (>= 9),
+ dpkg-dev (>= 1.16.2),
  dh-ocaml (>= 0.9.0),
  autotools-dev,
- ocaml-nox (>= 4.01.0) | ocaml-best-compilers,
+ autoconf (>= 2.68),
+ automake (>= 1.14),
  g++ (>= 4.9) | c++-compiler,
+ ocaml-nox (>= 4.01.0) | ocaml-best-compilers,
  ocaml-lua-dev (>= 1.2),
  liblua5.1-0-dev,
- libopencv-core-dev,
+ libopencv-core-dev
 Standards-Version: 3.9.6
 Section: games
 Homepage: https://conreality.org
