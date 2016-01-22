@@ -236,13 +236,13 @@ module Server = struct
 
   let load_protocol server =
     define server "hello" Protocol.hello;
-    define server "bye" Protocol.bye
-    (* TODO *)
+    define server "bye" Protocol.bye;
+    () (* TODO *)
 
   let create config_path =
     let server = {
       context = Scripting.Context.create ();
-      config  = Config.load_file config_path;
+      config  = if String.is_empty config_path then Config.create () else Config.load_file config_path;
       clients = Client_set.empty;
       client  = Client.any;
     } in
@@ -338,9 +338,7 @@ module Server = struct
 end
 
 let main options config_path =
-  if String.is_empty config_path
-  then `Error (true, "no configuration file specified.")
-  else `Ok (Lwt_main.run (Server.create config_path |> Server.init |> Server.loop))
+  `Ok (Lwt_main.run (Server.create config_path |> Server.init |> Server.loop))
 
 (* Options common to all commands *)
 

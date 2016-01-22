@@ -15,4 +15,5 @@ type t = {
   network: Network.t;
 }
 
+val create : unit -> t
 val load_file : string -> t
