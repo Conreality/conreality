@@ -1,4 +1,4 @@
-ocaml-lua (1.2-1) trusty; urgency=low
+ocaml-lua (1.2-1) unstable; urgency=low
 
   * Initial release (Closes: #nnnn)
 
