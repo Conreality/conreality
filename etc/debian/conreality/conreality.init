@@ -17,11 +17,13 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="conreality"
+DESC="Conreality"
 NAME=conreality
 DAEMON=/usr/sbin/conreald
+DAEMON_NAME=conreald
+DAEMON_USER=root
 DAEMON_ARGS=""
-PIDFILE=/var/run/$NAME.pid
+PIDFILE=/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
@@ -47,23 +49,14 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --exec $DAEMON --chuid $DAEMON_USER --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --exec $DAEMON --chuid $DAEMON_USER --background -- \
 		$DAEMON_ARGS \
 		|| return 2
-	# The above code will not work for interpreted scripts, use the next
-	# six lines below instead (Ref: #643337, start-stop-daemon(8) )
-	#start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $DAEMON \
-	#	--name $NAME --test > /dev/null \
-	#	|| return 1
-	#start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $DAEMON \
-	#	--name $NAME -- $DAEMON_ARGS \
-	#	|| return 2
-
 	# Add code here, if necessary, that waits for the process to be ready
 	# to handle requests from services started subsequently which depend
-	# on this one.  As a last resort, sleep for some time.
+	# on this one. As a last resort, sleep for some time.
 }
 
 #
@@ -83,7 +76,7 @@ do_stop()
 	# and if the daemon is only ever run from this initscript.
 	# If the above conditions are not satisfied then add some other code
 	# that waits for the process to drop all resources that could be
-	# needed by services started subsequently.  A last resort is to
+	# needed by services started subsequently. A last resort is to
 	# sleep for some time.
 	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
 	[ "$?" = 2 ] && return 2
@@ -96,18 +89,13 @@ do_stop()
 # Function that sends a SIGHUP to the daemon/service
 #
 do_reload() {
-	#
-	# If the daemon can reload its configuration without
-	# restarting (for example, when it is sent a SIGHUP),
-	# then implement that here.
-	#
 	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
 	return 0
 }
 
 case "$1" in
   start)
-	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC:" "$DAEMON_NAME"
 	do_start
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -115,7 +103,7 @@ case "$1" in
 	esac
 	;;
   stop)
-	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC:" "$DAEMON_NAME"
 	do_stop
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -125,21 +113,13 @@ case "$1" in
   status)
 	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
 	;;
-  #reload|force-reload)
-	#
-	# If do_reload() is not implemented then leave this commented out
-	# and leave 'force-reload' as an alias for 'restart'.
-	#
-	#log_daemon_msg "Reloading $DESC" "$NAME"
-	#do_reload
-	#log_end_msg $?
-	#;;
-  restart|force-reload)
-	#
-	# If the "reload" option is implemented then remove the
-	# 'force-reload' alias
-	#
-	log_daemon_msg "Restarting $DESC" "$NAME"
+  reload|force-reload)
+	log_daemon_msg "Reloading $DESC configuration..." "done"
+	do_reload
+	log_end_msg $?
+	;;
+  restart)
+	log_daemon_msg "Restarting $DESC:" "$DAEMON_NAME"
 	do_stop
 	case "$?" in
 	  0|1)
@@ -157,8 +137,7 @@ case "$1" in
 	esac
 	;;
   *)
-	#echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart|reload|force-reload}" >&2
 	exit 3
 	;;
 esac

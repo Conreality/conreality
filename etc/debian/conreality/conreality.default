@@ -1,5 +1,8 @@
 # Default settings for the Conreality daemon.
 # This file is sourced by the /etc/init.d/conreality initscript.
 
+# The user to run the conreald(8) daemon as:
+DAEMON_USER=root
+
 # Additional options to pass the conreald(8) daemon:
 DAEMON_OPTS=""
