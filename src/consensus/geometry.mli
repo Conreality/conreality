@@ -36,8 +36,6 @@ module P3 : sig
   val to_string : t -> bytes
 end
 
-module P = P3
-
 (* Vectors *)
 
 type v2     (** 2D vector *)

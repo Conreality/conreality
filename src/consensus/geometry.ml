@@ -51,7 +51,6 @@ end
 
 type p3 = P3.t
 type p = P3.t
-module P = P3
 
 (* Vectors *)
 
