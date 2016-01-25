@@ -43,12 +43,23 @@ libraries and header files as follows::
 OCaml Tooling
 -------------
 
+::
+
+   $ opam install cppo menhir
+
 * `Cppo <https://opam.ocaml.org/packages/cppo/cppo.1.3.1/>`__ (>= 1.3.1)
 
 * `Menhir <https://opam.ocaml.org/packages/menhir/menhir.20151112/>`__ (>= 20151112)
 
 OCaml Packages
 --------------
+
+::
+
+   $ opam install cmdliner irc-client lwt ocaml-lua
+
+   $ opam install alcotest utop   # for development only (--enable-develop)
+   $ opam install core_bench      # for benchmarking only
 
 * `Alcotest <https://opam.ocaml.org/packages/alcotest/alcotest.0.4.5/>`__ (>= 0.4.5)
   (not automatically installed. ``opam install alcotest`` to run the tests with ``make check``)
