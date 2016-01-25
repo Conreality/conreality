@@ -60,6 +60,7 @@ module CCCP = struct
     Lwt.return cccp_server
 end
 
+#ifdef ENABLE_IRC
 module IRC = struct
   let section = "network.irc"
 
@@ -120,6 +121,7 @@ module IRC = struct
     >>= fun () -> Lwt_log.info_f "Disconnected from %s." irc_url
     >>= fun () -> Lwt.return connection
 end
+#endif
 
 module ROS = struct
   let section = "network.ros"
@@ -171,14 +173,18 @@ end
 
 type t = {
   mutable cccp:  CCCP.t;
+#ifdef ENABLE_IRC
   mutable irc:   IRC.t;
+#endif
   mutable ros:   ROS.t;
   mutable stomp: STOMP.t;
 }
 
 let create () = {
   cccp  = CCCP.create ();
+#ifdef ENABLE_IRC
   irc   = IRC.create ();
+#endif
   ros   = ROS.create ();
   stomp = STOMP.create ();
 }
@@ -186,6 +192,8 @@ let create () = {
 let load network context =
   LuaL.checktype context (-1) Lua.LUA_TTABLE;
   network.cccp  <- CCCP.load context;
+#ifdef ENABLE_IRC
   network.irc   <- IRC.load context;
+#endif
   network.ros   <- ROS.load context;
   network.stomp <- STOMP.load context

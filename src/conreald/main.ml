@@ -270,6 +270,7 @@ module Server = struct
       >>= (fun cccp_server -> Lwt.return ())
     end)
 
+#ifdef ENABLE_IRC
   let eval_irc_message server irc_connection target message =
     let command = Syntax.parse_from_string message in
     let respond message =
@@ -303,6 +304,7 @@ module Server = struct
       Config.Network.IRC.connect irc_config (recv_irc_message server)
       >>= (fun irc_connection -> Lwt.return ())
     end)
+#endif
 
   let connect_to_ros server =
     let ros_config = server.config.network.ros in
@@ -328,7 +330,9 @@ module Server = struct
     Lwt_main.at_exit (fun () -> Lwt_log.notice "Shutting down...");
     Lwt_log.ign_notice "Starting up...";
     Lwt.async (listen_for_cccp server);
+#ifdef ENABLE_IRC
     Lwt.async (connect_to_irc server);
+#endif
     Lwt.async (connect_to_ros server);
     Lwt.async (connect_to_stomp server);
     server

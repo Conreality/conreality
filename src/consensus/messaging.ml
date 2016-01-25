@@ -10,9 +10,11 @@ module CCCP = struct
   #include "messaging/cccp.ml"
 end
 
+#ifdef ENABLE_IRC
 module IRC = struct
   #include "messaging/irc.ml"
 end
+#endif
 
 module MQTT = struct
   #include "messaging/mqtt.ml"

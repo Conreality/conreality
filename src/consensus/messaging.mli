@@ -12,10 +12,12 @@ module CCCP : sig
   #include "messaging/cccp.mli"
 end
 
+#ifdef ENABLE_IRC
 (* See: http://api.conreality.org/protocols/irc.html *)
 module IRC : sig
   #include "messaging/irc.mli"
 end
+#endif
 
 (* See: http://api.conreality.org/protocols/mqtt.html *)
 module MQTT : sig
