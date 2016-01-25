@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+#if OCAMLVERSION < 40200
+type bytes = string
+#endif
+
 (* Device driver interface for cameras. *)
 module Camera : sig
   class virtual interface : object

@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+#if OCAMLVERSION < 40200
+type bytes = string
+#endif
+
 module Command : sig
   type t =
     | CONNECTED
@@ -26,9 +30,9 @@ module Header : sig
   val create : string -> string -> t
   val key : t -> string
   val value : t -> string
+  val length : t -> int
   val of_string : string -> t
   val to_string : t -> string
-  val length : t -> int
 end
 
 module Frame : sig
@@ -37,8 +41,9 @@ module Frame : sig
   val command : t -> Command.t
   val headers : t -> Header.t list
   val body : t -> string
-  val to_string : t -> string
   val size : t -> int
+  val to_bytes : t -> bytes
+  val to_string : t -> string
 end
 
 module Protocol : sig

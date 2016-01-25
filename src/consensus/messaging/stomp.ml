@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+#if OCAMLVERSION < 40200
+type bytes = string
+#endif
+
 open Prelude
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#Server_Frames *)
@@ -73,13 +77,13 @@ module Header = struct
   let key header = header.key
   let value header = header.value
 
+  let length command =
+    (String.length command.key) + 1 + (String.length command.value)
+
   let of_string input = assert false (* TODO *)
 
   let to_string header =
     Printf.sprintf "%s:%s" header.key header.value
-
-  let length command =
-    (String.length command.key) + 1 + (String.length command.value)
 end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html#STOMP_Frames *)
@@ -100,7 +104,7 @@ module Frame = struct
         frame.headers)) + 1 +
     (String.length frame.body) + 1
 
-  let to_string frame =
+  let to_bytes frame =
     let buffer = Buffer.create (size frame) in
     Buffer.add_string buffer (Command.to_string frame.command);
     Buffer.add_char buffer '\n';
@@ -112,7 +116,14 @@ module Frame = struct
     Buffer.add_char buffer '\n';
     Buffer.add_string buffer frame.body;
     Buffer.add_char buffer '\x00';
+#if OCAMLVERSION < 40200
+    Buffer.contents buffer
+#else
     Buffer.to_bytes buffer
+#endif
+
+  let to_string frame =
+    Bytes.to_string (to_bytes frame)
 end
 
 (* See: https://stomp.github.io/stomp-specification-1.2.html *)
