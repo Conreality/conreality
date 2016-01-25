@@ -1,5 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+#if OCAMLVERSION < 40200
+type bytes = string
+#endif
+
 include String
 
 let is_empty string = (length string) = 0
