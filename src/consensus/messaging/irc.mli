@@ -1,12 +1,16 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-module Message = Irc_message
-
-module Connection : sig
-  type t = Irc_client_lwt.connection_t
+module Message : sig
+  include module type of struct include Irc_message end
 end
 
-module Client = Irc_client_lwt
+module Client : sig
+  include module type of struct include Irc_client_lwt end
+end
+
+module Connection : sig
+  type t = Client.connection_t
+end
 
 module Callback : sig
   type t = Connection.t -> Message.parse_result -> unit Lwt.t

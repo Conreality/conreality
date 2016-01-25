@@ -2,13 +2,17 @@
 
 open Prelude
 
-module Message = Irc_message
-
-module Connection = struct
-  type t = Irc_client_lwt.connection_t
+module Message = struct
+  include Irc_message
 end
 
-module Client = Irc_client_lwt
+module Client = struct
+  include Irc_client_lwt
+end
+
+module Connection = struct
+  type t = Client.connection_t
+end
 
 module Callback = struct
   type t = Connection.t -> Message.parse_result -> unit Lwt.t
