@@ -1,5 +1,9 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/Conditionals.html
 
+CPPOFLAGS      =
+OCAMLPACKAGES  =
+AX_OCAMLCFLAGS =
+
 if ENABLE_COMPILE
   OCAMLCOMPILE = $(OCAMLOPT)
 else
@@ -8,3 +12,23 @@ endif
 
 if ENABLE_COVERAGE
 endif
+
+if ENABLE_DEBUG
+  CPPOFLAGS      += -D DEBUG
+  AX_OCAMLCFLAGS += -g
+endif
+
+if ENABLE_DEVELOP
+endif
+
+if ENABLE_IRC
+  CPPOFLAGS      += -D ENABLE_IRC
+  OCAMLPACKAGES  += -package irc-client.lwt
+endif
+
+AX_OCAMLCFLAGS += -pp "$(CPPO) $(CPPOFLAGS)"
+AX_OCAMLCFLAGS += -thread
+AX_OCAMLCFLAGS += -package lwt -package lwt.unix
+AX_OCAMLCFLAGS += -package lua
+AX_OCAMLCFLAGS += $(OCAMLPACKAGES)
+AX_OCAMLCFLAGS += -I $(top_srcdir)/src/consensus
