@@ -1,6 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 type bytes = string
 #endif
 

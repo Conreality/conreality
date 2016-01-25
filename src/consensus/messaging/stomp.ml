@@ -1,6 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 type bytes = string
 #endif
 
@@ -116,7 +116,7 @@ module Frame = struct
     Buffer.add_char buffer '\n';
     Buffer.add_string buffer frame.body;
     Buffer.add_char buffer '\x00';
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
     Buffer.contents buffer
 #else
     Buffer.to_bytes buffer

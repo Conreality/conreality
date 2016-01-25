@@ -1,41 +1,41 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 type bytes = string
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 include String
 #else
 include Bytes
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let empty = ""
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let of_string = String.copy
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let to_string = String.copy
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let sub_string = sub
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let extend (s : bytes) (left : int) (right : int) =
   failwith "not implemented for OCaml 4.01.0" (* TODO *)
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let blit_string = blit
 #endif
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 let cat s1 s2 = s1 ^ s2
 #endif
 

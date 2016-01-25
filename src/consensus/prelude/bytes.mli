@@ -1,6 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-#if OCAMLVERSION < 40200
+#if OCAMLVERSION < 4020
 type bytes = string
 #endif
 
@@ -9,7 +9,7 @@ external get : bytes -> int -> char = "%string_safe_get"
 external set : bytes -> int -> char -> unit = "%string_safe_set"
 external create : int -> bytes = "caml_create_string"
 val make : int -> char -> bytes
-#if OCAMLVERSION >= 40200
+#if OCAMLVERSION >= 4020
 val init : int -> (int -> char) -> bytes
 #endif
 val empty : bytes
@@ -27,7 +27,7 @@ val cat : bytes -> bytes -> bytes
 val iter : (char -> unit) -> bytes -> unit
 val iteri : (int -> char -> unit) -> bytes -> unit
 val map : (char -> char) -> bytes -> bytes
-#if OCAMLVERSION >= 40200
+#if OCAMLVERSION >= 4020
 val mapi : (int -> char -> char) -> bytes -> bytes
 #endif
 val trim : bytes -> bytes
@@ -45,7 +45,7 @@ val capitalize : bytes -> bytes
 val uncapitalize : bytes -> bytes
 type t = bytes
 val compare : t -> t -> int
-#if OCAMLVERSION >= 40200
+#if OCAMLVERSION >= 4020
 val unsafe_to_string : bytes -> string
 val unsafe_of_string : string -> bytes
 #endif
