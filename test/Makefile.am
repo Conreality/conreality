@@ -1,12 +1,9 @@
-$(eval include $(top_srcdir)/src/Makefile.conf)
+include $(top_srcdir)/src/Makefile.flags
 
 OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -package alcotest
 OCAMLCFLAGS += -cclib -Wl,--whole-archive -cclib $(top_srcdir)/src/libconreality/libconreality.a -cclib -Wl,--no-whole-archive
 OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmo check_common.cmo
-
-include $(top_srcdir)/src/Makefile.flags
-include $(top_srcdir)/src/Makefile.rules
 
 check_PROGRAMS = \
   check_config         \
@@ -32,6 +29,9 @@ check_PROGRAMS = \
   check_scripting      \
   check_syntax         \
   check_vision
+
+$(eval include $(top_srcdir)/src/Makefile.conf)
+include $(top_srcdir)/src/Makefile.rules
 
 # FIXME: this works, but results in lots of GNU Make warnings.
 #$(check_PROGRAMS): %: %.ml

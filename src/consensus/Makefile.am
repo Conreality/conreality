@@ -1,12 +1,9 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
-$(eval include $(top_srcdir)/src/Makefile.conf)
+include $(top_srcdir)/src/Makefile.flags
 
 OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -for-pack Consensus
-
-include $(top_srcdir)/src/Makefile.flags
-include $(top_srcdir)/src/Makefile.rules
 
 consensus_TARGETS = \
   consensus.cmi \
@@ -36,6 +33,9 @@ consensus_MODULES = \
 consensus_INTERFACES = $(consensus_MODULES:.ml=.cmi)
 consensus_BYTECODE   = $(consensus_MODULES:.ml=.cmo)
 consensus_OBJECTS    = $(consensus_MODULES:.ml=.cmx)
+
+$(eval include $(top_srcdir)/src/Makefile.conf)
+include $(top_srcdir)/src/Makefile.rules
 
 config.cmi:     $(wildcard config/*.mli)
 config.cmo:     $(wildcard config/*.ml)

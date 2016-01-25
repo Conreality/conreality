@@ -1,7 +1,7 @@
 # See: https://www.gnu.org/software/automake/manual/html_node/A-Program.html
 # See: https://www.gnu.org/software/automake/manual/html_node/Clean.html
 
-$(eval include $(top_srcdir)/src/Makefile.conf)
+include $(top_srcdir)/src/Makefile.flags
 
 OCAMLCFLAGS  = $(AX_OCAMLCFLAGS)
 OCAMLCFLAGS += -package cmdliner
@@ -13,11 +13,11 @@ else
 OCAMLCFLAGS += $(top_srcdir)/src/consensus/consensus.cmo
 endif
 
-include $(top_srcdir)/src/Makefile.flags
-
 bin_PROGRAMS = conctl
 
 conctl_SOURCES = main.ml
+
+$(eval include $(top_srcdir)/src/Makefile.conf)
 
 conctl: $(conctl_SOURCES)
 	$(OCAMLCOMPILE) -o $@ -linkpkg $(OCAMLCFLAGS) $^
