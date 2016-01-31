@@ -16,20 +16,20 @@ let create () = {
   instances = Hashtbl.create 0;
 }
 
-let is_registered devices name =
-  Hashtbl.mem devices.instances name
+let is_registered devices device_name =
+  Hashtbl.mem devices.instances device_name
 
-let register devices name config =
-  Lwt_log.ign_info_f "Registering the device /%s..." name;
+let register devices device_name config =
+  Lwt_log.ign_info_f "Registering the device /%s..." device_name;
   let driver_name = Value.to_string (Table.lookup config (Value.of_string "driver")) in
   let driver = Driver.find driver_name in
   let device = driver.constructor config in
-  Hashtbl.replace devices.instances name device;
-  Lwt_log.ign_notice_f "Registered the device /%s." name
+  Hashtbl.replace devices.instances device_name device;
+  Lwt_log.ign_notice_f "Registered the device /%s." device_name
 
-let unregister devices name =
-  Hashtbl.remove devices.instances name;
-  Lwt_log.ign_notice_f "Unregistered the device /%s." name
+let unregister devices device_name =
+  Hashtbl.remove devices.instances device_name;
+  Lwt_log.ign_notice_f "Unregistered the device /%s." device_name
 
 let load devices context =
   let table = Context.pop_table context in
@@ -40,3 +40,6 @@ let load devices context =
      | _ ->
        Lwt_log.ign_error_f "Skipped invalid %s configuration key: %s"
          "devices" (Value.to_string k))
+
+let find devices device_name =
+  try Some (Hashtbl.find devices.instances device_name) with Not_found -> None
