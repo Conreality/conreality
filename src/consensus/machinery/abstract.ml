@@ -87,3 +87,31 @@ module GPIO = struct
     type t = interface
   end
 end
+
+module PWM = struct
+  class virtual interface (id : int) = object (self)
+    inherit Device.interface as super
+
+    method driver_name = "abstract.pwm"
+
+    method device_name = failwith "not implemented yet"
+
+    method id = id
+
+    method is_open = not self#is_closed
+
+    method virtual is_closed : bool
+
+    method virtual init : GPIO.Mode.t -> unit (* FIXME: see .mli *)
+
+    method virtual close : unit
+
+    method virtual mode : GPIO.Mode.t
+
+    method virtual read : bool                (* FIXME: see .mli *)
+
+    method virtual write : bool -> unit       (* FIXME: see .mli *)
+  end
+
+  type t = interface
+end

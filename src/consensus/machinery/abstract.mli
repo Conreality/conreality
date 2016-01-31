@@ -73,3 +73,27 @@ module GPIO : sig
     type t = interface
   end
 end
+
+(* Device driver interface for PWM control. *)
+module PWM : sig
+  class virtual interface : int -> object
+    inherit Device.interface
+    (* Device interface: *)
+    method reset : unit
+    method parent : Device.t option
+    method is_privileged : bool
+    method virtual driver_name : string
+    method virtual device_name : string
+    method device_path : string list
+    (* PWM interface: *)
+    method id : int
+    method is_open : bool
+    method virtual is_closed : bool
+    method virtual init : GPIO.Mode.t -> unit (* FIXME: take config from Lua *)
+    method virtual close : unit
+    method virtual mode : GPIO.Mode.t
+    method virtual read : bool                (* FIXME: add PWM-specific parameters *)
+    method virtual write : bool -> unit       (* FIXME: add PWM-specific parameters *)
+  end
+  type t = interface
+end
