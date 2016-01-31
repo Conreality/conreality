@@ -1,6 +1,6 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-type t = { name: string; constructor: (string -> Device.t) }
+type t = { name: string; constructor: (Scripting.Table.t -> Device.t) }
 
 (** The list of supported device drivers. *)
 val list : t list

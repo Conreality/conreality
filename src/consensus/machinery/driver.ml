@@ -1,8 +1,9 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Prelude
+open Scripting
 
-type t = { name: string; constructor: (string -> Device.t) }
+type t = { name: string; constructor: (Table.t -> Device.t) }
 
 let register name constructor = { name; constructor }
 
