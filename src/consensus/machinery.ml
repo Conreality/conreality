@@ -1,11 +1,15 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-module Device = struct
-  #include "machinery/device.ml"
+module rec Abstract : sig
+  #include "machinery/abstract.mli"
+end = struct
+  #include "machinery/abstract.ml"
 end
 
-module Abstract = struct
-  #include "machinery/abstract.ml"
+and Device : sig
+  #include "machinery/device.mli"
+end = struct
+  #include "machinery/device.ml"
 end
 
 module BCM2835 = struct

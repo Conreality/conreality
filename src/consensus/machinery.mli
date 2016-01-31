@@ -2,14 +2,14 @@
 
 (** Machine drivers. *)
 
-(** Driver interfaces common to all devices. *)
-module Device : sig
-  #include "machinery/device.mli"
+(** Driver interfaces for abstract devices. *)
+module rec Abstract : sig
+  #include "machinery/abstract.mli"
 end
 
-(** Driver interfaces for abstract devices. *)
-module Abstract : sig
-  #include "machinery/abstract.mli"
+(** Driver interfaces common to all devices. *)
+and Device : sig
+  #include "machinery/device.mli"
 end
 
 (** Driver implementation for the Broadcom BCM2835 SoC (e.g., Raspberry Pi 1). *)
