@@ -11,6 +11,29 @@ type t =
   | String of string
   | Table of Table.t
 
+let rec inspect = function
+  | Nil           -> "nil"
+  | Boolean value -> Bool.to_string value
+  | Integer value -> Int.to_string value
+  | Number value  -> Float.string_of_float value
+  | String value  -> begin
+      "\"" ^ value ^ "\"" (* TODO: escaping of special characters *)
+    end
+  | Table value   -> begin
+      let buffer = Buffer.create 0 in
+      Buffer.add_char buffer '{';
+      Hashtbl.iter
+        (fun k v ->
+          Buffer.add_string buffer
+            (Printf.sprintf "%s=%s, " (inspect k) (inspect v)))
+        value;
+      Buffer.add_char buffer '}';
+      Buffer.contents buffer
+    end
+
+let fail_conversion operation value =
+  failwith (Printf.sprintf "Value.%s failed to convert %s" operation (inspect value))
+
 let of_unit =
   Nil
 
@@ -39,33 +62,25 @@ let to_type = function
 
 let to_bool = function
   | Boolean value -> value
-  | _ -> failwith "Value can't be converted to a boolean"
+  | value -> fail_conversion "to_bool" value
 
 let to_int = function
   | Integer value -> value
-  | _ -> failwith "Value can't be converted to an integer"
+  | value -> fail_conversion "to_int" value
 
 let to_float = function
   | Integer value -> Float.of_int value
   | Number value -> value
-  | _ -> failwith "Value can't be converted to a float"
+  | value -> fail_conversion "to_float" value
 
-let rec to_string = function
-  | Nil           -> ""
-  | Boolean value -> Bool.to_string value
-  | Integer value -> Int.to_string value
-  | Number value  -> Float.string_of_float value
-  | String value  -> value
-  | Table value   -> begin
-      let buffer = Buffer.create 0 in
-      Hashtbl.iter
-        (fun k v ->
-          Buffer.add_string buffer
-            (Printf.sprintf "%s=%s" (to_string k) (to_string v)))
-        value;
-      Buffer.contents buffer
-    end
+let to_string = function
+  | Nil              -> ""
+  | Boolean value    -> Bool.to_string value
+  | Integer value    -> Int.to_string value
+  | Number value     -> Float.string_of_float value
+  | String value     -> value
+  | Table _ as table -> inspect table (* developer representation *)
 
 let to_table = function
   | Table value -> value
-  | _ -> failwith "Value can't be converted to a Table.t"
+  | value -> fail_conversion "to_table" value

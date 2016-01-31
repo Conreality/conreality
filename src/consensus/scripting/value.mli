@@ -8,6 +8,8 @@ type t =
   | String of string
   | Table of Table.t
 
+val inspect : t -> string
+
 val of_unit : t
 
 val of_bool : bool -> t
