@@ -16,7 +16,7 @@ module GPIO = struct
 
     type t = implementation
 
-    let construct (id : string) : Device.t =
+    let construct (config : Scripting.Table.t) : Device.t =
       failwith "Not implemented as yet" (* TODO *)
   end
 end

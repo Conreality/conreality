@@ -1,6 +1,7 @@
 (* This is free and unencumbered software released into the public domain. *)
 
 open Prelude
+open Scripting
 
 module GPIO = struct
   module Mode = Abstract.GPIO.Mode
@@ -8,8 +9,7 @@ module GPIO = struct
   module Chip = struct
     (* TODO *)
 
-    let construct (id : string) : Device.t =
-      (*let id = (Int.of_string id) in*)
+    let construct (config : Scripting.Table.t) : Device.t =
       failwith "Not implemented as yet" (* TODO *)
   end
 
@@ -110,11 +110,15 @@ module GPIO = struct
 
     type t = implementation
 
-    let construct (id : string) : Device.t =
-      let id = (Int.of_string id) in
-      let pin = new implementation id in
-      pin#init Mode.Input;
-      (pin :> Device.t)
+    let construct (config : Scripting.Table.t) : Device.t =
+      match Table.lookup config (Value.of_string "gpio") with
+      | Table gpio_config -> begin
+          let id = Value.to_int (Table.lookup gpio_config (Value.of_string "pin")) in
+          let pin = new implementation id in
+          pin#init Mode.Input;
+          (pin :> Device.t)
+        end
+      | _ -> failwith "Missing configuration key 'gpio'" (* TODO: improve this *)
   end
 end
 

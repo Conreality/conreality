@@ -10,6 +10,8 @@ module Camera = struct
   class virtual interface = object (self)
     inherit Device.interface as super
 
+    method driver_name = "abstract.camera"
+
     method virtual init : unit
 
     method virtual close : unit
@@ -47,7 +49,7 @@ module GPIO = struct
     class virtual interface (id : int) = object (self)
       inherit Device.interface as super
 
-      method driver_name = "gpio.chip"
+      method driver_name = "abstract.gpio.chip"
 
       method device_name = Printf.sprintf "gpio/chip/%d" id
 
@@ -63,7 +65,7 @@ module GPIO = struct
     class virtual interface (id : int) = object (self)
       inherit Device.interface as super
 
-      method driver_name = "gpio.pin"
+      method driver_name = "abstract.gpio.pin"
 
       method device_name = Printf.sprintf "gpio/pin/%d" id
 

@@ -2,5 +2,5 @@
 
 (* See: http://linuxtv.org/downloads/v4l-dvb-apis/ *)
 module Camera : sig
-  val construct : string -> Device.t
+  val construct : Scripting.Table.t -> Device.t
 end

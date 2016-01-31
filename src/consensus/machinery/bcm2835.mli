@@ -2,6 +2,6 @@
 
 module GPIO : sig
   module Pin : sig
-    val construct : string -> Device.t
+    val construct : Scripting.Table.t -> Device.t
   end
 end
