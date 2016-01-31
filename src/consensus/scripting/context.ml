@@ -86,8 +86,15 @@ and get_value context =
   match (get_type context) with
   | Type.Nil     -> Value.of_unit
   | Type.Boolean -> Value.of_bool (get_bool context)
-  | Type.Integer -> assert false (* Lua 5.2+ *)
-  | Type.Number  -> Value.of_float (get_float context)
+  | Type.Integer -> Value.of_int (Int.of_string (get_string context)) (* Lua 5.2+ *)
+  | Type.Number  -> begin
+      let number = get_float context in
+      let number_as_int = Float.truncate number in
+      let number_as_float = Float.of_int number_as_int in
+      if (Float.(=.) number number_as_float)
+        then Value.of_int number_as_int
+        else Value.of_float number
+    end
   | Type.String  -> Value.of_string (get_string context)
   | Type.Table   -> Value.of_table (get_table context)
 
