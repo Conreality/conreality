@@ -2,5 +2,5 @@
 
 (* See: http://linuxtv.org/downloads/v4l-dvb-apis/ *)
 module Camera : sig
-  val construct : Scripting.Table.t -> Device.t
+  val construct : Scripting.Table.t -> ([> `Camera of 'a Abstract.Camera.interface] as 'a) Device.t
 end

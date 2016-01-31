@@ -1,11 +1,13 @@
 (* This is free and unencumbered software released into the public domain. *)
 
-class virtual interface : object
+class virtual ['a] interface : object
+  method virtual cast : 'a
+
   (* Resets the device, if applicable. *)
   method reset : unit
 
   (* Returns the parent device, if any. *)
-  method parent : interface option
+  method parent : 'a interface option
 
   (* Determines whether the driver requires superuser privileges. *)
   method is_privileged : bool
@@ -20,4 +22,4 @@ class virtual interface : object
   method device_path : string list
 end
 
-type t = interface
+type 'a t = 'a interface

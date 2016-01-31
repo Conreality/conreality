@@ -2,10 +2,12 @@
 
 open Prelude
 
-class virtual interface = object (self)
+class virtual ['a] interface = object (self)
+  method virtual cast : 'a
+
   method reset = ()
 
-  method parent = (None : interface option)
+  method parent = (None : 'a interface option)
 
   method is_privileged = false (* a sensible default *)
 
@@ -20,4 +22,4 @@ class virtual interface = object (self)
       | Some parent -> parent#device_path @ device_name
 end
 
-type t = interface
+type 'a t = 'a interface

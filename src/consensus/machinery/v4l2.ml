@@ -6,8 +6,10 @@ open Scripting
 module Camera = struct
   type state = { fd: Unix.file_descr }
 
-  class implementation (config : Table.t) = object (self)
-    inherit Abstract.Camera.interface as super
+  class ['a] implementation (config : Table.t) = object (self)
+    inherit ['a] Abstract.Camera.interface as super
+
+    method cast = `Camera self
 
     val mutable state : state option = None
 
@@ -35,11 +37,11 @@ module Camera = struct
         | Some { fd } -> Unix.close fd; state <- None
   end
 
-  type t = implementation
+  type 'a t = 'a implementation
 
-  let construct (config : Scripting.Table.t) : Device.t =
+  let construct (config : Scripting.Table.t) : 'a Device.t =
     let camera = new implementation config in
-    (camera :> Device.t)
+    (camera :> _ Device.t)
 end
 
 (*

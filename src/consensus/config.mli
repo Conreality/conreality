@@ -10,10 +10,10 @@ module Network : sig
   #include "config/network.mli"
 end
 
-type t = {
-  devices: Devices.t;
+type 'a t = {
+  devices: 'a Devices.t;
   network: Network.t;
 }
 
-val create : unit -> t
-val load_file : string -> t
+val create : unit -> 'a t
+val load_file : string -> 'a t

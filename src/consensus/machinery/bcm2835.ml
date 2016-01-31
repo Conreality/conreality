@@ -4,8 +4,10 @@ open Prelude
 
 module GPIO = struct
   module Pin = struct
-    class implementation = object (self)
-      inherit Device.interface as super
+    class ['a] implementation = object (self)
+      inherit ['a] Device.interface as super
+
+      method cast = `GPIO_Pin self
 
       method is_privileged = true
 
@@ -14,9 +16,9 @@ module GPIO = struct
       method device_name = "bcm2835"
     end
 
-    type t = implementation
+    type 'a t = 'a implementation
 
-    let construct (config : Scripting.Table.t) : Device.t =
+    let construct (config : Scripting.Table.t) : 'a Device.t =
       failwith "Not implemented as yet" (* TODO *)
   end
 end

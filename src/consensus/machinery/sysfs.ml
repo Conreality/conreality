@@ -9,7 +9,7 @@ module GPIO = struct
   module Chip = struct
     (* TODO *)
 
-    let construct (config : Scripting.Table.t) : Device.t =
+    let construct (config : Scripting.Table.t) : 'a Device.t =
       failwith "Not implemented as yet" (* TODO *)
   end
 
@@ -48,8 +48,10 @@ module GPIO = struct
 
     type state = { fd: Unix.file_descr; mode: Mode.t }
 
-    class implementation (id : int) = object (self)
-      inherit Abstract.GPIO.Pin.interface id as super
+    class ['a] implementation (id : int) = object (self)
+      inherit ['a] Abstract.GPIO.Pin.interface id as super
+
+      method cast = `GPIO_Pin self
 
       val mutable state : state option = None
 
@@ -108,24 +110,26 @@ module GPIO = struct
             Unix.write fd buffer 0 (Bytes.length buffer) |> ignore
     end
 
-    type t = implementation
+    type 'a t = 'a implementation
 
-    let construct (config : Scripting.Table.t) : Device.t =
+    let construct (config : Scripting.Table.t) : 'a Device.t =
       match Table.lookup config (Value.of_string "gpio") with
       | Table gpio_config -> begin
           let id = Value.to_int (Table.lookup gpio_config (Value.of_string "pin")) in
           let pin = new implementation id in
           pin#init Mode.Input;
-          (pin :> Device.t)
+          (pin :> _ Device.t)
         end
       | _ -> failwith "Missing configuration key 'gpio'" (* TODO: improve this *)
   end
 end
 
-let open_gpio_chip id : Abstract.GPIO.Chip.t =
+(*
+let open_gpio_chip id : 'a Abstract.GPIO.Chip.t =
   failwith "Not implemented as yet" (* TODO *)
 
-let open_gpio_pin id mode : Abstract.GPIO.Pin.t =
+let open_gpio_pin id mode : 'a Abstract.GPIO.Pin.t =
   let pin = new GPIO.Pin.implementation id in
   pin#init mode;
   pin
+*)

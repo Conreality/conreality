@@ -7,8 +7,8 @@ type bytes = string
 open Prelude
 
 module Camera = struct
-  class virtual interface = object (self)
-    inherit Device.interface as super
+  class virtual ['a] interface = object (self)
+    inherit ['a] Device.interface as super
 
     method driver_name = "abstract.camera"
 
@@ -17,7 +17,7 @@ module Camera = struct
     method virtual close : unit
   end
 
-  type t = interface
+  type 'a t = 'a interface
 end
 
 module GPIO = struct
@@ -46,8 +46,8 @@ module GPIO = struct
   end
 
   module Chip = struct
-    class virtual interface (id : int) = object (self)
-      inherit Device.interface as super
+    class virtual ['a] interface (id : int) = object (self)
+      inherit ['a] Device.interface as super
 
       method driver_name = "abstract.gpio.chip"
 
@@ -58,12 +58,12 @@ module GPIO = struct
       (* TODO *)
     end
 
-    type t = interface
+    type 'a t = 'a interface
   end
 
   module Pin = struct
-    class virtual interface (id : int) = object (self)
-      inherit Device.interface as super
+    class virtual ['a] interface (id : int) = object (self)
+      inherit ['a] Device.interface as super
 
       method driver_name = "abstract.gpio.pin"
 
@@ -86,13 +86,13 @@ module GPIO = struct
       method virtual write : bool -> unit
     end
 
-    type t = interface
+    type 'a t = 'a interface
   end
 end
 
 module PWM = struct
-  class virtual interface (id : int) = object (self)
-    inherit Device.interface as super
+  class virtual ['a] interface (id : int) = object (self)
+    inherit ['a] Device.interface as super
 
     method driver_name = "abstract.pwm"
 
@@ -115,5 +115,5 @@ module PWM = struct
     method virtual write : bool -> unit       (* FIXME: see .mli *)
   end
 
-  type t = interface
+  type 'a t = 'a interface
 end

@@ -6,11 +6,11 @@ type bytes = string
 
 (* Device driver interface for cameras. *)
 module Camera : sig
-  class virtual interface : object
-    inherit Device.interface
+  class virtual ['a] interface : object
+    inherit ['a] Device.interface
     (* Device interface: *)
     method reset : unit
-    method parent : Device.t option
+    method parent : 'a Device.t option
     method is_privileged : bool
     method virtual driver_name : string
     method virtual device_name : string
@@ -19,7 +19,7 @@ module Camera : sig
     method virtual init :unit
     method virtual close : unit
   end
-  type t = interface
+  type 'a t = 'a interface
 end
 
 module GPIO : sig
@@ -35,11 +35,11 @@ module GPIO : sig
 
   (* Device driver interface for GPIO chips. *)
   module Chip : sig
-    class virtual interface : int -> object
-      inherit Device.interface
+    class virtual ['a] interface : int -> object
+      inherit ['a] Device.interface
       (* Device interface: *)
       method reset : unit
-      method parent : Device.t option
+      method parent : 'a Device.t option
       method is_privileged : bool
       method driver_name : string
       method device_name : string
@@ -47,16 +47,16 @@ module GPIO : sig
       (* GPIO.Chip interface: *)
       method id : int
     end
-    type t = interface
+    type 'a t = 'a interface
   end
 
   (* Device driver interface for GPIO pins. *)
   module Pin : sig
-    class virtual interface : int -> object
-      inherit Device.interface
+    class virtual ['a] interface : int -> object
+      inherit ['a] Device.interface
       (* Device interface: *)
       method reset : unit
-      method parent : Device.t option
+      method parent : 'a Device.t option
       method is_privileged : bool
       method driver_name : string
       method device_name : string
@@ -71,17 +71,17 @@ module GPIO : sig
       method virtual read : bool
       method virtual write : bool -> unit
     end
-    type t = interface
+    type 'a t = 'a interface
   end
 end
 
 (* Device driver interface for PWM control. *)
 module PWM : sig
-  class virtual interface : int -> object
-    inherit Device.interface
+  class virtual ['a] interface : int -> object
+    inherit ['a] Device.interface
     (* Device interface: *)
     method reset : unit
-    method parent : Device.t option
+    method parent : 'a Device.t option
     method is_privileged : bool
     method virtual driver_name : string
     method virtual device_name : string
@@ -96,5 +96,5 @@ module PWM : sig
     method virtual read : bool                (* FIXME: add PWM-specific parameters *)
     method virtual write : bool -> unit       (* FIXME: add PWM-specific parameters *)
   end
-  type t = interface
+  type 'a t = 'a interface
 end

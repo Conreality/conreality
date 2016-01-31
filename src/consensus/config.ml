@@ -28,8 +28,8 @@ module Network = struct
   #include "config/network.ml"
 end
 
-type t = {
-  devices: Devices.t;
+type 'a t = {
+  devices: 'a Devices.t;
   network: Network.t;
 }
 

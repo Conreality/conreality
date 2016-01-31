@@ -81,9 +81,9 @@ module Client = CCCP.Client
 module Client_set = Set.Make(Client)
 
 module Server = struct
-  type t = {
+  type 'a t = {
     context: Scripting.Context.t;
-    mutable config: Config.t;
+    mutable config: 'a Config.t;
     mutable clients: Client_set.t;
     mutable client: Client.t
   }
@@ -114,14 +114,17 @@ module Server = struct
         (* TODO *)
       end
 
-    | Fire (device, duration) -> begin
-        let valid = Config.Devices.is_registered devices_config device in
+    | Fire (device_name, duration) -> begin
+        let valid = Config.Devices.is_registered devices_config device_name in
         if not valid
         then respond "ERR: Unknown device."
         else begin
-          respond (sprintf "ACK: Firing the device /%s..." device)
+          let device = Config.Devices.find devices_config device_name in
+          respond (sprintf "ACK: Firing the device /%s..." device_name)
+          >>= fun () -> Lwt.return () (* TODO: write 1 *)
           >>= fun () -> Lwt_unix.sleep duration
-          >>= fun () -> respond (sprintf "ACK: Fired the device /%s for %f seconds." device duration)
+          >>= fun () -> Lwt.return () (* TODO: write 0 *)
+          >>= fun () -> respond (sprintf "ACK: Fired the device /%s for %f seconds." device_name duration)
           (* TODO *)
         end
       end

@@ -6,9 +6,9 @@ open Lwt.Infix
 open Machinery
 open Scripting
 
-type t = {
+type 'a t = {
   classes:   (string, unit) Hashtbl.t; (* FIXME: figure out the hashtbl value *)
-  instances: (string, Device.t) Hashtbl.t;
+  instances: (string, 'a Device.t) Hashtbl.t;
 }
 
 let create () = {
