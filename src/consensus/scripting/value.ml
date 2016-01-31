@@ -37,12 +37,18 @@ let to_type = function
   | String _  -> Type.String
   | Table _   -> Type.Table
 
-let to_string = function
+let rec to_string = function
   | Nil           -> ""
   | Boolean value -> Bool.to_string value
   | Integer value -> Int.to_string value
   | Number value  -> Float.string_of_float value
   | String value  -> value
   | Table value   -> begin
-      assert false (* TODO *)
+      let buffer = Buffer.create 0 in
+      Hashtbl.iter
+        (fun k v ->
+          Buffer.add_string buffer
+            (Printf.sprintf "%s=%s" (to_string k) (to_string v)))
+        value;
+      Buffer.contents buffer
     end
