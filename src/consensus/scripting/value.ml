@@ -37,6 +37,19 @@ let to_type = function
   | String _  -> Type.String
   | Table _   -> Type.Table
 
+let to_bool = function
+  | Boolean value -> value
+  | _ -> failwith "Value can't be converted to a boolean"
+
+let to_int = function
+  | Integer value -> value
+  | _ -> failwith "Value can't be converted to an integer"
+
+let to_float = function
+  | Integer value -> Float.of_int value
+  | Number value -> value
+  | _ -> failwith "Value can't be converted to a float"
+
 let rec to_string = function
   | Nil           -> ""
   | Boolean value -> Bool.to_string value
@@ -52,3 +65,7 @@ let rec to_string = function
         value;
       Buffer.contents buffer
     end
+
+let to_table = function
+  | Table value -> value
+  | _ -> failwith "Value can't be converted to a Table.t"

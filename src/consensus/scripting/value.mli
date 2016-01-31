@@ -22,4 +22,12 @@ val of_table : Table.t -> t
 
 val to_type : t -> Type.t
 
+val to_bool : t -> bool
+
+val to_int : t -> int
+
+val to_float : t -> float
+
 val to_string : t -> string
+
+val to_table : t -> Table.t
