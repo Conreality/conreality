@@ -2,7 +2,7 @@
 
 type t = {
   classes: (string, unit) Hashtbl.t;
-  instances: (string, Scripting.Table.t) Hashtbl.t;
+  instances: (string, Machinery.Device.t) Hashtbl.t;
 }
 
 val is_registered : t -> string -> bool
