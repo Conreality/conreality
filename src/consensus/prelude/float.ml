@@ -154,3 +154,7 @@ let read_float () = Pervasives.read_float ()
 (*BISECT-IGNORE-END*)
 
 let inverse f = if is_infinite f then 0. else 1. /. f
+
+let of_int = Pervasives.float_of_int
+
+let to_int = Pervasives.int_of_float

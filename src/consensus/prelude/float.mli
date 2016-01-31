@@ -54,3 +54,6 @@ val print_float : float -> unit
 val prerr_float : float -> unit
 val read_float : unit -> float
 val inverse : float -> float
+
+val of_int : int -> float
+val to_int : float -> int
