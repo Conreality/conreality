@@ -19,7 +19,6 @@ consensus_MODULES = \
   syntax.ml     \
   messaging.ml  \
   scripting.ml  \
-  config.ml     \
   geometry.ml   \
   knowledge.ml  \
   machinery.ml  \
@@ -28,7 +27,8 @@ consensus_MODULES = \
   ontology.ml   \
   physics.ml    \
   version.ml    \
-  vision.ml
+  vision.ml     \
+  config.ml # FIXME: why does this need to come after machinery.ml?
 
 consensus_INTERFACES = $(consensus_MODULES:.ml=.cmi)
 consensus_BYTECODE   = $(consensus_MODULES:.ml=.cmo)
