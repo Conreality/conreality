@@ -30,6 +30,7 @@ module GPIO : sig
     val to_string : t -> string
     val of_bytes : bytes -> t
     val to_bytes : t -> bytes
+    val to_flags : t -> Unix.open_flag list
   end
 
   (* Device driver interface for GPIO chips. *)
