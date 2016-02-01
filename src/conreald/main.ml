@@ -7,6 +7,7 @@ open Consensus
 open Consensus.Prelude
 open Consensus.Config
 open Consensus.Config.Network
+open Consensus.Machinery
 open Consensus.Messaging
 open Consensus.Networking
 open Lwt.Infix
@@ -114,16 +115,17 @@ module Server = struct
         (* TODO *)
       end
 
-    | Fire (device, duration) -> begin
-        let valid = Config.Devices.is_registered devices_config device in
-        if not valid
-        then respond "ERR: Unknown device."
-        else begin
-          respond (sprintf "ACK: Firing the device /%s..." device)
-          >>= fun () -> Lwt_unix.sleep duration
-          >>= fun () -> respond (sprintf "ACK: Fired the device /%s for %f seconds." device duration)
-          (* TODO *)
-        end
+    | Fire (device_name, duration) -> begin
+        match Config.Devices.find devices_config device_name with
+        | Some device -> begin
+            let gpio_pin = Abstract.GPIO.Pin.cast device in
+            respond (sprintf "ACK: Firing the device /%s..." device_name)
+            >>= fun () -> Lwt.return (gpio_pin#write true)
+            >>= fun () -> Lwt_unix.sleep duration
+            >>= fun () -> Lwt.return (gpio_pin#write false)
+            >>= fun () -> respond (sprintf "ACK: Fired the device /%s for %f seconds." device_name duration)
+          end
+        | None -> respond "ERR: Unknown device."
       end
 
     | Help command -> begin
