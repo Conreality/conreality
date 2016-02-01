@@ -18,8 +18,12 @@ module Camera : sig
     (* Camera interface: *)
     method virtual init :unit
     method virtual close : unit
+    method virtual read_frame : bytes
   end
   type t = interface
+  val register : t -> unit
+  val unregister : t -> unit
+  val cast : Device.t -> t
 end
 
 module GPIO : sig
@@ -72,6 +76,9 @@ module GPIO : sig
       method virtual write : bool -> unit
     end
     type t = interface
+    val register : t -> unit
+    val unregister : t -> unit
+    val cast : Device.t -> t
   end
 end
 

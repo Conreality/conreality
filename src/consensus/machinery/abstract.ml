@@ -15,9 +15,23 @@ module Camera = struct
     method virtual init : unit
 
     method virtual close : unit
+
+    method virtual read_frame : bytes
   end
 
   type t = interface
+
+  let devices : (Device.t, t) Hashtbl.t =
+    Hashtbl.create 0
+
+  let register device =
+    Hashtbl.replace devices (device :> Device.t) device
+
+  let unregister device =
+    Hashtbl.remove devices (device :> Device.t)
+
+  let cast device =
+    Hashtbl.find devices (device :> Device.t)
 end
 
 module GPIO = struct
@@ -59,6 +73,8 @@ module GPIO = struct
     end
 
     type t = interface
+
+    (* TODO: register, unregister, cast *)
   end
 
   module Pin = struct
@@ -87,6 +103,18 @@ module GPIO = struct
     end
 
     type t = interface
+
+    let devices : (Device.t, t) Hashtbl.t =
+      Hashtbl.create 0
+
+    let register device =
+      Hashtbl.replace devices (device :> Device.t) device
+
+    let unregister device =
+      Hashtbl.remove devices (device :> Device.t)
+
+    let cast device =
+      Hashtbl.find devices (device :> Device.t)
   end
 end
 

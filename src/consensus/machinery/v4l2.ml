@@ -33,6 +33,11 @@ module Camera = struct
       match state with
         | None -> ()
         | Some { fd } -> Unix.close fd; state <- None
+
+    method read_frame =
+      Bytes.of_string "" (* TODO *)
+
+    initializer Abstract.Camera.register (self :> Abstract.Camera.t)
   end
 
   type t = implementation

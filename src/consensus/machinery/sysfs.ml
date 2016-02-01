@@ -106,6 +106,8 @@ module GPIO = struct
             let _ = Unix.lseek fd 0 Unix.SEEK_SET in
             let buffer = Bytes.of_string (if value then "1\n" else "0\n") in
             Unix.write fd buffer 0 (Bytes.length buffer) |> ignore
+
+      initializer Abstract.GPIO.Pin.register (self :> Abstract.GPIO.Pin.t)
     end
 
     type t = implementation
@@ -122,6 +124,7 @@ module GPIO = struct
   end
 end
 
+(*
 let open_gpio_chip id : Abstract.GPIO.Chip.t =
   failwith "Not implemented as yet" (* TODO *)
 
@@ -129,3 +132,4 @@ let open_gpio_pin id mode : Abstract.GPIO.Pin.t =
   let pin = new GPIO.Pin.implementation id in
   pin#init mode;
   pin
+*)

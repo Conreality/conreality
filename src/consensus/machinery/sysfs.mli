@@ -9,6 +9,8 @@ module GPIO : sig
   end
 end
 
+(*
 val open_gpio_chip : int -> Abstract.GPIO.Chip.t
 
 val open_gpio_pin : int -> Abstract.GPIO.Mode.t -> Abstract.GPIO.Pin.t
+*)
