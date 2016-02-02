@@ -115,12 +115,23 @@ module GPIO = struct
     let construct (config : Scripting.Table.t) : Device.t =
       match Table.lookup config (Value.of_string "gpio") with
       | Table gpio_config -> begin
-          let id = Value.to_int (Table.lookup gpio_config (Value.of_string "pin")) in
-          let pin = new implementation id in
-          pin#init Mode.Input;
-          (pin :> Device.t)
+          let pin = begin
+            match Table.lookup_int gpio_config "pin" with
+            | Some n -> n
+            | None -> failwith "Missing configuration key 'gpio.pin'"
+          end in
+          let direction = begin
+            match Table.lookup_string gpio_config "direction" with
+            | Some "in"  -> Mode.Input
+            | Some "out" -> Mode.Output
+            | Some _-> failwith "Invalid configuration key 'gpio.direction'"
+            | None  -> failwith "Missing configuration key 'gpio.direction'"
+          end in
+          let device = new implementation pin in
+          device#init direction;
+          (device :> Device.t)
         end
-      | _ -> failwith "Missing configuration key 'gpio'" (* TODO: improve this *)
+      | _ -> failwith "Missing configuration key 'gpio'"
   end
 end
 
