@@ -16,6 +16,8 @@ val insert : t -> Value.t -> Value.t -> unit
 
 val lookup : t -> Value.t -> Value.t
 
+val lookup_int : t -> string -> int option
+
 val lookup_string : t -> string -> string option
 
 val iter : t -> (Value.t -> Value.t -> unit) -> unit

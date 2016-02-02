@@ -18,6 +18,13 @@ let insert (table : t) = Hashtbl.replace table
 
 let lookup (table : t) = Hashtbl.find table
 
+let lookup_int (table : t) key =
+  try begin
+    let value = Hashtbl.find table (Value.of_string key) in
+    Some (Value.to_int value)
+  end
+  with Not_found -> None
+
 let lookup_string (table : t) key =
   try begin
     let value = Hashtbl.find table (Value.of_string key) in
