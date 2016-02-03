@@ -9,12 +9,14 @@
 #endif
 
 #define CAML_NAME_SPACE
+extern "C" {
 #include <caml/alloc.h>       /* for caml_copy_*() */
 #include <caml/bigarray.h>    /* for Caml_ba_data_val() */
 #include <caml/memory.h>      /* for CAMLlocal1(), CAMLparam?(), CAMLreturn() */
 #include <caml/mlvalues.h>    /* for value */
 #include <caml/threads.h>     /* for caml_{enter,leave}_blocking_section() */
 #include <caml/unixsupport.h> /* for uerror() */
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
