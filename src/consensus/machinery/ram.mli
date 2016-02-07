@@ -12,6 +12,9 @@ val init : unit -> unit
 (** Discontinues access to physical memory. *)
 val close : unit -> unit
 
+(** Enables access to a contiguous block of physical memory. *)
+val access : addr -> int -> unit
+
 (** Reads a contiguous block of bytes from physical memory. *)
 val read : addr -> int -> bytes
 

@@ -9,17 +9,19 @@ open Prelude
 type addr = int64
 
 module type S = sig
-  val init  : unit -> unit
-  val close : unit -> unit
-  val read  : addr -> int -> bytes
-  val write : addr -> bytes -> int
+  val init   : unit -> unit
+  val close  : unit -> unit
+  val access : addr -> int -> unit
+  val read   : addr -> int -> bytes
+  val write  : addr -> bytes -> int
 end
 
 module F (T : S) = struct
-  let init  = T.init
-  let close = T.close
-  let read  = T.read
-  let write = T.write
+  let init   = T.init
+  let close  = T.close
+  let access = T.access
+  let read   = T.read
+  let write  = T.write
 end
 
 (** lseek(2), read(2), and write(2) *)
@@ -43,9 +45,11 @@ module IO : S = struct
     match !state with
     | None -> ()
     | Some { fd } -> begin
-        Unix.close fd;
-        state := None
+        state := None;
+        Unix.close fd
       end
+
+  let access addr length = ()
 
   let read addr length =
     assert (addr >= 0L);
@@ -77,9 +81,11 @@ end
 
 (* fstat(2), mmap(2) *)
 module Mmap : S = struct
-  type opened = {
-    mmap: (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
-  }
+  type mmap = (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
+
+  type ranges = (addr, mmap) Hashtbl.t
+
+  type opened = { fd: Unix.file_descr; ranges: ranges }
 
   type state = opened option
 
@@ -91,27 +97,42 @@ module Mmap : S = struct
     | _ -> begin
         let flags = [Unix.O_RDWR; Unix.O_SYNC] in
         let fd = Unix.openfile "/dev/mem" flags 0 in
-        let length = 4096 in (* FIXME: fstat(2) returns zero *)
-        let mmap = Bigarray.Array1.map_file fd Bigarray.char Bigarray.c_layout true length in
-        let _ = Unix.close fd in
-        state := Some { mmap }
+        let ranges = Hashtbl.create 0 in
+        state := Some { fd; ranges }
       end
 
   let close () =
     match !state with
     | None -> ()
-    | Some _ -> state := None
+    | Some { fd; ranges } -> begin
+        state := None;
+        Unix.close fd;
+        Hashtbl.reset ranges
+      end
+
+  let access addr length =
+    match !state with
+    | None -> failwith "RAM.init not yet called"
+    | Some { fd; ranges } -> begin
+        let mmap = Bigarray.Array1.map_file fd ~pos:addr Bigarray.char Bigarray.c_layout true length in
+        let _ = Hashtbl.replace ranges addr mmap in
+        state := Some { fd; ranges }
+      end
+
+  let lookup ranges addr =
+    try Hashtbl.find ranges addr with
+    | Not_found ->
+      failwith (Printf.sprintf "RAM.access 0x%08LX not yet called" addr)
 
   let read addr length =
     assert (addr >= 0L);
     assert (length >= 0);
     match !state with
     | None -> failwith "RAM.init not yet called"
-    | Some { mmap } -> begin
-        let addr = Int64.to_int addr in (* FIXME: overflow? *)
-        let read_byte_at offset =
-          Bigarray.Array1.get mmap (addr + offset)
-        in
+    | Some { ranges } -> begin
+        let mmap = lookup ranges addr in
+        let _ = assert (length <= Bigarray.Array1.dim mmap) in
+        let read_byte_at = Bigarray.Array1.get mmap in
         Bytes.init length read_byte_at
       end
 
@@ -119,13 +140,13 @@ module Mmap : S = struct
     assert (addr >= 0L);
     match !state with
     | None -> failwith "RAM.init not yet called"
-    | Some { mmap } -> begin
-        let addr = Int64.to_int addr in (* FIXME: overflow? *)
-        let write_byte_at offset byte =
-          Bigarray.Array1.set mmap (addr + offset) byte
-        in
+    | Some { ranges } -> begin
+        let length = Bytes.length buffer in
+        let mmap = lookup ranges addr in
+        let _ = assert (length <= Bigarray.Array1.dim mmap) in
+        let write_byte_at = Bigarray.Array1.set mmap in
         let _ = Bytes.iteri write_byte_at buffer in
-        Bytes.length buffer
+        length
       end
 end
 
