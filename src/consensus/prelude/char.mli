@@ -9,6 +9,7 @@ type t = char
 val compare : t -> t -> int
 external unsafe_chr : int -> char = "%identity"
 
+val zero : char
 val of_int : int -> char
 val to_int : char -> int
 val of_int32 : int32 -> char

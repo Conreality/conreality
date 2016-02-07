@@ -2,6 +2,8 @@
 
 include Char
 
+let zero = '\x00'
+
 let of_int = chr
 
 let to_int = code
