@@ -47,3 +47,19 @@ let read (addr : addr) length =
 
 let read_byte (addr : addr) =
   Bytes.get (read addr 1) 0
+
+let write (addr : addr) buffer =
+  assert (addr >= Int64.zero);
+  match !state with
+  | None -> failwith "RAM.init not yet called"
+  | Some { fd } -> begin
+      (* TODO: optimize this using pwrite(2) to eliminate the seek. *)
+      let _ = Unix.LargeFile.lseek fd addr Unix.SEEK_SET in
+      let length = Bytes.length buffer in
+      let rc = Unix.single_write fd buffer 0 length in
+      let _ = assert (rc = length) in
+      length
+    end
+
+let write_byte (addr : addr) byte =
+  write addr (Bytes.make 1 byte) |> ignore
