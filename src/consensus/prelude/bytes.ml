@@ -42,14 +42,22 @@ let cat s1 s2 = s1 ^ s2
 let is_empty bytes = (length bytes) = 0
 
 let of_int32 value =
-  let byte_at_index i =
-    Char.zero (* TODO *)
+  (* FIXME: this assumes a little-endian architecture: *)
+  let byte_mask = 0xFFl in
+  let byte_at_index pos =
+    let open Int32 in
+    shift_right_logical value (pos * 8) |>
+    logand byte_mask |> Char.of_int32
   in
   init 4 byte_at_index
 
 let of_int64 value =
-  let byte_at_index i =
-    Char.zero (* TODO *)
+  (* FIXME: this assumes a little-endian architecture: *)
+  let byte_mask = 0xFFL in
+  let byte_at_index pos =
+    let open Int64 in
+    shift_right_logical value (pos * 8) |>
+    logand byte_mask |> Char.of_int64
   in
   init 8 byte_at_index
 
