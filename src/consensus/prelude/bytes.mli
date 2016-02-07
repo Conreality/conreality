@@ -56,6 +56,17 @@ external unsafe_blit : bytes -> int -> bytes -> int -> int -> unit
 external unsafe_fill : bytes -> int -> int -> char -> unit
   = "caml_fill_string" "noalloc"
 
+(** Checks whether a byte sequence is empty. *)
 val is_empty : bytes -> bool
+
+(** Returns the host-endian byte sequence for a 32-bit word. *)
+val of_int32 : int32 -> bytes
+
+(** Returns the host-endian byte sequence for a 64-bit word. *)
+val of_int64 : int64 -> bytes
+
+(** Returns a 32-bit word from a host-endian byte sequence. *)
 val to_int32 : bytes -> int32
+
+(** Returns a 64-bit word from a host-endian byte sequence. *)
 val to_int64 : bytes -> int64

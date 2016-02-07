@@ -41,6 +41,18 @@ let cat s1 s2 = s1 ^ s2
 
 let is_empty bytes = (length bytes) = 0
 
+let of_int32 value =
+  let byte_at_index i =
+    Char.zero (* TODO *)
+  in
+  init 4 byte_at_index
+
+let of_int64 value =
+  let byte_at_index i =
+    Char.zero (* TODO *)
+  in
+  init 8 byte_at_index
+
 let to_int32 bytes =
   assert ((length bytes) = 4);
   (* FIXME: this assumes a little-endian architecture: *)
