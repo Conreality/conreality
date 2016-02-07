@@ -2,6 +2,11 @@
 
 (** Machine drivers. *)
 
+(** Read/write access to physical memory. *)
+module RAM : sig
+  #include "machinery/ram.mli"
+end
+
 (** Driver interfaces for abstract devices. *)
 module rec Abstract : sig
   #include "machinery/abstract.mli"

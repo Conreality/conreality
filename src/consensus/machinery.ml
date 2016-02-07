@@ -1,5 +1,10 @@
 (* This is free and unencumbered software released into the public domain. *)
 
+(* Note: this should remain the first module in this file. *)
+module RAM = struct
+  #include "machinery/ram.ml"
+end
+
 module rec Abstract : sig
   #include "machinery/abstract.mli"
 end = struct
