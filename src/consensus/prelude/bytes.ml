@@ -49,3 +49,37 @@ let of_float value =
 
 let of_int value =
   of_string (Pervasives.string_of_int value) (*BISECT-IGNORE*)
+
+let to_int32 bytes =
+  assert ((length bytes) = 4);
+  (* FIXME: this assumes a little-endian architecture: *)
+  let byte0 = Char.to_int32 (get bytes 0) in
+  let byte1 = Char.to_int32 (get bytes 1) in
+  let byte2 = Char.to_int32 (get bytes 2) in
+  let byte3 = Char.to_int32 (get bytes 3) in
+  let open Int32 in
+  byte0 |>
+  logor (shift_left byte1 0x08) |>
+  logor (shift_left byte2 0x10) |>
+  logor (shift_left byte3 0x18)
+
+let to_int64 bytes =
+  assert ((length bytes) = 8);
+  (* FIXME: this assumes a little-endian architecture: *)
+  let byte0 = Char.to_int64 (get bytes 0) in
+  let byte1 = Char.to_int64 (get bytes 1) in
+  let byte2 = Char.to_int64 (get bytes 2) in
+  let byte3 = Char.to_int64 (get bytes 3) in
+  let byte4 = Char.to_int64 (get bytes 4) in
+  let byte5 = Char.to_int64 (get bytes 5) in
+  let byte6 = Char.to_int64 (get bytes 6) in
+  let byte7 = Char.to_int64 (get bytes 7) in
+  let open Int64 in
+  byte0 |>
+  logor (shift_left byte1 0x08) |>
+  logor (shift_left byte2 0x10) |>
+  logor (shift_left byte3 0x18) |>
+  logor (shift_left byte4 0x20) |>
+  logor (shift_left byte5 0x28) |>
+  logor (shift_left byte6 0x30) |>
+  logor (shift_left byte7 0x38)

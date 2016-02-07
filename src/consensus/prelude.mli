@@ -6,12 +6,12 @@ module Bool : sig
   #include "prelude/bool.mli"
 end
 
-module Bytes : sig
-  #include "prelude/bytes.mli"
-end
-
 module Char : sig
   #include "prelude/char.mli"
+end
+
+module Bytes : sig
+  #include "prelude/bytes.mli"
 end
 
 module Float : sig

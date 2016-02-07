@@ -49,36 +49,10 @@ let read_byte (addr : addr) =
   Bytes.get (read addr 1) 0
 
 let read_int32 (addr : addr) =
-  (* FIXME: this assumes a little-endian architecture: *)
-  let bytes = (read addr 4) in
-  let byte0 = Char.to_int32 (Bytes.get bytes 0) in
-  let byte1 = Char.to_int32 (Bytes.get bytes 1) in
-  let byte2 = Char.to_int32 (Bytes.get bytes 2) in
-  let byte3 = Char.to_int32 (Bytes.get bytes 3) in
-  byte0 |>
-  Int32.logor (Int32.shift_left byte1 0x08) |>
-  Int32.logor (Int32.shift_left byte2 0x10) |>
-  Int32.logor (Int32.shift_left byte3 0x18)
+  Bytes.to_int32 (read addr 4)
 
 let read_int64 (addr : addr) =
-  (* FIXME: this assumes a little-endian architecture: *)
-  let bytes = (read addr 8) in
-  let byte0 = Char.to_int64 (Bytes.get bytes 0) in
-  let byte1 = Char.to_int64 (Bytes.get bytes 1) in
-  let byte2 = Char.to_int64 (Bytes.get bytes 2) in
-  let byte3 = Char.to_int64 (Bytes.get bytes 3) in
-  let byte4 = Char.to_int64 (Bytes.get bytes 4) in
-  let byte5 = Char.to_int64 (Bytes.get bytes 5) in
-  let byte6 = Char.to_int64 (Bytes.get bytes 6) in
-  let byte7 = Char.to_int64 (Bytes.get bytes 7) in
-  byte0 |>
-  Int64.logor (Int64.shift_left byte1 0x08) |>
-  Int64.logor (Int64.shift_left byte2 0x10) |>
-  Int64.logor (Int64.shift_left byte3 0x18) |>
-  Int64.logor (Int64.shift_left byte4 0x20) |>
-  Int64.logor (Int64.shift_left byte5 0x28) |>
-  Int64.logor (Int64.shift_left byte6 0x30) |>
-  Int64.logor (Int64.shift_left byte7 0x38)
+  Bytes.to_int64 (read addr 8)
 
 let write (addr : addr) buffer =
   assert (addr >= Int64.zero);

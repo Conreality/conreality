@@ -4,12 +4,13 @@ module Bool = struct
   #include "prelude/bool.ml"
 end
 
-module Bytes = struct
-  #include "prelude/bytes.ml"
-end
-
+(* Note: this must come before Bytes. *)
 module Char = struct
   #include "prelude/char.ml"
+end
+
+module Bytes = struct
+  #include "prelude/bytes.ml"
 end
 
 module Float = struct
