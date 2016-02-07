@@ -48,6 +48,12 @@ let read (addr : addr) length =
 let read_byte (addr : addr) =
   Bytes.get (read addr 1) 0
 
+let read_int32 (addr : addr) =
+  Int32.zero (* TODO *)
+
+let read_int64 (addr : addr) =
+  Int64.zero (* TODO *)
+
 let write (addr : addr) buffer =
   assert (addr >= Int64.zero);
   match !state with
@@ -63,3 +69,9 @@ let write (addr : addr) buffer =
 
 let write_byte (addr : addr) byte =
   write addr (Bytes.make 1 byte) |> ignore
+
+let write_int32 (addr : addr) (word : int32) =
+  () (* TODO *)
+
+let write_int64 (addr : addr) (word : int64) =
+  () (* TODO *)

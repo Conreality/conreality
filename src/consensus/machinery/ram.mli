@@ -18,8 +18,20 @@ val read : addr -> int -> bytes
 (** Reads a single byte from physical memory. *)
 val read_byte : addr -> char
 
+(** Reads a single 32-bit word from physical memory. *)
+val read_int32 : addr -> int32
+
+(** Reads a single 64-bit word from physical memory. *)
+val read_int64 : addr -> int64
+
 (** Writes a contiguous block of bytes to physical memory. *)
 val write : addr -> bytes -> int
 
 (** Writes a single byte to physical memory. *)
 val write_byte : addr -> char -> unit
+
+(** Writes a single 32-bit word to physical memory. *)
+val write_int32 : addr -> int32 -> unit
+
+(** Writes a single 64-bit word to physical memory. *)
+val write_int64 : addr -> int64 -> unit
