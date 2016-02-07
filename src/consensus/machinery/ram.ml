@@ -31,7 +31,7 @@ let close () =
       state := None
     end
 
-let read (addr : addr) length =
+let read addr length =
   assert (addr >= Int64.zero);
   assert (length >= 0);
   match !state with
@@ -45,16 +45,16 @@ let read (addr : addr) length =
       buffer
     end
 
-let read_byte (addr : addr) =
+let read_byte addr =
   Bytes.get (read addr 1) 0
 
-let read_int32 (addr : addr) =
+let read_int32 addr =
   Bytes.to_int32 (read addr 4)
 
-let read_int64 (addr : addr) =
+let read_int64 addr =
   Bytes.to_int64 (read addr 8)
 
-let write (addr : addr) buffer =
+let write addr buffer =
   assert (addr >= Int64.zero);
   match !state with
   | None -> failwith "RAM.init not yet called"
@@ -67,11 +67,11 @@ let write (addr : addr) buffer =
       length
     end
 
-let write_byte (addr : addr) byte =
+let write_byte addr byte =
   write addr (Bytes.make 1 byte) |> ignore
 
-let write_int32 (addr : addr) word =
+let write_int32 addr word =
   write addr (Bytes.of_int32 word) |> ignore
 
-let write_int64 (addr : addr) word =
+let write_int64 addr word =
   write addr (Bytes.of_int64 word) |> ignore
