@@ -133,6 +133,7 @@ AS_IF([test "x$enable_develop" == "xno"], [],
 
 dnl Check for header files:
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
+AC_CHECK_HEADERS_ONCE([sys/mman.h])
 AC_CHECK_HEADERS_ONCE([caml/alloc.h])
 AC_CHECK_HEADERS_ONCE([caml/bigarray.h])
 AC_CHECK_HEADERS_ONCE([caml/memory.h])
