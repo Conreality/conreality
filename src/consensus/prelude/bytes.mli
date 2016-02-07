@@ -57,8 +57,5 @@ external unsafe_fill : bytes -> int -> int -> char -> unit
   = "caml_fill_string" "noalloc"
 
 val is_empty : bytes -> bool
-val of_bool : bool -> bytes
-val of_float : float -> bytes
-val of_int : int -> bytes
 val to_int32 : bytes -> int32
 val to_int64 : bytes -> int64

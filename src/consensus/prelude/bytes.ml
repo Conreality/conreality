@@ -41,15 +41,6 @@ let cat s1 s2 = s1 ^ s2
 
 let is_empty bytes = (length bytes) = 0
 
-let of_bool value =
-  of_string (Pervasives.string_of_bool value) (*BISECT-IGNORE*)
-
-let of_float value =
-  of_string (Pervasives.string_of_float value) (*BISECT-IGNORE*)
-
-let of_int value =
-  of_string (Pervasives.string_of_int value) (*BISECT-IGNORE*)
-
 let to_int32 bytes =
   assert ((length bytes) = 4);
   (* FIXME: this assumes a little-endian architecture: *)
