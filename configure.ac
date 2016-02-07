@@ -93,6 +93,12 @@ AC_ARG_ENABLE([irc],
     [omit support for the IRC protocol])],
   [], [enable_irc=yes])
 AM_CONDITIONAL([ENABLE_IRC], [test "x$enable_irc" != "xno"])
+# --enable-mmap/--disable-mmap
+AC_ARG_ENABLE([mmap],
+  [AS_HELP_STRING([--disable-mmap],
+    [omit support for the mmap(2) system call])],
+  [], [enable_mmap=yes])
+AM_CONDITIONAL([ENABLE_MMAP], [test "x$enable_mmap" != "xno"])
 
 dnl Check for libraries:
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
