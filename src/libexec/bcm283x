@@ -3,9 +3,11 @@ from os.path import basename
 from sys import argv
 from syslog import *
 
-openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-setlogmask(LOG_UPTO(LOG_DEBUG))
+def main(argv):
+  openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
+  setlogmask(LOG_UPTO(LOG_DEBUG))
+  syslog(LOG_CRIT, "The %s driver is not yet implemented." % basename(argv[0])) # TODO
+  closelog()
 
-syslog(LOG_CRIT, "The %s driver is not yet implemented." % basename(argv[0])) # TODO
-
-closelog()
+if __name__ == '__main__':
+  main(argv)
