@@ -6,8 +6,14 @@ from signal import *
 from sys import argv, exit
 from syslog import *
 
-WIDTH  = 640
-HEIGHT = 480
+CAMERA_WIDTH  = 640
+CAMERA_HEIGHT = 480
+WINDOW_WIDTH  = CAMERA_WIDTH
+WINDOW_HEIGHT = CAMERA_HEIGHT
+RED_COLOR     = (0, 0, 255)
+GREEN_COLOR   = (0, 255, 0)
+BLUE_COLOR    = (255, 0, 0)
+TERM_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
 def parse_arguments(argv):
   parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
@@ -23,6 +29,7 @@ def loop(camera, options):
   class State(object):
     def __init__(self):
       self.frame_count = 0 # the number of video frames processed
+      self.frame = None    # the current video frame being processed
       self.object = None   # the current object being designated (if any)
       self.objects = []    # the current set of tracked objects
 
@@ -30,22 +37,54 @@ def loop(camera, options):
     def __init__(self, left=(-1, -1), right=(-1, -1)):
       self.left  = left
       self.right = right
-      self.color = (255, 0, 0) # BGR
-      self.is_valid = False
+      self.color = BLUE_COLOR
+      self.roi_hist = None
+    def is_valid(self):
+      (x1, y1), (x2, y2) = self.left, self.right
+      return x1 <> -1 and x2 <> -1 and y1 <> -1 and y2 <> -1
+    def normalize(self):
+      (x1, y1), (x2, y2) = self.left, self.right
+      self.left, self.right = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
+      return self
+    def window(self):
+      (x1, y1), (x2, y2) = self.left, self.right
+      return (x1, y1, x2-x1, y2-y1)
+    def draw(self, image, color, thickness=1):
+      cv2.rectangle(image, self.left, self.right, color, thickness)
     def __str__(self):
       return "Object({}, {})".format(self.left, self.right)
 
   state = State()
 
-  def process_frame(frame):
-    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    if state.object and state.object.is_valid:
-      cv2.rectangle(frame, state.object.left, state.object.right, state.object.color, 1)
-    return frame
-
   def track_object(object):
     syslog(LOG_INFO, "Tracking new designated object: {}".format(object))
     state.objects.append(object)
+    object.normalize()
+    (x1, y1), (x2, y2) = object.left, object.right
+    roi = state.frame[y1:y2, x1:x2]
+    hsv_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv_roi, numpy.array((0., 60., 32.)), numpy.array((180., 255., 255.)))
+    roi_hist = cv2.calcHist([hsv_roi], [0], mask, [180], [0, 180])
+    cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
+    object.roi_hist = roi_hist
+
+  def process_frame(frame):
+    image = frame.copy()
+    #image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to grayscale
+
+    for object in state.objects:
+      hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+      dst = cv2.calcBackProject([hsv], [0], object.roi_hist, [0, 180], 1)
+      track_window = object.window()
+      _, track_window = cv2.meanShift(dst, track_window, TERM_CRITERIA)
+      x, y, w, h = track_window
+      object.left, object.right = (x, y), (x + w, y + h)
+      object.draw(image, object.color)
+
+    if state.object and state.object.is_valid():
+      state.object.draw(image, RED_COLOR)
+
+    return image
 
   def handle_mouse(event, x, y, flags, param):
     #print (event, x, y, flags, param) # DEBUG
@@ -54,11 +93,10 @@ def loop(camera, options):
     elif event == cv2.EVENT_MOUSEMOVE:
       if state.object:
         state.object.right = (x, y)
-        state.object.is_valid = True
     elif event == cv2.EVENT_LBUTTONUP:
-      if state.object:
+      if state.object and state.object.is_valid():
         track_object(state.object)
-        state.object = None
+      state.object = None
 
   if options.window:
     cv2.setMouseCallback('Conreality', handle_mouse)
@@ -69,6 +107,7 @@ def loop(camera, options):
       if not state.frame_count:
         syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
       break # end of video stream
+    state.frame = frame
     state.frame_count += 1
     frame = process_frame(frame)
     if options.window:
@@ -109,8 +148,8 @@ def main(argv):
 
   def open_camera():
     camera = cv2.VideoCapture(video_source())
-    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, WIDTH)
-    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, HEIGHT)
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
     #camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
     return camera
 
@@ -128,7 +167,7 @@ def main(argv):
 
     if options.window:
       cv2.namedWindow('Conreality')
-      cv2.imshow('Conreality', numpy.zeros((HEIGHT, WIDTH, 3), numpy.uint8))
+      cv2.imshow('Conreality', numpy.zeros((WINDOW_HEIGHT, WINDOW_WIDTH, 3), numpy.uint8))
 
     camera = open_camera()
     try:
