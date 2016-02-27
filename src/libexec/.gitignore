@@ -1,0 +1,12 @@
+# GNU Autotools
+.deps/
+.libs/
+.dirstamp
+
+# GNU Libtool
+*.la
+*.lo
+
+# C/C++
+*.a
+*.o

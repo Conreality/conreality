@@ -1,4 +1,4 @@
-SUBDIRS    = libconreality consensus conctl conreald
+SUBDIRS    = libconreality consensus conctl conreald libexec
 EXTRA_DIST = Makefile.conf
 
 if ENABLE_DEVELOP
