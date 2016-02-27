@@ -6,9 +6,15 @@ from signal import *
 from sys import argv, exit
 from syslog import *
 
+class SignalException(Exception):
+  def __init__(self, signum):
+    self.signum = signum
+  def exit_code(self):
+    return 0x80 + self.signum
+
 def handle_signal(signum, stack_frame):
   syslog(LOG_INFO, "Received a signal ({}), terminating...".format(signum))
-  exit(0x80 + signum)
+  raise SignalException(signum)
 
 def parse_arguments(argv):
   parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
@@ -16,6 +22,7 @@ def parse_arguments(argv):
   group.add_argument('-q', '--quiet', action='store_true', help='suppress superfluous output')
   group.add_argument('-v', '--verbose', action='count', help='increase the verbosity level')
   group.add_argument('-d', '--debug', action='store_true', help='enable debugging output')
+  parser.add_argument('-w', '--window', action='store_true', help='enable GUI window')
   parser.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
   return parser.parse_args(argv)
 
@@ -24,7 +31,7 @@ def get_log_verbosity(options):
     return LOG_DEBUG
   if options.verbose:
     return LOG_INFO
-  elif options.quiet:
+  if options.quiet:
     return LOG_WARNING
   else:
     return LOG_NOTICE
@@ -34,29 +41,45 @@ def stream_video(options):
     return options.input
   return 0
 
-def main(argv):
-  options = parse_arguments(argv[1:])
-
-  openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-  setlogmask(LOG_UPTO(get_log_verbosity(options)))
-
-  signal(SIGHUP, handle_signal)
-  signal(SIGINT, handle_signal)
-  signal(SIGPIPE, handle_signal)
-  signal(SIGTERM, handle_signal)
-
-  camera = cv2.VideoCapture(stream_video(options))
-
+def loop(camera, options):
   while True:
     success, frame = camera.read()
     if not success:
       syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
       break
-    pause() # TODO
+    if options.window:
+      cv2.imshow('Conreality', frame)
+    else:
+      pause() # TODO
 
-  camera.release()
+def main(argv):
+  options = parse_arguments(argv[1:])
 
-  closelog()
+  try:
+    openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
+    setlogmask(LOG_UPTO(get_log_verbosity(options)))
+
+    signal(SIGHUP, handle_signal)
+    signal(SIGINT, handle_signal)
+    signal(SIGPIPE, handle_signal)
+    signal(SIGTERM, handle_signal)
+
+    if options.window:
+      cv2.namedWindow('Conreality OpenCV driver')
+
+    camera = cv2.VideoCapture(stream_video(options))
+    try:
+      loop(camera, options)
+    finally:
+      camera.release()
+
+      if options.window:
+        cv2.destroyAllWindows()
+
+  except SignalException as e:
+    exit(e.exit_code())
+  finally:
+    closelog()
 
 if __name__ == '__main__':
   main(argv)
