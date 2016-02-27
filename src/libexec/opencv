@@ -12,10 +12,6 @@ class SignalException(Exception):
   def exit_code(self):
     return 0x80 + self.signum
 
-def handle_signal(signum, stack_frame):
-  syslog(LOG_INFO, "Received a signal ({}), terminating...".format(signum))
-  raise SignalException(signum)
-
 def parse_arguments(argv):
   parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
   group = parser.add_mutually_exclusive_group()
@@ -26,20 +22,9 @@ def parse_arguments(argv):
   parser.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
   return parser.parse_args(argv)
 
-def get_log_verbosity(options):
-  if options.debug:
-    return LOG_DEBUG
-  if options.verbose:
-    return LOG_INFO
-  if options.quiet:
-    return LOG_WARNING
-  else:
-    return LOG_NOTICE
-
-def stream_video(options):
-  if options.input:
-    return options.input
-  return 0
+def process_frame(frame, options):
+  frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+  return frame
 
 def loop(camera, options):
   while True:
@@ -47,6 +32,7 @@ def loop(camera, options):
     if not success:
       syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
       break
+    frame = process_frame(frame, options)
     if options.window:
       cv2.imshow('Conreality', frame)
     else:
@@ -55,9 +41,28 @@ def loop(camera, options):
 def main(argv):
   options = parse_arguments(argv[1:])
 
+  def log_verbosity():
+    if options.debug:
+      return LOG_DEBUG
+    if options.verbose:
+      return LOG_INFO
+    if options.quiet:
+      return LOG_WARNING
+    else:
+      return LOG_NOTICE
+
+  def video_source():
+    if options.input:
+      return options.input
+    return 0
+
+  def handle_signal(signum, stack_frame):
+    syslog(LOG_INFO, "Received a signal ({}), terminating...".format(signum))
+    raise SignalException(signum)
+
   try:
     openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-    setlogmask(LOG_UPTO(get_log_verbosity(options)))
+    setlogmask(LOG_UPTO(log_verbosity()))
 
     signal(SIGHUP, handle_signal)
     signal(SIGINT, handle_signal)
@@ -67,7 +72,7 @@ def main(argv):
     if options.window:
       cv2.namedWindow('Conreality OpenCV driver')
 
-    camera = cv2.VideoCapture(stream_video(options))
+    camera = cv2.VideoCapture(video_source())
     try:
       loop(camera, options)
     finally:
