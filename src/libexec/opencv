@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+import argparse
 import numpy
 import cv2
 from signal import *
@@ -6,18 +7,45 @@ from sys import argv, exit
 from syslog import *
 
 def handle_signal(signum, stack_frame):
-  syslog(LOG_INFO, "Received a signal (%d), terminating..." % signum)
+  syslog(LOG_INFO, "Received a signal ({}), terminating...".format(signum))
   exit(0x80 + signum)
 
+def parse_arguments(argv):
+  parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
+  group = parser.add_mutually_exclusive_group()
+  group.add_argument('-q', '--quiet', action='store_true', help='suppress superfluous output')
+  group.add_argument('-v', '--verbose', action='count', help='increase the verbosity level')
+  group.add_argument('-d', '--debug', action='store_true', help='enable debugging output')
+  parser.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
+  return parser.parse_args(argv)
+
+def get_log_verbosity(options):
+  if options.debug:
+    return LOG_DEBUG
+  if options.verbose:
+    return LOG_INFO
+  elif options.quiet:
+    return LOG_WARNING
+  else:
+    return LOG_NOTICE
+
+def stream_video(options):
+  if options.input:
+    return options.input
+  return 0
+
 def main(argv):
+  options = parse_arguments(argv[1:])
+
   openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-  setlogmask(LOG_UPTO(LOG_DEBUG))
+  setlogmask(LOG_UPTO(get_log_verbosity(options)))
+
   signal(SIGHUP, handle_signal)
   signal(SIGINT, handle_signal)
   signal(SIGPIPE, handle_signal)
   signal(SIGTERM, handle_signal)
 
-  camera = cv2.VideoCapture(0)
+  camera = cv2.VideoCapture(stream_video(options))
 
   while True:
     success, frame = camera.read()
