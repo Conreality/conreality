@@ -6,6 +6,9 @@ from signal import *
 from sys import argv, exit
 from syslog import *
 
+WIDTH  = 640
+HEIGHT = 480
+
 def parse_arguments(argv):
   parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
   group = parser.add_mutually_exclusive_group()
@@ -27,7 +30,7 @@ def loop(camera, options):
     def __init__(self, left=(-1, -1), right=(-1, -1)):
       self.left  = left
       self.right = right
-      self.color = (255, 0, 0)
+      self.color = (255, 0, 0) # BGR
       self.is_valid = False
     def __str__(self):
       return "Object({}, {})".format(self.left, self.right)
@@ -35,13 +38,13 @@ def loop(camera, options):
   state = State()
 
   def process_frame(frame):
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     if state.object and state.object.is_valid:
-      cv2.rectangle(frame, state.object.left, state.object.right, state.object.color, -1)
+      cv2.rectangle(frame, state.object.left, state.object.right, state.object.color, 1)
     return frame
 
   def track_object(object):
-    syslog(LOG_INFO, "Tracking object: {}".format(object))
+    syslog(LOG_INFO, "Tracking new designated object: {}".format(object))
     state.objects.append(object)
 
   def handle_mouse(event, x, y, flags, param):
@@ -104,6 +107,13 @@ def main(argv):
     syslog(LOG_INFO, "Received a signal ({}), terminating...".format(signum))
     raise SignalException(signum)
 
+  def open_camera():
+    camera = cv2.VideoCapture(video_source())
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, WIDTH)
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, HEIGHT)
+    #camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
+    return camera
+
   try:
     log_options = LOG_PID | LOG_CONS | LOG_NDELAY
     if options.debug:
@@ -118,8 +128,9 @@ def main(argv):
 
     if options.window:
       cv2.namedWindow('Conreality')
+      cv2.imshow('Conreality', numpy.zeros((HEIGHT, WIDTH, 3), numpy.uint8))
 
-    camera = cv2.VideoCapture(video_source())
+    camera = open_camera()
     try:
       loop(camera, options)
     finally:
