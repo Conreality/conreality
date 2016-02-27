@@ -1,2 +1,6 @@
 usr/bin/conctl
+usr/lib/conreality/bcm2835
+usr/lib/conreality/bcm2836
+usr/lib/conreality/sysfs
+usr/lib/conreality/v4l2
 usr/sbin/conreald
