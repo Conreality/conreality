@@ -6,12 +6,6 @@ from signal import *
 from sys import argv, exit
 from syslog import *
 
-class SignalException(Exception):
-  def __init__(self, signum):
-    self.signum = signum
-  def exit_code(self):
-    return 0x80 + self.signum
-
 def parse_arguments(argv):
   parser = argparse.ArgumentParser(description='Conreality driver for OpenCV.')
   group = parser.add_mutually_exclusive_group()
@@ -22,23 +16,73 @@ def parse_arguments(argv):
   parser.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
   return parser.parse_args(argv)
 
-def process_frame(frame, options):
-  frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-  return frame
-
 def loop(camera, options):
-  while True:
+  class State(object):
+    def __init__(self):
+      self.frame_count = 0 # the number of video frames processed
+      self.object = None   # the current object being designated (if any)
+      self.objects = []    # the current set of tracked objects
+
+  class Object(object):
+    def __init__(self, left=(-1, -1), right=(-1, -1)):
+      self.left  = left
+      self.right = right
+      self.color = (255, 0, 0)
+      self.is_valid = False
+    def __str__(self):
+      return "Object({}, {})".format(self.left, self.right)
+
+  state = State()
+
+  def process_frame(frame):
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    if state.object and state.object.is_valid:
+      cv2.rectangle(frame, state.object.left, state.object.right, state.object.color, -1)
+    return frame
+
+  def track_object(object):
+    syslog(LOG_INFO, "Tracking object: {}".format(object))
+    state.objects.append(object)
+
+  def handle_mouse(event, x, y, flags, param):
+    #print (event, x, y, flags, param) # DEBUG
+    if event == cv2.EVENT_LBUTTONDOWN:
+      state.object = Object((x, y))
+    elif event == cv2.EVENT_MOUSEMOVE:
+      if state.object:
+        state.object.right = (x, y)
+        state.object.is_valid = True
+    elif event == cv2.EVENT_LBUTTONUP:
+      if state.object:
+        track_object(state.object)
+        state.object = None
+
+  if options.window:
+    cv2.setMouseCallback('Conreality', handle_mouse)
+
+  while camera.isOpened():
     success, frame = camera.read()
     if not success:
-      syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
-      break
-    frame = process_frame(frame, options)
+      if not state.frame_count:
+        syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
+      break # end of video stream
+    state.frame_count += 1
+    frame = process_frame(frame)
     if options.window:
       cv2.imshow('Conreality', frame)
+      cv2.waitKey(1)
     else:
       pause() # TODO
 
+  return state.frame_count
+
 def main(argv):
+  class SignalException(Exception):
+    def __init__(self, signum):
+      self.signum = signum
+    def exit_code(self):
+      return 0x80 + self.signum
+
   options = parse_arguments(argv[1:])
 
   def log_verbosity():
@@ -61,7 +105,10 @@ def main(argv):
     raise SignalException(signum)
 
   try:
-    openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
+    log_options = LOG_PID | LOG_CONS | LOG_NDELAY
+    if options.debug:
+      log_options |= LOG_PERROR
+    openlog("conreality", logoption=log_options, facility=LOG_DAEMON)
     setlogmask(LOG_UPTO(log_verbosity()))
 
     signal(SIGHUP, handle_signal)
@@ -70,7 +117,7 @@ def main(argv):
     signal(SIGTERM, handle_signal)
 
     if options.window:
-      cv2.namedWindow('Conreality OpenCV driver')
+      cv2.namedWindow('Conreality')
 
     camera = cv2.VideoCapture(video_source())
     try:
