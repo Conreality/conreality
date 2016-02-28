@@ -1,5 +1,7 @@
 # This is free and unencumbered software released into the public domain.
 
+"""Conreality Driver Development Kit (DDK) for Python."""
+
 from __future__ import print_function
 import argparse
 import signal
@@ -8,7 +10,6 @@ import syslog
 
 EX_OK = 0
 
-##
 class ArgumentParser(argparse.ArgumentParser):
   def __init__(self):
     super(ArgumentParser, self).__init__()
@@ -21,7 +22,6 @@ class ArgumentParser(argparse.ArgumentParser):
   def init(self):
     pass
 
-##
 class SignalException(Exception):
   def __init__(self, signum):
     self.signum = signum
@@ -29,9 +29,9 @@ class SignalException(Exception):
   def exit_code(self):
     return 0x80 + self.signum
 
-##
-# Base class for device drivers.
 class Driver(object):
+  """Base class for device drivers."""
+
   def __init__(self, argv=sys.argv, argparser=ArgumentParser):
     self.options = argparser().parse_args(argv[1:])
     self.init()

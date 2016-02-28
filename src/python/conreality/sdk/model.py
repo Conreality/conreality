@@ -11,7 +11,7 @@ class ObjectShape(object):
 class Object(object):
   """An object of interest."""
 
-  def __init__(self, id=None):
+  def __init__(self, id=None, color=None):
     self.id = id
     self.label = None
     self.position = None
@@ -21,8 +21,9 @@ class Object(object):
     self.linear_acceleration = None
     self.mass = None
     self.shape = None
-    self.color = None
+    self.color = color
 
+  @property
   def inverse_mass(self):
     """Computes the inverse mass of this object."""
     return None # unknown
@@ -57,7 +58,7 @@ class Object(object):
 
   def __repr__(self):
     """Returns a human-readable string representation of this object."""
-    return "object{}" # TODO
+    return "object{{}}" # TODO
 
   def __str__(self):
     """Returns a human-readable string representation of this object."""
