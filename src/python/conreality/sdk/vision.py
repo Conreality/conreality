@@ -81,11 +81,25 @@ class Image(object):
     """Returns a new copy of this image."""
     return Image(data=self.data.copy())
 
+  def data_as_gray(self):
+    return cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY)
+
+  def data_as_hsv(self):
+    return cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV)
+
   def to_gray(self):
-    return Image(data=cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY))
+    return Image(data=self.data_as_gray())
 
   def to_hsv(self):
-    return Image(data=cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV))
+    return Image(data=self.data_as_hsv())
+
+  def histogram(self):
+    """Returns a normalized HSV histogram of this image."""
+    data = self.data_as_hsv()
+    mask = cv2.inRange(data, numpy.array((0., 60., 32.)), numpy.array((180., 255., 255.)))
+    hist = cv2.calcHist([data], [0], mask, [180], [0, 180])
+    cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
+    return hist
 
   def draw_circle(self, center, radius, color, thickness=1):
     cv2.circle(self.data, center, radius, color.bgr(), thickness)
