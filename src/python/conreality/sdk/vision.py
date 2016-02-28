@@ -6,7 +6,7 @@ import numpy
 import cv2
 
 class Color(object):
-  """A color."""
+  """A red-green-blue (RGB) color value."""
 
   def __init__(self, r, g, b):
     self.r = r
@@ -20,6 +20,16 @@ class Color(object):
   def bgr(self):
     """Returns this color as a BGR tuple (for OpenCV)."""
     return (self.b, self.g, self.r)
+
+  def gray(self):
+    """Returns this color as a grayscale scalar (for OpenCV)."""
+    gray_array = cv2.cvtColor(numpy.uint8([[list(self.bgr())]]), cv2.COLOR_BGR2GRAY)
+    return gray_array[0][0]
+
+  def hsv(self):
+    """Returns this color as an HSV tuple (for OpenCV)."""
+    hsv_array = cv2.cvtColor(numpy.uint8([[list(self.bgr())]]), cv2.COLOR_BGR2HSV)
+    return tuple(hsv_array[0][0])
 
   def __repr__(self):
     """Returns a human-readable string representation of this color."""
@@ -36,15 +46,62 @@ GREEN_COLOR = Color(0, 255, 0)
 BLUE_COLOR  = Color(0, 0, 255)
 
 class Image(object):
-  """An image."""
+  """A two-dimensional (2D) image."""
 
-  def __init__(self, width, height, color=BLACK_COLOR):
-    self.width  = width
-    self.height = height
-    if color == BLACK_COLOR:
-      self.data = numpy.zeros((self.height, self.width, 3), numpy.uint8)
-    elif color.r == color.g and color.r == color.b:
-      self.data = numpy.full((self.height, self.width, 3), color.r, numpy.uint8)
+  def __init__(self, width=None, height=None, color=BLACK_COLOR, data=None, format='bgr'):
+    if data is not None:
+      self.height, self.width, _ = data.shape
+      self.data = data
+      self.format = format
     else:
-      self.data = numpy.empty((self.height, self.width, 3), numpy.uint8)
-      # TODO: initialize array with color
+      self.width = width
+      self.height = height
+      if color == BLACK_COLOR:
+        self.data = numpy.zeros((height, width, 3), numpy.uint8)
+      elif color.r == color.g and color.r == color.b:
+        self.data = numpy.full((height, width, 3), color.r, numpy.uint8)
+      else:
+        self.data = numpy.empty((height, width, 3), numpy.uint8)
+        cv2.rectangle(self.data, (0, 0), (width-1, height-1), color.bgr(), cv2.cv.CV_FILLED)
+      self.format = format
+
+  def is_bgr(self):
+    """Determines whether this is a BGR image."""
+    return self.format == 'bgr'
+
+  def is_gray(self):
+    """Determines whether this is a grayscale image."""
+    return self.format == 'gray'
+
+  def is_hsv(self):
+    """Determines whether this is an HSV image."""
+    return self.format == 'hsv'
+
+  def copy(self):
+    """Returns a new copy of this image."""
+    return Image(data=self.data.copy())
+
+  def to_gray(self):
+    return Image(data=cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY))
+
+  def to_hsv(self):
+    return Image(data=cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV))
+
+  def draw_circle(self, center, radius, color, thickness=1):
+    cv2.circle(self.data, center, radius, color.bgr(), thickness)
+    return self
+
+  def draw_line(self, point1, point2, color, thickness=1):
+    cv2.line(self.data, point1, point2, color.bgr(), thickness)
+    return self
+
+  def draw_polylines(self, points, is_closed, color, thickness=1):
+    cv2.polylines(self.data, points, is_closed, color.bgr(), thickness)
+    return self
+
+  def draw_rectangle(self, point1, point2, color, thickness=1):
+    cv2.rectangle(self.data, point1, point2, color.bgr(), thickness)
+    return self
+
+  def draw(self, shape):
+    return self # TODO
