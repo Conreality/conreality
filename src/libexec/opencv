@@ -1,11 +1,7 @@
 #!/usr/bin/env python2.7
-import argparse
 import numpy
 import cv2
 from conreality import ddk
-from signal import *
-from sys import argv, exit
-from syslog import *
 
 CAMERA_WIDTH  = 640
 CAMERA_HEIGHT = 480
@@ -16,54 +12,99 @@ GREEN_COLOR   = (0, 255, 0)
 BLUE_COLOR    = (255, 0, 0)
 TERM_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
-def loop(camera, options):
-  class State(object):
-    def __init__(self):
-      self.frame_count = 0 # the number of video frames processed
-      self.frame = None    # the current video frame being processed
-      self.object = None   # the current object being designated (if any)
-      self.objects = []    # the current set of tracked objects
+class Object(object):
+  def __init__(self, left=(-1, -1), right=(-1, -1)):
+    self.left  = left
+    self.right = right
+    self.color = BLUE_COLOR
+    self.roi_hist = None
+  def is_valid(self):
+    (x1, y1), (x2, y2) = self.left, self.right
+    return x1 <> -1 and x2 <> -1 and y1 <> -1 and y2 <> -1
+  def normalize(self):
+    (x1, y1), (x2, y2) = self.left, self.right
+    self.left, self.right = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
+    return self
+  def window(self):
+    (x1, y1), (x2, y2) = self.left, self.right
+    return (x1, y1, x2-x1, y2-y1)
+  def draw(self, image, color, thickness=1):
+    cv2.rectangle(image, self.left, self.right, color, thickness)
+  def __str__(self):
+    return "Object({}, {})".format(self.left, self.right)
 
-  class Object(object):
-    def __init__(self, left=(-1, -1), right=(-1, -1)):
-      self.left  = left
-      self.right = right
-      self.color = BLUE_COLOR
-      self.roi_hist = None
-    def is_valid(self):
-      (x1, y1), (x2, y2) = self.left, self.right
-      return x1 <> -1 and x2 <> -1 and y1 <> -1 and y2 <> -1
-    def normalize(self):
-      (x1, y1), (x2, y2) = self.left, self.right
-      self.left, self.right = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
-      return self
-    def window(self):
-      (x1, y1), (x2, y2) = self.left, self.right
-      return (x1, y1, x2-x1, y2-y1)
-    def draw(self, image, color, thickness=1):
-      cv2.rectangle(image, self.left, self.right, color, thickness)
-    def __str__(self):
-      return "Object({}, {})".format(self.left, self.right)
+class ArgumentParser(ddk.ArgumentParser):
+  def init(self):
+    self.add_argument('-w', '--window', action='store_true', help='enable GUI window')
+    self.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
 
-  state = State()
+class Driver(ddk.Driver):
+  def has_window(self):
+    return self.options.window
 
-  def track_object(object):
-    syslog(LOG_INFO, "Tracking new designated object: {}".format(object))
-    state.objects.append(object)
+  def init(self):
+    if self.has_window():
+      cv2.namedWindow('Conreality')
+      cv2.imshow('Conreality', numpy.zeros((WINDOW_HEIGHT, WINDOW_WIDTH, 3), numpy.uint8))
+    self.open_camera()
+    self.frame_count = 0 # the number of video frames processed
+    self.frame = None    # the current video frame being processed
+    self.object = None   # the current object being designated (if any)
+    self.objects = []    # the current set of tracked objects
+
+  def exit(self):
+    self.camera.release()
+    if self.has_window():
+      cv2.destroyAllWindows()
+
+  def loop(self):
+    if self.has_window():
+      cv2.setMouseCallback('Conreality', self.handle_mouse)
+    while self.camera.isOpened():
+      success, frame = self.camera.read()
+      if not success:
+        if not self.frame_count:
+          self.error("Failed to read frame from video capture device; terminating...")
+        break # end of video stream
+      self.frame = frame
+      self.frame_count += 1
+      frame = self.process_frame(frame)
+      if self.has_window():
+        cv2.imshow('Conreality', frame)
+        cv2.waitKey(1)
+      else:
+        self.pause() # TODO
+    return self.frame_count
+
+  def open_camera(self):
+    self.camera = cv2.VideoCapture(self.video_source())
+    #self.camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
+    #self.camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
+    #self.camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
+    return self.camera
+
+  def video_source(self):
+    if self.options.input:
+      return self.options.input
+    return 0 # the default camera
+
+  def track_object(self, object):
+    self.info("Tracking new designated object: {}", object)
+    self.objects.append(object)
     object.normalize()
     (x1, y1), (x2, y2) = object.left, object.right
-    roi = state.frame[y1:y2, x1:x2]
+    roi = self.frame[y1:y2, x1:x2]
     hsv_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv_roi, numpy.array((0., 60., 32.)), numpy.array((180., 255., 255.)))
     roi_hist = cv2.calcHist([hsv_roi], [0], mask, [180], [0, 180])
     cv2.normalize(roi_hist, roi_hist, 0, 255, cv2.NORM_MINMAX)
     object.roi_hist = roi_hist
 
-  def process_frame(frame):
+  def process_frame(self, frame):
     image = frame.copy()
     #image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
-    for object in state.objects:
+    for object in self.objects:
       hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
       dst = cv2.calcBackProject([hsv], [0], object.roi_hist, [0, 180], 1)
       track_window = object.window()
@@ -72,74 +113,22 @@ def loop(camera, options):
       object.left, object.right = (x, y), (x + w, y + h)
       object.draw(image, object.color)
 
-    if state.object and state.object.is_valid():
-      state.object.draw(image, RED_COLOR)
+    if self.object and self.object.is_valid():
+      self.object.draw(image, RED_COLOR)
 
     return image
 
-  def handle_mouse(event, x, y, flags, param):
+  def handle_mouse(self, event, x, y, flags, param):
     #print (event, x, y, flags, param) # DEBUG
     if event == cv2.EVENT_LBUTTONDOWN:
-      state.object = Object((x, y))
+      self.object = Object((x, y))
     elif event == cv2.EVENT_MOUSEMOVE:
-      if state.object:
-        state.object.right = (x, y)
+      if self.object:
+        self.object.right = (x, y)
     elif event == cv2.EVENT_LBUTTONUP:
-      if state.object and state.object.is_valid():
-        track_object(state.object)
-      state.object = None
-
-  if options.window:
-    cv2.setMouseCallback('Conreality', handle_mouse)
-
-  while camera.isOpened():
-    success, frame = camera.read()
-    if not success:
-      if not state.frame_count:
-        syslog(LOG_ERR, "Failed to read frame from video capture device; terminating...")
-      break # end of video stream
-    state.frame = frame
-    state.frame_count += 1
-    frame = process_frame(frame)
-    if options.window:
-      cv2.imshow('Conreality', frame)
-      cv2.waitKey(1)
-    else:
-      pause() # TODO
-
-  return state.frame_count
-
-class ArgumentParser(ddk.ArgumentParser):
-  def init(self):
-    self.add_argument('-w', '--window', action='store_true', help='enable GUI window')
-    self.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
-
-class Driver(ddk.Driver):
-  def init(self):
-    if self.options.window:
-      cv2.namedWindow('Conreality')
-      cv2.imshow('Conreality', numpy.zeros((WINDOW_HEIGHT, WINDOW_WIDTH, 3), numpy.uint8))
-    self.camera = self.open_camera()
-
-  def exit(self):
-    self.camera.release()
-    if self.options.window:
-      cv2.destroyAllWindows()
-
-  def loop(self):
-    loop(self.camera, self.options)
-
-  def open_camera(self):
-    camera = cv2.VideoCapture(self.video_source())
-    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
-    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
-    #camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
-    return camera
-
-  def video_source(self):
-    if self.options.input:
-      return self.options.input
-    return 0 # the default camera
+      if self.object and self.object.is_valid():
+        self.track_object(self.object)
+      self.object = None
 
 if __name__ == '__main__':
   Driver(argparser=ArgumentParser).run()
