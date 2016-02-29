@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 from conreality import ddk, sdk
-from conreality.sdk.vision import Image, RED_COLOR, GREEN_COLOR, BLUE_COLOR
+from conreality.sdk.vision import Image, SharedImage, RED_COLOR, BLUE_COLOR
 import cv2
 
 CAMERA_WIDTH  = 640
@@ -25,8 +25,9 @@ class Object(sdk.model.Object):
 
 class ArgumentParser(ddk.ArgumentParser):
   def init(self):
-    self.add_argument('-w', '--window', action='store_true', help='enable GUI window')
-    self.add_argument('input', nargs='?', default=0, help='input video stream (default: /dev/video0)')
+    self.add_argument('-w', '--window', action='store_true', help='show GUI window')
+    self.add_argument('input', nargs='?', default=0, help='input for raw video stream (default: /dev/video0)')
+    self.add_argument('output', nargs='?', default=0, help='output for current annotated frame (default: /dev/null)')
 
 class Driver(ddk.Driver):
   def has_window(self):
@@ -36,7 +37,9 @@ class Driver(ddk.Driver):
     if self.has_window():
       cv2.namedWindow('Conreality')
       cv2.imshow('Conreality', Image(height=WINDOW_HEIGHT, width=WINDOW_WIDTH).data)
-    self.open_camera()
+
+    self.camera = self.open_camera()
+    self.image_output = self.open_image_output()
     self.frame_count = 0       # the number of video frames processed
     self.frame = None          # the current video frame being processed
     self.designated_box = None # the current object being designated (if any)
@@ -50,34 +53,53 @@ class Driver(ddk.Driver):
   def loop(self):
     if self.has_window():
       cv2.setMouseCallback('Conreality', self.handle_mouse)
+
     while self.camera.isOpened():
       success, frame = self.camera.read()
       if not success:
         if not self.frame_count:
           self.error("Failed to read frame from video capture device; terminating...")
         break # end of video stream
+
       self.frame = Image(data=frame)
       self.frame_count += 1
       frame = None
       image = self.process_frame(self.frame)
+
+      if self.image_output:
+        image.copy_to(self.image_output)
+
       if self.has_window():
         cv2.imshow('Conreality', image.data)
         cv2.waitKey(1)
-      else:
-        self.pause() # TODO
+
     return self.frame_count
 
   def open_camera(self):
-    self.camera = cv2.VideoCapture(self.video_source())
-    #self.camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
-    #self.camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
-    #self.camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
-    return self.camera
+    camera = cv2.VideoCapture(self.video_source())
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
+    #camera.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
+    #camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
+    return camera
+
+  def open_image_output(self):
+    image_target = self.image_target()
+    if image_target:
+      try:
+        return SharedImage(image_target, mode='r+', width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
+      except IOError:
+        return SharedImage(image_target, mode='w+', width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
+    return None
 
   def video_source(self):
-    if self.options.input:
+    if self.options.input and self.options.input <> '-':
       return self.options.input
     return 0 # the default camera
+
+  def image_target(self):
+    if self.options.output:
+      return self.options.output
+    return None
 
   def track_object(self, (x1, y1), (x2, y2)):
     (x1, y1), (x2, y2) = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
@@ -89,10 +111,8 @@ class Driver(ddk.Driver):
     self.tracked_objects.append(object)
 
   def process_frame(self, frame):
-    image = frame.copy()
-    #image = frame.gray() # convert to grayscale
-
     frame_hsv = frame.to_hsv()
+
     for object in self.tracked_objects:
       dst = cv2.calcBackProject([frame_hsv.data], [0], object.histogram, [0, 180], 1)
       old_bounds = object.bounds
@@ -101,14 +121,13 @@ class Driver(ddk.Driver):
       if new_bounds <> old_bounds:
         pass # TODO: output object movement message
 
+    image = frame.copy()
     for object in self.tracked_objects:
       object.draw(image)
-
     if self.designated_box:
       p1, p2 = self.designated_box
       if p1 is not None and p2 is not None:
         image.draw_rectangle(p1, p2, RED_COLOR)
-
     return image
 
   def handle_mouse(self, event, x, y, flags, param):
