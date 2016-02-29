@@ -2,8 +2,9 @@
 
 """Conreality Software Development Kit (SDK) for Python."""
 
-__all__ = ['measures', 'messaging', 'model', 'scripting', 'vision']
+__all__ = ['geometry', 'measures', 'messaging', 'model', 'scripting', 'vision']
 
+from . import geometry
 from . import measures
 from . import messaging
 from . import model
