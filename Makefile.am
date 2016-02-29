@@ -1,4 +1,4 @@
-SUBDIRS         = src test
+SUBDIRS         = bin src test
 EXTRA_DIST      = AUTHORS CHANGES CREDITS README TODO UNLICENSE VERSION
 ACLOCAL_AMFLAGS = -I etc/aclocal
 

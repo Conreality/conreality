@@ -188,6 +188,7 @@ dnl Check for system services:
 dnl Generate output:
 AC_CONFIG_FILES([
   Makefile
+  bin/Makefile
   src/Makefile
   src/libconreality/Makefile
   src/consensus/Makefile
