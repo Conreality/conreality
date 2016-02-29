@@ -81,6 +81,14 @@ class Image(object):
     """Returns a new copy of this image."""
     return Image(data=self.data.copy())
 
+  def copy_from(self, image):
+    """Overwrites this image with the data from the given same-shaped image."""
+    numpy.copyto(self.data, image.data, 'no')
+
+  def copy_to(self, image):
+    """Overwrites the given same-shaped image with the data from this image."""
+    numpy.copyto(image.data, self.data, 'no')
+
   def data_as_gray(self):
     return cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY)
 
@@ -119,3 +127,25 @@ class Image(object):
 
   def draw(self, shape):
     return self # TODO
+
+class SharedImage(Image):
+  """A two-dimensional (2D) image in shared memory."""
+
+  def __init__(self, pathname, mode='r', width=None, height=None, format='bgr'):
+    self.pathname = pathname
+    self.width = width
+    self.height = height
+    self.format = format
+    self.data = numpy.memmap(pathname, numpy.uint8, mode, offset=0, shape=(height, width, 3))
+
+  @property
+  def mode(self):
+    return self.data.mode
+
+  @property
+  def offset(self):
+    return self.data.offset
+
+  def flush(self):
+    """Write back any changes in the image to the backing storage."""
+    self.data.flush()
