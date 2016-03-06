@@ -4,11 +4,27 @@
 
 from __future__ import print_function
 import argparse
+import os
 import signal
 import sys
 import syslog
 
-EX_OK = 0
+EX_OK        = 0
+EX_CANTCREAT = 73
+
+class SignalException(Exception):
+  def __init__(self, signum):
+    self.signum = signum
+
+  def exit_code(self):
+    return 0x80 + self.signum
+
+class DataDirectoryException(OSError):
+  def __init__(self, error):
+    super(DataDirectoryException, self).__init__(error.errno, error.strerror, error.filename)
+
+  def exit_code(self):
+    return EX_CANTCREAT
 
 class ArgumentParser(argparse.ArgumentParser):
   def __init__(self):
@@ -22,12 +38,22 @@ class ArgumentParser(argparse.ArgumentParser):
   def init(self):
     pass
 
-class SignalException(Exception):
-  def __init__(self, signum):
-    self.signum = signum
+class DataDirectory(object):
+  BASE_PATH = '/tmp/var/run/conreality' # FIXME
 
-  def exit_code(self):
-    return 0x80 + self.signum
+  def __init__(self, *path):
+    self.path = os.path.join(self.BASE_PATH, *path)
+
+  def exists(self):
+    os.path.exists(self.path)
+
+  def open(self, mode='r'):
+    if mode != 'r':
+      try:
+        os.makedirs(self.path, 0777)
+      except OSError as e:
+        raise DataDirectoryException(e)
+    return self
 
 class Driver(object):
   """Base class for device drivers."""
