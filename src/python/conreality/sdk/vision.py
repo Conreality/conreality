@@ -131,7 +131,7 @@ class Image(object):
 class SharedImage(Image):
   """A two-dimensional (2D) image in shared memory."""
 
-  def __init__(self, pathname, mode='r', width=None, height=None, format='bgr'):
+  def __init__(self, pathname, width=None, height=None, format='bgr', mode='r'):
     self.pathname = pathname
     self.width = width
     self.height = height

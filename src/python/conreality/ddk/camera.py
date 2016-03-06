@@ -7,13 +7,21 @@ from .driver import DataDirectory
 import os
 
 class CameraFeed(object):
-  pass # TODO
+  def __init__(self, dir, width, height, format='bgr', mode='r'):
+    self.path = os.path.join(dir.path, '{}x{}.{}'.format(width, height, format))
+    self.image = SharedImage(self.path, width=width, height=height, format=format, mode=mode)
+
+  def snap(self):
+    return self.image.copy()
 
 class CameraDirectory(DataDirectory):
   def __init__(self, id):
     super(CameraDirectory, self).__init__('cameras', id)
 
-  def open_image(self, width, height, mode='r+', format='bgr'):
-    feed_name = '{}x{}.{}'.format(width, height, format)
-    image_path = os.path.join(self.path, feed_name)
-    return SharedImage(image_path, mode=mode, width=width, height=height)
+  def open_feed(self, **kwargs):
+    if not 'mode' in kwargs:
+      kwargs['mode'] = self.mode or 'r'
+    return CameraFeed(self, **kwargs)
+
+class CameraRegistry(object):
+  pass # TODO

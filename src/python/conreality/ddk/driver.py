@@ -53,7 +53,11 @@ class DataDirectory(object):
         os.makedirs(self.path, 0777)
       except OSError as e:
         raise DataDirectoryException(e)
+    self.mode = mode
     return self
+
+  def close(self):
+    self.mode = None
 
 class Driver(object):
   """Base class for device drivers."""
