@@ -1,6 +1,6 @@
 # This is free and unencumbered software released into the public domain.
 
-"""Conreality Driver Development Kit (DDK) for Python."""
+"""Driver support."""
 
 from __future__ import print_function
 import argparse
