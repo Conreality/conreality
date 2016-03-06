@@ -2,7 +2,7 @@ usr/bin/concam
 usr/bin/conctl
 usr/lib/conreality/bcm2835
 usr/lib/conreality/bcm2836
-usr/lib/conreality/opencv
-usr/lib/conreality/sysfs
-usr/lib/conreality/v4l2
+usr/lib/conreality/opencv-camera
+usr/lib/conreality/sysfs-gpio
+usr/lib/conreality/v4l2-camera
 usr/sbin/conreald
