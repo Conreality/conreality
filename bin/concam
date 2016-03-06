@@ -10,7 +10,9 @@ WINDOW_HEIGHT = CAMERA_HEIGHT
 
 class ArgumentParser(ddk.ArgumentParser):
   def init(self):
-    self.add_argument('input', help='input for raw video stream')
+    self.add_argument('input', help='the video feed to attach to')
+    self.add_argument('-r', '--fps', type=int, default=30,
+      help='set the frames per second (FPS) rate (default: 30)')
 
 class Program(ddk.Driver):
   def init(self):
@@ -24,6 +26,7 @@ class Program(ddk.Driver):
 
   def loop(self):
     cv2.setMouseCallback('Concam', self.handle_mouse)
+    frame_duration = 1000 / self.options.fps # in milliseconds
     while True:
       image = self.image_input.copy()
       if self.designated_box:
@@ -31,7 +34,7 @@ class Program(ddk.Driver):
         if p1 is not None and p2 is not None:
           image.draw_rectangle(p1, p2, RED_COLOR)
       cv2.imshow('Concam', image.data)
-      key = cv2.waitKey(1)
+      key = cv2.waitKey(frame_duration)
       if key == 0x1B: # ESC
         break
 
@@ -43,7 +46,6 @@ class Program(ddk.Driver):
     pass # TODO
 
   def handle_mouse(self, event, x, y, flags, param):
-    #print (event, x, y, flags, param) # DEBUG
     if event == cv2.EVENT_LBUTTONDOWN:
       self.designated_box = ((x, y), None)
 
