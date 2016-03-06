@@ -45,10 +45,10 @@ class DataDirectory(object):
     self.path = os.path.join(self.BASE_PATH, *path)
 
   def exists(self):
-    os.path.exists(self.path)
+    return os.path.exists(self.path)
 
   def open(self, mode='r'):
-    if mode != 'r':
+    if mode != 'r' and not self.exists():
       try:
         os.makedirs(self.path, 0777)
       except OSError as e:
