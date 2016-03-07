@@ -29,9 +29,11 @@ class ArgumentParser(ddk.ArgumentParser):
   def init(self):
     self.add_argument('input', nargs='?', default=0,
       help='the video feed input (default: /dev/video0)')
-    self.add_argument('-i', '--id', nargs='?',
+    self.add_argument('-i', '--id', metavar='ID', nargs='?',
       help='set camera ID (default: default)')
-    self.add_argument('-a', '--algorithm', nargs=1, default='meanshift',
+    self.add_argument('-o', '--output', metavar='FILE', nargs='?',
+      help='record output to MPEG-4 video file')
+    self.add_argument('-a', '--algorithm', metavar='ALGO', nargs=1, default='meanshift',
       help='set object-tracking algorithm (default: meanshift)')
     self.add_argument('-w', '--window', action='store_true',
       help='show GUI window')
@@ -50,6 +52,9 @@ class Driver(ddk.Driver):
     self.designated_box = None # the current object being designated (if any)
     self.tracked_objects = []  # the current set of tracked objects
 
+    if self.options.output:
+      self.video_output = sdk.video.VideoEncoder(self.options.output, self.camera_feed.size)
+
     if self.has_window():
       self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
       cv2.namedWindow(self.window_title)
@@ -57,6 +62,8 @@ class Driver(ddk.Driver):
 
   def exit(self):
     self.camera.release()
+    self.video_output.close()
+
     if self.has_window():
       cv2.destroyAllWindows()
 
@@ -78,6 +85,9 @@ class Driver(ddk.Driver):
 
       if self.camera_feed:
         image.copy_to(self.camera_feed.image)
+
+      if self.video_output:
+        self.video_output.write(image)
 
       if self.has_window():
         cv2.imshow(self.window_title, image.data)
