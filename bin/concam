@@ -3,47 +3,47 @@ from conreality import ddk, sdk
 from conreality.sdk.vision import Image, SharedImage, RED_COLOR, BLUE_COLOR
 import cv2
 
-CAMERA_WIDTH  = 640
-CAMERA_HEIGHT = 480
-WINDOW_WIDTH  = CAMERA_WIDTH
-WINDOW_HEIGHT = CAMERA_HEIGHT
+WINDOW_TITLE = 'Concam'
 
 class ArgumentParser(ddk.ArgumentParser):
   def init(self):
-    self.add_argument('input', help='the video feed to attach to')
+    self.add_argument('id', nargs='?', default='default',
+      help='the ID of the camera to attach to')
     self.add_argument('-r', '--fps', type=int, default=30,
       help='set the frames per second (FPS) rate (default: 30)')
 
 class Program(ddk.Driver):
   def init(self):
-    cv2.namedWindow('Concam', cv2.WINDOW_AUTOSIZE)
-    cv2.imshow('Concam', Image(height=WINDOW_HEIGHT, width=WINDOW_WIDTH).data)
-    self.image_input = self.open_image_input()
+    self.camera_id = self.options.id
+    self.camera_dir = ddk.CameraDirectory(self.camera_id).open('r')
+    self.camera_feed = self.camera_dir.open_feed()
+    self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
+    self.window_width = self.camera_feed.width
+    self.window_height = self.camera_feed.height
     self.designated_box = None # the current object being designated (if any)
+    cv2.namedWindow(self.window_title, cv2.WINDOW_AUTOSIZE)
+    cv2.imshow(self.window_title, Image(width=self.window_width, height=self.window_height).data)
 
   def exit(self):
     cv2.destroyAllWindows()
 
   def loop(self):
-    cv2.setMouseCallback('Concam', self.handle_mouse)
+    cv2.setMouseCallback(self.window_title, self.handle_mouse)
     frame_duration = 1000 / self.options.fps # in milliseconds
     while True:
-      image = self.image_input.copy()
+      image = self.camera_feed.snap()
       if self.designated_box:
         p1, p2 = self.designated_box
         if p1 is not None and p2 is not None:
           image.draw_rectangle(p1, p2, RED_COLOR)
-      cv2.imshow('Concam', image.data)
+      cv2.imshow(self.window_title, image.data)
       key = cv2.waitKey(frame_duration)
       if key == 0x1B: # ESC
         break
 
-  def open_image_input(self):
-    return SharedImage(self.options.input, mode='r', width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
-
   def track_object(self, (x1, y1), (x2, y2)):
     (x1, y1), (x2, y2) = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
-    pass # TODO
+    pass # TODO: emit object designation message
 
   def handle_mouse(self, event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:

@@ -7,6 +7,7 @@ CAMERA_WIDTH  = 640
 CAMERA_HEIGHT = 480
 WINDOW_WIDTH  = CAMERA_WIDTH
 WINDOW_HEIGHT = CAMERA_HEIGHT
+WINDOW_TITLE  = 'OpenCV Camera'
 TERM_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
 class Object(sdk.model.Object):
@@ -25,25 +26,33 @@ class Object(sdk.model.Object):
 
 class ArgumentParser(ddk.ArgumentParser):
   def init(self):
-    self.add_argument('-w', '--window', action='store_true', help='show GUI window')
-    self.add_argument('input', nargs='?', default=0, help='input for raw video stream (default: /dev/video0)')
-    self.add_argument('output', nargs='?', default=0, help='output for current annotated frame (default: /dev/null)')
+    self.add_argument('input', nargs='?', default=0,
+      help='the video feed input (default: /dev/video0)')
+    self.add_argument('-i', '--id', nargs='?',
+      help='set camera ID (default: default)')
+    self.add_argument('-a', '--algorithm', nargs=1, default='meanshift',
+      help='set object-tracking algorithm (default: meanshift)')
+    self.add_argument('-w', '--window', action='store_true',
+      help='show GUI window')
 
 class Driver(ddk.Driver):
   def has_window(self):
     return self.options.window
 
   def init(self):
-    if self.has_window():
-      cv2.namedWindow('Conreality')
-      cv2.imshow('Conreality', Image(height=WINDOW_HEIGHT, width=WINDOW_WIDTH).data)
-
     self.camera = self.open_camera()
-    self.image_output = self.open_image_output()
+    self.camera_id = self.options.id or 'default'
+    self.camera_dir = ddk.CameraDirectory(self.camera_id).open('w')
+    self.camera_feed = self.camera_dir.open_feed(width=CAMERA_WIDTH, height=CAMERA_HEIGHT, mode='w+')
     self.frame_count = 0       # the number of video frames processed
     self.frame = None          # the current video frame being processed
     self.designated_box = None # the current object being designated (if any)
     self.tracked_objects = []  # the current set of tracked objects
+
+    if self.has_window():
+      self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
+      cv2.namedWindow(self.window_title)
+      cv2.imshow(self.window_title, Image(height=WINDOW_HEIGHT, width=WINDOW_WIDTH).data)
 
   def exit(self):
     self.camera.release()
@@ -52,7 +61,7 @@ class Driver(ddk.Driver):
 
   def loop(self):
     if self.has_window():
-      cv2.setMouseCallback('Conreality', self.handle_mouse)
+      cv2.setMouseCallback(self.window_title, self.handle_mouse)
 
     while self.camera.isOpened():
       success, frame = self.camera.read()
@@ -66,12 +75,14 @@ class Driver(ddk.Driver):
       frame = None
       image = self.process_frame(self.frame)
 
-      if self.image_output:
-        image.copy_to(self.image_output)
+      if self.camera_feed:
+        image.copy_to(self.camera_feed.image)
 
       if self.has_window():
-        cv2.imshow('Conreality', image.data)
-        cv2.waitKey(1)
+        cv2.imshow(self.window_title, image.data)
+        key = cv2.waitKey(1)
+        if key == 0x1B: # ESC
+          break
 
     return self.frame_count
 
@@ -82,24 +93,10 @@ class Driver(ddk.Driver):
     #camera.set(cv2.cv.CV_CAP_PROP_FPS, 30)
     return camera
 
-  def open_image_output(self):
-    image_target = self.image_target()
-    if image_target:
-      try:
-        return SharedImage(image_target, mode='r+', width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
-      except IOError:
-        return SharedImage(image_target, mode='w+', width=CAMERA_WIDTH, height=CAMERA_HEIGHT)
-    return None
-
   def video_source(self):
     if self.options.input and self.options.input <> '-':
       return self.options.input
     return 0 # the default camera
-
-  def image_target(self):
-    if self.options.output:
-      return self.options.output
-    return None
 
   def track_object(self, (x1, y1), (x2, y2)):
     (x1, y1), (x2, y2) = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
@@ -110,16 +107,20 @@ class Driver(ddk.Driver):
     self.info("Tracking new designated object: {}", object)
     self.tracked_objects.append(object)
 
+  def compute_meanshift(self, frame_hsv, object):
+    old_bounds = object.bounds
+    dst = cv2.calcBackProject([frame_hsv.data], [0], object.histogram, [0, 180], 1)
+    _, new_bounds = cv2.meanShift(dst, old_bounds, TERM_CRITERIA)
+    return new_bounds
+
   def process_frame(self, frame):
     frame_hsv = frame.to_hsv()
-
     for object in self.tracked_objects:
-      dst = cv2.calcBackProject([frame_hsv.data], [0], object.histogram, [0, 180], 1)
       old_bounds = object.bounds
-      _, new_bounds = cv2.meanShift(dst, old_bounds, TERM_CRITERIA)
-      object.bounds = new_bounds
+      new_bounds = self.compute_meanshift(frame_hsv, object)
       if new_bounds <> old_bounds:
-        pass # TODO: output object movement message
+        object.bounds = new_bounds
+        pass # TODO: emit object movement message
 
     image = frame.copy()
     for object in self.tracked_objects:
@@ -131,7 +132,6 @@ class Driver(ddk.Driver):
     return image
 
   def handle_mouse(self, event, x, y, flags, param):
-    #print (event, x, y, flags, param) # DEBUG
     if event == cv2.EVENT_LBUTTONDOWN:
       self.designated_box = ((x, y), None)
 
