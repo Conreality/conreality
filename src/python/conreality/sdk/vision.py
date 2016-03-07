@@ -125,6 +125,17 @@ class Image(object):
     cv2.rectangle(self.data, point1, point2, color.bgr(), thickness)
     return self
 
+  def draw_text(self, origin, text, color, thickness=1):
+    font_face, font_scale = cv2.FONT_HERSHEY_PLAIN, 1
+    (text_width, text_height), baseline = cv2.getTextSize(text, font_face, font_scale, thickness)
+    (origin_x, origin_y) = origin
+    if origin_x < 0:
+      origin_x = self.width + origin_x - text_width
+    if origin_y < 0:
+      origin_y = self.height + origin_y
+    cv2.putText(self.data, text, (origin_x, origin_y), font_face, font_scale, color.bgr(), thickness)
+    return self
+
   def draw(self, shape):
     return self # TODO
 
