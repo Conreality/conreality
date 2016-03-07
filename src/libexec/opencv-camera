@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 from conreality import ddk, sdk
-from conreality.sdk.vision import Image, SharedImage, RED_COLOR, BLUE_COLOR
+from conreality.sdk.vision import Image, SharedImage, RED_COLOR, GREEN_COLOR, BLUE_COLOR
+from datetime import datetime
 import cv2
 
 CAMERA_WIDTH  = 640
@@ -129,6 +130,9 @@ class Driver(ddk.Driver):
       p1, p2 = self.designated_box
       if p1 is not None and p2 is not None:
         image.draw_rectangle(p1, p2, RED_COLOR)
+
+    image.draw_text((12, -12), self.camera_id, GREEN_COLOR)
+    image.draw_text((-12, -12), datetime.now().isoformat()[:-3], GREEN_COLOR)
     return image
 
   def handle_mouse(self, event, x, y, flags, param):
