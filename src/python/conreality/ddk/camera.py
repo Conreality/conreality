@@ -76,6 +76,10 @@ class CameraFeed(object):
     self.image = SharedImage(self.path, width=width, height=height, format=format, mode=mode)
 
   @property
+  def size(self):
+    return (self.image.width, self.image.height)
+
+  @property
   def width(self):
     return self.image.width
 
