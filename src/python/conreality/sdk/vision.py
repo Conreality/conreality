@@ -160,3 +160,17 @@ class SharedImage(Image):
   def flush(self):
     """Write back any changes in the image to the backing storage."""
     self.data.flush()
+
+class CascadeClassifier(object):
+  @staticmethod
+  def find(filename):
+    return '/opt/local/share/OpenCV/haarcascades/' + filename # FIXME
+
+  def __init__(self, filename):
+    self.classifier = cv2.CascadeClassifier(self.find(filename))
+
+  def detect(self, image, *args):
+    result = []
+    for (x, y, w, h) in self.classifier.detectMultiScale(image.data, *args):
+      result.append((x, y, w, h))
+    return result
