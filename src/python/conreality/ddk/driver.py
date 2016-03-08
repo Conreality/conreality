@@ -6,6 +6,7 @@ from __future__ import print_function
 from ..sdk.scripting import Context
 import argparse
 import os
+import select
 import signal
 import sys
 import syslog
@@ -69,6 +70,10 @@ class Driver(object):
     self.output  = sys.stdout
     self.context = Context()
     self.init()
+
+  def has_input(self, timeout=0.):
+    readables, _, _ = select.select([self.input], [], [], timeout)
+    return bool(readables)
 
   def init(self):
     pass
