@@ -52,6 +52,7 @@ class Driver(ddk.Driver):
     self.designated_box = None # the current object being designated (if any)
     self.tracked_objects = []  # the current set of tracked objects
 
+    self.video_output = None
     if self.options.output:
       self.video_output = sdk.video.VideoEncoder(self.options.output, self.camera_feed.size)
 
@@ -62,7 +63,9 @@ class Driver(ddk.Driver):
 
   def exit(self):
     self.camera.release()
-    self.video_output.close()
+
+    if self.video_output:
+      self.video_output.close()
 
     if self.has_window():
       cv2.destroyAllWindows()
