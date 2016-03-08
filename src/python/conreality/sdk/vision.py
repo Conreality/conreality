@@ -50,7 +50,7 @@ class Image(object):
 
   def __init__(self, width=None, height=None, color=BLACK_COLOR, data=None, format='bgr'):
     if data is not None:
-      self.height, self.width, _ = data.shape
+      self.height, self.width = data.shape[0:2]
       self.data = data
       self.format = format
     else:
@@ -96,10 +96,10 @@ class Image(object):
     return cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV)
 
   def to_gray(self):
-    return Image(data=self.data_as_gray())
+    return Image(data=self.data_as_gray(), format='gray')
 
   def to_hsv(self):
-    return Image(data=self.data_as_hsv())
+    return Image(data=self.data_as_hsv(), format='hsv')
 
   def histogram(self):
     """Returns a normalized HSV histogram of this image."""
