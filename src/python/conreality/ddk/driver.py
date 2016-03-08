@@ -3,6 +3,7 @@
 """Driver support."""
 
 from __future__ import print_function
+from ..sdk.scripting import Context
 import argparse
 import os
 import signal
@@ -64,6 +65,7 @@ class Driver(object):
 
   def __init__(self, argv=sys.argv, argparser=ArgumentParser):
     self.options = argparser().parse_args(argv[1:])
+    self.context = Context()
     self.init()
 
   def init(self):
