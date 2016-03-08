@@ -2,8 +2,10 @@
 
 """Vision algorithms."""
 
+import errno
 import numpy
 import cv2
+import os
 
 class Color(object):
   """A red-green-blue (RGB) color value."""
@@ -168,6 +170,8 @@ class CascadeClassifier(object):
 
   def __init__(self, filename):
     self.classifier = cv2.CascadeClassifier(self.find(filename))
+    if self.classifier.empty():
+      raise OSError(errno.ENOENT, os.strerror(errno.ENOENT), filename)
 
   def detect(self, image, *args):
     result = []
