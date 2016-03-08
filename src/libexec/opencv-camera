@@ -43,6 +43,7 @@ class Driver(ddk.Driver):
     return self.options.window
 
   def init(self):
+    self.context.define('object', {'designate': self.designate_object})
     self.camera = self.open_camera()
     self.camera_id = self.options.id or 'default'
     self.camera_dir = ddk.CameraDirectory(self.camera_id).open('w')
@@ -92,6 +93,16 @@ class Driver(ddk.Driver):
       if self.video_output:
         self.video_output.write(image)
 
+      if self.has_input():
+        input_line = self.input.readline()
+        if not input_line:
+          break
+        self.debug("Read input command line: {}", repr(input_line))
+        try:
+          self.context.load_code(input_line)
+        except sdk.scripting.Error as e:
+          self.error("Failed to execute input command: {}", e)
+
       if self.has_window():
         cv2.imshow(self.window_title, image.data)
         key = cv2.waitKey(1)
@@ -112,14 +123,18 @@ class Driver(ddk.Driver):
       return self.options.input
     return 0 # the default camera
 
-  def track_object(self, (x1, y1), (x2, y2)):
+  def track_object(self, (x1, y1), (x2, y2), id=None):
     (x1, y1), (x2, y2) = (min(x1, x2), min(y1, y2)), (max(x1, x2), max(y1, y2))
-
     object = Object(x1, y1, x2-x1, y2-y1)
     object.histogram = Image(data=self.frame.data[y1:y2, x1:x2]).histogram()
-
     self.info("Tracking new designated object: {}", object)
     self.tracked_objects.append(object)
+
+  def designate_object(self, args):
+    x, y, w, h, id = args.x, args.y, args.w, args.h, args.id
+    if not x or not y or not w or not h:
+      raise sdk.scripting.Error("missing x, y, w, or h attribute")
+    self.track_object((x, y), (x+w, y+h), id)
 
   def compute_meanshift(self, frame_hsv, object):
     old_bounds = object.bounds
