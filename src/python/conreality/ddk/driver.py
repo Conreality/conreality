@@ -65,6 +65,8 @@ class Driver(object):
 
   def __init__(self, argv=sys.argv, argparser=ArgumentParser):
     self.options = argparser().parse_args(argv[1:])
+    self.input   = sys.stdin
+    self.output  = sys.stdout
     self.context = Context()
     self.init()
 
