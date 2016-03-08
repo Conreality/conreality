@@ -9,7 +9,10 @@ CAMERA_HEIGHT = 480
 WINDOW_WIDTH  = CAMERA_WIDTH
 WINDOW_HEIGHT = CAMERA_HEIGHT
 WINDOW_TITLE  = 'OpenCV Camera'
+
 TERM_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
+FACE_CASCADE  = sdk.vision.CascadeClassifier('haarcascade_frontalface_default.xml')
+EYE_CASCADE   = sdk.vision.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
 
 class Object(sdk.model.Object):
   def __init__(self, x, y, w, h, id=None, color=BLUE_COLOR):
@@ -52,6 +55,8 @@ class Driver(ddk.Driver):
     self.frame = None          # the current video frame being processed
     self.designated_box = None # the current object being designated (if any)
     self.tracked_objects = []  # the current set of tracked objects
+    self.tracked_faces = []
+    self.tracked_eyes = []
 
     self.video_output = None
     if self.options.output:
@@ -81,6 +86,8 @@ class Driver(ddk.Driver):
         if not self.frame_count:
           self.error("Failed to read frame from video capture device; terminating...")
         break # end of video stream
+
+      frame = cv2.flip(frame, 1) # flip horizontally
 
       self.frame = Image(data=frame)
       self.frame_count += 1
@@ -144,6 +151,9 @@ class Driver(ddk.Driver):
 
   def process_frame(self, frame):
     frame_hsv = frame.to_hsv()
+    frame_gray = frame.to_gray()
+
+    # Track objects:
     for object in self.tracked_objects:
       old_bounds = object.bounds
       new_bounds = self.compute_meanshift(frame_hsv, object)
@@ -151,9 +161,29 @@ class Driver(ddk.Driver):
         object.bounds = new_bounds
         pass # TODO: emit object movement message
 
+    # Detect faces:
+    self.tracked_faces = FACE_CASCADE.detect(frame_gray, 1.3, 5) or self.tracked_faces
+
+    # Detect eyes in faces:
+    eyes = []
+    for (fx, fy, fw, fh) in self.tracked_faces:
+      roi = Image(data=frame_gray.data[fy:fy+fh, fx:fx+fw], format='gray')
+      for (ex, ey, ew, eh) in EYE_CASCADE.detect(roi):
+        eyes.append((fx+ex, fy+ey, ew, eh))
+    if eyes:
+      self.tracked_eyes = eyes
+
     image = frame.copy()
+
     for object in self.tracked_objects:
       object.draw(image)
+
+    for (x, y, w, h) in self.tracked_faces:
+      image.draw_rectangle((x, y), (x+w, y+h), GREEN_COLOR)
+
+    for (x, y, w, h) in self.tracked_eyes:
+      image.draw_rectangle((x, y), (x+w, y+h), GREEN_COLOR)
+
     if self.designated_box:
       p1, p2 = self.designated_box
       if p1 is not None and p2 is not None:
