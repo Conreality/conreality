@@ -2,7 +2,6 @@
 
 """Driver support."""
 
-from __future__ import print_function
 from ..sdk.scripting import Context
 import argparse
 import os
@@ -40,7 +39,7 @@ class ArgumentParser(argparse.ArgumentParser):
   def init(self):
     pass
 
-class DataDirectory(object):
+class DataDirectory:
   BASE_PATH = '/tmp/var/run/conreality' # FIXME
 
   def __init__(self, *path):
@@ -61,7 +60,7 @@ class DataDirectory(object):
   def close(self):
     self.mode = None
 
-class Driver(object):
+class Driver:
   """Base class for device drivers."""
 
   def __init__(self, argv=sys.argv, argparser=ArgumentParser):

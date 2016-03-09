@@ -4,7 +4,7 @@
 
 import cv2
 
-class VideoEncoder(object):
+class VideoEncoder:
   """Video encoder for writing MPEG-4 video files."""
 
   def __init__(self, filepath, size, fps=20, fourcc='FMP4'):

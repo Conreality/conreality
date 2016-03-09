@@ -2,13 +2,13 @@
 
 """World model."""
 
-class ObjectColor(object):
+class ObjectColor:
   pass
 
-class ObjectShape(object):
+class ObjectShape:
   pass
 
-class Object(object):
+class Object:
   """An object of interest."""
 
   def __init__(self, id=None, color=None):

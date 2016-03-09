@@ -7,7 +7,7 @@ import numpy
 import cv2
 import os
 
-class Color(object):
+class Color:
   """A red-green-blue (RGB) color value."""
 
   def __init__(self, r, g, b):
@@ -47,7 +47,7 @@ RED_COLOR   = Color(255, 0, 0)
 GREEN_COLOR = Color(0, 255, 0)
 BLUE_COLOR  = Color(0, 0, 255)
 
-class Image(object):
+class Image:
   """A two-dimensional (2D) image."""
 
   def __init__(self, width=None, height=None, color=BLACK_COLOR, data=None, format='bgr'):
@@ -163,7 +163,7 @@ class SharedImage(Image):
     """Write back any changes in the image to the backing storage."""
     self.data.flush()
 
-class CascadeClassifier(object):
+class CascadeClassifier:
   @staticmethod
   def find(filename):
     return '/opt/local/share/OpenCV/haarcascades/' + filename # FIXME

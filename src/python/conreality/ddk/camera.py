@@ -28,7 +28,7 @@ class CameraRegistry(DataDirectory):
     return len(self.dirs)
 
   def __iter__(self):
-    return iter(list(self.dirs.values()))
+    return self.dirs.values()
 
   def __contains__(self, id):
     return id in self.dirs
@@ -63,7 +63,7 @@ class CameraDirectory(DataDirectory):
       kwargs['mode'] = self.mode or 'r'
     return CameraFeed(self, **kwargs)
 
-class CameraFeed(object):
+class CameraFeed:
   PATH_REGEXP = re.compile(r'(\d+)x(\d+).(bgr)')
 
   def __init__(self, dir, path=None, width=None, height=None, format='bgr', mode='r'):

@@ -4,7 +4,7 @@ import lupa
 
 Error = lupa.LuaError
 
-class Context(object):
+class Context:
   def __init__(self):
     self.runtime = lupa.LuaRuntime(unpack_returned_tuples=True)
 
