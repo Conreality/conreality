@@ -52,7 +52,7 @@ class DataDirectory(object):
   def open(self, mode='r'):
     if mode != 'r' and not self.exists():
       try:
-        os.makedirs(self.path, 0777)
+        os.makedirs(self.path, 0o777)
       except OSError as e:
         raise DataDirectoryException(e)
     self.mode = mode

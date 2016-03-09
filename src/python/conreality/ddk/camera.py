@@ -28,7 +28,7 @@ class CameraRegistry(DataDirectory):
     return len(self.dirs)
 
   def __iter__(self):
-    return iter(self.dirs.values())
+    return iter(list(self.dirs.values()))
 
   def __contains__(self, id):
     return id in self.dirs
