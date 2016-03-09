@@ -4,6 +4,8 @@
 
 from ..sdk.scripting import Context
 import argparse
+import asyncio
+import functools
 import os
 import select
 import signal
@@ -60,64 +62,61 @@ class DataDirectory:
   def close(self):
     self.mode = None
 
-class Driver:
-  """Base class for device drivers."""
+class Logger:
+  def __enter__(self):
+    return self
 
-  def __init__(self, argv=sys.argv, argparser=ArgumentParser):
-    self.options = argparser().parse_args(argv[1:])
-    self.input   = sys.stdin
-    self.output  = sys.stdout
-    self.context = Context()
-    self.init()
+  def __exit__(self, *args):
+    self.close()
+    return False
 
-  def has_input(self, timeout=0.):
-    readables, _, _ = select.select([self.input], [], [], timeout)
-    return bool(readables)
-
-  def init(self):
-    pass
-
-  def exit(self):
-    pass
-
-  def loop(self):
-    self.pause()
-
-  def run(self):
-    try:
-      self.open_log()
-      self.init_signals()
-      self.loop()
-      return EX_OK
-    except SignalException as e:
-      print("", file=sys.stderr)
-      self.info("Received a signal ({}), terminating...", e.signum)
-      return e.exit_code()
-    finally:
-      self.exit()
-      self.close_log()
-
-  def pause(self):
-    signal.pause()
-
-  def open_log(self):
+  def open(self, verbosity=syslog.LOG_NOTICE):
     log_options = syslog.LOG_PID | syslog.LOG_CONS | syslog.LOG_NDELAY
     if self.options.debug:
       log_options |= syslog.LOG_PERROR
     syslog.openlog("conreality", logoption=log_options, facility=syslog.LOG_DAEMON)
-    syslog.setlogmask(syslog.LOG_UPTO(self.log_verbosity()))
+    syslog.setlogmask(syslog.LOG_UPTO(verbosity))
+    return self
 
-  def close_log(self):
+  def close(self):
     syslog.closelog()
 
-  def handle_signal(self, signum, stack_frame):
-    raise SignalException(signum)
+  def log(self, priority, message, *args):
+    syslog.syslog(priority, message.format(*args))
+    return self
 
-  def init_signals(self):
-    signal.signal(signal.SIGHUP, self.handle_signal)
-    signal.signal(signal.SIGINT, self.handle_signal)
-    signal.signal(signal.SIGPIPE, self.handle_signal)
-    signal.signal(signal.SIGTERM, self.handle_signal)
+  def panic(self, *args):
+    return self.log(syslog.LOG_EMERG, *args)
+
+  def alert(self, *args):
+    return self.log(syslog.LOG_ALERT, *args)
+
+  def critical(self, *args):
+    return self.log(syslog.LOG_CRIT, *args)
+
+  def error(self, *args):
+    return self.log(syslog.LOG_ERR, *args)
+
+  def warning(self, *args):
+    return self.log(syslog.LOG_WARNING, *args)
+
+  def notice(self, *args):
+    return self.log(syslog.LOG_NOTICE, *args)
+
+  def info(self, *args):
+    return self.log(syslog.LOG_INFO, *args)
+
+  def debug(self, *args):
+    return self.log(syslog.LOG_DEBUG, *args)
+
+class Program(Logger):
+  """Base class for utility programs."""
+
+  def __init__(self, argv=sys.argv, argparser=ArgumentParser, input=sys.stdin, output=sys.stdout):
+    self.options = argparser().parse_args(argv[1:])
+    self.input   = input
+    self.output  = output
+    self.open(verbosity=self.log_verbosity())
 
   def log_verbosity(self):
     if self.options.debug:
@@ -129,29 +128,68 @@ class Driver:
     else:
       return syslog.LOG_NOTICE
 
-  def log(self, priority, message, *args):
-    syslog.syslog(priority, message.format(*args))
+class Driver(Program):
+  """Base class for device drivers."""
 
-  def panic(self, *args):
-    self.log(syslog.LOG_EMERG, *args)
+  def __init__(self, argv=sys.argv, argparser=ArgumentParser, input=sys.stdin, output=sys.stdout):
+    super(Driver, self).__init__(argv, argparser, input, output)
+    self.__loop__ = asyncio.get_event_loop()
+    self.__loop__.add_reader(self.input, self.handle_input)
+    self.__sigs__ = {}
+    self.catch_signal(signal.SIGHUP,  "SIGHUP")
+    self.catch_signal(signal.SIGINT,  "SIGINT")
+    self.catch_signal(signal.SIGPIPE, "SIGPIPE")
+    self.catch_signal(signal.SIGTERM, "SIGTERM")
+    self.context = Context()
+    self.init()
 
-  def alert(self, *args):
-    self.log(syslog.LOG_ALERT, *args)
+  def __exit__(self, *args):
+    for signum in self.__sigs__.keys():
+      self.__loop__.remove_signal_handler(signum)
+    self.exit()
+    self.__loop__.close()
+    return super(Driver, self).__exit__(*args)
 
-  def critical(self, *args):
-    self.log(syslog.LOG_CRIT, *args)
+  def init(self):
+    pass # subclasses should override this
 
-  def error(self, *args):
-    self.log(syslog.LOG_ERR, *args)
+  def exit(self):
+    pass # subclasses should override this
 
-  def warning(self, *args):
-    self.log(syslog.LOG_WARNING, *args)
+  def run(self):
+    self.__loop__.call_soon(self.idle)
+    self.__loop__.run_forever()
+    return EX_OK
 
-  def notice(self, *args):
-    self.log(syslog.LOG_NOTICE, *args)
+  def idle(self):
+    self.loop()
+    self.__loop__.call_soon(self.idle)
 
-  def info(self, *args):
-    self.log(syslog.LOG_INFO, *args)
+  def loop(self):
+    pass # subclasses should override this
 
-  def debug(self, *args):
-    self.log(syslog.LOG_DEBUG, *args)
+  def stop(self):
+    self.__loop__.stop()
+
+  def catch_signal(self, signum, name=None):
+    self.__sigs__[signum] = name or signum
+    self.__loop__.add_signal_handler(signum,
+      functools.partial(self.handle_signal, signum))
+
+  def handle_signal(self, signum):
+    print("", file=sys.stderr)
+    self.info("Received a {} signal ({}), terminating...", self.__sigs__[signum], signum)
+    self.stop()
+    # TODO: SignalException(signum).exit_code()
+
+  def handle_input(self):
+    input_line = self.input.readline()
+    if not input_line:
+      self.info("Received EOF on input, terminating...")
+      self.stop()
+      return
+    self.debug("Read input command line: {}", repr(input_line))
+    try:
+      self.context.load_code(input_line)
+    except sdk.scripting.Error as e:
+      self.error("Failed to execute input command: {}", e)
