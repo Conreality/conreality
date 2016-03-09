@@ -78,6 +78,9 @@ class Driver(object):
   def init(self):
     pass
 
+  def exit(self):
+    pass
+
   def loop(self):
     self.pause()
 
