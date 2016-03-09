@@ -3,6 +3,7 @@
 """Driver support."""
 
 from ..sdk.scripting import Context
+from .sysexits import *
 import argparse
 import asyncio
 import functools
@@ -11,9 +12,6 @@ import select
 import signal
 import sys
 import syslog
-
-EX_OK        = 0
-EX_CANTCREAT = 73
 
 class SignalException(Exception):
   def __init__(self, signum):

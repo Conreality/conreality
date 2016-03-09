@@ -2,7 +2,8 @@
 
 """Conreality Driver Development Kit (DDK) for Python."""
 
-__all__ = ['camera', 'driver']
+__all__ = ['camera', 'driver', 'sysexits']
 
 from .camera import *
 from .driver import *
+from .sysexits import *
