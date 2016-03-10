@@ -1,13 +1,141 @@
 #!/usr/bin/env python3
-from os.path import basename
-from sys import argv
-from syslog import *
+from conreality import ddk
+import os
 
-def main(argv):
-  openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-  setlogmask(LOG_UPTO(LOG_DEBUG))
-  syslog(LOG_CRIT, "The %s driver is not yet implemented." % basename(argv[0])) # TODO
-  closelog()
+BASE_DIR_FD=os.open('/', os.O_RDONLY)
+#BASE_DIR_FD=os.open('/tmp', os.O_RDONLY) # DEBUG
+
+# See: https://www.kernel.org/doc/Documentation/gpio/sysfs.txt
+class GPIOChip:
+  pass
+
+# See: https://www.kernel.org/doc/Documentation/gpio/sysfs.txt
+class GPIOPin:
+  @staticmethod
+  def control_path(op):
+    return 'sys/class/gpio/{}'.format(op)
+
+  def __init__(self, id, readable=None, writable=None):
+    self.id = id
+    self.readable = True if readable is None else readable
+    self.writable = True if writable is None else writable
+    self.export()
+    self.set_direction()
+    self.open()
+
+  def __del__(self):
+    self.close()
+
+  def _path(self, op):
+    return 'sys/class/gpio/gpio{}/{}'.format(self.id, op)
+
+  @property
+  def path(self):
+    return self._path('value')
+
+  @property
+  def flags(self):
+    return self.mode | os.O_CLOEXEC
+
+  @property
+  def mode(self):
+    if self.readable and not self.writable:
+      return os.O_RDONLY
+    if self.writable and not self.readable:
+      return os.O_WRONLY
+    return os.O_RDWR
+
+  def export(self):
+    self.control('export')
+
+  def unexport(self):
+    self.control('unexport')
+
+  def control(self, op):
+    fd = os.open(self.control_path(op),
+      flags=os.O_WRONLY | os.O_CLOEXEC,
+      dir_fd=BASE_DIR_FD)
+    try:
+      os.pwrite(fd, str(self.id).encode('ascii'), 0)
+    finally:
+      os.close(fd)
+
+  def set_direction(self):
+    fd = os.open(self._path('direction'),
+      flags=os.O_WRONLY | os.O_CLOEXEC,
+      dir_fd=BASE_DIR_FD)
+    try:
+      os.pwrite(fd, b'out' if self.writable else b'in' , 0)
+    finally:
+      os.close(fd)
+
+  def open(self):
+    self.fd = os.open(self.path,
+      flags=self.flags,
+      dir_fd=BASE_DIR_FD)
+
+  def close(self):
+    if not self.fd:
+      return # this method is idempotent
+    try:
+      os.close(self.fd)
+      self.fd = None
+    finally:
+      self.unexport()
+
+  def read(self):
+    if not self.fd:
+      raise RuntimeError("not opened")
+    value = bool(int(os.pread(self.fd, 1, 0)))
+    return value
+
+  def write(self, value):
+    if not self.fd:
+      raise RuntimeError("not opened")
+    value = bool(value)
+    os.pwrite(self.fd, b'1' if value else b'0', 0)
+
+class ArgumentParser(ddk.ArgumentParser):
+  def init(self):
+    self.add_argument('id', nargs=1, type=int,
+      help='set the GPIO pin ID')
+    self.add_argument('-r', '--read', action='store_true',
+      help='enable input on the GPIO pin')
+    self.add_argument('-w', '--write', action='store_true',
+      help='enable output on the GPIO pin')
+    self.add_argument('-f', '--freq', nargs='?',
+      help='set polling frequency in Hz (default: 1)')
+
+class Driver(ddk.Driver):
+  def init(self):
+    self.id = self.options.id[0]
+    self.io = GPIOPin(self.id, self.options.read, self.options.write)
+    if self.options.read:
+      self.context.define('read', self.read)
+    if self.options.write:
+      self.context.define('write', self.write)
+
+  def exit(self):
+    self.close()
+
+  def close(self):
+    if self.io:
+      self.io.close()
+      self.io = None
+    super(Driver, self).close()
+
+  def read(self):
+    if not self.io:
+      raise RuntimeError("not opened yet")
+    print(self.io.read(), file=self.output) # FIXME
+
+  def write(self, value):
+    if not self.io:
+      raise RuntimeError("not opened yet")
+    self.io.write(bool(value))
+    print("write({})".format(repr(bool(value)))) # FIXME
 
 if __name__ == '__main__':
-  main(argv)
+  import sys
+  with Driver(argparser=ArgumentParser) as driver:
+    sys.exit(driver.run())
