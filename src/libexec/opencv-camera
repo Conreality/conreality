@@ -66,6 +66,7 @@ class Driver(ddk.Driver):
       self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
       cv2.namedWindow(self.window_title)
       cv2.imshow(self.window_title, Image(height=WINDOW_HEIGHT, width=WINDOW_WIDTH).data)
+      cv2.setMouseCallback(self.window_title, self.handle_mouse)
 
   def exit(self):
     self.camera.release()
@@ -77,44 +78,30 @@ class Driver(ddk.Driver):
       cv2.destroyAllWindows()
 
   def loop(self):
+    success, frame = self.camera.read()
+    if not success:
+      if not self.frame_count:
+        self.error("Failed to read frame from video capture device; terminating...")
+      self.stop() # end of video stream
+
+    frame = cv2.flip(frame, 1) # flip horizontally
+
+    self.frame = Image(data=frame)
+    self.frame_count += 1
+    frame = None
+    image = self.process_frame(self.frame)
+
+    if self.camera_feed:
+      image.copy_to(self.camera_feed.image)
+
+    if self.video_output:
+      self.video_output.write(image)
+
     if self.has_window():
-      cv2.setMouseCallback(self.window_title, self.handle_mouse)
-
-    while self.camera.isOpened():
-      success, frame = self.camera.read()
-      if not success:
-        if not self.frame_count:
-          self.error("Failed to read frame from video capture device; terminating...")
-        break # end of video stream
-
-      frame = cv2.flip(frame, 1) # flip horizontally
-
-      self.frame = Image(data=frame)
-      self.frame_count += 1
-      frame = None
-      image = self.process_frame(self.frame)
-
-      if self.camera_feed:
-        image.copy_to(self.camera_feed.image)
-
-      if self.video_output:
-        self.video_output.write(image)
-
-      if self.has_input():
-        input_line = self.input.readline()
-        if not input_line:
-          break
-        self.debug("Read input command line: {}", repr(input_line))
-        try:
-          self.context.load_code(input_line)
-        except sdk.scripting.Error as e:
-          self.error("Failed to execute input command: {}", e)
-
-      if self.has_window():
-        cv2.imshow(self.window_title, image.data)
-        key = cv2.waitKey(1)
-        if key == 0x1B: # ESC
-          break
+      cv2.imshow(self.window_title, image.data)
+      key = cv2.waitKey(1)
+      if key == 0x1B: # ESC
+        self.stop()
 
     return self.frame_count
 
@@ -211,4 +198,6 @@ class Driver(ddk.Driver):
           self.track_object(p1, p2)
 
 if __name__ == '__main__':
-  Driver(argparser=ArgumentParser).run()
+  import sys
+  with Driver(argparser=ArgumentParser) as driver:
+    sys.exit(driver.run())

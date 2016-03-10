@@ -23,23 +23,23 @@ class Program(ddk.Driver):
     self.designated_box = None # the current object being designated (if any)
     cv2.namedWindow(self.window_title, cv2.WINDOW_AUTOSIZE)
     cv2.imshow(self.window_title, Image(width=self.window_width, height=self.window_height).data)
+    cv2.setMouseCallback(self.window_title, self.handle_mouse)
 
   def exit(self):
     cv2.destroyAllWindows()
 
   def loop(self):
-    cv2.setMouseCallback(self.window_title, self.handle_mouse)
-    frame_duration = 1000 // self.options.fps # in milliseconds
-    while True:
-      image = self.camera_feed.snap()
-      if self.designated_box:
-        p1, p2 = self.designated_box
-        if p1 is not None and p2 is not None:
-          image.draw_rectangle(p1, p2, RED_COLOR)
-      cv2.imshow(self.window_title, image.data)
-      key = cv2.waitKey(frame_duration)
-      if key == 0x1B: # ESC
-        break
+    image = self.camera_feed.snap()
+    if self.designated_box:
+      p1, p2 = self.designated_box
+      if p1 is not None and p2 is not None:
+        image.draw_rectangle(p1, p2, RED_COLOR)
+    cv2.imshow(self.window_title, image.data)
+
+    frame_duration = (1000 // self.options.fps) // 2 # in milliseconds (FIXME)
+    key = cv2.waitKey(frame_duration)
+    if key == 0x1B: # ESC
+      self.stop()
 
   def track_object(self, p1, p2):
     (x1, y1), (x2, y2) = p1, p2
@@ -64,4 +64,6 @@ class Program(ddk.Driver):
           self.track_object(p1, p2)
 
 if __name__ == '__main__':
-  Program(argparser=ArgumentParser).run()
+  import sys
+  with Program(argparser=ArgumentParser) as program:
+    sys.exit(program.run())
