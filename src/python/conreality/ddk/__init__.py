@@ -4,6 +4,5 @@
 
 __all__ = ['camera', 'driver', 'sysexits']
 
-from .camera import *
 from .driver import *
 from .sysexits import *
