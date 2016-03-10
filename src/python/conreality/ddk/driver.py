@@ -114,7 +114,7 @@ class Program(Logger):
     self.options = argparser().parse_args(argv[1:])
     self.input   = input
     self.output  = output
-    self.open(verbosity=self.log_verbosity())
+    Logger.open(self, verbosity=self.log_verbosity())
 
   def log_verbosity(self):
     if self.options.debug:
