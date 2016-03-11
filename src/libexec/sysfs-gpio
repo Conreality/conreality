@@ -7,7 +7,12 @@ BASE_DIR_FD=os.open('/', os.O_RDONLY)
 
 # See: https://www.kernel.org/doc/Documentation/gpio/sysfs.txt
 class GPIOChip:
-  pass
+  def __init__(self, id):
+    self.id = id
+
+  @property
+  def path(self):
+    return 'sys/class/gpio/gpiochip{}'.format(self.id)
 
 # See: https://www.kernel.org/doc/Documentation/gpio/sysfs.txt
 class GPIOPin:
@@ -98,22 +103,28 @@ class GPIOPin:
 class ArgumentParser(ddk.ArgumentParser):
   def init(self):
     self.add_argument('id', nargs=1, type=int,
-      help='set the GPIO pin ID')
+      help="set the GPIO pin ID")
     self.add_argument('-r', '--read', action='store_true',
-      help='enable input on the GPIO pin')
+      help="enable input on the GPIO pin")
     self.add_argument('-w', '--write', action='store_true',
-      help='enable output on the GPIO pin')
-    self.add_argument('-f', '--freq', nargs='?',
-      help='set polling frequency in Hz (default: 1)')
+      help="enable output on the GPIO pin")
+    self.add_argument('-f', '--freq', nargs='?', type=self.positive_int,
+      help="set polling frequency in Hz (default: max)")
 
 class Driver(ddk.Driver):
   def init(self):
     self.id = self.options.id[0]
     self.io = GPIOPin(self.id, self.options.read, self.options.write)
-    if self.options.read:
-      self.context.define('read', self.read)
     if self.options.write:
       self.context.define('write', self.write)
+    if self.options.read:
+      self.context.define('read', self.read)
+      if self.options.freq is None:
+        self.watch_readability(self.io.fd, self.read)
+      else:
+        assert self.options.freq > 0
+        self.poll_delay = 1. / self.options.freq
+        self.__loop__.call_soon(self.poll)
 
   def exit(self):
     self.close()
@@ -123,6 +134,10 @@ class Driver(ddk.Driver):
       self.io.close()
       self.io = None
     super(Driver, self).close()
+
+  def poll(self):
+    self.read()
+    self.__loop__.call_later(self.poll_delay, self.poll)
 
   def read(self):
     if not self.io:
