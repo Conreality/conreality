@@ -39,6 +39,12 @@ class ArgumentParser(argparse.ArgumentParser):
   def init(self):
     pass
 
+  def positive_int(self, string):
+    value = int(string)
+    if value <= 0:
+      raise argparse.ArgumentTypeError("{} is not a positive integer".format(string))
+    return value
+
 class DataDirectory:
   BASE_PATH = '/tmp/var/run/conreality' # FIXME
 
