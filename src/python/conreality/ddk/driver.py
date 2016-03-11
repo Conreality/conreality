@@ -2,7 +2,7 @@
 
 """Driver support."""
 
-from ..sdk.scripting import Context
+from ..sdk import scripting
 from .sysexits import *
 import argparse
 import asyncio
@@ -138,7 +138,7 @@ class Driver(Program):
     self.catch_signal(signal.SIGINT,  "SIGINT")
     self.catch_signal(signal.SIGPIPE, "SIGPIPE")
     self.catch_signal(signal.SIGTERM, "SIGTERM")
-    self.context = Context()
+    self.context = scripting.Context()
     self.init()
 
   def __exit__(self, *args):
@@ -189,5 +189,5 @@ class Driver(Program):
     self.debug("Read input command line: {}", repr(input_line))
     try:
       self.context.load_code(input_line)
-    except sdk.scripting.Error as e:
+    except scripting.Error as e:
       self.error("Failed to execute input command: {}", e)
