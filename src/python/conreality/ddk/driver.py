@@ -169,6 +169,12 @@ class Driver(Program):
   def stop(self):
     self.__loop__.stop()
 
+  def watch_readability(self, fd, callback, *args):
+    self.__loop__.add_reader(fd, callback, *args)
+
+  def watch_writability(self, fd, callback, *args):
+    self.__loop__.add_writer(fd, callback, *args)
+
   def catch_signal(self, signum, name=None):
     self.__sigs__[signum] = name or signum
     self.__loop__.add_signal_handler(signum,
