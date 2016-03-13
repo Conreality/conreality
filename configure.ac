@@ -196,6 +196,7 @@ AC_CONFIG_FILES([
   src/conreald/Makefile
   src/contop/Makefile
   src/libexec/Makefile
+  src/libexec/bcm283x/Makefile
   test/Makefile
 ])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])
