@@ -6,4 +6,4 @@ include $(top_srcdir)/src/Makefile.flags
 
 noinst_LIBRARIES = libconreality.a
 
-libconreality_a_SOURCES = ioctl.cc hello.cc
+libconreality_a_SOURCES = ioctl.cc hello.cc time.c
