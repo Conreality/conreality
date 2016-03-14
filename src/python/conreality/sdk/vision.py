@@ -4,7 +4,6 @@
 
 import errno
 import numpy
-import cv2
 import os
 
 class Color:
@@ -25,11 +24,13 @@ class Color:
 
   def gray(self):
     """Returns this color as a grayscale scalar (for OpenCV)."""
+    import cv2
     gray_array = cv2.cvtColor(numpy.uint8([[list(self.bgr())]]), cv2.COLOR_BGR2GRAY)
     return gray_array[0][0]
 
   def hsv(self):
     """Returns this color as an HSV tuple (for OpenCV)."""
+    import cv2
     hsv_array = cv2.cvtColor(numpy.uint8([[list(self.bgr())]]), cv2.COLOR_BGR2HSV)
     return tuple(hsv_array[0][0])
 
@@ -63,6 +64,7 @@ class Image:
       elif color.r == color.g and color.r == color.b:
         self.data = numpy.full((height, width, 3), color.r, numpy.uint8)
       else:
+        import cv2
         self.data = numpy.empty((height, width, 3), numpy.uint8)
         cv2.rectangle(self.data, (0, 0), (width-1, height-1), color.bgr(), cv2.cv.CV_FILLED)
       self.format = format
@@ -92,9 +94,11 @@ class Image:
     numpy.copyto(image.data, self.data, 'no')
 
   def data_as_gray(self):
+    import cv2
     return cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY)
 
   def data_as_hsv(self):
+    import cv2
     return cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV)
 
   def to_gray(self):
@@ -105,6 +109,7 @@ class Image:
 
   def histogram(self):
     """Returns a normalized HSV histogram of this image."""
+    import cv2
     data = self.data_as_hsv()
     mask = cv2.inRange(data, numpy.array((0., 60., 32.)), numpy.array((180., 255., 255.)))
     hist = cv2.calcHist([data], [0], mask, [180], [0, 180])
@@ -112,22 +117,27 @@ class Image:
     return hist
 
   def draw_circle(self, center, radius, color, thickness=1):
+    import cv2
     cv2.circle(self.data, center, radius, color.bgr(), thickness)
     return self
 
   def draw_line(self, point1, point2, color, thickness=1):
+    import cv2
     cv2.line(self.data, point1, point2, color.bgr(), thickness)
     return self
 
   def draw_polylines(self, points, is_closed, color, thickness=1):
+    import cv2
     cv2.polylines(self.data, points, is_closed, color.bgr(), thickness)
     return self
 
   def draw_rectangle(self, point1, point2, color, thickness=1):
+    import cv2
     cv2.rectangle(self.data, point1, point2, color.bgr(), thickness)
     return self
 
   def draw_text(self, origin, text, color, thickness=1):
+    import cv2
     font_face, font_scale = cv2.FONT_HERSHEY_PLAIN, 1
     (text_width, text_height), baseline = cv2.getTextSize(text, font_face, font_scale, thickness)
     (origin_x, origin_y) = origin
@@ -169,6 +179,7 @@ class CascadeClassifier:
     return '/opt/local/share/OpenCV/haarcascades/' + filename # FIXME
 
   def __init__(self, filename):
+    import cv2
     self.classifier = cv2.CascadeClassifier(self.find(filename))
     if self.classifier.empty():
       raise OSError(errno.ENOENT, os.strerror(errno.ENOENT), filename)
