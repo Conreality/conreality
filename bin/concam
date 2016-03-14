@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+# This is free and unencumbered software released into the public domain.
+
 from conreality import ddk, sdk
+from conreality.ddk.camera import CameraDirectory
 from conreality.sdk.vision import Image, SharedImage, RED_COLOR, BLUE_COLOR
 import cv2
 
@@ -15,7 +18,7 @@ class ArgumentParser(ddk.ArgumentParser):
 class Program(ddk.Driver):
   def init(self):
     self.camera_id = self.options.id
-    self.camera_dir = ddk.CameraDirectory(self.camera_id).open('r')
+    self.camera_dir = CameraDirectory(self.camera_id).open('r')
     self.camera_feed = self.camera_dir.open_feed()
     self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
     self.window_width = self.camera_feed.width
@@ -29,7 +32,7 @@ class Program(ddk.Driver):
     cv2.destroyAllWindows()
 
   def loop(self):
-    image = self.camera_feed.snap()
+    image = self.camera_feed.snap('bgr')
     if self.designated_box:
       p1, p2 = self.designated_box
       if p1 is not None and p2 is not None:
