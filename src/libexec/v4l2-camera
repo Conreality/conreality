@@ -1,15 +1,205 @@
 #!/usr/bin/env python3
 # This is free and unencumbered software released into the public domain.
 
-from os.path import basename
-from sys import argv
-from syslog import *
+from conreality import ddk
+from fcntl import ioctl
+import ctypes
+import os
 
-def main(argv):
-  openlog("conreality", logoption=LOG_PID|LOG_CONS|LOG_NDELAY, facility=LOG_DAEMON)
-  setlogmask(LOG_UPTO(LOG_DEBUG))
-  syslog(LOG_CRIT, "The %s driver is not yet implemented." % basename(argv[0])) # TODO
-  closelog()
+VIDIOC_G_FMT                = 0xC0D05604
+VIDIOC_QUERYCAP             = 0x80685600
+VIDIOC_S_FMT                = 0xC0D05605
+V4L2_BUF_TYPE_VIDEO_CAPTURE = 1
+V4L2_CAP_VIDEO_CAPTURE      = 1
+V4L2_FIELD_INTERLACED       = 4
+V4L2_PIX_FMT_YUYV           = 0x56595559
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/field-order.html#v4l2-field
+v4l2_field = ctypes.c_uint
+(
+  V4L2_FIELD_ANY,
+  V4L2_FIELD_NONE,
+  V4L2_FIELD_TOP,
+  V4L2_FIELD_BOTTOM,
+  V4L2_FIELD_INTERLACED,
+  V4L2_FIELD_SEQ_TB,
+  V4L2_FIELD_SEQ_BT,
+  V4L2_FIELD_ALTERNATE,
+  V4L2_FIELD_INTERLACED_TB,
+  V4L2_FIELD_INTERLACED_BT,
+) = range(0, 10)
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/vidioc-querycap.html#v4l2-capability
+class v4l2_capability(ctypes.Structure):
+  _fields_ = [
+    ('driver',           ctypes.c_char * 16),
+    ('card',             ctypes.c_char * 32),
+    ('bus_info',         ctypes.c_char * 32),
+    ('version' ,         ctypes.c_uint32),
+    ('capabilities',     ctypes.c_uint32),
+    ('device_caps',      ctypes.c_uint32),
+    ('reserved',         ctypes.c_uint32 * 3),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/overlay.html#v4l2-rect
+class v4l2_rect(ctypes.Structure):
+  _fields_ = [
+    ('left',             ctypes.c_int32),
+    ('top',              ctypes.c_int32),
+    ('width',            ctypes.c_uint32),
+    ('height',           ctypes.c_uint32),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/pixfmt.html#v4l2-pix-format
+class v4l2_pix_format(ctypes.Structure):
+  _fields_ = [
+    ('width' ,           ctypes.c_uint32),
+    ('height' ,          ctypes.c_uint32),
+    ('pixelformat' ,     ctypes.c_uint32),
+    ('field',            v4l2_field),
+    ('bytesperline',     ctypes.c_uint32),
+    ('sizeimage',        ctypes.c_uint32),
+    ('colorspace',       ctypes.c_uint),   # TODO: v4l2_colorspace
+    ('priv',             ctypes.c_uint32),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/overlay.html#v4l2-window
+class v4l2_window(ctypes.Structure):
+  _fields = [
+    ('w',                v4l2_rect),
+    ('field',            v4l2_field),
+    ('chromakey',        ctypes.c_uint32),
+    ('clips',            ctypes.c_void_p), # TODO: v4l2_clip
+    ('clipcount',        ctypes.c_uint32),
+    ('bitmap',           ctypes.c_void_p),
+    ('global_alpha',     ctypes.c_uint8),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/raw-vbi.html#v4l2-vbi-format
+class v4l2_vbi_format(ctypes.Structure):
+  _fields = [
+    ('sampling_rate',    ctypes.c_uint32),
+    ('offset',           ctypes.c_uint32),
+    ('samples_per_line', ctypes.c_uint32),
+    ('sample_format',    ctypes.c_uint32),
+    ('start',            ctypes.c_uint32 * 2),
+    ('count',            ctypes.c_uint32 * 2),
+    ('flags',            ctypes.c_uint32),
+    ('reserved',         ctypes.c_uint32 * 2),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/sliced.html#v4l2-sliced-vbi-format
+class v4l2_sliced_vbi_format(ctypes.Structure):
+  _fields = [
+    ('service_set',      ctypes.c_uint32),
+    ('service_lines',    ctypes.c_uint16 * 2 * 24),
+    ('io_size',          ctypes.c_uint32),
+    ('reserved',         ctypes.c_uint32 * 2),
+  ]
+
+##
+# @see https://linuxtv.org/downloads/v4l-dvb-apis/vidioc-g-fmt.html#v4l2-format
+class v4l2_format(ctypes.Structure):
+  class _U(ctypes.Union):
+    _fields_ = [
+      ('pix',            v4l2_pix_format),
+      ('win',            v4l2_window),
+      ('vbi',            v4l2_vbi_format),
+      ('sliced',         v4l2_sliced_vbi_format),
+      ('raw_data',       ctypes.c_char * 200),
+    ]
+  _anonymous_ = ('u',)
+  _fields_ = [
+    ('type',             ctypes.c_uint32),
+    ('padding',          ctypes.c_uint32), # FIXME: why is this needed?
+    ('u',                _U),
+  ]
+
+class Camera:
+  def __init__(self, device_path):
+    self.path = str(device_path)
+    self.open()
+    self.caps = self.querycap()
+    if not self.caps.capabilities & V4L2_CAP_VIDEO_CAPTURE:
+      raise RuntimeError("video capture not supported")
+    self.format = self.g_fmt()
+
+  ##
+  # @see https://docs.python.org/3.4/library/os.html#os.open
+  def open(self):
+    self.fd = os.open(self.path,
+      flags=os.O_RDONLY | os.O_CLOEXEC)
+
+  ##
+  # @see https://docs.python.org/3.4/library/os.html#os.close
+  def close(self):
+    if self.fd:
+      os.close(self.fd)
+      self.fd = None
+
+  ##
+  # @see https://docs.python.org/3.4/library/os.html#os.read
+  def read(self):
+    bytes = os.read(self.fd, self.format.pix.sizeimage)
+    return bytes
+
+  ##
+  # @see https://docs.python.org/3.4/library/fcntl.html#fcntl.ioctl
+  def ioctl(self, op, arg=0, mutate=True):
+    rc = ioctl(self.fd, op, arg, mutate)
+    assert rc == 0
+
+  ##
+  # @see https://linuxtv.org/downloads/v4l-dvb-apis/vidioc-querycap.html
+  def querycap(self):
+    """Queries device capabilities."""
+    caps = v4l2_capability()
+    self.ioctl(VIDIOC_QUERYCAP, caps)
+    return caps
+
+  ##
+  # @see https://linuxtv.org/downloads/v4l-dvb-apis/vidioc-g-fmt.html
+  def g_fmt(self):
+    """Gets the data format."""
+    format = v4l2_format(type=V4L2_BUF_TYPE_VIDEO_CAPTURE)
+    self.ioctl(VIDIOC_G_FMT, format)
+    return format
+
+  ##
+  # @see https://linuxtv.org/downloads/v4l-dvb-apis/vidioc-g-fmt.html
+  def s_fmt(self, format):
+    """Gets the data format."""
+    self.ioctl(VIDIOC_S_FMT, format)
+    return format
+
+class Driver(ddk.Driver):
+  """Driver for V4L2 video devices."""
+
+  class ArgumentParser(ddk.ArgumentParser):
+    def init(self):
+      self.add_argument('camera', nargs='?', default='/dev/video0',
+        help='the camera device (default: /dev/video0)')
+      self.add_argument('-I', '--id', metavar='ID', nargs='?',
+        help='set camera ID (default: default)')
+
+  def init(self):
+    self.camera = Camera(self.options.camera)
+    # TODO
+    #print(len(self.camera.read()))
+
+  def exit(self):
+    if self.camera:
+      self.camera.close()
+      self.camera = None
 
 if __name__ == '__main__':
-  main(argv)
+  import sys
+  with Driver(argparser=Driver.ArgumentParser) as driver:
+    sys.exit(driver.run())
