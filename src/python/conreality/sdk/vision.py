@@ -53,21 +53,21 @@ class Image:
 
   def __init__(self, width=None, height=None, color=BLACK_COLOR, data=None, format='bgr'):
     if data is not None:
+      self.format = format
       self.height, self.width = data.shape[0:2]
       self.data = data
-      self.format = format
     else:
+      self.format = format
       self.width = width
       self.height = height
       if color == BLACK_COLOR:
-        self.data = numpy.zeros((height, width, 3), numpy.uint8)
+        self.data = numpy.zeros(self.dimensions(), numpy.uint8)
       elif color.r == color.g and color.r == color.b:
-        self.data = numpy.full((height, width, 3), color.r, numpy.uint8)
+        self.data = numpy.full(self.dimensions(), color.r, numpy.uint8)
       else:
         import cv2
-        self.data = numpy.empty((height, width, 3), numpy.uint8)
+        self.data = numpy.empty(self.dimensions(), numpy.uint8)
         cv2.rectangle(self.data, (0, 0), (width-1, height-1), color.bgr(), cv2.cv.CV_FILLED)
-      self.format = format
 
   def is_bgr(self):
     """Determines whether this is a BGR image."""
@@ -81,6 +81,20 @@ class Image:
     """Determines whether this is an HSV image."""
     return self.format == 'hsv'
 
+  # @see http://www.fourcc.org/yuv.php#YUYV
+  def is_yuyv(self):
+    """Determines whether this is an YUV 4:2:2 (aka YUYV, YUY2) image."""
+    return self.format == 'yuyv'
+
+  def dimensions(self):
+    if self.is_bgr() or self.is_hsv():
+      return (self.height, self.width, 3)
+    if self.is_gray():
+      return (self.height, self.width, 1)
+    if self.is_yuyv():
+      return (self.height, self.width, 2)
+    assert False
+
   def copy(self):
     """Returns a new copy of this image."""
     return Image(data=self.data.copy())
@@ -93,13 +107,44 @@ class Image:
     """Overwrites the given same-shaped image with the data from this image."""
     numpy.copyto(image.data, self.data, 'no')
 
+  def data_as_bgr(self):
+    import cv2
+    if self.is_bgr():
+      return self.data
+    if self.is_gray():
+      return cv2.cvtColor(self.data, cv2.COLOR_GRAY2BGR)
+    if self.is_hsv():
+      return cv2.cvtColor(self.data, cv2.COLOR_HSV2BGR)
+    if self.is_yuyv():
+      return cv2.cvtColor(self.data, cv2.COLOR_YUV2BGR_YUYV)
+    assert False
+
   def data_as_gray(self):
     import cv2
-    return cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY)
+    if self.is_bgr():
+      return cv2.cvtColor(self.data, cv2.COLOR_BGR2GRAY)
+    if self.is_gray():
+      return self.data
+    if self.is_hsv():
+      return cv2.cvtColor(self.data_as_bgr(), cv2.COLOR_BGR2GRAY)
+    if self.is_yuyv():
+      return cv2.cvtColor(self.data, cv2.COLOR_YUV2GRAY_YUYV)
+    assert False
 
   def data_as_hsv(self):
     import cv2
-    return cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV)
+    if self.is_bgr():
+      return cv2.cvtColor(self.data, cv2.COLOR_BGR2HSV)
+    if self.is_gray():
+      return cv2.cvtColor(self.data_as_bgr(), cv2.COLOR_BGR2HSV)
+    if self.is_hsv():
+      return self.data
+    if self.is_yuyv():
+      return cv2.cvtColor(self.data_as_bgr(), cv2.COLOR_BGR2HSV)
+    assert False
+
+  def to_bgr(self):
+    return Image(data=self.data_as_bgr(), format='bgr')
 
   def to_gray(self):
     return Image(data=self.data_as_gray(), format='gray')
@@ -156,10 +201,10 @@ class SharedImage(Image):
 
   def __init__(self, pathname, width=None, height=None, format='bgr', mode='r'):
     self.pathname = pathname
+    self.format = format
     self.width = width
     self.height = height
-    self.format = format
-    self.data = numpy.memmap(pathname, numpy.uint8, mode, offset=0, shape=(height, width, 3))
+    self.data = numpy.memmap(pathname, numpy.uint8, mode, offset=0, shape=self.dimensions())
 
   @property
   def mode(self):
