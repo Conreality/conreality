@@ -28,8 +28,8 @@ class DataDirectoryException(OSError):
     return EX_CANTCREAT
 
 class ArgumentParser(argparse.ArgumentParser):
-  def __init__(self):
-    super(ArgumentParser, self).__init__()
+  def __init__(self, description=None):
+    super(ArgumentParser, self).__init__(description=description)
     group = self.add_mutually_exclusive_group()
     group.add_argument('-q', '--quiet', action='store_true', help='suppress superfluous output')
     group.add_argument('-v', '--verbose', action='count', help='increase the verbosity level')
@@ -117,7 +117,7 @@ class Program(Logger):
   """Base class for utility programs."""
 
   def __init__(self, argv=sys.argv, argparser=ArgumentParser, input=sys.stdin, output=sys.stdout):
-    self.options = argparser().parse_args(argv[1:])
+    self.options = argparser(description=self.__doc__).parse_args(argv[1:])
     self.input   = input
     self.output  = output
     Logger.open(self, verbosity=self.log_verbosity())

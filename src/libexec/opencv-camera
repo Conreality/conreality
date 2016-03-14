@@ -30,20 +30,22 @@ class Object(sdk.model.Object):
   def __repr__(self):
     return "Object(x={}, y={}, w={}, h={})".format(*self.bounds)
 
-class ArgumentParser(ddk.ArgumentParser):
-  def init(self):
-    self.add_argument('input', nargs='?', default=0,
-      help='the video feed input (default: /dev/video0)')
-    self.add_argument('-i', '--id', metavar='ID', nargs='?',
-      help='set camera ID (default: default)')
-    self.add_argument('-o', '--output', metavar='FILE', nargs='?',
-      help='record output to MPEG-4 video file')
-    self.add_argument('-a', '--algorithm', metavar='ALGO', nargs=1, default='meanshift',
-      help='set object-tracking algorithm (default: meanshift)')
-    self.add_argument('-w', '--window', action='store_true',
-      help='show GUI window')
-
 class Driver(ddk.Driver):
+  """Driver for OpenCV cameras, with object tracking."""
+
+  class ArgumentParser(ddk.ArgumentParser):
+    def init(self):
+      self.add_argument('input', nargs='?', default=0,
+        help='the video feed input (default: /dev/video0)')
+      self.add_argument('-I', '--id', metavar='ID', nargs='?',
+        help='set camera ID (default: default)')
+      self.add_argument('-o', '--output', metavar='FILE', nargs='?',
+        help='record output to MPEG-4 video file')
+      self.add_argument('-a', '--algorithm', metavar='ALGO', nargs=1, default='meanshift',
+        help='set object-tracking algorithm (default: meanshift)')
+      self.add_argument('-w', '--window', action='store_true',
+        help='show GUI window')
+
   def has_window(self):
     return self.options.window
 
@@ -201,5 +203,5 @@ class Driver(ddk.Driver):
 
 if __name__ == '__main__':
   import sys
-  with Driver(argparser=ArgumentParser) as driver:
+  with Driver(argparser=Driver.ArgumentParser) as driver:
     sys.exit(driver.run())

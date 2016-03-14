@@ -102,18 +102,20 @@ class GPIOPin:
     value = bool(value)
     os.pwrite(self.fd, b'1' if value else b'0', 0)
 
-class ArgumentParser(ddk.ArgumentParser):
-  def init(self):
-    self.add_argument('id', nargs=1, type=int,
-      help="set the GPIO pin ID")
-    self.add_argument('-r', '--read', action='store_true',
-      help="enable input on the GPIO pin")
-    self.add_argument('-w', '--write', action='store_true',
-      help="enable output on the GPIO pin")
-    self.add_argument('-f', '--freq', nargs='?', type=self.positive_int,
-      help="set polling frequency in Hz (default: max)")
-
 class Driver(ddk.Driver):
+  """Driver for GPIO pins (Linux only)."""
+
+  class ArgumentParser(ddk.ArgumentParser):
+    def init(self):
+      self.add_argument('id', nargs=1, type=int,
+        help="set the GPIO pin ID")
+      self.add_argument('-r', '--read', action='store_true',
+        help="enable input on the GPIO pin")
+      self.add_argument('-w', '--write', action='store_true',
+        help="enable output on the GPIO pin")
+      self.add_argument('-f', '--freq', nargs='?', type=self.positive_int,
+        help="set polling frequency in Hz (default: max)")
+
   def init(self):
     self.id = self.options.id[0]
     self.io = GPIOPin(self.id, self.options.read, self.options.write)
@@ -154,5 +156,5 @@ class Driver(ddk.Driver):
 
 if __name__ == '__main__':
   import sys
-  with Driver(argparser=ArgumentParser) as driver:
+  with Driver(argparser=Driver.ArgumentParser) as driver:
     sys.exit(driver.run())

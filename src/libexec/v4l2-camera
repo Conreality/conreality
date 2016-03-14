@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # This is free and unencumbered software released into the public domain.
 
-from conreality import ddk
+from conreality import ddk, sdk
 from fcntl import ioctl
 import ctypes
 import os
@@ -180,7 +180,7 @@ class Camera:
     return format
 
 class Driver(ddk.Driver):
-  """Driver for V4L2 video devices."""
+  """Driver for V4L2 video devices (Linux only)."""
 
   class ArgumentParser(ddk.ArgumentParser):
     def init(self):
