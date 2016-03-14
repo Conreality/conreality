@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # This is free and unencumbered software released into the public domain.
 
-from conreality import ddk, sdk
+from conreality import ddk
+from conreality.ddk.camera import CameraDirectory
+from conreality.sdk.vision import Image
 from fcntl import ioctl
 import ctypes
+import numpy
 import os
 
 VIDIOC_G_FMT                = 0xC0D05604
@@ -128,8 +131,20 @@ class Camera:
     self.open()
     self.caps = self.querycap()
     if not self.caps.capabilities & V4L2_CAP_VIDEO_CAPTURE:
-      raise RuntimeError("video capture not supported")
+      raise RuntimeError("{} does not support video capture".format(self.path))
     self.format = self.g_fmt()
+    self.frame_size = self.format.pix.sizeimage
+
+  def fileno(self):
+    return self.fd
+
+  @property
+  def width(self):
+    return self.format.pix.width
+
+  @property
+  def height(self):
+    return self.format.pix.height
 
   ##
   # @see https://docs.python.org/3.4/library/os.html#os.open
@@ -144,10 +159,17 @@ class Camera:
       os.close(self.fd)
       self.fd = None
 
+  def read_frame(self):
+    bytes = self.read_bytes()
+    array = numpy.fromstring(bytes, numpy.uint8)
+    array = numpy.reshape(array, (self.height, self.width, 2)) # YUYV
+    return Image(data=array, format='yuyv')
+
   ##
   # @see https://docs.python.org/3.4/library/os.html#os.read
-  def read(self):
-    bytes = os.read(self.fd, self.format.pix.sizeimage)
+  def read_bytes(self):
+    bytes = os.read(self.fd, self.frame_size)
+    assert len(bytes) == self.frame_size
     return bytes
 
   ##
@@ -191,13 +213,21 @@ class Driver(ddk.Driver):
 
   def init(self):
     self.camera = Camera(self.options.camera)
-    # TODO
-    #print(len(self.camera.read()))
+    self.camera_id = self.options.id or 'default'
+    self.camera_dir = CameraDirectory(self.camera_id).open('w')
+    self.camera_feed = self.camera_dir.open_feed(width=self.camera.width, height=self.camera.height, mode='w+', format='yuyv')
+    self.frame_count = 0 # the number of video frames processed
+    self.watch_readability(self.camera, self.poll)
 
   def exit(self):
     if self.camera:
       self.camera.close()
       self.camera = None
+
+  def poll(self):
+    frame = self.camera.read_frame()
+    frame.copy_to(self.camera_feed.image)
+    self.frame_count += 1
 
 if __name__ == '__main__':
   import sys
