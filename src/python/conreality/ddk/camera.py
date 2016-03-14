@@ -64,7 +64,7 @@ class CameraDirectory(DataDirectory):
     return CameraFeed(self, **kwargs)
 
 class CameraFeed:
-  PATH_REGEXP = re.compile(r'(\d+)x(\d+).(bgr)')
+  PATH_REGEXP = re.compile(r'(\d+)x(\d+).(bgr|gray|hsv|yuyv)')
 
   def __init__(self, dir, path=None, width=None, height=None, format='bgr', mode='r'):
     if path:

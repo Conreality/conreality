@@ -97,7 +97,7 @@ class Image:
 
   def copy(self):
     """Returns a new copy of this image."""
-    return Image(data=self.data.copy())
+    return Image(data=self.data.copy(), format=self.format)
 
   def copy_from(self, image):
     """Overwrites this image with the data from the given same-shaped image."""
