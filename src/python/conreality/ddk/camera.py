@@ -91,5 +91,14 @@ class CameraFeed:
   def format(self):
     return self.image.format
 
-  def snap(self):
-    return self.image.copy()
+  def snap(self, format=None):
+    # TODO: eliminate unnecessary copies:
+    if format is None:
+      return self.image.copy()
+    elif format == 'bgr':
+      return self.image.copy().to_bgr()
+    elif format == 'gray':
+      return self.image.copy().to_gray()
+    elif format == 'hsv':
+      return self.image.copy().to_hsv()
+    assert False
