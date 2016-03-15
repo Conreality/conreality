@@ -198,6 +198,9 @@ AC_CONFIG_FILES([
   src/libexec/Makefile
   src/libexec/bcm283x/Makefile
   test/Makefile
+  test/consensus/Makefile
+  test/libexec/Makefile
+  test/python/Makefile
 ])
 AC_SUBST([PACKAGE_VERSION_MAJOR], ["VERSION_MAJOR"])
 AC_SUBST([PACKAGE_VERSION_MINOR], ["VERSION_MINOR"])
