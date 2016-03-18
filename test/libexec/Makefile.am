@@ -1,10 +1,12 @@
 include $(top_srcdir)/src/Makefile.flags
 $(eval include $(top_srcdir)/src/Makefile.conf)
 
-TESTS =           \
+check_SCRIPTS =   \
   opencv-camera.t \
   sysfs-gpio.t    \
   v4l2-camera.t
+
+TESTS = $(check_SCRIPTS)
 
 TEST_EXTENSIONS = .t
 
@@ -12,4 +14,4 @@ TEST_EXTENSIONS = .t
 T_LOG_COMPILER = $(CRAM)
 AM_T_LOG_FLAGS =
 
-EXTRA_DIST = .cramrc
+EXTRA_DIST = $(check_SCRIPTS) .cramrc
