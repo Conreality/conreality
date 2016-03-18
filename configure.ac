@@ -99,6 +99,9 @@ AC_CHECK_PROGS([CPPO], [cppo])
 AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
   AC_MSG_ERROR([*** OCaml preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
 AC_CHECK_PROGS([PANDOC], [pandoc])
+# Python 3.4+: (python3.4 on Ubuntu, python34 on Mac OS X + MacPorts)
+AM_PATH_PYTHON([3.4],, [:])
+AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != ":"])
 
 dnl Check for libraries:
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
@@ -197,6 +200,7 @@ AC_CONFIG_FILES([
   src/contop/Makefile
   src/libexec/Makefile
   src/libexec/bcm283x/Makefile
+  src/python/Makefile
   test/Makefile
   test/consensus/Makefile
   test/libexec/Makefile
