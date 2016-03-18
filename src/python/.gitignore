@@ -1,1 +1,14 @@
+# Python
 *.pyc
+*.pyo
+
+# Python distutils
+build
+
+# Python setuptools
+conreality.egg-info
+dist
+
+# Python setup.py
+UNLICENSE
+VERSION
