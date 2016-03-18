@@ -1,7 +1,11 @@
 include $(top_srcdir)/src/Makefile.flags
 
-check_PROGRAMS = check_all
+check_SCRIPTS = check_all
 
-check_all:
+TESTS = $(check_SCRIPTS)
 
-TESTS = $(check_PROGRAMS)
+EXTRA_DIST =      \
+  .cramrc         \
+  opencv-camera.t \
+  sysfs-gpio.t    \
+  v4l2-camera.t
