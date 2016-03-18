@@ -34,31 +34,6 @@ dnl Configure Automake:
 AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-override -Wno-portability dist-bzip2 subdir-objects nostdinc no-exeext])
 AM_SILENT_RULES([yes])
 
-dnl Check for programs:
-AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_CXX
-AC_PROG_CXXCPP
-m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-AC_PROG_RANLIB
-AC_LANG([C++])
-AC_PROG_OCAML
-AS_IF([test "x$OCAMLC" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml toolchain not found in \$PATH ***]))
-AC_PROG_OCAMLLEX
-AS_IF([test "x$OCAMLLEX" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml lexer generator program `ocamllex' not found in \$PATH ***]))
-AC_PROG_FINDLIB
-AS_IF([test "x$OCAMLFIND" != "xno"], [],
-  AC_MSG_ERROR([*** OCaml package manager program `ocamlfind' not found in \$PATH (install it using OPAM?) ***]))
-AC_CHECK_PROGS([MENHIR], [menhir])
-AS_IF([test "x$ac_cv_prog_MENHIR" != "x"], [],
-  AC_MSG_ERROR([*** OCaml parser generator program `menhir' not found in \$PATH (install it using OPAM?) ***]))
-AC_CHECK_PROGS([CPPO], [cppo])
-AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
-  AC_MSG_ERROR([*** OCaml preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
-AC_CHECK_PROGS([PANDOC], [pandoc])
-
 dnl Check for configuration options:
 # --enable-compile/--disable-compile
 AC_ARG_ENABLE([compile],
@@ -99,6 +74,31 @@ AC_ARG_ENABLE([mmap],
     [omit support for the mmap(2) system call])],
   [], [enable_mmap=yes])
 AM_CONDITIONAL([ENABLE_MMAP], [test "x$enable_mmap" != "xno"])
+
+dnl Check for programs:
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CXX
+AC_PROG_CXXCPP
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+AC_PROG_RANLIB
+AC_LANG([C++])
+AC_PROG_OCAML
+AS_IF([test "x$OCAMLC" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml toolchain not found in \$PATH ***]))
+AC_PROG_OCAMLLEX
+AS_IF([test "x$OCAMLLEX" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml lexer generator program `ocamllex' not found in \$PATH ***]))
+AC_PROG_FINDLIB
+AS_IF([test "x$OCAMLFIND" != "xno"], [],
+  AC_MSG_ERROR([*** OCaml package manager program `ocamlfind' not found in \$PATH (install it using OPAM?) ***]))
+AC_CHECK_PROGS([MENHIR], [menhir])
+AS_IF([test "x$ac_cv_prog_MENHIR" != "x"], [],
+  AC_MSG_ERROR([*** OCaml parser generator program `menhir' not found in \$PATH (install it using OPAM?) ***]))
+AC_CHECK_PROGS([CPPO], [cppo])
+AS_IF([test "x$ac_cv_prog_CPPO" != "x"], [],
+  AC_MSG_ERROR([*** OCaml preprocessor program `cppo' not found in \$PATH (install it using OPAM?) ***]))
+AC_CHECK_PROGS([PANDOC], [pandoc])
 
 dnl Check for libraries:
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
