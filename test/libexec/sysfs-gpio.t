@@ -1,3 +1,6 @@
+#!/usr/bin/env cram
+# This is free and unencumbered software released into the public domain.
+
 Environment:
 
   $ [ -n "$PYTHONPATH" ] || PYTHONPATH="$TESTDIR/../../src/python" && export PYTHONPATH

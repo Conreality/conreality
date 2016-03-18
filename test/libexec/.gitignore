@@ -8,3 +8,6 @@
 *.lo
 *.log
 *.trs
+
+# Cram
+*.t.err
