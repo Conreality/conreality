@@ -154,16 +154,18 @@ class Driver(ddk.Driver):
         pass # TODO: emit object movement message
 
     # Detect faces:
-    self.tracked_faces = FACE_CASCADE.detect(frame_gray, 1.3, 5) or self.tracked_faces
+    if FACE_CASCADE:
+      self.tracked_faces = FACE_CASCADE.detect(frame_gray, 1.3, 5) or self.tracked_faces
 
     # Detect eyes in faces:
-    eyes = []
-    for (fx, fy, fw, fh) in self.tracked_faces:
-      roi = Image(data=frame_gray.data[fy:fy+fh, fx:fx+fw], format='gray')
-      for (ex, ey, ew, eh) in EYE_CASCADE.detect(roi):
-        eyes.append((fx+ex, fy+ey, ew, eh))
-    if eyes:
-      self.tracked_eyes = eyes
+    if EYE_CASCADE and self.tracked_faces:
+      eyes = []
+      for (fx, fy, fw, fh) in self.tracked_faces:
+        roi = Image(data=frame_gray.data[fy:fy+fh, fx:fx+fw], format='gray')
+        for (ex, ey, ew, eh) in EYE_CASCADE.detect(roi):
+          eyes.append((fx+ex, fy+ey, ew, eh))
+      if eyes:
+        self.tracked_eyes = eyes
 
     image = frame.copy()
 
