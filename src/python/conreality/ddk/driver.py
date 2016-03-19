@@ -4,6 +4,7 @@
 
 from ..sdk import scripting
 from .sysexits import *
+from inspect import ismethod
 import argparse
 import asyncio
 import functools
@@ -161,16 +162,18 @@ class Driver(Program):
     pass # subclasses should override this
 
   def run(self):
-    self.__loop__.call_soon(self.idle)
+    if getattr(self, 'loop', None) and ismethod(self.loop):
+      if self.__class__.loop != Driver.loop:
+        self.__loop__.call_soon(self._loop)
     self.__loop__.run_forever()
     return EX_OK
 
-  def idle(self):
+  def _loop(self):
     self.loop()
-    self.__loop__.call_soon(self.idle)
+    self.__loop__.call_soon(self._loop)
 
   def loop(self):
-    pass # subclasses should override this
+    pass
 
   def stop(self):
     self.__loop__.stop()
