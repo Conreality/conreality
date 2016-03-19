@@ -1,9 +1,11 @@
 include $(top_srcdir)/src/Makefile.flags
 $(eval include $(top_srcdir)/src/Makefile.conf)
 
-check_SCRIPTS =   \
-  opencv-camera.t \
-  sysfs-gpio.t    \
+check_SCRIPTS =     \
+  opencv-camera.t   \
+  opencv-objtrack.t \
+  ros-proxy.t       \
+  sysfs-gpio.t      \
   v4l2-camera.t
 
 TESTS = $(check_SCRIPTS)

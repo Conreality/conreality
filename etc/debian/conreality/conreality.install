@@ -3,6 +3,8 @@ usr/bin/conctl
 usr/lib/conreality/bcm2835
 usr/lib/conreality/bcm2836
 usr/lib/conreality/opencv-camera
+usr/lib/conreality/opencv-objtrack
+usr/lib/conreality/ros-proxy
 usr/lib/conreality/sysfs-gpio
 usr/lib/conreality/v4l2-camera
 usr/sbin/conreald
