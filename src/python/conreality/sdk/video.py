@@ -2,12 +2,11 @@
 
 """Video input/output."""
 
-import cv2
-
 class VideoEncoder:
   """Video encoder for writing MPEG-4 video files."""
 
   def __init__(self, filepath, size, fps=20, fourcc='FMP4'):
+    import cv2
     self.fourcc = cv2.VideoWriter_fourcc(*fourcc)
     self.writer = cv2.VideoWriter(filepath, self.fourcc, fps, size, True)
 
