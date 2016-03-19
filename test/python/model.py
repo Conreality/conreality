@@ -6,15 +6,21 @@
 from conreality.sdk.model import *
 
 class TestObjectColor:
-  def test(self):
+  """Test cases for the conreality.sdk.model.ObjectColor class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestObjectShape:
-  def test(self):
+  """Test cases for the conreality.sdk.model.ObjectShape class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestObject:
-  def test(self):
+  """Test cases for the conreality.sdk.model.Object class."""
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':

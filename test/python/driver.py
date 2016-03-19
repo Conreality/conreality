@@ -6,23 +6,33 @@
 from conreality.ddk.driver import *
 
 class TestArgumentParser:
-  def test(self):
+  """Test cases for the conreality.ddk.driver.ArgumentParser class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestDataDirectory:
-  def test(self):
+  """Test cases for the conreality.ddk.driver.DataDirectory class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestLogger:
-  def test(self):
+  """Test cases for the conreality.ddk.driver.Logger class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestProgram:
-  def test(self):
+  """Test cases for the conreality.ddk.driver.Program class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestDriver:
-  def test(self):
+  """Test cases for the conreality.ddk.driver.Driver class."""
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':

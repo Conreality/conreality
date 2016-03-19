@@ -6,7 +6,9 @@
 from conreality.sdk.video import *
 
 class TestVideoEncoder:
-  def test(self):
+  """Test cases for the conreality.sdk.video.VideoEncoder class."""
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':

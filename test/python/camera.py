@@ -6,15 +6,21 @@
 from conreality.ddk.camera import *
 
 class TestCameraRegistry:
-  def test(self):
+  """Test cases for the conreality.ddk.camera.CameraRegistry class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestCameraDirectory:
-  def test(self):
+  """Test cases for the conreality.ddk.camera.CameraDirectory class."""
+
+  def test_construction(self):
     assert True # TODO
 
 class TestCameraFeed:
-  def test(self):
+  """Test cases for the conreality.ddk.camera.CameraFeed class."""
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':

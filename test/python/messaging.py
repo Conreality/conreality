@@ -5,8 +5,10 @@
 
 from conreality.sdk.messaging import *
 
-class Test:
-  def test(self):
+class Test: # TODO
+  """Test cases for the conreality.sdk.messaging. class.""" # TODO
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':

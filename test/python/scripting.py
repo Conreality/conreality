@@ -6,7 +6,9 @@
 from conreality.sdk.scripting import *
 
 class TestContext:
-  def test(self):
+  """Test cases for the conreality.sdk.scripting.Context class."""
+
+  def test_construction(self):
     assert True # TODO
 
 if __name__ == '__main__':
