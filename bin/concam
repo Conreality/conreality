@@ -2,30 +2,29 @@
 # This is free and unencumbered software released into the public domain.
 
 from conreality import ddk, sdk
-from conreality.ddk.camera import CameraDirectory
-from conreality.sdk.vision import Image, SharedImage, RED_COLOR, BLUE_COLOR
+from conreality.sdk.vision import RED_COLOR
 import cv2
 
 WINDOW_TITLE = 'Concam'
 
-class ArgumentParser(ddk.ArgumentParser):
-  def init(self):
-    self.add_argument('id', nargs='?', default='default',
-      help='the ID of the camera to attach to')
-    self.add_argument('-r', '--fps', type=int, default=30,
-      help='set the frames per second (FPS) rate (default: 30)')
-
 class Program(ddk.Driver):
+  class ArgumentParser(ddk.ArgumentParser):
+    def init(self):
+      self.add_argument('id', nargs='?', default='default',
+        help='the ID of the camera to attach to')
+      self.add_argument('-r', '--fps', type=int, default=30,
+        help='set the frames per second (FPS) rate (default: 30)')
+
   def init(self):
     self.camera_id = self.options.id
-    self.camera_dir = CameraDirectory(self.camera_id).open('r')
+    self.camera_dir = ddk.camera.CameraDirectory(self.camera_id).open('r')
     self.camera_feed = self.camera_dir.open_feed()
     self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
     self.window_width = self.camera_feed.width
     self.window_height = self.camera_feed.height
     self.designated_box = None # the current object being designated (if any)
     cv2.namedWindow(self.window_title, cv2.WINDOW_AUTOSIZE)
-    cv2.imshow(self.window_title, Image(width=self.window_width, height=self.window_height).data)
+    cv2.imshow(self.window_title, sdk.vision.Image(width=self.window_width, height=self.window_height).data)
     cv2.setMouseCallback(self.window_title, self.handle_mouse)
 
   def exit(self):
@@ -68,5 +67,5 @@ class Program(ddk.Driver):
 
 if __name__ == '__main__':
   import sys
-  with Program(argparser=ArgumentParser) as program:
+  with Program(argparser=Program.ArgumentParser) as program:
     sys.exit(program.run())
