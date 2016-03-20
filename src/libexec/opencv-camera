@@ -35,12 +35,12 @@ class Driver(ddk.Driver):
 
     self.camera_id = self.options.id or 'default'
     self.camera_dir = ddk.CameraDirectory(self.camera_id).open('w')
-    self.camera_feed = self.camera_dir.open_feed(width=CAMERA_WIDTH, height=CAMERA_HEIGHT, mode='w+')
+    self.output_feed = self.camera_dir.open_feed(size=(CAMERA_WIDTH, CAMERA_HEIGHT), channel='original', mode='w+')
     self.frame_count = 0 # the number of video frames processed
 
     self.video_output = None
     if self.options.output:
-      self.video_output = sdk.video.VideoEncoder(self.options.output, self.camera_feed.size)
+      self.video_output = sdk.video.VideoEncoder(self.options.output, self.output_feed.size)
 
     if self.has_window:
       self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
@@ -70,8 +70,8 @@ class Driver(ddk.Driver):
     frame = cv2.flip(frame, 1) # flip horizontally
     frame = sdk.vision.Image(data=frame)
 
-    if self.camera_feed:
-      frame.copy_to(self.camera_feed.image)
+    if self.output_feed:
+      frame.copy_to(self.output_feed.image)
 
     if self.video_output:
       self.video_output.write(frame)

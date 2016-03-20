@@ -47,7 +47,8 @@ class Driver(ddk.Driver):
 
     self.camera_id = self.options.id or 'default'
     self.camera_dir = ddk.camera.CameraDirectory(self.camera_id).open('r')
-    self.camera_feed = self.camera_dir.open_feed()
+    self.input_feed = self.camera_dir.open_feed(channel='original')
+    self.output_feed = self.camera_dir.open_feed(size=self.input_feed.size, channel='objtrack', mode='w+')
 
     self.frame_count = 0       # the number of video frames processed
     self.frame = None          # the current video frame being processed
@@ -58,12 +59,12 @@ class Driver(ddk.Driver):
 
     self.video_output = None
     if self.options.output:
-      self.video_output = sdk.video.VideoEncoder(self.options.output, self.camera_feed.size)
+      self.video_output = sdk.video.VideoEncoder(self.options.output, self.input_feed.size)
 
     if self.has_window:
       self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
-      self.window_width = self.camera_feed.width
-      self.window_height = self.camera_feed.height
+      self.window_width = self.input_feed.width
+      self.window_height = self.input_feed.height
       cv2.namedWindow(self.window_title, cv2.WINDOW_AUTOSIZE)
       cv2.imshow(self.window_title, sdk.vision.Image(width=self.window_width, height=self.window_height).data)
       cv2.setMouseCallback(self.window_title, self.handle_mouse)
@@ -76,13 +77,13 @@ class Driver(ddk.Driver):
       cv2.destroyAllWindows()
 
   def loop(self):
-    self.frame = self.camera_feed.snap('bgr')
+    self.frame = self.input_feed.snap('bgr')
     self.frame_count += 1
 
     image = self.process_frame(self.frame)
 
-    #if self.camera_feed:
-    #  image.copy_to(self.camera_feed.image)
+    if self.output_feed:
+      image.copy_to(self.output_feed.image)
 
     if self.video_output:
       self.video_output.write(image)

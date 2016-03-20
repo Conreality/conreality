@@ -18,7 +18,9 @@ class Program(ddk.Driver):
   def init(self):
     self.camera_id = self.options.id
     self.camera_dir = ddk.camera.CameraDirectory(self.camera_id).open('r')
-    self.camera_feed = self.camera_dir.open_feed()
+    self.camera_feed = self.camera_dir.open_feed(channel='objtrack')
+    if not self.camera_feed:
+      self.camera_feed = self.camera_dir.open_feed(channel='original')
     self.window_title = '{} ({})'.format(WINDOW_TITLE, self.camera_id)
     self.window_width = self.camera_feed.width
     self.window_height = self.camera_feed.height
