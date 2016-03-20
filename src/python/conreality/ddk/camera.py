@@ -57,7 +57,7 @@ class CameraDirectory(DataDirectory):
   def open_feed(self, **kwargs):
     if not 'channel' in kwargs:
       kwargs['channel'] = 'original'
-    if not 'width' in kwargs or not 'height' in kwargs:
+    if not 'size' in kwargs:
       for feed in self:
         if feed.channel == kwargs['channel']:
           return feed
@@ -69,19 +69,22 @@ class CameraDirectory(DataDirectory):
 class CameraFeed:
   PATH_REGEXP = re.compile(r'(\d+)x(\d+).([a-z0-9_\+\-]+).(bgr|gray|hsv|yuyv)')
 
-  def __init__(self, dir, path=None, width=None, height=None, channel='original', format='bgr', mode='r'):
+  def __init__(self, dir, path=None, size=None, channel='original', format='bgr', mode='r'):
+    width, height = None, None
     if path:
       self.path = os.path.join(dir.path, path)
       match = self.PATH_REGEXP.match(os.path.basename(self.path))
       width, height, channel, format = int(match.group(1)), int(match.group(2)), match.group(3), match.group(4)
+      size = width, height
     else:
+      width, height = size
       self.path = os.path.join(dir.path, '{}x{}.{}.{}'.format(width, height, channel, format))
     self.channel = channel
     self.image = SharedImage(self.path, width=width, height=height, format=format, mode=mode)
 
   @property
   def size(self):
-    return (self.image.width, self.image.height)
+    return self.image.size
 
   @property
   def width(self):

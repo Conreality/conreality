@@ -86,6 +86,10 @@ class Image:
     """Determines whether this is an YUV 4:2:2 (aka YUYV, YUY2) image."""
     return self.format == 'yuyv'
 
+  @property
+  def size(self):
+    return (self.width, self.height)
+
   def dimensions(self):
     if self.is_bgr() or self.is_hsv():
       return (self.height, self.width, 3)
