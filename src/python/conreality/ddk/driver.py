@@ -121,8 +121,9 @@ class Program(Logger):
     self.options = argparser(description=self.__doc__).parse_args(argv[1:])
     self.input   = input
     self.output  = output
-    Logger.open(self, verbosity=self.log_verbosity())
+    Logger.open(self, verbosity=self.log_verbosity)
 
+  @property
   def log_verbosity(self):
     if self.options.debug:
       return syslog.LOG_DEBUG
@@ -132,6 +133,13 @@ class Program(Logger):
       return syslog.LOG_WARNING
     else:
       return syslog.LOG_NOTICE
+
+  @property
+  def has_window(self):
+    try:
+      return self.options.window
+    except AttributeError:
+      return false
 
 class Driver(Program):
   """Base class for device drivers."""
