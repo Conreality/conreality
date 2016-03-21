@@ -4,6 +4,12 @@
 
 import os
 
+try:
+  from os import scandir
+except ImportError:
+  # See: https://pypi.python.org/pypi/scandir
+  from scandir import scandir
+
 class DataDirectoryException(OSError):
   def __init__(self, error):
     super(DataDirectoryException, self).__init__(error.errno, error.strerror, error.filename)
@@ -31,3 +37,6 @@ class DataDirectory:
 
   def close(self):
     self.mode = None
+
+  def scan(self):
+    return scandir(self.path)
