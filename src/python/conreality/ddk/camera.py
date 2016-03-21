@@ -3,7 +3,7 @@
 """Camera support."""
 
 from ..sdk.vision import SharedImage
-from .driver import DataDirectory
+from ..sdk.storage import DataDirectory
 import os
 import re
 

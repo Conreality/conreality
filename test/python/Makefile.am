@@ -9,6 +9,7 @@ check_SCRIPTS = \
   messaging.py  \
   model.py      \
   scripting.py  \
+  storage.py    \
   video.py      \
   vision.py
 

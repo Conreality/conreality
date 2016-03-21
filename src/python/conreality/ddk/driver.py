@@ -3,7 +3,7 @@
 """Driver support."""
 
 from ..sdk import scripting
-from .sysexits import *
+from .sysexits import EX_OK
 from inspect import ismethod
 import argparse
 import asyncio
@@ -20,13 +20,6 @@ class SignalException(Exception):
 
   def exit_code(self):
     return 0x80 + self.signum
-
-class DataDirectoryException(OSError):
-  def __init__(self, error):
-    super(DataDirectoryException, self).__init__(error.errno, error.strerror, error.filename)
-
-  def exit_code(self):
-    return EX_CANTCREAT
 
 class ArgumentParser(argparse.ArgumentParser):
   def __init__(self, description=None):
@@ -45,27 +38,6 @@ class ArgumentParser(argparse.ArgumentParser):
     if value <= 0:
       raise argparse.ArgumentTypeError("{} is not a positive integer".format(string))
     return value
-
-class DataDirectory:
-  BASE_PATH = '/tmp/var/run/conreality' # FIXME
-
-  def __init__(self, *path):
-    self.path = os.path.join(self.BASE_PATH, *path)
-
-  def exists(self):
-    return os.path.exists(self.path)
-
-  def open(self, mode='r'):
-    if mode != 'r' and not self.exists():
-      try:
-        os.makedirs(self.path, 0o777)
-      except OSError as e:
-        raise DataDirectoryException(e)
-    self.mode = mode
-    return self
-
-  def close(self):
-    self.mode = None
 
 class Logger:
   def __enter__(self):

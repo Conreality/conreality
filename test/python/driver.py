@@ -11,12 +11,6 @@ class TestArgumentParser:
   def test_construction(self):
     assert True # TODO
 
-class TestDataDirectory:
-  """Test cases for the conreality.ddk.driver.DataDirectory class."""
-
-  def test_construction(self):
-    assert True # TODO
-
 class TestLogger:
   """Test cases for the conreality.ddk.driver.Logger class."""
 
