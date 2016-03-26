@@ -9,6 +9,27 @@ import threading
 
 DATA_PATH = 'topics'
 
+class Message:
+  ENCODING = 'utf-8'
+
+  def __init__(self, data=b''):
+    if type(data) is str:
+      data = data.encode(self.ENCODING)
+    self.data = data
+
+  @property
+  def size(self):
+    """Returns the byte size of this message."""
+    return len(self.data)
+
+  def encode(self):
+    """Encodes this message as a UTF-8 byte string."""
+    return self.data
+
+  def decode(self):
+    """Decodes this message as a Unicode character string."""
+    return self.data.decode(self.ENCODING)
+
 class TopicRegistry(DataDirectory):
   """Topic registry."""
 
@@ -92,7 +113,7 @@ class Subscriber:
     assert self.fd
     select([self.fd], [], [], timeout) # FIXME: check return value
     buffer = os.read(self.fd, PIPE_BUF)
-    message = buffer.decode() # TODO: Message(data=buffer)
+    message = Message(data=buffer)
     return message
 
 class Publisher:

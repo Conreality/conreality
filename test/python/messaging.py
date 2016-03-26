@@ -94,7 +94,8 @@ class TestPublisher:
       assert publisher.publish(message) == set((1,))
       thread.join()  # wait for subscribers
       assert thread.done()
-      assert thread.result() == message
+      assert isinstance(thread.result(), Message)
+      assert thread.result().decode() == message
 
   def test_publish_with_two_subscribers(self, tmpdir):
     topic = Topic(path=tmpdir.join('foobar'))
@@ -108,10 +109,12 @@ class TestPublisher:
       assert publisher.publish(message) == set((1, 2))
       thread1.join() # wait for subscribers
       assert thread1.done()
-      assert thread1.result() == message
+      assert isinstance(thread1.result(), Message)
+      assert thread1.result().decode() == message
       thread2.join() # wait for subscribers
       assert thread2.done()
-      assert thread2.result() == message
+      assert isinstance(thread2.result(), Message)
+      assert thread2.result().decode() == message
 
 if __name__ == '__main__':
   import pytest, sys
