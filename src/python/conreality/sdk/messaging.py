@@ -30,6 +30,14 @@ class Message:
     """Decodes this message as a Unicode character string."""
     return self.data.decode(self.ENCODING)
 
+  def __repr__(self):
+    """Returns a human-readable string representation of this message."""
+    return "Message(data={})".format(repr(self.data)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this message."""
+    return self.decode()
+
 class TopicRegistry(DataDirectory):
   """Topic registry."""
 
@@ -77,7 +85,7 @@ class Subscriber:
   """Message subscriber."""
 
   PIPE_MODE  = 0o666
-  PIPE_FLAGS = os.O_RDONLY | os.O_NONBLOCK | os.O_CLOEXEC
+  PIPE_FLAGS = os.O_RDWR | os.O_NONBLOCK | os.O_CLOEXEC
 
   def __init__(self, topic, id=None):
     self.topic = topic

@@ -9,7 +9,6 @@ import argparse
 import asyncio
 import functools
 import os
-import select
 import signal
 import sys
 import syslog

@@ -67,11 +67,29 @@ class TestPublisher:
     def run(self):
       try:
         self.subscriber.open()
-        result = self.subscriber.receive() # blocks until message arrival
-        self.subscriber.close()
+        result = self.loop()
         self.future.set_result(result)
       except Exception as error:
         self.future.set_exception(error)
+      finally:
+        self.subscriber.close()
+    def loop(self):
+      raise NotImplementedError()
+
+  class SingleMessageSubscriberThread(SubscriberThread):
+    def loop(self):
+      return self.subscriber.receive() # blocks until message arrival
+
+  class MultiMessageSubscriberThread(SubscriberThread):
+    def __init__(self, topic, id, count=1):
+      super().__init__(topic=topic, id=id)
+      self.count = count
+    def loop(self):
+      result = []
+      while self.count:
+        result.append(self.subscriber.receive()) # blocks until message arrival
+        self.count -= 1
+      return tuple(result)
 
   def test_construction(self, tmpdir):
     topic = Topic(path=tmpdir.join('foobar'))
@@ -84,11 +102,11 @@ class TestPublisher:
     with Publisher(topic) as publisher:
       assert publisher.publish(message) == set()
 
-  def test_publish_with_one_subscriber(self, tmpdir):
+  def test_publish_a_message_to_one_subscriber(self, tmpdir):
     topic = Topic(path=tmpdir.join('foobar'))
     message = "Hello, world!"
     with Publisher(topic) as publisher:
-      thread = self.SubscriberThread(topic, 1)
+      thread = self.SingleMessageSubscriberThread(topic, 1)
       thread.start()
       sleep(0.25)    # wait for subscribers
       assert publisher.publish(message) == set((1,))
@@ -97,13 +115,13 @@ class TestPublisher:
       assert isinstance(thread.result(), Message)
       assert thread.result().decode() == message
 
-  def test_publish_with_two_subscribers(self, tmpdir):
+  def test_publish_a_message_to_two_subscribers(self, tmpdir):
     topic = Topic(path=tmpdir.join('foobar'))
     message = "Hello, world!"
     with Publisher(topic) as publisher:
-      thread1 = self.SubscriberThread(topic, 1)
+      thread1 = self.SingleMessageSubscriberThread(topic, 1)
       thread1.start()
-      thread2 = self.SubscriberThread(topic, 2)
+      thread2 = self.SingleMessageSubscriberThread(topic, 2)
       thread2.start()
       sleep(0.25)    # wait for subscribers
       assert publisher.publish(message) == set((1, 2))
@@ -115,6 +133,25 @@ class TestPublisher:
       assert thread2.done()
       assert isinstance(thread2.result(), Message)
       assert thread2.result().decode() == message
+
+  def test_publish_two_messages_to_one_subscriber(self, tmpdir):
+    topic = Topic(path=tmpdir.join('foobar'))
+    message1, message2 = "Hello, ", "world!"
+    with Publisher(topic) as publisher:
+      thread = self.MultiMessageSubscriberThread(topic, 1, 2)
+      thread.start()
+      sleep(0.25)    # wait for subscribers
+      assert publisher.publish(message1) == set((1,))
+      sleep(0.25)    # wait for subscribers
+      assert publisher.publish(message2) == set((1,))
+      thread.join()  # wait for subscribers
+      assert thread.done()
+      assert isinstance(thread.result(), tuple)
+      result1, result2 = thread.result()
+      assert isinstance(result1, Message)
+      assert result1.decode() == message1
+      assert isinstance(result2, Message)
+      assert result2.decode() == message2
 
 if __name__ == '__main__':
   import pytest, sys
