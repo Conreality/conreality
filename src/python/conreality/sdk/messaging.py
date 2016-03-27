@@ -12,10 +12,11 @@ DATA_PATH = 'topics'
 class Message:
   ENCODING = 'utf-8'
 
-  def __init__(self, data=b''):
+  def __init__(self, data=b'', origin=None):
     if type(data) is str:
       data = data.encode(self.ENCODING)
     self.data = data
+    self.origin = origin
 
   @property
   def size(self):
@@ -87,7 +88,6 @@ class Subscriber:
   PIPE_MODE  = 0o666
   PIPE_FLAGS = os.O_RDWR | os.O_NONBLOCK | os.O_CLOEXEC
 
-  @property
   def fileno(self):
     """Returns the file descriptor for this subscriber."""
     return self.fd
@@ -126,7 +126,7 @@ class Subscriber:
     assert self.fd
     select([self.fd], [], [], timeout) # FIXME: check return value
     buffer = os.read(self.fd, PIPE_BUF)
-    message = Message(data=buffer)
+    message = Message(data=buffer, origin=self.topic)
     return message
 
 class Publisher:

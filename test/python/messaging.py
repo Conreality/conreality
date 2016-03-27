@@ -10,6 +10,17 @@ from inspect import *
 from time import sleep
 import os
 
+class TestMessage:
+  """Test cases for the conreality.sdk.messaging.Message class."""
+
+  def test_construction(self):
+    message = Message(data=b'hello', origin=None)
+    assert message.data == b'hello'
+    assert message.origin is None
+    assert message.size == 5
+    assert message.encode() == b'hello'
+    assert message.decode() == "hello"
+
 class TestTopicRegistry:
   """Test cases for the conreality.sdk.messaging.TopicRegistry class."""
 
@@ -51,7 +62,7 @@ class TestSubscriber:
       assert type(subscriber.id) is int
       assert subscriber.path == str(tmpdir.join('foobar', str(subscriber.id)))
       assert subscriber.fd is not None
-      assert subscriber.fileno == subscriber.fd
+      assert subscriber.fileno()== subscriber.fd
 
 class TestPublisher:
   """Test cases for the conreality.sdk.messaging.Publisher class."""
