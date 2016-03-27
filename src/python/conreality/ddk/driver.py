@@ -2,7 +2,7 @@
 
 """Driver support."""
 
-from ..sdk import scripting
+from ..sdk import messaging, scripting
 from .sysexits import EX_OK
 from inspect import ismethod
 import argparse
@@ -115,6 +115,10 @@ class Program(Logger):
 class Driver(Program):
   """Base class for device drivers."""
 
+  @property
+  def subscriptions(self):
+    return self.__subs__
+
   def __init__(self, argv=sys.argv, argparser=ArgumentParser, input=sys.stdin, output=sys.stdout):
     super(Driver, self).__init__(argv, argparser, input, output)
     self.__loop__ = asyncio.get_event_loop()
@@ -124,14 +128,30 @@ class Driver(Program):
     self.catch_signal(signal.SIGINT,  "SIGINT")
     self.catch_signal(signal.SIGPIPE, "SIGPIPE")
     self.catch_signal(signal.SIGTERM, "SIGTERM")
+    self.__subs__ = {}
     self.context = scripting.Context()
     self.init()
 
   def __exit__(self, *args):
+    # Remove signal handlers:
     for signum in self.__sigs__.keys():
-      self.__loop__.remove_signal_handler(signum)
+      try:
+        self.__loop__.remove_signal_handler(signum)
+      except:
+        pass # ignore errors
+
+    # Remove subscriptions:
+    for topic in self.__subs__.keys():
+      try:
+        self.__subs__[topic].close()
+      except:
+        pass # ignore errors
+      self.__subs__[topic] = None
+
+    # Terminate the event loop:
     self.exit()
     self.__loop__.close()
+
     return super(Driver, self).__exit__(*args)
 
   def init(self):
@@ -156,6 +176,17 @@ class Driver(Program):
 
   def stop(self):
     self.__loop__.stop()
+
+  def subscribe(self, topic, callback):
+    subscriber = messaging.Subscriber(topic)
+    subscriber.open()
+    self.watch_readability(subscriber, functools.partial(self.handle_message, subscriber, callback))
+    self.__subs__[subscriber.topic] = subscriber
+    return subscriber
+
+  def handle_message(self, subscriber, callback):
+    message = subscriber.receive() # potentially blocks
+    callback(message)
 
   def watch_readability(self, fd, callback, *args):
     self.__loop__.add_reader(fd, callback, *args)

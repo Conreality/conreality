@@ -12,16 +12,24 @@ DATA_PATH = 'topics'
 class Message:
   ENCODING = 'utf-8'
 
+  @property
+  def size(self):
+    """Returns the byte size of this message."""
+    return len(self.data)
+
   def __init__(self, data=b'', origin=None):
     if type(data) is str:
       data = data.encode(self.ENCODING)
     self.data = data
     self.origin = origin
 
-  @property
-  def size(self):
-    """Returns the byte size of this message."""
-    return len(self.data)
+  def __repr__(self):
+    """Returns a programmer-readable string representation of this message."""
+    return "Message(data={}, origin={})".format(repr(self.data), repr(self.origin)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this message."""
+    return self.decode()
 
   def encode(self):
     """Encodes this message as a UTF-8 byte string."""
@@ -31,14 +39,6 @@ class Message:
     """Decodes this message as a Unicode character string."""
     return self.data.decode(self.ENCODING)
 
-  def __repr__(self):
-    """Returns a human-readable string representation of this message."""
-    return "Message(data={})".format(repr(self.data)) # Python syntax
-
-  def __str__(self):
-    """Returns a human-readable string representation of this message."""
-    return self.decode()
-
 class TopicRegistry(DataDirectory):
   """Topic registry."""
 
@@ -47,6 +47,14 @@ class TopicRegistry(DataDirectory):
       self.path = str(path)
     else:
       super().__init__(DATA_PATH)
+
+  def __repr__(self):
+    """Returns a programmer-readable string representation of this registry."""
+    return "TopicRegistry(path={})".format(repr(self.path)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this registry."""
+    return repr(self)
 
   def topics(self):
     """Yields each of the topics in this topic registry."""
@@ -67,6 +75,14 @@ class Topic(DataDirectory):
     else:
       raise ValueError("no topic name or path specified")
     self.open(mode='r+')
+
+  def __repr__(self):
+    """Returns a programmer-readable string representation of this topic."""
+    return "Topic(name={}, path={})".format(repr(self.name), repr(self.path)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this topic."""
+    return self.name
 
   def publish(self, message):
     """Publishes a message to subscribers of this topic."""
@@ -93,10 +109,20 @@ class Subscriber:
     return self.fd
 
   def __init__(self, topic, id=None):
+    if not isinstance(topic, Topic):
+      topic = Topic(name=str(topic))
     self.topic = topic
     self.id = int(id) if id else threading.get_ident()
     self.path = os.path.join(self.topic.path, str(self.id))
     self.fd = None
+
+  def __repr__(self):
+    """Returns a programmer-readable string representation of this subscriber."""
+    return "Subscriber(topic={}, id={})".format(repr(self.topic), repr(self.id)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this subscriber."""
+    return repr(self)
 
   def __enter__(self):
     self.open()
@@ -135,8 +161,18 @@ class Publisher:
   PIPE_FLAGS = os.O_WRONLY | os.O_NONBLOCK | os.O_CLOEXEC
 
   def __init__(self, topic, id=None):
+    if not isinstance(topic, Topic):
+      topic = Topic(name=str(topic))
     self.topic = topic
     self.id = int(id) if id else threading.get_ident()
+
+  def __repr__(self):
+    """Returns a programmer-readable string representation of this publisher."""
+    return "Publisher(topic={}, id={})".format(repr(self.topic), repr(self.id)) # Python syntax
+
+  def __str__(self):
+    """Returns a human-readable string representation of this publisher."""
+    return repr(self)
 
   def __enter__(self):
     self.open()
