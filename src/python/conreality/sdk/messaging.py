@@ -87,6 +87,11 @@ class Subscriber:
   PIPE_MODE  = 0o666
   PIPE_FLAGS = os.O_RDWR | os.O_NONBLOCK | os.O_CLOEXEC
 
+  @property
+  def fileno(self):
+    """Returns the file descriptor for this subscriber."""
+    return self.fd
+
   def __init__(self, topic, id=None):
     self.topic = topic
     self.id = int(id) if id else threading.get_ident()

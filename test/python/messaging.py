@@ -51,6 +51,7 @@ class TestSubscriber:
       assert type(subscriber.id) is int
       assert subscriber.path == str(tmpdir.join('foobar', str(subscriber.id)))
       assert subscriber.fd is not None
+      assert subscriber.fileno == subscriber.fd
 
 class TestPublisher:
   """Test cases for the conreality.sdk.messaging.Publisher class."""
