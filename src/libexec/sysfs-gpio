@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # This is free and unencumbered software released into the public domain.
 
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'python')))
+
 from conreality import ddk
-import os
 
 BASE_DIR_FD=os.open('/', os.O_RDONLY)
 #BASE_DIR_FD=os.open('/tmp', os.O_RDONLY) # DEBUG

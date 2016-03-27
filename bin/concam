@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # This is free and unencumbered software released into the public domain.
 
+try:
+  import conreality
+except ImportError:
+  import os, sys
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'python')))
+  import conreality
+
 from conreality import ddk, sdk
 from conreality.sdk.vision import RED_COLOR
 import cv2
