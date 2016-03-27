@@ -121,6 +121,7 @@ class Driver(ddk.Driver):
     self.io = GPIOPin(self.id, self.options.read, self.options.write)
     if self.options.write:
       self.context.define('write', self.write)
+      self.subscribe(topic='gpio{}'.format(self.id), callback=self.recv)
     if self.options.read:
       self.context.define('read', self.read)
       if self.options.freq is None:
@@ -153,6 +154,9 @@ class Driver(ddk.Driver):
       raise RuntimeError("not opened yet")
     self.io.write(bool(value))
     print("write({})".format(repr(bool(value)))) # FIXME
+
+  def recv(self, message):
+    self.notice("Received a message: {}", repr(message)) # FIXME
 
 if __name__ == '__main__':
   import sys
