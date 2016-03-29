@@ -2,7 +2,6 @@
 
 --- Messaging protocols
 -- @module conreality.sdk.messaging
-
 local messaging = {}
 
 return messaging

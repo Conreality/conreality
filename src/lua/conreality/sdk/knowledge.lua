@@ -2,7 +2,6 @@
 
 --- Knowledge base
 -- @module conreality.sdk.knowledge
-
 local knowledge = {}
 
 return knowledge

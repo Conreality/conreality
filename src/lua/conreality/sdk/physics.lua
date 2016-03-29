@@ -2,7 +2,6 @@
 
 --- Physics engine
 -- @module conreality.sdk.physics
-
 local physics = {}
 
 return physics

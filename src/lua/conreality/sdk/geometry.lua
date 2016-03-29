@@ -2,7 +2,6 @@
 
 --- Geometry calculations
 -- @module conreality.sdk.geometry
-
 local geometry = {}
 
 return geometry

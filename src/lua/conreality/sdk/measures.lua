@@ -2,7 +2,6 @@
 
 --- Measures & quantities
 -- @module conreality.sdk.measures
-
 local measures = {}
 
 return measures
