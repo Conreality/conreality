@@ -200,6 +200,7 @@ AC_CONFIG_FILES([
   src/contop/Makefile
   src/libexec/Makefile
   src/libexec/bcm283x/Makefile
+  src/lua/Makefile
   src/python/Makefile
   test/Makefile
   test/consensus/Makefile
