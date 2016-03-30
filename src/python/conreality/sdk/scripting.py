@@ -34,6 +34,9 @@ class Context:
     self.package_path = package_path
     return self
 
+  def require(self, module):
+    return self.runtime.require(module)
+
   def load_code(self, code):
     self.eval_code(code)
 
