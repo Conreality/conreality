@@ -5,8 +5,10 @@ import lupa
 Error = lupa.LuaError
 
 class Context:
-  def __init__(self):
+  def __init__(self, package_path=None):
     self.runtime = lupa.LuaRuntime(unpack_returned_tuples=True)
+    if package_path:
+      self.prepend_package_path(package_path)
 
   @property
   def package_path(self):
@@ -36,6 +38,15 @@ class Context:
 
   def require(self, module):
     return self.runtime.require(module)
+
+  def load_sdk(self):
+    self.require('conreality.sdk')
+    self.require('conreality.sdk.geometry')
+    self.require('conreality.sdk.knowledge')
+    self.require('conreality.sdk.measures')
+    self.require('conreality.sdk.messaging')
+    self.require('conreality.sdk.model')
+    self.require('conreality.sdk.physics')
 
   def load_code(self, code):
     self.eval_code(code)
