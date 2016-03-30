@@ -249,6 +249,12 @@ function kb.scenario.is_autonomous()
   return false
 end
 
+--- Determines whether the scenario is being simulated.
+-- @treturn boolean
+function kb.scenario.is_simulation()
+  return false
+end
+
 --- Returns the node's unique object identifier.
 -- @treturn number
 function kb.self.id()

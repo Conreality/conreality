@@ -49,6 +49,7 @@ class Context:
     for module in ('geometry', 'knowledge', 'measures', 'messaging', 'model', 'physics'):
       self.define(module, self.require('conreality.sdk.' + module))
     kb = self.globals['knowledge']
+    kb.scenario.is_simulation = lambda: True
     kb.time.now = time
 
   def load_code(self, code):
