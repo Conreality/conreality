@@ -1,5 +1,7 @@
 usr/bin/concam
 usr/bin/conctl
+usr/bin/conmsg
+usr/bin/consim
 usr/lib/conreality/bcm2835
 usr/lib/conreality/bcm2836
 usr/lib/conreality/opencv-camera

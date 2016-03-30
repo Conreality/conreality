@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# This is free and unencumbered software released into the public domain.
+
+try:
+  import conreality
+except ImportError:
+  import os, sys
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'python')))
+  import conreality
+
+from conreality import ddk, sdk
+from conreality.ddk.sysexits import EX_OK
+
+class Program(ddk.Program):
+  """Conreality messaging client."""
+
+  class ArgumentParser(ddk.ArgumentParser):
+    def init(self):
+      pass # TODO
+
+  def __init__(self, **kwargs):
+    super().__init__(**kwargs)
+    # TODO
+
+  def run(self):
+    # TODO
+    return EX_OK
+
+if __name__ == '__main__':
+  import sys
+  with Program(argparser=Program.ArgumentParser) as program:
+    sys.exit(program.run())
