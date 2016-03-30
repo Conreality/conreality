@@ -1,5 +1,6 @@
 # This is free and unencumbered software released into the public domain.
 
+from time import time
 import lupa
 
 Error = lupa.LuaError
@@ -11,24 +12,28 @@ class Context:
       self.prepend_package_path(package_path)
 
   @property
+  def globals(self):
+    return self.runtime.globals()
+
+  @property
   def package_path(self):
-    return self.runtime.globals().package.path.split(';')
+    return self.globals.package.path.split(';')
 
   @package_path.setter
   def package_path(self, value):
     if type(value) is list:
       value = ';'.join(value)
-    self.runtime.globals().package.path = value
+    self.globals.package.path = value
 
   @property
   def package_cpath(self):
-    return self.runtime.globals().package.cpath.split(';')
+    return self.globals.package.cpath.split(';')
 
   @package_cpath.setter
   def package_cpath(self, value):
     if type(value) is list:
       value = ';'.join(value)
-    self.runtime.globals().package.cpath = value
+    self.globals.package.cpath = value
 
   def prepend_package_path(self, path):
     package_path = self.package_path
@@ -43,6 +48,8 @@ class Context:
     self.require('conreality.sdk')
     for module in ('geometry', 'knowledge', 'measures', 'messaging', 'model', 'physics'):
       self.define(module, self.require('conreality.sdk.' + module))
+    kb = self.globals['knowledge']
+    kb.time.now = time
 
   def load_code(self, code):
     return self.runtime.execute(code)
@@ -59,7 +66,7 @@ class Context:
       return self.eval_code(file.read())
 
   def define(self, name, function):
-    self.runtime.globals()[name] = function
+    self.globals[name] = function
 
   def undefine(self, name):
-    self.runtime.globals()[name] = None
+    self.globals[name] = None
