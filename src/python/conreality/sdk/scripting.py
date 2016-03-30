@@ -41,26 +41,22 @@ class Context:
 
   def load_sdk(self):
     self.require('conreality.sdk')
-    self.require('conreality.sdk.geometry')
-    self.require('conreality.sdk.knowledge')
-    self.require('conreality.sdk.measures')
-    self.require('conreality.sdk.messaging')
-    self.require('conreality.sdk.model')
-    self.require('conreality.sdk.physics')
+    for module in ('geometry', 'knowledge', 'measures', 'messaging', 'model', 'physics'):
+      self.define(module, self.require('conreality.sdk.' + module))
 
   def load_code(self, code):
-    self.eval_code(code)
+    return self.runtime.execute(code)
 
   def load_file(self, filepath):
-    self.eval_file(filepath)
+    with open(filepath, 'r') as file:
+      return self.load_code(file.read())
 
   def eval_code(self, code):
     return self.runtime.eval(code)
 
   def eval_file(self, filepath):
     with open(filepath, 'r') as file:
-      code = file.read()
-      return self.eval_code(code)
+      return self.eval_code(file.read())
 
   def define(self, name, function):
     self.runtime.globals()[name] = function

@@ -9,21 +9,30 @@ except ImportError:
   import conreality
 
 from conreality import ddk, sdk
-from conreality.ddk.sysexits import EX_OK
+from conreality.ddk.sysexits import EX_NOINPUT, EX_OK
+import os
 
 class Program(ddk.Program):
   """Conreality node simulator."""
 
   class ArgumentParser(ddk.ArgumentParser):
     def init(self):
-      pass # TODO
+      self.add_argument('script', nargs='?', default='/dev/stdin',
+        help='the scenario script to run (default: stdin)')
 
   def __init__(self, **kwargs):
     super().__init__(**kwargs)
+    assert self.options.script
     self.context = sdk.scripting.Context()
+    self.context.prepend_package_path(os.path.join(os.path.dirname(__file__), '..', 'src', 'lua', '?.lua'))
+    self.context.load_sdk()
 
   def run(self):
-    # TODO
+    try:
+      self.context.load_file(self.options.script)
+    except FileNotFoundError as error:
+      print("Failed to load script:", error, file=sys.stderr)
+      return EX_NOINPUT
     return EX_OK
 
 if __name__ == '__main__':
