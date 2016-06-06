@@ -142,6 +142,7 @@ AS_IF([test "x$enable_develop" == "xno"], [],
     AC_MSG_ERROR([*** OCaml package 'utop' not found (install it using OPAM?) ***])))
 
 dnl Check for header files:
+CPPFLAGS="$CPPFLAGS -I$OCAMLLIB"
 AC_CHECK_HEADERS_ONCE([sys/ioctl.h])
 AC_CHECK_HEADERS_ONCE([sys/mman.h])
 AC_CHECK_HEADERS_ONCE([caml/alloc.h])
