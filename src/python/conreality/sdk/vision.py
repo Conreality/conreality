@@ -225,7 +225,8 @@ class SharedImage(Image):
 class CascadeClassifier:
   @staticmethod
   def find(filename):
-    return '/opt/local/share/OpenCV/haarcascades/' + filename # FIXME
+    #return '/opt/local/share/OpenCV/haarcascades/' + filename # FIXME
+    return '/usr/local/share/OpenCV/haarcascades/' + filename # FIXME
 
   def __init__(self, filename):
     import cv2
