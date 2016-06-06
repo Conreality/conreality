@@ -181,7 +181,7 @@ AS_CASE([$host_os],
   [netbsd*],  [host_type="posix" host_os="bsd"],
   [openbsd*], [host_type="posix" host_os="bsd"],
   [AC_MSG_ERROR([unsupported OS platform: $host_os])])
-AM_CPPFLAGS="$AM_CPPFLAGS -I\$(top_srcdir)/src"
+AM_CPPFLAGS="$AM_CPPFLAGS -I$OCAMLLIB -I\$(top_srcdir)/src"
 AC_SUBST([AM_CPPFLAGS])
 
 dnl Check for library functions:
