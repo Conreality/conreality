@@ -105,10 +105,11 @@ AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != ":"])
 
 dnl Check for libraries:
 # Lua (liblua5.1-0-dev on Ubuntu, lua51 on Mac OS X + MacPorts)
-AC_CHECK_HEADERS([lua5.1/lua.h],
-  AC_SEARCH_LIBS([lua_load], [lua5.1], [],
-    AC_MSG_ERROR([*** Lua native library liblua5.1 not found ***])),
-  AC_MSG_ERROR([*** Lua header file <lua5.1/lua.h> not found ***]))
+AC_CHECK_HEADERS([lua5.1/lua.h lua.h],
+  AC_SEARCH_LIBS([lua_load], [lua5.1 lua], [],
+    AC_MSG_ERROR([*** Lua native library liblua5.1 or liblua not found ***])))
+AS_IF([test "x$ac_cv_header_lua5_1_lua_h" != "xno" || test "x$ac_cv_header_lua_h" != "xno"], [],
+  AC_MSG_ERROR([*** Lua header file <lua5.1/lua.h> or <lua.h> not found ***]))
 # OpenCV (libopencv-dev on Ubuntu, opencv on Mac OS X + MacPorts)
 AC_CHECK_HEADERS([opencv2/opencv.hpp],
   AC_SEARCH_LIBS([cvLoad], [opencv_core], [],
