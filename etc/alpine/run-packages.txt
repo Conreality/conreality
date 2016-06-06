@@ -1,0 +1,3 @@
+libstdc++
+lua5.1-libs
+python3
