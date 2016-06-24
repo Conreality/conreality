@@ -1,3 +1,0 @@
-[submodule "lib/cmdliner"]
-	path = lib/cmdliner
-	url = https://github.com/dbuenzli/cmdliner.git
