@@ -2,4 +2,6 @@
 
 use Mix.Config
 
+config :conreality, platform: :qemu, arch: :arm, kernel: :linux
+
 config :conreality, status_leds: []
