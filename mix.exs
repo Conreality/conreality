@@ -16,16 +16,14 @@ defmodule Conreality.Mixfile do
      deps: deps ++ system(@target)]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
   def application do
     [mod: {Conreality, []},
-     applications: [:logger]]
+     applications: [:logger, :nerves_leds]]
   end
 
   def deps do
-    [{:nerves, "~> 0.3.0"}]
+    [{:nerves, "~> 0.3.0"},
+     {:nerves_leds, "~> 0.7.0"}]
   end
 
   def system(target) do
@@ -36,5 +34,4 @@ defmodule Conreality.Mixfile do
     ["deps.precompile": ["nerves.precompile", "deps.precompile"],
      "deps.loadpaths":  ["deps.loadpaths", "nerves.loadpaths"]]
   end
-
 end
