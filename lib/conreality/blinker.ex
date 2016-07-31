@@ -1,4 +1,5 @@
 defmodule Conreality.Blinker do
+  alias Nerves.Leds
   require Logger
 
   @interval 100 # ms
@@ -16,7 +17,9 @@ defmodule Conreality.Blinker do
 
   defp blink(led) do
     Logger.debug "Blinking LED #{led}..."
-    # TODO
+    Leds.set [{led, true}]
+    :timer.sleep @interval
+    Leds.set [{led, false}]
     :timer.sleep @interval
   end
 end
