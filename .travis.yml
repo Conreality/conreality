@@ -1,5 +1,19 @@
 # https://travis-ci.org/conreality/conreality
-language: c
-script: bash -ex etc/travis-ci/script.sh
-sudo: required
-dist: trusty
+
+sudo: false
+
+language: elixir
+elixir:
+  - 1.3.2
+otp_release:
+  - 19.0
+
+notifications:
+  email:
+    recipients:
+      - arto@bendiken.net
+  slack: conreality:RpAqwN7aAP0pbSbFMdLmg6at
+
+branches:
+  only:
+    - swarm
