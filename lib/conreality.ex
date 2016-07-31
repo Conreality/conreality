@@ -9,6 +9,7 @@ defmodule Conreality do
     status_leds = Application.get_env(:conreality, :status_leds) || []
     children = [
       worker(Conreality.Blinker, [status_leds]),
+      worker(Conreality.Networking, []),
     ]
 
     # See: http://elixir-lang.org/docs/stable/elixir/Supervisor.html
