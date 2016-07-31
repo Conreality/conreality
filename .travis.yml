@@ -9,6 +9,8 @@ otp_release:
   - 19.0
 before_install:
   - mix archive.install https://github.com/nerves-project/archives/raw/master/nerves_bootstrap.ez --force
+script:
+  - mix coveralls.travis
 
 notifications:
   email:

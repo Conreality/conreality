@@ -13,8 +13,15 @@ defmodule Conreality.Mixfile do
      build_path: "_build/#{@target}",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
-     deps: deps ++ system(@target)]
+     aliases: aliases(),
+     deps: deps() ++ system(@target),
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: [
+       "coveralls": :test,
+       "coveralls.detail": :test,
+       "coveralls.post": :test,
+       "coveralls.html": :test,
+     ]]
   end
 
   def application do
@@ -23,7 +30,8 @@ defmodule Conreality.Mixfile do
   end
 
   def deps do
-    [{:nerves, "~> 0.3.0"},
+    [{:excoveralls, "~> 0.5.0", only: :test},
+     {:nerves, "~> 0.3.0"},
      {:nerves_leds, "~> 0.7.0"},
      {:nerves_lib, github: "nerves-project/nerves_lib"},
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"}]
