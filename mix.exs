@@ -1,7 +1,7 @@
 defmodule Conreality.Mixfile do
   use Mix.Project
 
-  @target System.get_env("NERVES_TARGET") || "qemu_arm"
+  @target System.get_env("CONREAL_TARGET") ||  System.get_env("NERVES_TARGET") || "qemu_arm"
 
   def project do
     [app: :conreality,
