@@ -6,6 +6,7 @@ defmodule Conreality.Mixfile do
   def project do
     [app: :conreality,
      version: "0.0.1",
+     elixir: "~> 1.3",
      target: @target,
      archives: [nerves_bootstrap: "~> 0.1.4"],
      deps_path: "deps/#{@target}",
