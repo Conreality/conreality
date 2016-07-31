@@ -10,6 +10,6 @@ https://conreality.org
    :target: https://travis-ci.org/conreality/conreality
    :alt: Travis CI build status
 
-.. image:: https://coveralls.io/repos/conreality/conreality/badge.svg?branch=swarm&service=github
+.. image:: https://coveralls.io/repos/github/conreality/conreality/badge.svg?branch=swarm
    :target: https://coveralls.io/github/conreality/conreality?branch=swarm
    :alt: Coveralls.io code coverage
