@@ -18,16 +18,18 @@ defmodule Conreality.Mixfile do
 
   def application do
     [mod: {Conreality, []},
-     applications: [:logger, :nerves_leds]]
+     applications: [:logger, :nerves_leds, :nerves_lib, :nerves_networking]]
   end
 
   def deps do
     [{:nerves, "~> 0.3.0"},
-     {:nerves_leds, "~> 0.7.0"}]
+     {:nerves_leds, "~> 0.7.0"},
+     {:nerves_lib, github: "nerves-project/nerves_lib"},
+     {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"}]
   end
 
   def system(target) do
-    [{:"nerves_system_#{target}", ">= 0.0.0"}]
+    [{:"nerves_system_#{target}", "~> 0.6.0"}]
   end
 
   def aliases do

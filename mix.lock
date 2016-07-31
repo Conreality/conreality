@@ -5,6 +5,8 @@
   "getopt": {:hex, :getopt, "0.8.2", "b17556db683000ba50370b16c0619df1337e7af7ecbf7d64fbf8d1d6bce3109b", [:rebar], []},
   "nerves": {:hex, :nerves, "0.3.4", "7de99513f2775633e2db00acbf7437c55bd132f19b7406814f50818702b381b5", [:mix], [{:exrm, "~> 1.0.6", [hex: :exrm, optional: false]}]},
   "nerves_leds": {:hex, :nerves_leds, "0.7.0", "1d0f6587a9ac27c3ad3767a4dd84098e21e48fa3dc5526d5e11ddde48212e186", [:mix], []},
+  "nerves_lib": {:git, "https://github.com/nerves-project/nerves_lib.git", "78b9e489af7df25c162d4a1130569e7cc301cb48", []},
+  "nerves_networking": {:git, "https://github.com/nerves-project/nerves_networking.git", "7b77c481b368def153b764eff7e5c487f25eed64", [tag: "v0.6.0"]},
   "nerves_system": {:hex, :nerves_system, "0.1.5", "3b523a49eb6c0f49239d1354b772d824be9d62be13651fe2878a9ba5ffd737b0", [:mix], [{:porcelain, "~> 2.0", [hex: :porcelain, optional: false]}]},
   "nerves_system_br": {:hex, :nerves_system_br, "0.6.0", "bf3f762ead48f333436a389cec8c73e792b626553eb6b46b0120093a25a5ea66", [:mix], []},
   "nerves_system_qemu_arm": {:hex, :nerves_system_qemu_arm, "0.6.0", "b914d703ff5afc928bfde6281a45d610c053044429e1c0e14d02d89ac93496c1", [:mix], [{:nerves_system, "~> 0.1.4", [hex: :nerves_system, optional: false]}, {:nerves_system_br, "~> 0.6.0", [hex: :nerves_system_br, optional: false]}, {:nerves_toolchain_arm_unknown_linux_gnueabihf, "~> 0.6.0", [hex: :nerves_toolchain_arm_unknown_linux_gnueabihf, optional: false]}]},
