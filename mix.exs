@@ -38,7 +38,14 @@ defmodule Conreality.Mixfile do
 
   def application do
     [mod: {Conreality, []},
-     applications: [:logger, :nerves_leds, :nerves_lib, :nerves_networking]]
+     applications: [
+       :logger,
+       :nerves_leds,
+       :nerves_lib,
+       :nerves_networking,
+       :nerves_ssdp_client,
+       :nerves_ssdp_server,
+     ]]
   end
 
   defp package do
@@ -64,7 +71,9 @@ defmodule Conreality.Mixfile do
      {:nerves,      "~> 0.3.0"},
      {:nerves_leds, "~> 0.7.0"},
      {:nerves_lib,        github: "nerves-project/nerves_lib"},
-     {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"}]
+     {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
+     {:nerves_ssdp_client, "~> 0.1.3"},
+     {:nerves_ssdp_server, "~> 0.2.1"}]
   end
 
   defp system(nil), do: []
