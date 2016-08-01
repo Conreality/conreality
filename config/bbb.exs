@@ -4,6 +4,8 @@ use Mix.Config
 
 config :conreality, platform: :bbb, arch: :arm, kernel: :linux
 
+config :conreality, networking: [interface: :eth0, mode: "auto"]
+
 config :conreality, status_leds: [:led0, :led1, :led2, :led3]
 
 config :nerves_leds, names: [

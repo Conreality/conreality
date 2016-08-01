@@ -37,6 +37,8 @@ defmodule Conreality.Mixfile do
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"}]
   end
 
+  def system(nil), do: []
+
   def system(target) do
     [{:"nerves_system_#{target}", "~> 0.6.0"}]
   end

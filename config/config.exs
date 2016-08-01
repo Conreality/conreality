@@ -5,9 +5,9 @@
 # is restricted to this project.
 use Mix.Config
 
-config :conreality, networking: [interface: :eth0, mode: "auto"]
-
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations
-import_config "#{Mix.Project.config[:target]}.exs"
+if Mix.Project.config[:target] do
+  import_config "#{Mix.Project.config[:target]}.exs"
+end
