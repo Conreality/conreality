@@ -1,5 +1,6 @@
 defmodule Conreality do
   use Application
+  alias Nerves.Lib.UUID
 
   @platform    Application.get_env(:conreality, :platform)
   @networking  Application.get_env(:conreality, :networking)
@@ -9,10 +10,12 @@ defmodule Conreality do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    # Define workers and sub-supervisors to be supervised:
+    # Define workers and sub-supervisors to be supervised.
+    # See: http://elixir-lang.org/docs/stable/elixir/Supervisor.Spec.html
     children = [
       (if @status_leds, do: worker(Conreality.Blinker, [@status_leds]), else: nil),
       (if @networking,  do: worker(Conreality.Networking, []),          else: nil),
+      worker(Conreality.Discovery, [UUID.generate], restart: :transient),
     ] |> Enum.filter(&(&1))
 
     # See: http://elixir-lang.org/docs/stable/elixir/Supervisor.html
