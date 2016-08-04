@@ -68,6 +68,7 @@ defmodule Conreality.Mixfile do
      {:earmark,           ">= 0.0.0", only: :dev},
      {:ex_doc,            ">= 0.0.0", only: :dev},
      {:excoveralls,       "~> 0.5.0", only: :test},
+     {:exlua,             github: "bendiken/exlua", branch: "master"},
      {:luerl,             github: "bendiken/luerl", tag: "v0.3",
                           compile: "make && cp src/luerl.app.src ebin/luerl.app"},
      {:nerves,            "~> 0.3.0"},
