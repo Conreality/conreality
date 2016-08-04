@@ -40,6 +40,7 @@ defmodule Conreality.Mixfile do
     [mod: {Conreality, []},
      applications: [
        :logger,
+       :luerl,
        :nerves_leds,
        :nerves_lib,
        :nerves_networking,
@@ -62,14 +63,15 @@ defmodule Conreality.Mixfile do
   end
 
   defp deps do
-    [
-     {:credo,       ">= 0.0.0", only: [:dev, :test]},
-     {:dialyxir,    ">= 0.0.0", only: [:dev, :test]},
-     {:earmark,     ">= 0.0.0", only: :dev},
-     {:ex_doc,      ">= 0.0.0", only: :dev},
-     {:excoveralls, "~> 0.5.0", only: :test},
-     {:nerves,      "~> 0.3.0"},
-     {:nerves_leds, "~> 0.7.0"},
+    [{:credo,             ">= 0.0.0", only: [:dev, :test]},
+     {:dialyxir,          ">= 0.0.0", only: [:dev, :test]},
+     {:earmark,           ">= 0.0.0", only: :dev},
+     {:ex_doc,            ">= 0.0.0", only: :dev},
+     {:excoveralls,       "~> 0.5.0", only: :test},
+     {:luerl,             github: "bendiken/luerl", tag: "v0.3",
+                          compile: "make && cp src/luerl.app.src ebin/luerl.app"},
+     {:nerves,            "~> 0.3.0"},
+     {:nerves_leds,       "~> 0.7.0"},
      {:nerves_lib,        github: "nerves-project/nerves_lib"},
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
      {:nerves_ssdp_client, "~> 0.1.3"},
