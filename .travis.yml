@@ -10,7 +10,7 @@ otp_release:
 before_install:
   - mix archive.install https://github.com/nerves-project/archives/raw/master/nerves_bootstrap.ez --force
 script:
-  - "MIX_ENV=test mix do deps.get, compile, coveralls.travis"
+  - MIX_ENV=test mix do deps.get, compile, coveralls.travis
 
 notifications:
   slack: conreality:RpAqwN7aAP0pbSbFMdLmg6at
