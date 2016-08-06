@@ -1,5 +1,4 @@
 ## Start the Elixir shell
--name conreality
 -setcookie conreality
 -noshell
 -user Elixir.IEx.CLI
