@@ -12,7 +12,11 @@ from conreality import otp as ddk
 from conreality.ddk.sysexits import *
 
 class Driver(ddk.Driver):
-    """Driver for evdev input devices (Linux only)."""
+    """Driver for evdev input devices (Linux only).
+    
+    requires the evdev library for Python:
+      $ sudo pip install evdev
+    """
 
     class ArgumentParser(ddk.ArgumentParser):
         def init(self):

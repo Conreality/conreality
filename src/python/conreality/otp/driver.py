@@ -22,7 +22,9 @@ class SignalException(Exception):
 
 class ArgumentParser(argparse.ArgumentParser):
     def __init__(self, description=None):
-        super(ArgumentParser, self).__init__(description=description)
+        super(ArgumentParser, self).__init__(
+            description=description,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
         group = self.add_mutually_exclusive_group()
         group.add_argument('-q', '--quiet', action='store_true', help='suppress superfluous output')
         group.add_argument('-v', '--verbose', action='count', help='increase the verbosity level')
@@ -89,7 +91,8 @@ class Program(Logger):
     """Base class for utility programs."""
 
     def __init__(self, argv=sys.argv, argparser=ArgumentParser):
-        self.options = argparser(description=self.__doc__).parse_args(argv[1:])
+        docstring = self.__doc__.replace("\n    ", "\n")
+        self.options = argparser(description=docstring).parse_args(argv[1:])
         Logger.open(self, verbosity=self.log_verbosity)
 
     @property
