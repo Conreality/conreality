@@ -40,16 +40,18 @@ class Driver(ddk.Driver):
         EVENT_CODES = evdev.ecodes.bytype
 
         for event in self.device.read():
+            event_time = event.timestamp()
             event_type = EVENT_TYPES[event.type]
             event_code = EVENT_CODES[event.type][event.code]
             if isinstance(event_code, list):
                 event_code = event_code[0]
             event_value = event.value
-            #print((event_type, event_code, event_value)) # DEBUG
-            self.send((self.atom(event_type), self.atom(event_code), event_value)) # TODO: asyncio
+            #print((event_time, event_type, event_code, event_value)) # DEBUG
+            self.send((event_time, self.atom(event_type), self.atom(event_code), event_value)) # TODO: asyncio
 
     def handle_input(self):
         if len(self.input.read(512)) == 0: # EOF
+          self.info("Received EOF on input, terminating...")
           self.unwatch_readability(self.input)
           self.stop()
 
