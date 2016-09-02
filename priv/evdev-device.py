@@ -29,20 +29,29 @@ class Driver(ddk.Driver):
             self.device = None
 
     def run(self):
+        self.watch_readability(self.device, self.handle_event)
+        self.watch_readability(self.input, self.handle_input)
+        self.loop()
+        return EX_OK
+
+    def handle_event(self):
         import evdev
         EVENT_TYPES = evdev.ecodes.EV
         EVENT_CODES = evdev.ecodes.bytype
 
-        for event in self.device.read_loop():
+        for event in self.device.read():
             event_type = EVENT_TYPES[event.type]
             event_code = EVENT_CODES[event.type][event.code]
             if isinstance(event_code, list):
-              event_code = event_code[0]
+                event_code = event_code[0]
             event_value = event.value
             #print((event_type, event_code, event_value)) # DEBUG
-            self.send((self.atom(event_type), self.atom(event_code), event_value))
+            self.send((self.atom(event_type), self.atom(event_code), event_value)) # TODO: asyncio
 
-        return EX_OK
+    def handle_input(self):
+        if len(self.input.read(512)) == 0: # EOF
+          self.unwatch_readability(self.input)
+          self.stop()
 
 if __name__ == '__main__':
     import sys

@@ -4,8 +4,11 @@
 
 from .sysexits import EX_OK
 import argparse
+import asyncio
 import erlang
+import functools
 import os
+import signal
 import struct
 import sys
 import syslog
@@ -112,13 +115,32 @@ class Driver(Program):
 
     def __init__(self, argv=sys.argv, argparser=ArgumentParser, input=None, output=None):
         super(Driver, self).__init__(argv, argparser)
+
         self.input = input or os.fdopen(3, 'rb')
         self.output = output or os.fdopen(4, 'wb')
+
+        self.__loop__ = asyncio.get_event_loop()
+
+        self.__sigs__ = {}
+        self.catch_signal(signal.SIGHUP,  "SIGHUP")
+        self.catch_signal(signal.SIGINT,  "SIGINT")
+        self.catch_signal(signal.SIGPIPE, "SIGPIPE")
+        self.catch_signal(signal.SIGTERM, "SIGTERM")
+
         self.init()
 
     def __exit__(self, *args):
+        # Remove signal handlers:
+        for signum in self.__sigs__.keys():
+            try:
+                self.__loop__.remove_signal_handler(signum)
+            except:
+                pass # ignore errors
+
         # Terminate the event loop:
         self.exit()
+        self.__loop__.close()
+
         return super(Driver, self).__exit__(*args)
 
     def init(self):
@@ -162,3 +184,32 @@ class Driver(Program):
         while message:
             yield message
             message = self.recv()
+
+    def loop(self):
+        self.__loop__.run_forever()
+
+    def stop(self):
+        self.__loop__.stop()
+
+    def watch_readability(self, fd, callback, *args):
+        self.__loop__.add_reader(fd, callback, *args)
+
+    def unwatch_readability(self, fd):
+        self.__loop__.remove_reader(fd)
+
+    def watch_writability(self, fd, callback, *args):
+        self.__loop__.add_writer(fd, callback, *args)
+
+    def unwatch_writability(self, fd):
+        self.__loop__.remove_writer(fd)
+
+    def catch_signal(self, signum, name=None):
+        self.__sigs__[signum] = name or signum
+        self.__loop__.add_signal_handler(signum,
+            functools.partial(self.handle_signal, signum))
+
+    def handle_signal(self, signum):
+        print("", file=sys.stderr)
+        self.info("Received a {} signal ({}), terminating...", self.__sigs__[signum], signum)
+        self.stop()
+        # TODO: SignalException(signum).exit_code()
