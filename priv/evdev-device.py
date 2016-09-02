@@ -9,11 +9,7 @@ except ImportError:
     import conreality
 
 from conreality import otp as ddk
-from conreality.ddk.sysexits import EX_OK
-import evdev
-
-EVENT_TYPES = evdev.ecodes.EV
-EVENT_CODES = evdev.ecodes.bytype
+from conreality.ddk.sysexits import *
 
 class Driver(ddk.Driver):
     """Driver for evdev input devices (Linux only)."""
@@ -25,6 +21,7 @@ class Driver(ddk.Driver):
                 help='the input device (e.g., /dev/input/event4)')
 
     def init(self):
+        import evdev
         self.device = evdev.InputDevice(self.options.device[0])
 
     def exit(self):
@@ -32,6 +29,10 @@ class Driver(ddk.Driver):
             self.device = None
 
     def run(self):
+        import evdev
+        EVENT_TYPES = evdev.ecodes.EV
+        EVENT_CODES = evdev.ecodes.bytype
+
         for event in self.device.read_loop():
             event_type = EVENT_TYPES[event.type]
             event_code = EVENT_CODES[event.type][event.code]
@@ -40,9 +41,20 @@ class Driver(ddk.Driver):
             event_value = event.value
             #print((event_type, event_code, event_value)) # DEBUG
             self.send((self.atom(event_type), self.atom(event_code), event_value))
+
         return EX_OK
 
 if __name__ == '__main__':
     import sys
-    with Driver(argparser=Driver.ArgumentParser) as driver:
-        sys.exit(driver.run())
+    try:
+        with Driver(argparser=Driver.ArgumentParser) as driver:
+            sys.exit(driver.run())
+    except ImportError as error:
+        print(error, file=sys.stderr)
+        sys.exit(EX_UNAVAILABLE)
+    except FileNotFoundError as error:
+        print(error, file=sys.stderr)
+        sys.exit(EX_NOINPUT)
+    except PermissionError as error:
+        print(error, file=sys.stderr)
+        sys.exit(EX_NOINPUT)
