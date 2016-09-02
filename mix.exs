@@ -7,24 +7,24 @@ defmodule Conreality.Mixfile do
   @bitbucket "https://bitbucket.org/conreality/conreality"
   @homepage  "https://conreality.org/"
 
-  @target    System.get_env("CONREAL_TARGET") || System.get_env("NERVES_TARGET") || "qemu_arm"
+  @target    System.get_env("NERVES_TARGET")
 
   def project do
     [app: :conreality,
      version: @version,
      elixir: "~> 1.3",
      target: @target,
-     archives: [nerves_bootstrap: "~> 0.1.4"],
-     deps_path: "deps/#{@target}",
-     build_path: "_build/#{@target}",
-     build_embedded: Mix.env == :prod,
+     archives:   (if @target, do: [nerves_bootstrap: "~> 0.1.4"], else: []),
+     deps_path:  (if @target, do: "deps/#{@target}", else: "deps/host"),
+     build_path: (if @target, do: "_build/#{@target}", else: "_build/host"),
+     build_embedded:  Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      name: @name,
      source_url: @github,
      homepage_url: @homepage,
      description: description(),
-     aliases: aliases(),
-     deps: deps() ++ system(@target),
+     aliases: aliases(@target),
+     deps: deps() ++ target_deps(@target) ++ system(@target),
      package: package(),
      docs: [source_ref: @version, main: "readme", extras: ["README.md"]],
      test_coverage: [tool: ExCoveralls],
@@ -43,10 +43,10 @@ defmodule Conreality.Mixfile do
        :luerl,
        :nerves_leds,
        :nerves_lib,
-       :nerves_networking,
+       (if @target, do: :nerves_networking, else: nil),
        :nerves_ssdp_client,
        :nerves_ssdp_server,
-     ]]
+     ] |> Enum.filter(&(&1))]
   end
 
   defp package do
@@ -62,21 +62,30 @@ defmodule Conreality.Mixfile do
     """
   end
 
-  defp deps do
+  defp dev_deps do
     [{:credo,             ">= 0.0.0", only: [:dev, :test]},
      {:dialyxir,          ">= 0.0.0", only: [:dev, :test]},
      {:earmark,           ">= 0.0.0", only: :dev},
      {:ex_doc,            ">= 0.0.0", only: :dev},
-     {:excoveralls,       "~> 0.5.0", only: :test},
-     {:exlua,             github: "bendiken/exlua", branch: "master"},
+     {:excoveralls,       "~> 0.5.0", only: :test}]
+  end
+
+  defp deps do
+    dev_deps() ++
+    [{:exlua,             github: "bendiken/exlua", branch: "master"},
      {:luerl,             github: "bendiken/luerl", branch: "exlua",
                           compile: "make && cp src/luerl.app.src ebin/luerl.app"},
-     {:nerves,            "~> 0.3.0"},
      {:nerves_leds,       "~> 0.7.0"},
      {:nerves_lib,        github: "nerves-project/nerves_lib"},
-     {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
      {:nerves_ssdp_client, "~> 0.1.3"},
      {:nerves_ssdp_server, "~> 0.2.1"}]
+  end
+
+  defp target_deps(nil), do: []
+
+  defp target_deps(_target) do
+    [{:nerves,            "~> 0.3.0"},
+     {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"}]
   end
 
   defp system(nil), do: []
@@ -85,7 +94,9 @@ defmodule Conreality.Mixfile do
     [{:"nerves_system_#{target}", "~> 0.6.0"}]
   end
 
-  defp aliases do
+  defp aliases(nil), do: []
+
+  defp aliases(_target) do
     ["deps.precompile": ["nerves.precompile", "deps.precompile"],
      "deps.loadpaths":  ["deps.loadpaths", "nerves.loadpaths"]]
   end
