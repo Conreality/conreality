@@ -23,16 +23,12 @@ class Driver(ddk.Driver):
     def init(self):
         import evdev
         self.device = evdev.InputDevice(self.options.device[0])
+        self.watch_readability(self.device, self.handle_event)
 
     def exit(self):
         if self.device is not None:
+            self.unwatch_readability(self.device)
             self.device = None
-
-    def run(self):
-        self.watch_readability(self.device, self.handle_event)
-        self.watch_readability(self.input, self.handle_input)
-        self.loop()
-        return EX_OK
 
     def handle_event(self):
         import evdev
@@ -48,12 +44,6 @@ class Driver(ddk.Driver):
             event_value = event.value
             #print((event_time, event_type, event_code, event_value)) # DEBUG
             self.send((event_time, self.atom(event_type), self.atom(event_code), event_value)) # TODO: asyncio
-
-    def handle_input(self):
-        if len(self.input.read(512)) == 0: # EOF
-          self.info("Received EOF on input, terminating...")
-          self.unwatch_readability(self.input)
-          self.stop()
 
 if __name__ == '__main__':
     import sys

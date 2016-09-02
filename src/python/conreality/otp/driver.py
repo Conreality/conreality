@@ -127,9 +127,18 @@ class Driver(Program):
         self.catch_signal(signal.SIGPIPE, "SIGPIPE")
         self.catch_signal(signal.SIGTERM, "SIGTERM")
 
+        self.watch_readability(self.input, self.handle_input)
         self.init()
 
+    def handle_input(self):
+        if len(self.input.read(512)) == 0: # EOF
+          self.info("Received EOF on input, terminating...")
+          self.unwatch_readability(self.input)
+          self.stop()
+
     def __exit__(self, *args):
+        self.unwatch_readability(self.input)
+
         # Remove signal handlers:
         for signum in self.__sigs__.keys():
             try:
@@ -150,7 +159,7 @@ class Driver(Program):
         pass # subclasses should override this
 
     def run(self):
-        pass # subclasses should override this
+        self.loop()
         return EX_OK
 
     def atom(self, str):
