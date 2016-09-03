@@ -15,6 +15,7 @@ defmodule Conreality do
     # Define workers and sub-supervisors to be supervised.
     # See: http://elixir-lang.org/docs/stable/elixir/Supervisor.Spec.html
     children = [
+      supervisor(Conreality.Machinery.Supervisor, []),
       (if @status_leds, do: worker(Conreality.Blinker, [@status_leds]), else: nil),
       (if @networking,  do: worker(Conreality.Networking, []),          else: nil),
       worker(Conreality.Discovery, [UUID.generate], restart: :transient),
