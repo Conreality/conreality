@@ -2,7 +2,7 @@
 
 defmodule Conreality.Machinery.Device do
   @moduledoc """
-  Device driver loading/unloading.
+  Device driver lifecycle.
   """
 
   import Supervisor.Spec
@@ -11,30 +11,40 @@ defmodule Conreality.Machinery.Device do
 
   @spec start(binary) :: {:ok, pid} | {:error, any}
   def start(device_path) do
-    case String.split(device_path, "/") |> Enum.drop(1) do
-      # /dev/videoN:
-      ["dev", "video" <> _id] ->
-        spec = worker(Machinery.Camera, [device_path], id: device_path, restart: :permanent)
-        case Supervisor.start_child(Machinery.Supervisor, spec) do
+    case find_driver(device_path) do
+      {:ok, driver_module, driver_args} ->
+        driver_spec = worker(driver_module, driver_args, id: device_path, restart: :permanent)
+
+        case Supervisor.start_child(Machinery.Supervisor, driver_spec) do
           {:ok, pid} -> {:ok, pid}
-          {:error, {:already_started, pid}} -> {:ok, pid} # idempotency
+          {:error, {:already_started, pid}} when is_pid(pid) -> {:ok, pid} # idempotency
         end
 
-      _ -> {:error, :unknown_device} # ignore any unknown devices
+      {:error, reason} -> {:error, reason}
     end
   end
 
   @spec stop(binary) :: :ok | {:error, any}
   def stop(device_path) do
-    case String.split(device_path, "/") |> Enum.drop(1) do
-      # /dev/videoN:
-      ["dev", "video" <> _id] ->
+    case find_driver(device_path) do
+      {:ok, _driver_module, _driver_args} ->
         Logger.info "Stopping driver for #{device_path}..."
 
         case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
           :ok -> :ok = Supervisor.delete_child(Machinery.Supervisor, device_path)
           {:error, :not_found} -> :ok # the driver wasn't loaded
         end
+
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @spec find_driver(binary) :: {:ok, module, [term]} | {:error, atom}
+  defp find_driver(device_path) do
+    case String.split(device_path, "/") |> Enum.drop(1) do
+      # /dev/video[0-9]+:
+      ["dev", "video" <> _id] ->
+        {:ok, Machinery.Camera, [device_path]}
 
       _ -> {:error, :unknown_device} # ignore any unknown devices
     end
