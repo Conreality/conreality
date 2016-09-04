@@ -61,7 +61,7 @@ defmodule Conreality.Machinery.Supervisor do
 
       case String.split(device_path, "/") |> Enum.drop(1) do
         # /dev/videoN:
-        ["dev", "video" <> _video_id] ->
+        ["dev", "video" <> _id] ->
           {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
             worker(Machinery.Camera, [device_path], id: device_path, restart: :permanent))
 
@@ -75,7 +75,9 @@ defmodule Conreality.Machinery.Supervisor do
 
       case String.split(device_path, "/") |> Enum.drop(1) do
         # /dev/videoN:
-        ["dev", "video" <> _video_id] ->
+        ["dev", "video" <> _id] ->
+          Logger.info "Stopping driver for #{device_path}..."
+
           case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
             {:error, :not_found} -> nil # the driver wasn't loaded
             :ok ->
