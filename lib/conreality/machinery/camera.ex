@@ -5,19 +5,20 @@ defmodule Conreality.Machinery.Camera do
   Camera support.
   """
 
+  alias Conreality.Machinery
   require Logger
 
-  @spec open(non_neg_integer) :: {:ok, port} | {:error, any}
-  def open(video_id) when is_integer(video_id) do
-    open("/dev/video#{video_id}")
+  @spec start_link(non_neg_integer) :: {:ok, port} | {:error, any}
+  def start_link(video_id) when is_integer(video_id) do
+    start_link("/dev/video#{video_id}")
   end
 
-  @spec open(binary) :: {:ok, port} | {:error, any}
-  def open(device_path) when is_binary(device_path) do
-    Logger.debug "Starting camera driver for #{device_path}..."
+  @spec start_link(binary) :: {:ok, port} | {:error, any}
+  def start_link(device_path) when is_binary(device_path) do
+    Logger.info "Starting camera driver for #{device_path}..."
 
     ["v4l2-camera.py", device_path]
-    |> InputDriver.start_script(__MODULE__)
+    |> Machinery.InputDriver.start_script(__MODULE__)
   end
 
   @spec handle_input(term) :: any

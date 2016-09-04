@@ -12,7 +12,7 @@ defmodule Conreality.Machinery.Supervisor do
   """
 
   use Supervisor
-  alias Conreality.Machinery.InputDriver
+  alias Conreality.Machinery
   require Logger
 
   @spec start_link() :: {:ok, pid}
@@ -23,7 +23,7 @@ defmodule Conreality.Machinery.Supervisor do
   @spec init([]) :: {:ok, {:supervisor.sup_flags, [Supervisor.Spec.spec]}}
   def init([]) do
     children = [
-      worker(Conreality.Machinery.Supervisor.Discovery, [], restart: :transient)
+      worker(Machinery.Supervisor.Discovery, [], restart: :transient)
     ]
     supervise(children, strategy: :one_for_one)
   end
@@ -42,8 +42,8 @@ defmodule Conreality.Machinery.Supervisor do
 
       # TODO: enumerate udev devices
 
-      {:ok, _pid} = Supervisor.start_child(Conreality.Machinery.Supervisor,
-        worker(Conreality.Machinery.Supervisor.Monitoring, [], restart: :permanent))
+      {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
+        worker(Machinery.Supervisor.Monitoring, [], restart: :permanent))
     end
   end
 
@@ -52,17 +52,25 @@ defmodule Conreality.Machinery.Supervisor do
     def start_link do
       Logger.info "Starting hardware monitoring..."
 
-      InputDriver.start_script(["udev-monitor.py"], __MODULE__)
+      Machinery.InputDriver.start_script(["udev-monitor.py"], __MODULE__)
     end
 
     @spec handle_input({:add, binary, [binary]}) :: any
     def handle_input({:add, device_path, device_links}) do
-      Logger.info "Hardware device added: #{device_path} #{inspect device_links}"
+      Logger.debug "Hardware device added: #{device_path} #{inspect device_links}"
+
+      case String.split(device_path, "/") do
+        ["", "dev", "video" <> _video_id] ->
+          {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
+            worker(Machinery.Camera, [device_path], restart: :permanent))
+
+        _ -> nil # ignore any unknown devices
+      end
     end
 
     @spec handle_input({:remove, binary, [binary]}) :: any
     def handle_input({:remove, device_path, device_links}) do
-      Logger.info "Hardware device removed: #{device_path} #{inspect device_links}"
+      Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
     end
 
     @spec handle_input(term) :: any

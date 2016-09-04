@@ -8,19 +8,20 @@ defmodule Conreality.Machinery.Gamepad do
   controllers.
   """
 
+  alias Conreality.Machinery
   require Logger
 
-  @spec open(non_neg_integer) :: {:ok, port} | {:error, any}
-  def open(event_id) when is_integer(event_id) do
-    open("/dev/input/event#{event_id}")
+  @spec start_link(non_neg_integer) :: {:ok, port} | {:error, any}
+  def start_link(event_id) when is_integer(event_id) do
+    start_link("/dev/input/event#{event_id}")
   end
 
-  @spec open(binary) :: {:ok, port} | {:error, any}
-  def open(device_path) when is_binary(device_path) do
-    Logger.debug "Starting gamepad driver for #{device_path}..."
+  @spec start_link(binary) :: {:ok, port} | {:error, any}
+  def start_link(device_path) when is_binary(device_path) do
+    Logger.info "Starting gamepad driver for #{device_path}..."
 
     ["evdev-device.py", device_path]
-    |> InputDriver.start_script(__MODULE__)
+    |> Machinery.InputDriver.start_script(__MODULE__)
   end
 
   @spec handle_input(term) :: any
