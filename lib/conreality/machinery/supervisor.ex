@@ -33,17 +33,30 @@ defmodule Conreality.Machinery.Supervisor do
     def start_link do
       Logger.info "Starting hardware discovery..."
 
-      {:ok, spawn_link(__MODULE__, :init, [])}
+      Machinery.InputDriver.start_script(["udev-enumerate.py"], __MODULE__)
     end
 
-    @spec init() :: none
-    def init do
-      Logger.info "Performing hardware discovery..."
+    @spec handle_input({binary, [binary]}) :: any
+    def handle_input({device_path, _device_links}) do
+      Machinery.Device.start(device_path)
+    end
 
-      # TODO: enumerate udev devices
+    @spec handle_input(term) :: any
+    def handle_input(event) do
+      Logger.warn "Hardware discovery ignored unexpected input: #{inspect event}"
+    end
+
+    @spec handle_exit(0) :: any
+    def handle_exit(0) do
+      Logger.info "Hardware discovery completed."
 
       {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
         worker(Machinery.Supervisor.Monitoring, [], restart: :permanent))
+    end
+
+    @spec handle_exit(integer) :: any
+    def handle_exit(code) do
+      Logger.warn "Hardware discovery failed with code #{code}."
     end
   end
 
@@ -59,33 +72,14 @@ defmodule Conreality.Machinery.Supervisor do
     def handle_input({:add, device_path, device_links}) do
       Logger.debug "Hardware device added: #{device_path} #{inspect device_links}"
 
-      case String.split(device_path, "/") |> Enum.drop(1) do
-        # /dev/videoN:
-        ["dev", "video" <> _id] ->
-          {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
-            worker(Machinery.Camera, [device_path], id: device_path, restart: :permanent))
-
-        _ -> nil # ignore any unknown devices
-      end
+      Machinery.Device.start(device_path)
     end
 
     @spec handle_input({:remove, binary, [binary]}) :: any
     def handle_input({:remove, device_path, device_links}) do
       Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
 
-      case String.split(device_path, "/") |> Enum.drop(1) do
-        # /dev/videoN:
-        ["dev", "video" <> _id] ->
-          Logger.info "Stopping driver for #{device_path}..."
-
-          case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
-            {:error, :not_found} -> nil # the driver wasn't loaded
-            :ok ->
-              :ok = Supervisor.delete_child(Machinery.Supervisor, device_path)
-          end
-
-        _ -> nil # ignore any unknown devices
-      end
+      Machinery.Device.stop(device_path)
     end
 
     @spec handle_input(term) :: any

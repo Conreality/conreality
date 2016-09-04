@@ -9,12 +9,10 @@ except ImportError:
     import conreality
 
 from conreality import otp as ddk
-from conreality.ddk.marshal import atom
 from conreality.ddk.sysexits import *
-from functools import partial
 
 class Driver(ddk.Driver):
-    """Driver for udev device monitoring (Linux only).
+    """Driver for udev device enumeration (Linux only).
 
     requires the pyudev library for Python:
       $ sudo pip install pyudev
@@ -32,22 +30,21 @@ class Driver(ddk.Driver):
     def init(self):
         import pyudev
         context = pyudev.Context()
-        monitor = pyudev.Monitor.from_netlink(context)
-        if self.options.subsystem:
-            monitor.filter_by(self.options.subsystem, devtype=self.options.devtype)
-        monitor.start()
-        self.monitor = monitor
-        self.watch_readability(self.monitor, self.poll)
+        if self.options.subsystem and self.options.devtype:
+          self.devices = context.list_devices(
+              subsystem=self.options.subsystem,
+              DEVTYPE=self.options.devtype)
+        elif self.options.subsystem:
+          self.devices = context.list_devices(
+              subsystem=self.options.subsystem)
+        else:
+          self.devices = context.list_devices()
 
-    def exit(self):
-        if self.monitor is not None:
-            self.unwatch_readability(self.monitor)
-            self.monitor = None
-
-    def poll(self):
-        for device in iter(partial(self.monitor.poll, 0), None):
+    def run(self):
+        for device in self.devices:
             if device.device_node:
-                self.send((atom(device.action), device.device_node, list(device.device_links)))
+                self.send((device.device_node, list(device.device_links)))
+        return EX_OK
 
 if __name__ == '__main__':
     import sys

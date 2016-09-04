@@ -40,7 +40,7 @@ defmodule Conreality.Machinery.InputDriver do
         exit({:shutdown})
 
       {^port, {:exit_status, code}} ->
-        apply(module, :handle_exit, code)
+        apply(module, :handle_exit, [code])
         exit({:shutdown, code})
 
       {^port, {:data, message}} ->
