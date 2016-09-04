@@ -59,10 +59,11 @@ defmodule Conreality.Machinery.Supervisor do
     def handle_input({:add, device_path, device_links}) do
       Logger.debug "Hardware device added: #{device_path} #{inspect device_links}"
 
-      case String.split(device_path, "/") do
-        ["", "dev", "video" <> _video_id] ->
+      case String.split(device_path, "/") |> Enum.drop(1) do
+        # /dev/videoN:
+        ["dev", "video" <> _video_id] ->
           {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
-            worker(Machinery.Camera, [device_path], restart: :permanent))
+            worker(Machinery.Camera, [device_path], id: device_path, restart: :permanent))
 
         _ -> nil # ignore any unknown devices
       end
@@ -71,6 +72,18 @@ defmodule Conreality.Machinery.Supervisor do
     @spec handle_input({:remove, binary, [binary]}) :: any
     def handle_input({:remove, device_path, device_links}) do
       Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
+
+      case String.split(device_path, "/") |> Enum.drop(1) do
+        # /dev/videoN:
+        ["dev", "video" <> _video_id] ->
+          case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
+            {:error, :not_found} -> nil # the driver wasn't loaded
+            :ok ->
+              :ok = Supervisor.delete_child(Machinery.Supervisor, device_path)
+          end
+
+        _ -> nil # ignore any unknown devices
+      end
     end
 
     @spec handle_input(term) :: any

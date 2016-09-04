@@ -19,6 +19,8 @@ defmodule Conreality.Machinery.InputDriver do
 
   @spec init(list, module) :: no_return
   def init([command | arguments], module) do
+    Process.flag(:trap_exit, true)
+
     port = Port.open({:spawn_executable, command},
       [:binary,
        {:packet, 4},
@@ -33,6 +35,10 @@ defmodule Conreality.Machinery.InputDriver do
   @spec loop(port, module) :: no_return
   def loop(port, module) do
     receive do
+      {:EXIT, _from, :shutdown} ->
+        Port.close(port)
+        exit({:shutdown})
+
       {^port, {:exit_status, code}} ->
         apply(module, :handle_exit, code)
         exit({:shutdown, code})
@@ -43,7 +49,6 @@ defmodule Conreality.Machinery.InputDriver do
         loop(port, module)
 
       garbage ->
-        #apply(module, :handle_garbage, garbage)
         :erlang.error({:badmatch, garbage})
     end
   end
