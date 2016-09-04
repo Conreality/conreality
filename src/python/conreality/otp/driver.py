@@ -2,6 +2,7 @@
 
 """Erlang/OTP port driver support."""
 
+from .marshal import encode, decode
 from .sysexits import EX_OK
 import argparse
 import asyncio
@@ -165,13 +166,10 @@ class Driver(Program):
         self.loop()
         return EX_OK
 
-    def atom(self, str):
-        return erlang.OtpErlangAtom(str)
-
     def send(self, term):
         """Write an Erlang term to an output stream."""
         stream = self.output
-        payload = erlang.term_to_binary(term)
+        payload = encode(term)
         header = struct.pack('!I', len(payload))
         stream.write(header)
         stream.write(payload)
@@ -187,7 +185,7 @@ class Driver(Program):
         payload = stream.read(length)
         if len(payload) != length:
             return None
-        term = erlang.binary_to_term(payload)
+        term = decode(payload)
         return term
 
     def recv_loop(self):

@@ -9,6 +9,7 @@ except ImportError:
     import conreality
 
 from conreality import otp as ddk
+from conreality.ddk.marshal import atom
 from conreality.ddk.sysexits import *
 
 class Driver(ddk.Driver):
@@ -28,7 +29,7 @@ class Driver(ddk.Driver):
         pass
 
     def ping(self):
-        self.send(self.atom('ping'))
+        self.send(atom('ping'))
         self.__loop__.call_later(self.interval, self.ping)
 
 if __name__ == '__main__':

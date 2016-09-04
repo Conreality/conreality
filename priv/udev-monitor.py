@@ -9,6 +9,7 @@ except ImportError:
     import conreality
 
 from conreality import otp as ddk
+from conreality.ddk.marshal import atom
 from conreality.ddk.sysexits import *
 from functools import partial
 
@@ -46,7 +47,7 @@ class Driver(ddk.Driver):
     def poll(self):
         for device in iter(partial(self.monitor.poll, 0), None):
             if device.device_node:
-                self.send((self.atom(device.action), device.device_node, list(device.device_links)))
+                self.send((atom(device.action), device.device_node, list(device.device_links)))
 
 if __name__ == '__main__':
     import sys

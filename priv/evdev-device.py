@@ -9,6 +9,7 @@ except ImportError:
     import conreality
 
 from conreality import otp as ddk
+from conreality.ddk.marshal import atom
 from conreality.ddk.sysexits import *
 
 class Driver(ddk.Driver):
@@ -47,7 +48,7 @@ class Driver(ddk.Driver):
                 event_code = event_code[0]
             event_value = event.value
             #print((event_time, event_type, event_code, event_value)) # DEBUG
-            self.send((event_time, self.atom(event_type), self.atom(event_code), event_value)) # TODO: asyncio
+            self.send((event_time, atom(event_type), atom(event_code), event_value)) # TODO: asyncio
 
 if __name__ == '__main__':
     import sys
