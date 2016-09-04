@@ -12,6 +12,7 @@ defmodule Conreality.Machinery.Supervisor do
   """
 
   use Supervisor
+  alias Conreality.Machinery.InputDriver
   require Logger
 
   @spec start_link() :: {:ok, pid}
@@ -51,47 +52,17 @@ defmodule Conreality.Machinery.Supervisor do
     def start_link do
       Logger.info "Starting hardware monitoring..."
 
-      {:ok, spawn_link(__MODULE__, :init, [])}
+      InputDriver.start_script(["udev-monitor.py"], __MODULE__)
     end
 
-    @spec init() :: no_return
-    def init do
-      priv_dir = :code.priv_dir(:conreality)
-
-      port = Port.open({:spawn_executable, "/usr/bin/env"},
-        [:binary, :in,
-         {:packet, 4},
-         {:args, ["python3", "-u", "#{priv_dir}/udev-monitor.py"]},
-         {:env, [{'PYTHONPATH', 'src/python'}]},
-         :exit_status,
-         :nouse_stdio])
-
-      loop(port)
-    end
-
-    @spec loop(port) :: no_return
-    def loop(port) do
-      event = read(port)
-
+    @spec handle_input(term) :: any
+    def handle_input(event) do
       IO.inspect event # TODO
-
-      loop(port)
     end
 
-    @spec read(port) :: no_return | term
-    def read(port) do
-      receive do
-        {^port, {:exit_status, code}} ->
-          Logger.warn "Hardware monitoring process exited with code #{code}."
-          exit({:shutdown, code})
-
-        {^port, {:data, message}} ->
-          :erlang.binary_to_term(message)
-
-        garbage ->
-          Logger.error "Hardware monitoring process received an unexpected message: #{inspect garbage}."
-          :erlang.error({:badmatch, garbage})
-      end
+    @spec handle_exit(integer) :: any
+    def handle_exit(code) do
+      Logger.warn "Hardware monitoring process exited with code #{code}."
     end
   end
 end

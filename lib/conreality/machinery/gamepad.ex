@@ -2,37 +2,34 @@
 
 defmodule Conreality.Machinery.Gamepad do
   @moduledoc """
-  Gamepad support for Conreality.
+  Gamepad support.
 
-  At present, this has been tested with PlayStation 3-compatible gamepad
+  At present, this has been tested with PlayStation 3-compatible USB gamepad
   controllers.
   """
 
+  require Logger
+
   @spec open(non_neg_integer) :: {:ok, port} | {:error, any}
-  def open(evdev_id) when is_integer(evdev_id) do
-    open("/dev/input/event#{evdev_id}")
+  def open(event_id) when is_integer(event_id) do
+    open("/dev/input/event#{event_id}")
   end
 
   @spec open(binary) :: {:ok, port} | {:error, any}
-  def open(device) when is_binary(device) do
-    priv_dir = :code.priv_dir(:conreality)
-    Port.open({:spawn_executable, "/usr/bin/env"},
-      [:binary,
-       {:packet, 4},
-       {:args, ["python3", "-u", "#{priv_dir}/evdev-device.py", device]},
-       {:env, [{'PYTHONPATH', 'src/python'}]},
-       :nouse_stdio])
+  def open(device_path) when is_binary(device_path) do
+    Logger.debug "Starting gamepad process for #{device_path}..."
+
+    ["evdev-device.py", device_path]
+    |> InputDriver.start_script(__MODULE__)
   end
 
-  @spec close(port) :: true
-  def close(port) do
-    Port.close(port)
+  @spec handle_input(term) :: any
+  def handle_input(event) do
+    IO.inspect event # TODO
   end
 
-  @spec read(port) :: term
-  def read(port) do
-    receive do
-      {^port, {:data, response}} -> :erlang.binary_to_term(response)
-    end
+  @spec handle_exit(integer) :: any
+  def handle_exit(code) do
+    Logger.warn "Gamepad process exited with code #{code}."
   end
 end
