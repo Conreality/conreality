@@ -55,9 +55,19 @@ defmodule Conreality.Machinery.Supervisor do
       InputDriver.start_script(["udev-monitor.py"], __MODULE__)
     end
 
+    @spec handle_input({:add, binary, [binary]}) :: any
+    def handle_input({:add, device_path, device_links}) do
+      Logger.info "Hardware device added: #{device_path} #{inspect device_links}"
+    end
+
+    @spec handle_input({:remove, binary, [binary]}) :: any
+    def handle_input({:remove, device_path, device_links}) do
+      Logger.info "Hardware device removed: #{device_path} #{inspect device_links}"
+    end
+
     @spec handle_input(term) :: any
     def handle_input(event) do
-      IO.inspect event # TODO
+      Logger.warn "Hardware monitoring received an unknown event type: #{inspect event}"
     end
 
     @spec handle_exit(integer) :: any
