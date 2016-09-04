@@ -67,7 +67,7 @@ defmodule Conreality.Machinery.Supervisor do
 
     @spec handle_input(term) :: any
     def handle_input(event) do
-      Logger.warn "Hardware monitoring received an unknown event type: #{inspect event}"
+      Logger.warn "Hardware monitoring ignored unexpected input: #{inspect event}"
     end
 
     @spec handle_exit(integer) :: any

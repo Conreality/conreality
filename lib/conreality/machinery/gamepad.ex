@@ -17,7 +17,7 @@ defmodule Conreality.Machinery.Gamepad do
 
   @spec open(binary) :: {:ok, port} | {:error, any}
   def open(device_path) when is_binary(device_path) do
-    Logger.debug "Starting gamepad process for #{device_path}..."
+    Logger.debug "Starting gamepad driver for #{device_path}..."
 
     ["evdev-device.py", device_path]
     |> InputDriver.start_script(__MODULE__)
@@ -25,11 +25,11 @@ defmodule Conreality.Machinery.Gamepad do
 
   @spec handle_input(term) :: any
   def handle_input(event) do
-    IO.inspect event # TODO
+    Logger.warn "Gamepad driver ignored unexpected input: #{inspect event}" # TODO
   end
 
   @spec handle_exit(integer) :: any
   def handle_exit(code) do
-    Logger.warn "Gamepad process exited with code #{code}."
+    Logger.warn "Gamepad driver exited with code #{code}."
   end
 end
