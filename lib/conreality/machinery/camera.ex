@@ -18,16 +18,18 @@ defmodule Conreality.Machinery.Camera do
     Logger.info "Starting camera driver for #{device_path}..."
 
     ["v4l2-camera.py", device_path]
-    |> Machinery.InputDriver.start_script(__MODULE__)
+    |> Machinery.InputDriver.start_script(__MODULE__, %{})
   end
 
-  @spec handle_input(term) :: any
-  def handle_input(event) do
+  @spec handle_input(term, any) :: any
+  def handle_input(event, state) do
     Logger.warn "Camera driver ignored unexpected input: #{inspect event}" # TODO
+
+    state
   end
 
-  @spec handle_exit(integer) :: any
-  def handle_exit(code) do
+  @spec handle_exit(integer, any) :: any
+  def handle_exit(code, _state) do
     Logger.warn "Camera driver exited with code #{code}."
   end
 end

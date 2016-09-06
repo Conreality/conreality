@@ -21,16 +21,25 @@ defmodule Conreality.Machinery.Gamepad do
     Logger.info "Starting gamepad driver for #{device_path}..."
 
     ["evdev-device.py", device_path]
-    |> Machinery.InputDriver.start_script(__MODULE__)
+    |> Machinery.InputDriver.start_script(__MODULE__, [])
   end
 
-  @spec handle_input(term) :: any
-  def handle_input(event) do
-    Logger.warn "Gamepad driver ignored unexpected input: #{inspect event}" # TODO
+  @spec handle_input({float, atom, atom, integer}, any) :: any
+  def handle_input({timestamp, event_type, event_code, event_value}, state) do
+    Logger.info "Gamepad driver: #{timestamp} #{event_type} #{event_code} #{event_value}" # TODO
+
+    state
   end
 
-  @spec handle_exit(integer) :: any
-  def handle_exit(code) do
+  @spec handle_input(term, any) :: any
+  def handle_input(event, state) do
+    Logger.warn "Gamepad driver ignored unexpected input: #{inspect event}"
+
+    state
+  end
+
+  @spec handle_exit(integer, any) :: any
+  def handle_exit(code, _state) do
     Logger.warn "Gamepad driver exited with code #{code}."
   end
 end

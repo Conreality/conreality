@@ -33,29 +33,33 @@ defmodule Conreality.Machinery.Supervisor do
     def start_link do
       Logger.info "Starting hardware discovery..."
 
-      Machinery.InputDriver.start_script(["udev-enumerate.py"], __MODULE__)
+      Machinery.InputDriver.start_script(["udev-enumerate.py"], __MODULE__, %{})
     end
 
-    @spec handle_input({binary, [binary]}) :: any
-    def handle_input({device_path, device_links}) do
+    @spec handle_input({binary, [binary]}, any) :: any
+    def handle_input({device_path, device_links}, state) do
       Machinery.Device.start(device_path, device_links)
+
+      state
     end
 
-    @spec handle_input(term) :: any
-    def handle_input(event) do
+    @spec handle_input(term, any) :: any
+    def handle_input(event, state) do
       Logger.warn "Hardware discovery ignored unexpected input: #{inspect event}"
+
+      state
     end
 
-    @spec handle_exit(0) :: any
-    def handle_exit(0) do
+    @spec handle_exit(0, any) :: any
+    def handle_exit(0, _state) do
       Logger.info "Hardware discovery completed."
 
       {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
         worker(Machinery.Supervisor.Monitoring, [], restart: :permanent))
     end
 
-    @spec handle_exit(integer) :: any
-    def handle_exit(code) do
+    @spec handle_exit(integer, any) :: any
+    def handle_exit(code, _state) do
       Logger.warn "Hardware discovery failed with code #{code}."
     end
   end
@@ -65,30 +69,36 @@ defmodule Conreality.Machinery.Supervisor do
     def start_link do
       Logger.info "Starting hardware monitoring..."
 
-      Machinery.InputDriver.start_script(["udev-monitor.py"], __MODULE__)
+      Machinery.InputDriver.start_script(["udev-monitor.py"], __MODULE__, %{})
     end
 
-    @spec handle_input({:add, binary, [binary]}) :: any
-    def handle_input({:add, device_path, device_links}) do
+    @spec handle_input({:add, binary, [binary]}, any) :: any
+    def handle_input({:add, device_path, device_links}, state) do
       Logger.debug "Hardware device added: #{device_path} #{inspect device_links}"
 
       Machinery.Device.start(device_path, device_links)
+
+      state
     end
 
-    @spec handle_input({:remove, binary, [binary]}) :: any
-    def handle_input({:remove, device_path, device_links}) do
+    @spec handle_input({:remove, binary, [binary]}, any) :: any
+    def handle_input({:remove, device_path, device_links}, state) do
       Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
 
       Machinery.Device.stop(device_path)
+
+      state
     end
 
-    @spec handle_input(term) :: any
-    def handle_input(event) do
+    @spec handle_input(term, any) :: any
+    def handle_input(event, state) do
       Logger.warn "Hardware monitoring ignored unexpected input: #{inspect event}"
+
+      state
     end
 
-    @spec handle_exit(integer) :: any
-    def handle_exit(code) do
+    @spec handle_exit(integer, any) :: any
+    def handle_exit(code, _state) do
       Logger.warn "Hardware monitoring process exited with code #{code}."
     end
   end
