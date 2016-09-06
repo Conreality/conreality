@@ -9,9 +9,9 @@ defmodule Conreality.Machinery.Device do
   alias Conreality.Machinery
   require Logger
 
-  @spec start(binary) :: {:ok, pid} | {:error, any}
-  def start(device_path) do
-    case find_driver(device_path) do
+  @spec start(binary, [binary]) :: {:ok, pid} | {:error, any}
+  def start(device_path, device_links \\ []) do
+    case find_driver(device_path, device_links) do
       {:ok, driver_module, driver_args} ->
         driver_spec = worker(driver_module, driver_args, id: device_path, restart: :permanent)
 
@@ -24,10 +24,12 @@ defmodule Conreality.Machinery.Device do
     end
   end
 
-  @spec stop(binary) :: :ok | {:error, any}
-  def stop(device_path) do
-    case find_driver(device_path) do
+  @spec stop(binary, [binary]) :: :ok | {:error, any}
+  def stop(device_path, device_links) do
+    case find_driver(device_path, device_links) do
       {:ok, _driver_module, _driver_args} ->
+        # Note: we do the filtering here simply in order to log useful notices.
+
         Logger.info "Stopping driver for #{device_path}..."
 
         case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
@@ -39,9 +41,18 @@ defmodule Conreality.Machinery.Device do
     end
   end
 
-  @spec find_driver(binary) :: {:ok, module, [term]} | {:error, atom}
-  defp find_driver(device_path) do
+  @spec find_driver(binary, [binary]) :: {:ok, module, [term]} | {:error, atom}
+  defp find_driver(device_path, device_links \\ []) do
     case String.split(device_path, "/") |> Enum.drop(1) do
+      # /dev/input/event[0-9]+
+      ["dev", "input", "event" <> _id] ->
+        cond do
+          Enum.find(device_links, &(String.ends_with?(&1, "-event-joystick"))) ->
+            {:ok, Machinery.Gamepad, [device_path]}
+          true ->
+            {:error, :unknown_device}
+        end
+
       # /dev/video[0-9]+:
       ["dev", "video" <> _id] ->
         {:ok, Machinery.Camera, [device_path]}

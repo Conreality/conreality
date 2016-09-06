@@ -37,8 +37,8 @@ defmodule Conreality.Machinery.Supervisor do
     end
 
     @spec handle_input({binary, [binary]}) :: any
-    def handle_input({device_path, _device_links}) do
-      Machinery.Device.start(device_path)
+    def handle_input({device_path, device_links}) do
+      Machinery.Device.start(device_path, device_links)
     end
 
     @spec handle_input(term) :: any
@@ -72,14 +72,14 @@ defmodule Conreality.Machinery.Supervisor do
     def handle_input({:add, device_path, device_links}) do
       Logger.debug "Hardware device added: #{device_path} #{inspect device_links}"
 
-      Machinery.Device.start(device_path)
+      Machinery.Device.start(device_path, device_links)
     end
 
     @spec handle_input({:remove, binary, [binary]}) :: any
     def handle_input({:remove, device_path, device_links}) do
       Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
 
-      Machinery.Device.stop(device_path)
+      Machinery.Device.stop(device_path, device_links)
     end
 
     @spec handle_input(term) :: any
