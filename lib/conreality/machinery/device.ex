@@ -24,25 +24,22 @@ defmodule Conreality.Machinery.Device do
     end
   end
 
-  @spec stop(binary, [binary]) :: :ok | {:error, any}
-  def stop(device_path, device_links) do
-    case find_driver(device_path, device_links) do
-      {:ok, _driver_module, _driver_args} ->
-        # Note: we do the filtering here simply in order to log useful notices.
+  @spec stop(binary) :: :ok | {:error, any}
+  def stop(device_path) do
+    if List.keymember?(Supervisor.which_children(Machinery.Supervisor), device_path, 0) do
+      Logger.info "Stopping driver for #{device_path}..."
 
-        Logger.info "Stopping driver for #{device_path}..."
-
-        case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
-          :ok -> :ok = Supervisor.delete_child(Machinery.Supervisor, device_path)
-          {:error, :not_found} -> :ok # the driver wasn't loaded
-        end
-
-      {:error, reason} -> {:error, reason}
+      case Supervisor.terminate_child(Machinery.Supervisor, device_path) do
+        :ok -> :ok = Supervisor.delete_child(Machinery.Supervisor, device_path)
+        {:error, :not_found} -> :ok # the driver wasn't loaded
+      end
+    else
+      {:error, :unknown_device} # ignore any unknown devices
     end
   end
 
   @spec find_driver(binary, [binary]) :: {:ok, module, [term]} | {:error, atom}
-  defp find_driver(device_path, device_links \\ []) do
+  defp find_driver(device_path, device_links) do
     case String.split(device_path, "/") |> Enum.drop(1) do
       # /dev/input/event[0-9]+
       ["dev", "input", "event" <> _id] ->

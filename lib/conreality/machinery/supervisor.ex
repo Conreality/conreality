@@ -79,7 +79,7 @@ defmodule Conreality.Machinery.Supervisor do
     def handle_input({:remove, device_path, device_links}) do
       Logger.debug "Hardware device removed: #{device_path} #{inspect device_links}"
 
-      Machinery.Device.stop(device_path, device_links)
+      Machinery.Device.stop(device_path)
     end
 
     @spec handle_input(term) :: any
