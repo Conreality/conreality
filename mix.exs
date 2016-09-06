@@ -75,6 +75,7 @@ defmodule Conreality.Mixfile do
     [{:exlua,             github: "bendiken/exlua", branch: "master"},
      {:luerl,             github: "bendiken/luerl", branch: "exlua",
                           compile: "make && cp src/luerl.app.src ebin/luerl.app"},
+     {:gen_state_machine, "~> 1.0"},
      {:nerves_leds,       "~> 0.7.0"},
      {:nerves_lib,        github: "nerves-project/nerves_lib"},
      {:nerves_ssdp_client, "~> 0.1.3"},
