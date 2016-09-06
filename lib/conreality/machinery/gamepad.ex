@@ -11,6 +11,12 @@ defmodule Conreality.Machinery.Gamepad do
   alias Conreality.Machinery
   require Logger
 
+  defmodule State do
+    defstruct current: %{}, pending: []
+
+    @type t :: struct
+  end
+
   @spec start_link(non_neg_integer) :: {:ok, port} | {:error, any}
   def start_link(event_id) when is_integer(event_id) do
     start_link("/dev/input/event#{event_id}")
@@ -21,27 +27,33 @@ defmodule Conreality.Machinery.Gamepad do
     Logger.info "Starting gamepad driver for #{device_path}..."
 
     ["evdev-device.py", device_path]
-    |> Machinery.InputDriver.start_script(__MODULE__, [])
+    |> Machinery.InputDriver.start_script(__MODULE__, %State{})
   end
 
-  @spec handle_exit(integer, any) :: any
+  @spec handle_exit(integer, State.t) :: any
   def handle_exit(code, _state) do
     Logger.warn "Gamepad driver exited with code #{code}."
   end
 
-  @spec handle_input({float, :EV_SYN, :SYN_REPORT, 0}, any) :: any
+  @spec handle_input({float, :EV_SYN, :SYN_REPORT, 0}, State.t) :: State.t
   def handle_input({timestamp, :EV_SYN, :SYN_REPORT, 0}, state) do
-    handle_events(state)
-    state = []
+    state = handle_events(state)
   end
 
-  @spec handle_input({float, atom, atom, integer}, any) :: any
+  @spec handle_input({float, atom, atom, integer}, State.t) :: State.t
   def handle_input({_timestamp, _event_type, _event_code, _event_value} = event, state) do
-    state = [event | state]
+    state = %{state | pending: [event | state.pending]}
   end
 
-  @spec handle_events([{float, atom, atom, integer}]) :: any
-  def handle_events(events) do
-    IO.inspect events # TODO
+  @spec handle_events(State.t) :: State.t
+  def handle_events(state) do
+    current = Enum.reduce(state.pending, state.current, fn(event, current) ->
+      case event do
+        {_, :EV_ABS, event_code, event_value} ->
+          Map.put(current, event_code, event_value)
+        _ -> current # ignore unknown event types
+      end
+    end)
+    state = %{state | pending: [], current: current}
   end
 end
