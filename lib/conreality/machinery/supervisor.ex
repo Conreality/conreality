@@ -23,7 +23,7 @@ defmodule Conreality.Machinery.Supervisor do
   @spec init([]) :: {:ok, {:supervisor.sup_flags, [Supervisor.Spec.spec]}}
   def init([]) do
     children = [
-      worker(Machinery.DeviceDiscovery, [], restart: :transient)
+      worker(Machinery.DeviceConfiguration, [], restart: :transient)
     ]
     supervise(children, strategy: :one_for_one)
   end
