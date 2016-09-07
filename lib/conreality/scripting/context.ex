@@ -4,26 +4,20 @@ defmodule Conreality.Scripting.Context do
   @moduledoc """
   """
 
+  alias Conreality.Scripting
   require Logger
 
+  @spec new() :: Lua.State.t
   def new do
-    priv_dir = :code.priv_dir(:conreality)
     Lua.State.new
-    |> Lua.set_table([:package, :path], "#{priv_dir}/lua/?.lua")
-    |> load_file("#{priv_dir}/lua/conreality/sdk.lua")
+    |> Lua.set_package_path(Scripting.package_path())
+    |> load_sdk()
     |> Lua.gc
   end
 
-  def load_module(state, module_name) do
-    priv_dir = :code.priv_dir(:conreality)
-    load_file(state, "#{priv_dir}/lua/conreality/sdk/#{module_name}.lua")
-  end
-
-  def load_file(state, file_path) do
-    case Lua.load_file(state, file_path) do
-      {:ok, state, chunk} ->
-        {state, [_result]} = Lua.call_chunk!(state, chunk)
-        state
-    end
+  @spec load_sdk(Lua.State.t) :: Lua.State.t
+  def load_sdk(state) do
+    {state, [table]} = state |> Lua.require!("conreality.sdk")
+    state
   end
 end
