@@ -17,7 +17,11 @@ defmodule Conreality.Machinery.DeviceMonitoring do
   def start_link do
     Logger.info "Starting hardware monitoring..."
 
-    Machinery.InputDriver.start_script(["udev-monitor.py"], __MODULE__, %State{})
+    result = Machinery.InputDriver.start_script(["udev-monitor.py"], __MODULE__, %State{})
+
+    Status.success()
+
+    result
   end
 
   @spec handle_input({:add, binary, [binary]}, State.t) :: State.t
