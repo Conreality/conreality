@@ -14,6 +14,11 @@ defmodule Conreality.Scripting do
     Path.join(path(), file_name)
   end
 
+  @spec package_path() :: binary
+  def package_path do
+    path_to("?.lua") # "priv/lua/?.lua"
+  end
+
   @spec start_link(binary, Lua.State.t) :: {:ok, pid} | {:error, any, any}
   def start_link(filepath, state \\ nil) when is_binary(filepath) do
     Lua.Thread.start_link(filepath, state)
