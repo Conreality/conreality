@@ -5,7 +5,7 @@ try:
   import conreality
 except ImportError:
   import os, sys
-  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'python')))
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'priv', 'python')))
   import conreality
 
 from conreality import ddk, sdk
@@ -24,7 +24,7 @@ class Program(ddk.Program):
     super().__init__(**kwargs)
     assert self.options.script
     self.context = sdk.scripting.Context()
-    self.context.prepend_package_path(os.path.join(os.path.dirname(__file__), '..', 'src', 'lua', '?.lua'))
+    self.context.prepend_package_path(os.path.join(os.path.dirname(__file__), '..', 'priv', 'lua', '?.lua'))
     self.context.load_sdk()
 
   def run(self):

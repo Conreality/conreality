@@ -5,7 +5,7 @@ try:
   import conreality
 except ImportError:
   import os, sys
-  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'python')))
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'priv', 'python')))
   import conreality
 
 from conreality import ddk, sdk
