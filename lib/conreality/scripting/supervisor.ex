@@ -16,7 +16,7 @@ defmodule Conreality.Scripting.Supervisor do
 
   @spec init([]) :: {:ok, {:supervisor.sup_flags, [Supervisor.Spec.spec]}}
   def init([]) do
-    children = []
+    children = [] # populated by the Conreality.Status state machine
     supervise(children, strategy: :one_for_one)
   end
 end

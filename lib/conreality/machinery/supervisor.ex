@@ -12,7 +12,6 @@ defmodule Conreality.Machinery.Supervisor do
   """
 
   use Supervisor
-  alias Conreality.Machinery
   require Logger
 
   @spec start_link() :: {:ok, pid}
@@ -22,9 +21,7 @@ defmodule Conreality.Machinery.Supervisor do
 
   @spec init([]) :: {:ok, {:supervisor.sup_flags, [Supervisor.Spec.spec]}}
   def init([]) do
-    children = [
-      worker(Machinery.DeviceConfiguration, [], restart: :transient)
-    ]
+    children = [] # populated by the Conreality.Status state machine
     supervise(children, strategy: :one_for_one)
   end
 end

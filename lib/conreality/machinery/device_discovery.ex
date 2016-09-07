@@ -4,8 +4,7 @@ defmodule Conreality.Machinery.DeviceDiscovery do
   @moduledoc """
   """
 
-  import Supervisor.Spec
-  alias Conreality.Machinery
+  alias Conreality.{Machinery, Status}
   require Logger
 
   defmodule State do
@@ -39,12 +38,13 @@ defmodule Conreality.Machinery.DeviceDiscovery do
   def handle_exit(0, _state) do
     Logger.info "Hardware discovery completed."
 
-    {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
-      worker(Machinery.DeviceMonitoring, [], restart: :permanent))
+    Status.success()
   end
 
   @spec handle_exit(integer, State.t) :: any
   def handle_exit(code, _state) do
     Logger.warn "Hardware discovery failed with code #{code}."
+
+    Status.failure()
   end
 end

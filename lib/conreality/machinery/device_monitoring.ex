@@ -4,7 +4,7 @@ defmodule Conreality.Machinery.DeviceMonitoring do
   @moduledoc """
   """
 
-  alias Conreality.Machinery
+  alias Conreality.{Machinery, Status}
   require Logger
 
   defmodule State do
@@ -48,5 +48,7 @@ defmodule Conreality.Machinery.DeviceMonitoring do
   @spec handle_exit(integer, State.t) :: any
   def handle_exit(code, _state) do
     Logger.warn "Hardware monitoring process exited with code #{code}."
+
+    Status.failure()
   end
 end

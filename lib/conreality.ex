@@ -17,6 +17,7 @@ defmodule Conreality do
     children = [
       supervisor(Conreality.Machinery.Supervisor, []),
       supervisor(Conreality.Scripting.Supervisor, []),
+      worker(Conreality.Status, [], restart: :transient),
 
       # FIXME:
       #(if @status_leds, do: worker(Conreality.Blinker, [@status_leds]), else: nil),

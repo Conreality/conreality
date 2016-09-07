@@ -4,8 +4,7 @@ defmodule Conreality.Machinery.DeviceConfiguration do
   @moduledoc """
   """
 
-  import Supervisor.Spec
-  alias Conreality.Machinery
+  alias Conreality.Status
   require Logger
 
   @spec start_link() :: {:ok, pid}
@@ -21,7 +20,6 @@ defmodule Conreality.Machinery.DeviceConfiguration do
 
     Logger.info "Hardware configuration completed."
 
-    {:ok, _pid} = Supervisor.start_child(Machinery.Supervisor,
-      worker(Machinery.DeviceDiscovery, [], restart: :transient))
+    Status.success()
   end
 end
