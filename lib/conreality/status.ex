@@ -102,8 +102,9 @@ defmodule Conreality.Status do
     script_path = Path.join(System.get_env("HOME") || "", "main.lua")
 
     if File.exists?(script_path) do
+      context = Scripting.Context.new()
       {:ok, _pid} = Supervisor.start_child(Scripting.Supervisor,
-        worker(Scripting, [script_path], restart: :transient, id: Scripting.MainScript))
+        worker(Scripting, [script_path, context], restart: :transient, id: Scripting.MainScript))
     end
 
     {:next_state, :execute_scripts, data, [{:next_event, :cast, :success}]}
