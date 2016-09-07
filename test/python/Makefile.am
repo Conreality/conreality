@@ -17,7 +17,7 @@ TESTS = $(check_SCRIPTS)
 
 TEST_EXTENSIONS = .py
 
-AM_TESTS_ENVIRONMENT = PYTHONPATH="$(top_srcdir)/src/python"; export PYTHONPATH;
+AM_TESTS_ENVIRONMENT = PYTHONPATH="$(top_srcdir)/priv/python"; export PYTHONPATH;
 PY_LOG_COMPILER = $(PYTHON)
 AM_PY_LOG_FLAGS = -m pytest
 

@@ -3,7 +3,7 @@
 
 Environment:
 
-  $ [ -n "$PYTHONPATH" ] || PYTHONPATH="$TESTDIR/../../src/python" && export PYTHONPATH
+  $ [ -n "$PYTHONPATH" ] || PYTHONPATH="$TESTDIR/../../priv/python" && export PYTHONPATH
 
 Usage:
 

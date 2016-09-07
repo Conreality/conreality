@@ -28,7 +28,7 @@ defmodule Conreality.Machinery.InputDriver do
       [:binary,
        {:packet, 4},
        {:args, arguments},
-       {:env, [{'PYTHONPATH', 'src/python'}]},
+       {:env, [{'PYTHONPATH', 'priv/python'}]},
        :exit_status,
        :nouse_stdio])
 

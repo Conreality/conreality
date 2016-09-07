@@ -12,7 +12,7 @@ TESTS = $(check_SCRIPTS)
 
 TEST_EXTENSIONS = .t
 
-#AM_TESTS_ENVIRONMENT = PYTHONPATH="$(top_srcdir)/src/python"; export PYTHONPATH;
+#AM_TESTS_ENVIRONMENT = PYTHONPATH="$(top_srcdir)/priv/python"; export PYTHONPATH;
 T_LOG_COMPILER = $(CRAM)
 AM_T_LOG_FLAGS =
 
