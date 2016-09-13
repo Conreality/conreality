@@ -19,8 +19,19 @@ defmodule Conreality.Scripting do
     path_to("?.lua") # "priv/lua/?.lua"
   end
 
-  @spec start_link(binary, Lua.State.t) :: {:ok, pid} | {:error, any, any}
+  @spec start_link(binary, Lua.State.t)
+    :: GenServer.on_start | {:error, any, any}
   def start_link(filepath, state \\ nil) when is_binary(filepath) do
-    Lua.Thread.start_link(filepath, state)
+    Lua.Thread.start_link(filepath, state, name: __MODULE__)
+  end
+
+  @spec call_function(atom | [atom], [term]) :: [term]
+  def call_function(function_name, function_args \\ []) do
+    Lua.Thread.call_function(__MODULE__, function_name, function_args)
+  end
+
+  @spec exec_function(atom | [atom], [term]) :: :ok
+  def exec_function(function_name, function_args \\ []) do
+    Lua.Thread.exec_function(__MODULE__, function_name, function_args)
   end
 end

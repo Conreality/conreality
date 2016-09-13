@@ -8,7 +8,7 @@ defmodule Conreality.Machinery.Gamepad do
   controllers.
   """
 
-  alias Conreality.Machinery
+  alias Conreality.{Machinery, Scripting}
   require Logger
 
   defmodule State do
@@ -54,6 +54,7 @@ defmodule Conreality.Machinery.Gamepad do
         _ -> current # ignore unknown event types
       end
     end)
+    Scripting.exec_function(:on_gamepad_input, [current])
     _state = %{state | pending: [], current: current}
   end
 end

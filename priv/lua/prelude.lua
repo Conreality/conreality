@@ -9,3 +9,9 @@ for module, module_table in pairs(require('conreality.sdk')) do
     end
   end
 end
+
+function on_camera_frame(camera)
+end
+
+function on_gamepad_input(gamepad)
+end
