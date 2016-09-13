@@ -32,9 +32,10 @@ defmodule Conreality.Scripting.Context do
   @spec define_machinery(Lua.State.t) :: Lua.State.t
   defp define_machinery(state) do
     state
+    |> Lua.set_table([:Camera, :__index], fn [_tref, _key] -> nil end) # TODO
     |> Lua.set_table([:Gamepad, :__index], fn [_tref, key] ->
          case key do
-           "x" -> [1]; "y" -> [2]; "z" -> [3]; _ -> nil
+           "x" -> [1]; "y" -> [2]; "z" -> [3]; _ -> nil # TODO
          end
        end)
   end
@@ -42,7 +43,9 @@ defmodule Conreality.Scripting.Context do
   @spec import_hardware(Lua.State.t) :: Lua.State.t
   defp import_hardware(state) do
     state
+    |> Lua.set_global(:camera, %{})
     |> Lua.set_global(:gamepad, %{})
+    |> Lua.exec!("setmetatable(camera, Camera); return nil")
     |> Lua.exec!("setmetatable(gamepad, Gamepad); return nil")
   end
 end

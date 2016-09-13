@@ -3,8 +3,19 @@
 --- Hardware interface
 -- @module conreality.sdk.machinery
 local machinery = {
+  Camera  = {},
   Gamepad = {},
 }
+
+--- Camera class metatable
+-- @type Camera
+local Camera = machinery.Camera
+
+--- The camera's unique identifier.
+Camera.id = nil
+
+--- The camera's descriptive label.
+Camera.label = nil
 
 --- Gamepad class metatable
 -- @type Gamepad
@@ -15,14 +26,5 @@ Gamepad.id = nil
 
 --- The gamepad's descriptive label.
 Gamepad.label = nil
-
---- Constructs a new object instance.
--- @param fields initial values for fields
--- @treturn Gamepad
-function Gamepad.new(fields)
-  local self = fields or {}
-  setmetatable(self, {__index = Gamepad})
-  return self
-end
 
 return machinery
