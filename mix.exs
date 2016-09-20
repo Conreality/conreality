@@ -72,14 +72,15 @@ defmodule Conreality.Mixfile do
 
   defp deps do
     dev_deps() ++
-    [{:exlua,             github: "bendiken/exlua", branch: "master"},
-     {:luerl,             github: "bendiken/luerl", branch: "exlua",
-                          compile: "make && cp src/luerl.app.src ebin/luerl.app"},
-     {:gen_state_machine, "~> 1.0"},
-     {:nerves_leds,       "~> 0.7.0"},
-     {:nerves_lib,        github: "nerves-project/nerves_lib"},
+    [{:exlua,              github: "bendiken/exlua", branch: "master"},
+     {:luerl,              github: "bendiken/luerl", branch: "exlua",
+                           compile: "make && cp src/luerl.app.src ebin/luerl.app"},
+     {:gen_state_machine,  "~> 1.0"},
+     {:nerves_leds,        "~> 0.7.0"},
+     {:nerves_lib,         github: "nerves-project/nerves_lib"},
      {:nerves_ssdp_client, "~> 0.1.3"},
-     {:nerves_ssdp_server, "~> 0.2.1"}]
+     {:nerves_ssdp_server, "~> 0.2.1"},
+     {:elixir_ale,         "~> 0.5.6"}]
   end
 
   defp target_deps(nil), do: []
