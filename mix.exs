@@ -81,6 +81,7 @@ defmodule Conreality.Mixfile do
      {:nerves_lib,         github: "nerves-project/nerves_lib"},
      {:nerves_ssdp_client, "~> 0.1.3"},
      {:nerves_ssdp_server, "~> 0.2.1"},
+     {:nerves_uart,        "~> 0.1.1"},
      {:elixir_ale,         "~> 0.5.6"}]
   end
 
