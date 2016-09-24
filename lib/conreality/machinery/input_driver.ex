@@ -5,22 +5,20 @@ defmodule Conreality.Machinery.InputDriver do
   Driver for input-only devices.
   """
 
-  @spec start_script(list, module, any) :: {:ok, pid}
+  @spec start_script([binary, ...], module, any) :: {:ok, pid}
   def start_script([command | arguments], module, initial_state \\ nil) do
     priv_dir = :code.priv_dir(:conreality)
-
-    start_link(["/usr/bin/env", "python3", "-u"] ++
-      ["#{priv_dir}/#{command}"] ++ arguments,
-      module, initial_state)
+    command_and_arguments = ["/usr/bin/env", "python3", "-u", "#{priv_dir}/#{command}"] ++ arguments
+    start_link(command_and_arguments, module, initial_state)
   end
 
-  @spec start_link(list, module, any) :: {:ok, pid}
+  @spec start_link([binary, ...], module, any) :: {:ok, pid}
   def start_link(command_and_arguments, module, initial_state \\ nil) do
     {:ok, spawn_link(__MODULE__, :init,
      [command_and_arguments, module, initial_state])}
   end
 
-  @spec init(list, module, any) :: no_return
+  @spec init([binary, ...], module, any) :: no_return
   def init([command | arguments], module, state) do
     Process.flag(:trap_exit, true)
 
