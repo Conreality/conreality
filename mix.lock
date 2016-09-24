@@ -9,7 +9,7 @@
   "excoveralls": {:hex, :excoveralls, "0.5.6", "35a903f6f78619ee7f951448dddfbef094b3a0d8581657afaf66465bc930468e", [:mix], [{:exjsx, "~> 3.0", [hex: :exjsx, optional: false]}, {:hackney, ">= 0.12.0", [hex: :hackney, optional: false]}]},
   "exjsx": {:hex, :exjsx, "3.2.0", "7136cc739ace295fc74c378f33699e5145bead4fdc1b4799822d0287489136fb", [:mix], [{:jsx, "~> 2.6.2", [hex: :jsx, optional: false]}]},
   "exlua": {:git, "https://github.com/bendiken/exlua.git", "c0459aa4c4b9ad1238170d1de436fe9ac4bef067", [branch: "master"]},
-  "gen_state_machine": {:hex, :gen_state_machine, "1.0.2", "7fb11ec9e77b90cc9bcc095436a3786592fb243d80ed35c1279dd84153207962", [:mix], []},
+  "gen_state_machine": {:hex, :gen_state_machine, "2.0.0", "f3bc7d961e4cd9f37944b379137e25fd063feffc42800bed69197fd1b78b3151", [:mix], []},
   "hackney": {:hex, :hackney, "1.6.1", "ddd22d42db2b50e6a155439c8811b8f6df61a4395de10509714ad2751c6da817", [:rebar3], [{:certifi, "0.4.0", [hex: :certifi, optional: false]}, {:idna, "1.2.0", [hex: :idna, optional: false]}, {:metrics, "1.0.1", [hex: :metrics, optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, optional: false]}, {:ssl_verify_fun, "1.1.0", [hex: :ssl_verify_fun, optional: false]}]},
   "idna": {:hex, :idna, "1.2.0", "ac62ee99da068f43c50dc69acf700e03a62a348360126260e87f2b54eced86b2", [:rebar3], []},
   "jsx": {:hex, :jsx, "2.6.2", "213721e058da0587a4bce3cc8a00ff6684ced229c8f9223245c6ff2c88fbaa5a", [:mix, :rebar], []},
