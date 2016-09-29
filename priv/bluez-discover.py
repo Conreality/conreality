@@ -29,7 +29,8 @@ class Driver(ddk.Driver):
         self.adapter = bluez5.Adapter(self.options.adapter.strip())
 
     def run(self):
-        # TODO
+        for peripheral_address in self.adapter.peripherals():
+            self.send(peripheral_address)
         return EX_OK
 
 if __name__ == '__main__':

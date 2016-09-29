@@ -25,7 +25,7 @@ class Proxy(object):
     def get_path(self, subpath=None):
         if subpath:
             assert type(subpath) is str
-            return "{}/{}".format(self.path, subpath)
+            return '{}/{}'.format(self.path, subpath)
         else:
             return self.path
 
@@ -41,18 +41,28 @@ class Proxy(object):
 class Adapter(Proxy):
     """Bluetooth LE adapter."""
 
-    def __init__(self, name="hci0"):
+    def __init__(self, name='hci0'):
         assert type(name) is str
         super(Adapter, self).__init__()
         self.name = name
-        self.path = "/org/bluez/{}".format(name)
+        self.path = '/org/bluez/{}'.format(name)
         self.bus = pydbus.SystemBus()
 
     def get_proxy(self, path):
-        return self.bus.get("org.bluez", path)
+        return self.bus.get('org.bluez', path)
 
     def get_peripheral(self, address):
         return Peripheral(self, address)
+
+    def peripherals(self):
+        device_base_path = '{}/{}'.format(self.path, 'dev_')
+        object_manager = self.bus.get('org.bluez', '/')
+        for object_path in object_manager.GetManagedObjects():
+            if object_path.startswith(device_base_path):
+                device_subpath = object_path[len(device_base_path):]
+                device_address = device_subpath.replace('_', ':')
+                yield device_address
+        return []
 
 ################################################################################
 
@@ -62,7 +72,7 @@ class Peripheral(Proxy):
     def __init__(self, adapter, address):
         assert type(address) is str
         super(Peripheral, self).__init__(adapter)
-        self.subpath = "dev_{}".format(address.upper().replace(":", "_"))
+        self.subpath = 'dev_{}'.format(address.upper().replace(':', '_'))
         self.path = adapter.get_path(self.subpath)
         try:
             self.proxy = self.get_proxy(self.path)
@@ -97,7 +107,7 @@ class Service(Proxy):
     def __init__(self, peripheral, id):
         assert type(id) is int
         super(Service, self).__init__(peripheral)
-        self.subpath = "service{:04x}".format(id)
+        self.subpath = 'service{:04x}'.format(id)
         self.path = peripheral.get_path(self.subpath)
         try:
             self.proxy = peripheral.get_child(self.subpath)
@@ -120,7 +130,7 @@ class Characteristic(Proxy):
     def __init__(self, service, id, path=None):
         super(Characteristic, self).__init__(service)
         if type(id) is int:
-            self.subpath = "char{:04x}".format(id)
+            self.subpath = 'char{:04x}'.format(id)
             self.path = service.get_path(self.subpath)
             try:
                 self.proxy = service.get_child(self.subpath)
@@ -140,6 +150,6 @@ class Characteristic(Proxy):
     def write(self, data):
         self.counter = (self.counter + 1) % 0xFF
         data[1] = self.counter
-        #print(("write", self.path, data)) # DEBUG
+        #print(('write', self.path, data)) # DEBUG
         self.proxy.WriteValue(data)
         return self
