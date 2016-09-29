@@ -2,6 +2,7 @@
 # This is free and unencumbered software released into the public domain.
 
 import pydbus
+from gi.repository import GLib
 
 ################################################################################
 
@@ -89,9 +90,19 @@ class Peripheral(Proxy):
 
     def connect(self):
         assert not self.proxy is None
-        self.proxy.Connect()
-        if not self.proxy.Paired:
-            self.proxy.Pair()
+        try:
+            if not self.proxy.Connected:
+                self.proxy.Connect()
+            if not self.proxy.Paired:
+                self.proxy.Pair()
+        except GLib.Error as error:
+            if error.code == 36:
+                # GLib.Error: g-io-error-quark: GDBus.Error:org.bluez.Error.Failed: Operation already in progress (36)
+                raise ConnectionAbortedError(error.message) from None
+            elif error.code == 24:
+                # GLib.Error: g-io-error-quark: Timeout was reached (24)
+                raise TimeoutError(error.message) from None
+            raise error
         return self
 
     def disconnect(self):
